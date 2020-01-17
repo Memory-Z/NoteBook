@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/card_main_color">
+
+    <com.inz.z.base.view.widget.BaseSecurityImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/main_left_nav_content_nsv"
+        app:layout_constraintEnd_toEndOf="@id/main_left_nav_content_nsv"
+        app:layout_constraintStart_toStartOf="@id/main_left_nav_content_nsv"
+        app:layout_constraintTop_toTopOf="@id/main_left_nav_content_nsv"
+        app:text="@string/app_name"
+        app:textColor="@color/textColor70"
+        app:textSize="@dimen/text_body_size" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/main_left_nav_content_nsv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/main_left_nav_bottom_rl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/main_left_nav_content_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/mln_user_info_rl"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/nav_left_top_height"
+                android:background="@color/card_second_color"
+                android:paddingStart="@dimen/border_lr_dimen"
+                android:paddingEnd="@dimen/border_lr_dimen">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/mln_user_photo_civ"
+                    android:layout_width="@dimen/touch_target_size"
+                    android:layout_height="@dimen/touch_target_size"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/content_space_between_dimen"
+                    android:src="@drawable/img_photo_1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/content_space_between_dimen"
+                    android:layout_toEndOf="@id/mln_user_photo_civ">
+
+                    <TextView
+                        style="@style/NoteBookAppTheme.Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name"
+                        android:textSize="@dimen/text_body_size"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/lineColor" />
+
+            <com.inz.z.base.view.widget.BaseNavLayout
+                android:id="@+id/mln_0_bnl"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/touch_target_height"
+                android:background="@color/card_second_color"
+                android:paddingStart="@dimen/border_lr_dimen"
+                android:paddingEnd="@dimen/border_lr_dimen"
+                app:base_center_layout="@id/mln_0_tv"
+                app:base_left_layout="@id/mln_0_iv"
+                app:base_right_layout="@id/mln_0_right_ll">
+
+                <ImageView
+                    android:id="@+id/mln_0_iv"
+                    style="@style/NoteBookAppTheme.ImageView"
+                    android:layout_width="@dimen/icon_normal_size"
+                    android:layout_height="@dimen/icon_normal_size"
+                    android:contentDescription="@string/image"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_vd_word"
+                    android:tint="@null" />
+
+                <TextView
+                    android:id="@+id/mln_0_tv"
+                    style="@style/NoteBookAppTheme.Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/content_space_between_dimen"
+                    android:text="@string/setting"
+                    android:textSize="@dimen/text_body_size"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/mln_0_right_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+            </com.inz.z.base.view.widget.BaseNavLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:backgroundTint="@color/lineColor" />
+
+            <com.inz.z.base.view.widget.BaseNavLayout
+                android:id="@+id/mln_1_bnl"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/touch_target_height"
+                android:background="@color/card_four_color"
+                android:paddingStart="@dimen/border_lr_dimen"
+                android:paddingEnd="@dimen/border_lr_dimen">
+
+            </com.inz.z.base.view.widget.BaseNavLayout>
+
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <RelativeLayout
+        android:id="@+id/main_left_nav_bottom_rl"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/touch_target_height"
+        android:background="@color/card_main_color"
+        android:backgroundTint="@color/card_second_color"
+        android:paddingStart="@dimen/border_lr_dimen"
+        android:paddingEnd="@dimen/border_lr_dimen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:id="@+id/main_left_nav_bottom_setting_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_button_black_pressed"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/NoteBookAppTheme.ImageView"
+                android:layout_width="@dimen/photo_normal_size"
+                android:layout_height="@dimen/photo_normal_size"
+                android:contentDescription="@string/setting"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_settings_white_24dp" />
+
+            <TextView
+                style="@style/NoteBookAppTheme.Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/setting"
+                android:textSize="@dimen/text_body_size" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/main_left_nav_bottom_quit_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_button_black_pressed"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/NoteBookAppTheme.ImageView"
+                android:layout_width="@dimen/photo_normal_size"
+                android:layout_height="@dimen/photo_normal_size"
+                android:contentDescription="@string/_quit"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_exit_to_app_white_24dp" />
+
+            <TextView
+                style="@style/NoteBookAppTheme.Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/_quit"
+                android:textSize="@dimen/text_body_size" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/main_left_nav_bottom_back_v"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toStartOf="@id/main_left_nav_bottom_quit_ll"
+            android:layout_toEndOf="@id/main_left_nav_bottom_setting_ll" />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

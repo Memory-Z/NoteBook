@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#FF40A798</color>
+    <color name="colorPrimaryDark">#FF2E8177</color>
+    <color name="colorAccent">#FFFFB700</color>
+    <!-- 主色 -->
+    <!--    <color name="mainColor">#F5E1DA</color>-->
+    <color name="secondColor">#F1F1F1</color>
+    <color name="threadColor">#40A798</color>
+    <color name="fourColor">#476268</color>
+    <!-- 反色 -->
+    <color name="accessoryColor">#FFB700</color>
+
+    <color name="nearColorBlue">#0048FF</color>
+    <color name="nearColorRed">#FF0048</color>
+
+
+
+    <color name="card_main_color">@color/cardColor</color>
+    <color name="card_second_color">@color/textInverseColor70</color>
+    <color name="card_thread_color">@color/textInverseColor50</color>
+    <color name="card_four_color">@color/textInverseColor30</color>
+    <color name="card_inverse_color">@color/textColor</color>
+    <color name="card_inverse_second_color">@color/textColor70</color>
+    <color name="card_inverse_thread_color">@color/textColor50</color>
+    <color name="card_inverse_four_color">@color/textColor30</color>
+
+    <color name="cardColor">#666666</color>
+
+    <color name="textColor">#FFF5F5F5</color>
+    <color name="textColor70">#B3F5F5F5</color>
+    <color name="textColor50">#80F5F5F5</color>
+    <color name="textColor30">#4DF5F5F5</color>
+    <color name="textColor10">#1AF5F5F5</color>
+
+    <color name="textInverseColor">#FF474747</color>
+    <color name="textInverseColor70">#B3474747</color>
+    <color name="textInverseColor50">#80474747</color>
+    <color name="textInverseColor30">#4D474747</color>
+    <color name="textInverseColor10">#1A474747</color>
+
+    <color name="lineColor">@color/textColor50</color>
+
+
+
+    <color name="textBlackGray">#696969</color>
+    <color name="textGray">#C0C0C0</color>
+    <color name="textLightGray">#DCDCDC</color>
+    <color name="textGrayLight">#F5F5F5</color>
+    <color name="textLight">#FBFBFB</color>
+    <color name="darkGray">#A9A9A9</color>
+    <color name="lightGray">#D3D3D3</color>
+    <color name="linen">#FAF0E6</color>
+
+</resources>
