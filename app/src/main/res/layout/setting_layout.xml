@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/card_main_color">
 
     <com.inz.z.base.view.widget.BaseNavLayout
         android:id="@+id/setting_info_nav_bnl"
@@ -16,13 +17,14 @@
 
         <RelativeLayout
             android:id="@+id/setting_info_nav_left_rl"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/touch_target_size"
             android:layout_height="match_parent">
 
             <ImageView
                 style="@style/NoteBookAppTheme.ImageView"
-                android:layout_width="@dimen/touch_target_size"
-                android:layout_height="match_parent"
+                android:layout_width="@dimen/photo_normal_size"
+                android:layout_height="@dimen/photo_normal_size"
+                android:layout_centerInParent="true"
                 android:contentDescription="@string/base_image"
                 android:src="@drawable/ic_chevron_left_black_24dp" />
 
@@ -40,18 +42,20 @@
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical"
                 android:text="@string/setting"
+                android:textSize="@dimen/title_size"
                 android:textStyle="bold" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/setting_info_nav_right_rl"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/touch_target_size"
             android:layout_height="match_parent">
 
             <ImageView
                 style="@style/NoteBookAppTheme.ImageView"
-                android:layout_width="@dimen/touch_target_size"
-                android:layout_height="match_parent"
+                android:layout_width="@dimen/photo_normal_size"
+                android:layout_height="@dimen/photo_normal_size"
+                android:layout_centerInParent="true"
                 android:contentDescription="@string/base_image"
                 android:src="@drawable/ic_more_vert_black_24dp" />
         </RelativeLayout>
@@ -59,6 +63,7 @@
     </com.inz.z.base.view.widget.BaseNavLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/setting_info_content_nsv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/setting_info_nav_bnl"
@@ -91,12 +96,127 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <LinearLayout
+            <com.inz.z.base.view.widget.BaseNavLayout
+                android:id="@+id/setting_info_cache_clear_bnl"
                 android:layout_width="match_parent"
+                android:layout_height="@dimen/touch_target_height"
+                android:background="@drawable/bg_item_selector"
+                android:paddingStart="@dimen/border_lr_dimen"
+                android:paddingEnd="@dimen/border_lr_dimen"
+                app:base_center_layout="@id/setting_info_cache_clear_center_ll"
+                app:base_left_layout="@id/setting_info_cache_clear_left_iv"
+                app:base_right_layout="@id/setting_info_cache_clear_right_ll">
 
-                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/setting_info_cache_clear_left_iv"
+                    style="@style/NoteBookAppTheme.ImageView"
+                    android:layout_width="@dimen/icon_normal_size"
+                    android:layout_height="@dimen/icon_normal_size"
+                    android:contentDescription="@string/base_image"
+                    android:src="@drawable/ic_settings_black_24dp"
+                    android:tint="@android:color/transparent" />
 
-            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/setting_info_cache_clear_center_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/content_space_between_dimen"
+                    android:layout_marginEnd="@dimen/content_space_between_dimen"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/NoteBookAppTheme.Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/clear_cache"
+                        android:textSize="@dimen/subheading_text_size" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/setting_info_cache_clear_right_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/setting_info_cache_clear_size_tv"
+                        style="@style/NoteBookAppTheme.Text.Hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/content_space_between_dimen"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        style="@style/NoteBookAppTheme.ImageView"
+                        android:layout_width="@dimen/icon_normal_size"
+                        android:layout_height="@dimen/icon_normal_size"
+                        android:contentDescription="@string/base_image"
+                        android:src="@drawable/ic_chevron_right_black_24dp" />
+                </LinearLayout>
+            </com.inz.z.base.view.widget.BaseNavLayout>
+
+            <com.inz.z.base.view.widget.BaseNavLayout
+                android:id="@+id/setting_info_version_bnl"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/touch_target_height"
+                android:background="@drawable/bg_item_selector"
+                android:paddingStart="@dimen/border_lr_dimen"
+                android:paddingEnd="@dimen/border_lr_dimen"
+                app:base_center_layout="@id/setting_info_version_name_center_ll"
+                app:base_left_layout="@id/setting_info_version_name_left_iv"
+                app:base_right_layout="@id/setting_info_version_name_right_ll">
+
+                <ImageView
+                    android:id="@+id/setting_info_version_name_left_iv"
+                    style="@style/NoteBookAppTheme.ImageView"
+                    android:layout_width="@dimen/icon_normal_size"
+                    android:layout_height="@dimen/icon_normal_size"
+                    android:contentDescription="@string/base_image"
+                    android:src="@drawable/ic_cached_black_24dp"
+                    android:tint="@android:color/transparent" />
+
+                <LinearLayout
+                    android:id="@+id/setting_info_version_name_center_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/content_space_between_dimen"
+                    android:layout_marginEnd="@dimen/content_space_between_dimen"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/NoteBookAppTheme.Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/check_app_version_update"
+                        android:textSize="@dimen/subheading_text_size" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/setting_info_version_name_right_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/setting_info_version_name_tv"
+                        style="@style/NoteBookAppTheme.Text.Hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/content_space_between_dimen"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        style="@style/NoteBookAppTheme.ImageView"
+                        android:layout_width="@dimen/icon_normal_size"
+                        android:layout_height="@dimen/icon_normal_size"
+                        android:contentDescription="@string/base_image"
+                        android:src="@drawable/ic_chevron_right_black_24dp" />
+                </LinearLayout>
+            </com.inz.z.base.view.widget.BaseNavLayout>
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

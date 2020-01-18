@@ -81,7 +81,7 @@ class GroupActivity : AbsBaseActivity() {
             }
         )
         group_content_note_info_rv.adapter = mNoteInfoRecyclerAdapter
-        group_top_back_iv.setOnClickListener {
+        group_top_back_rl.setOnClickListener {
             finish()
         }
         group_content_srl.setOnRefreshListener {

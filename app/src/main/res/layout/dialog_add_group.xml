@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
-    android:background="@color/snow"
+    android:background="@color/card_main_color"
     android:orientation="vertical"
     android:padding="@dimen/border_lr_dimen">
 
@@ -14,15 +14,14 @@
 
         <ImageView
             android:id="@+id/dialog_add_group_icon_iv"
+            style="@style/NoteBookAppTheme.ImageView"
             android:layout_width="@dimen/touch_target_size"
             android:layout_height="@dimen/touch_target_size"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:background="@drawable/ic_add_black_24dp"
             android:backgroundTint="@color/colorPrimary"
-            android:contentDescription="@string/base_image"
-            android:padding="@dimen/touch_icon_padding"
-            android:scaleType="centerInside" />
+            android:contentDescription="@string/base_image" />
 
         <EditText
             android:id="@+id/dialog_add_group_title_et"

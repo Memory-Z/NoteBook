@@ -90,7 +90,7 @@
 
     <style name="NoteBookAppTheme.ImageView">
         <item name="android:tint">@color/textColor</item>
-        <item name="android:scaleType">center</item>
+        <item name="android:scaleType">centerCrop</item>
         <item name="android:contentDescription">@string/base_image</item>
     </style>
 

@@ -1,19 +1,16 @@
 package com.inz.z.base.util;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Environment;
+import android.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import android.provider.MediaStore;
-import android.util.Base64;
 
 import com.inz.z.base.entity.Constants;
 import com.orhanobut.logger.Logger;
@@ -155,8 +152,12 @@ public class FileUtils {
             String line;
             BufferedReader br = new BufferedReader(isr);
             while ((line = br.readLine()) != null) {
-                if (line.contains("secure")) continue;
-                if (line.contains("asec")) continue;
+                if (line.contains("secure")) {
+                    continue;
+                }
+                if (line.contains("asec")) {
+                    continue;
+                }
 
                 if (line.contains("fat")) {
                     String columns[] = line.split(" ");
@@ -614,6 +615,30 @@ public class FileUtils {
     public static Bitmap base64ToBitmap(String base64Str) {
         byte[] bytes = Base64.decode(base64Str, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
+
+    /**
+     * 获取文件 及 子文件大小
+     *
+     * @param filePath 文件路径
+     * @return 大小 long
+     */
+    public static long getFileSize(String filePath) {
+        long fileSize = 0L;
+        File file = new File(filePath);
+        if (file.exists()) {
+            if (file.isDirectory()) {
+                File[] files = file.listFiles();
+                if (files != null) {
+                    for (File f : files) {
+                        fileSize += getFileSize(f.getAbsolutePath());
+                    }
+                }
+            } else {
+                fileSize += file.length();
+            }
+        }
+        return fileSize;
     }
 
 }
