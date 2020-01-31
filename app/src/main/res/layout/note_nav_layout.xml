@@ -3,22 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/card_main_color"
-    app:base_relative_layout_header_view="@id/note_nav_top_include">
+    android:background="@color/card_main_color">
 
-    <include
-        android:id="@+id/note_nav_top_include"
-        layout="@layout/top_search_nav_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--    <include-->
+    <!--        android:id="@+id/note_nav_top_include"-->
+    <!--        layout="@layout/top_search_nav_layout"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <com.inz.z.base.view.widget.BaseRelativeLayout
         android:id="@+id/note_nav_content_base_rl"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/note_nav_top_include">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/note_nav_content_nsv"

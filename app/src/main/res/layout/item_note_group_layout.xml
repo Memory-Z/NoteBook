@@ -72,7 +72,7 @@
 
             <TextView
                 android:id="@+id/item_note_group_child_number_tv"
-                style="@style/NoteBookAppTheme.Text"
+                style="@style/NoteBookAppTheme.Text.Hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"

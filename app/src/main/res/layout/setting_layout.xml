@@ -113,8 +113,7 @@
                     android:layout_width="@dimen/icon_normal_size"
                     android:layout_height="@dimen/icon_normal_size"
                     android:contentDescription="@string/base_image"
-                    android:src="@drawable/ic_settings_black_24dp"
-                    android:tint="@android:color/transparent" />
+                    android:src="@drawable/ic_settings_black_24dp" />
 
                 <LinearLayout
                     android:id="@+id/setting_info_cache_clear_center_ll"
@@ -174,8 +173,7 @@
                     android:layout_width="@dimen/icon_normal_size"
                     android:layout_height="@dimen/icon_normal_size"
                     android:contentDescription="@string/base_image"
-                    android:src="@drawable/ic_cached_black_24dp"
-                    android:tint="@android:color/transparent" />
+                    android:src="@drawable/ic_cached_black_24dp" />
 
                 <LinearLayout
                     android:id="@+id/setting_info_version_name_center_ll"

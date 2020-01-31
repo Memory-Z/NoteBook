@@ -117,15 +117,46 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
+                android:layout_marginStart="@dimen/border_lr_dimen"
                 android:backgroundTint="@color/lineColor" />
 
             <com.inz.z.base.view.widget.BaseNavLayout
                 android:id="@+id/mln_1_bnl"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/touch_target_height"
-                android:background="@color/card_four_color"
+                android:background="@color/card_second_color"
                 android:paddingStart="@dimen/border_lr_dimen"
-                android:paddingEnd="@dimen/border_lr_dimen">
+                android:paddingEnd="@dimen/border_lr_dimen"
+                app:base_center_layout="@id/mln_1_tv"
+                app:base_left_layout="@id/mln_1_iv"
+                app:base_right_layout="@id/mln_1_right_ll">
+
+                <ImageView
+                    android:id="@+id/mln_1_iv"
+                    style="@style/NoteBookAppTheme.ImageView"
+                    android:layout_width="@dimen/icon_normal_size"
+                    android:layout_height="@dimen/icon_normal_size"
+                    android:contentDescription="@string/image"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_alarm_add_black_24dp" />
+
+                <TextView
+                    android:id="@+id/mln_1_tv"
+                    style="@style/NoteBookAppTheme.Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/content_space_between_dimen"
+                    android:text="@string/_schedule"
+                    android:textSize="@dimen/text_body_size"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/mln_1_right_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
 
             </com.inz.z.base.view.widget.BaseNavLayout>
 

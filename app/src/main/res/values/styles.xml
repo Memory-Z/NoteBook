@@ -55,11 +55,11 @@
     <style name="NoteBookAppTheme.TextButtonTag" parent="TextAppearance.AppCompat.Widget.Button">
         <item name="android:drawablePadding">4dp</item>
         <item name="android:gravity">center</item>
+        <item name="android:tint">@color/textColor</item>
         <item name="android:paddingEnd">16dp</item>
         <item name="android:paddingStart">12dp</item>
         <item name="android:background">@drawable/bg_text_radian</item>
         <item name="android:textSize">@dimen/body_text_size</item>
-        <item name="android:textColor">@color/textInverseColor</item>
         <item name="android:height">36dp</item>
     </style>
 
@@ -89,7 +89,13 @@
     </style>
 
     <style name="NoteBookAppTheme.ImageView">
-        <item name="android:tint">@color/textColor</item>
+        <item name="android:tint">@color/card_inverse_color</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:contentDescription">@string/base_image</item>
+    </style>
+
+    <style name="NoteBookAppTheme.ImageButton">
+        <item name="android:tint">@color/card_inverse_color</item>
         <item name="android:scaleType">centerCrop</item>
         <item name="android:contentDescription">@string/base_image</item>
     </style>

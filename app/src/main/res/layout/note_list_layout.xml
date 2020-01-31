@@ -16,29 +16,43 @@
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:gravity="center_vertical"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            app:base_center_layout="@id/note_list_top_search_v"
-            app:base_right_layout="@id/note_list_top_right_tv"
+            android:paddingStart="@dimen/border_lr_dimen"
+            android:paddingEnd="@dimen/border_lr_dimen"
+            app:base_left_layout="@id/note_list_top_left_ll"
+            app:base_right_layout="@id/note_list_top_riight_ll"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/note_list_top_search_v"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/note_list_top_left_ll"
+                android:layout_width="@dimen/touch_target_size"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="8dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:gravity="center"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/note_list_top_right_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/base_title"
-                android:textSize="20sp" />
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/note_list_top_search_v"
+                    android:layout_width="@dimen/photo_normal_size"
+                    android:layout_height="@dimen/photo_normal_size" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/note_list_top_riight_ll"
+                android:layout_width="@dimen/touch_target_size"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/note_list_top_right_tv"
+                    style="@style/NoteBookAppTheme.Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/base_title" />
+
+            </LinearLayout>
 
         </com.inz.z.base.view.widget.BaseNavLayout>
 

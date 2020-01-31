@@ -37,13 +37,13 @@
 
         <TextView
             android:id="@+id/note_nav_hint_week_tv"
+            style="@style/NoteBookAppTheme.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/note_nav_hint_data_tv"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/content_space_between_dimen"
             android:text="@string/base_format_week"
-            style="@style/NoteBookAppTheme.Text"
             android:textColor="@color/accessoryColor"
             android:textSize="@dimen/subheading_text_size" />
 
@@ -52,10 +52,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/border_lr_dimen"
         android:visibility="gone">
 
         <ImageButton
             android:id="@+id/note_nav_hint_ibtn"
+            style="@style/NoteBookAppTheme.ImageButton"
             android:layout_width="120dp"
             android:layout_height="48dp"
             android:layout_centerInParent="true"

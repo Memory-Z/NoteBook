@@ -9,21 +9,30 @@
         android:layout_height="@dimen/min_title_height"
         android:background="@color/textInverseColor50">
 
-        <ImageView
-            android:id="@+id/app_widget_top_add_iv"
+        <LinearLayout
+            android:id="@+id/app_widget_top_right_ll"
             android:layout_width="@dimen/touch_target_size"
             android:layout_height="@dimen/touch_target_size"
             android:layout_alignParentEnd="true"
-            android:contentDescription="@string/base_image"
-            android:padding="@dimen/touch_icon_padding"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_add_black_24dp" />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/app_widget_top_add_iv"
+                style="@style/NoteBookAppTheme.ImageView"
+                android:layout_width="@dimen/photo_normal_size"
+                android:layout_height="@dimen/photo_normal_size"
+
+                android:contentDescription="@string/base_image"
+                android:src="@drawable/ic_add_black_24dp" />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toStartOf="@id/app_widget_top_add_iv"
+            android:layout_toStartOf="@id/app_widget_top_right_ll"
             android:layout_toEndOf="@id/app_widget_top_title_tv" />
 
         <TextView

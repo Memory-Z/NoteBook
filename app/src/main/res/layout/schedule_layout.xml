@@ -2,15 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <Spinner
-        android:id="@+id/schedule_spinner"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <com.inz.z.base.view.widget.BaseSecurityImageView
         android:layout_width="match_parent"
@@ -20,5 +13,67 @@
         app:layout_constraintStart_toStartOf="parent"
         app:text="绝密绝密"
         app:textSize="@dimen/text_body_size" />
+
+    <com.inz.z.base.view.widget.BaseNavLayout
+        android:id="@+id/schedule_top_bnl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tool_bar_height"
+        android:background="@color/card_second_color"
+        app:base_center_layout="@id/schedule_top_center_ll"
+        app:base_left_layout="@id/schedule_top_left_ll"
+        app:base_right_layout="@id/schedule_top_right_ll"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/schedule_top_left_ll"
+            android:layout_width="@dimen/touch_target_size"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/NoteBookAppTheme.ImageView"
+                android:layout_width="@dimen/photo_normal_size"
+                android:layout_height="@dimen/photo_normal_size"
+                android:contentDescription="@string/image"
+                android:src="@drawable/ic_chevron_left_black_24dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/schedule_top_center_ll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/border_lr_dimen"
+            android:layout_marginEnd="@dimen/border_lr_dimen"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/NoteBookAppTheme.Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_schedule" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/schedule_top_right_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
+
+            <ImageView
+                style="@style/NoteBookAppTheme.ImageView"
+                android:layout_width="@dimen/photo_normal_size"
+                android:layout_height="@dimen/photo_normal_size"
+                android:contentDescription="@string/image"
+                android:src="@drawable/ic_add_black_24dp" />
+        </LinearLayout>
+    </com.inz.z.base.view.widget.BaseNavLayout>
+
+    <CalendarView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/schedule_top_bnl" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

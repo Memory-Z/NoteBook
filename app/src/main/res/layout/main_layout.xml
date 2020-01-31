@@ -1,24 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_note_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <com.inz.z.base.view.widget.BaseRelativeLayout
-        android:id="@+id/note_main_centent_brl"
+    <RelativeLayout
+        android:id="@+id/note_main_content_rl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:base_relative_layout_content_view="@id/note_main_fl">
+        android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/note_main_fl"
+        <include
+            android:id="@+id/main_note_nav_top_include"
+            layout="@layout/top_search_nav_layout" />
+
+        <com.inz.z.base.view.widget.BaseRelativeLayout
+            android:id="@+id/note_main_centent_brl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible">
+            android:layout_below="@id/main_note_nav_top_include"
+            app:base_relative_layout_content_view="@id/note_main_fl">
 
-        </FrameLayout>
-    </com.inz.z.base.view.widget.BaseRelativeLayout>
+
+            <FrameLayout
+                android:id="@+id/note_main_fl"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+            </FrameLayout>
+        </com.inz.z.base.view.widget.BaseRelativeLayout>
+    </RelativeLayout>
 
     <com.inz.z.base.view.widget.BaseRelativeLayout
         android:id="@+id/note_main_left_rl"

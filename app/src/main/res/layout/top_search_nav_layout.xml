@@ -30,29 +30,13 @@
         android:layout_height="@dimen/button_normal_height"
         android:layout_marginStart="@dimen/border_lr_dimen"
         android:layout_marginEnd="@dimen/border_lr_dimen"
-        android:background="@drawable/bg_nav_search"
         android:gravity="center_vertical">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:contentDescription="@string/base_image"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_vd_word" />
-        </LinearLayout>
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/top_search_nav_search_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@null" />
+            android:background="@drawable/bg_search_view_main" />
 
     </RelativeLayout>
 
@@ -61,13 +45,21 @@
         android:layout_width="@dimen/touch_target_height"
         android:layout_height="match_parent">
 
-        <ImageView
-            style="@style/NoteBookAppTheme.ImageView"
+        <LinearLayout
+            android:id="@+id/top_search_nav_end_more_ll"
             android:layout_width="@dimen/photo_normal_size"
             android:layout_height="@dimen/photo_normal_size"
             android:layout_centerInParent="true"
-            android:contentDescription="@string/base_image"
-            android:src="@drawable/ic_more_vert_black_24dp" />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/NoteBookAppTheme.ImageView"
+                android:layout_width="@dimen/button_normal_height"
+                android:layout_height="@dimen/button_normal_height"
+                android:contentDescription="@string/base_image"
+                android:src="@drawable/ic_more_vert_black_24dp" />
+        </LinearLayout>
     </RelativeLayout>
 
 
