@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!-- 通讯录 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/address_book_layout_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toStartOf="@id/address_book_layout_anv" />
+
+    <com.inz.z.addressbook.widget.AddressNavView
+        android:id="@+id/address_book_layout_anv"
+        android:layout_width="24dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="#6BFF7F" />
+
+</RelativeLayout>

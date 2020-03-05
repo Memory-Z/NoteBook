@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FBFBFB"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
+
+    <!-- 左侧 -->
+    <RelativeLayout
+        android:id="@+id/item_ab_left_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="16dp">
+
+        <ImageView
+            android:id="@+id/item_ab_left_iv"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/_ab_user_photo"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_account_box_black_24dp"
+            android:tint="@color/colorPrimary" />
+
+        <TextView
+            android:id="@+id/item_ab_left_short_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:maxLength="1"
+            android:text="@string/_ab_user_photo"
+            android:textColor="#EAEAEA"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <!-- 中间 -->
+    <RelativeLayout
+        android:id="@+id/item_ab_center_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_toStartOf="@id/item_ab_right_rl"
+        android:layout_toEndOf="@id/item_ab_left_rl">
+
+        <TextView
+            android:id="@+id/item_ab_center_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@string/_ab_user_photo"
+            android:textColor="#2D2D2D"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/item_ab_center_name_hint_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/item_ab_center_name_tv"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="#818181"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <!-- 右侧 -->
+    <RelativeLayout
+        android:id="@+id/item_ab_right_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="16dp">
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
