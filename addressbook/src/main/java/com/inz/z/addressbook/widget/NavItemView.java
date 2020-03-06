@@ -20,13 +20,15 @@ import com.inz.z.addressbook.tool.Tools;
  */
 public class NavItemView extends View {
     private static final String TAG = "NavItemView";
-    private static final int DEFAULT_TEXT_COLOR = Color.parseColor("#2d2d2d");
+    private static final int DEFAULT_TEXT_COLOR = Color.parseColor("#2D2D2D");
+    private static final int DEFAULT_TEXT_GRAY_COLOR = Color.parseColor("#9A9A9A");
+
     private Context mContext;
     private Paint textPaint;
     private int textColor = DEFAULT_TEXT_COLOR;
     private int textSize = 16;
 
-    private String text = "A";
+    private NavItemViewBean navItemViewBean;
 
     public NavItemView(Context context) {
         super(context);
@@ -57,21 +59,26 @@ public class NavItemView extends View {
         super.onDraw(canvas);
         int height = getHeight();
         int width = getWidth();
-        textPaint.setColor(textColor);
+        String tag = "";
+        if (navItemViewBean != null) {
+            if (navItemViewBean.isCanClick()) {
+                textPaint.setColor(textColor);
+            } else {
+                textPaint.setColor(DEFAULT_TEXT_GRAY_COLOR);
+            }
+            tag = navItemViewBean.getTag();
+        } else {
+            textPaint.setColor(textColor);
+        }
         Paint.FontMetricsInt fontMetricsInt = textPaint.getFontMetricsInt();
         int textCenterY = height / 2 - (fontMetricsInt.bottom + fontMetricsInt.top) / 2;
         int centerX = width / 2;
-        canvas.drawText(text, centerX, textCenterY, textPaint);
+        canvas.drawText(tag, centerX, textCenterY, textPaint);
     }
 
     ///////////////////////////////////////////////////////////////////////////
     // 对外接口
     ///////////////////////////////////////////////////////////////////////////
-
-
-    public void setText(String text) {
-        this.text = text;
-    }
 
     public void setTextSize(int textSize) {
         this.textSize = textSize;
@@ -80,5 +87,13 @@ public class NavItemView extends View {
     public void setTextColor(int textColor) {
         this.textColor = textColor;
         invalidate();
+    }
+
+    public NavItemViewBean getNavItemViewBean() {
+        return navItemViewBean == null ? (navItemViewBean = new NavItemViewBean()) : navItemViewBean;
+    }
+
+    public void setNavItemViewBean(NavItemViewBean navItemViewBean) {
+        this.navItemViewBean = navItemViewBean;
     }
 }

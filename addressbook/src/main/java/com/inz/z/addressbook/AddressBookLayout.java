@@ -16,13 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.inz.z.addressbook.adapter.AddressBookRvAdapter;
 import com.inz.z.addressbook.bean.AddressBookBean;
 import com.inz.z.addressbook.bean.AddressBookPinyinBean;
-import com.inz.z.addressbook.bean.PinyinItemBean;
 import com.inz.z.addressbook.widget.AddressNavView;
 
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -42,7 +42,6 @@ public class AddressBookLayout extends RelativeLayout {
     private View mView;
 
     private RecyclerView addressBookRv;
-    private RecyclerView.LayoutManager layoutManager;
     private AddressBookRvAdapter addressBookRvAdapter;
     private AddressBookItemDecoration addItemDecoration;
     /**
@@ -84,13 +83,17 @@ public class AddressBookLayout extends RelativeLayout {
             mView = LayoutInflater.from(mContext).inflate(R.layout.address_book_layout, this, true);
             addressBookRv = mView.findViewById(R.id.address_book_layout_rv);
 
-            layoutManager = new LinearLayoutManager(mContext);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
             addressBookRv.setLayoutManager(layoutManager);
             addressNavView = mView.findViewById(R.id.address_book_layout_anv);
             addressNavView.setLayoutManager(layoutManager);
+            addressNavView.setListener(new AddressNavViewListenerImpl());
+
             addressBookRvAdapter = new AddressBookRvAdapter(mContext, null);
             addressBookRv.setAdapter(addressBookRvAdapter);
+
             addItemDecoration = new AddressBookItemDecoration(mContext, itemBeanList);
+            addItemDecoration.setListener(new AddressBookItemDecorationListenerImpl());
             addressBookRv.addItemDecoration(addItemDecoration);
         }
     }
@@ -110,24 +113,57 @@ public class AddressBookLayout extends RelativeLayout {
             Random random = new Random();
             int p = random.nextInt(length);
             String text = nameArray[p];
-            Log.i(TAG, "initAddressBookData: Text = " + text);
             bookBean.setUserName(text);
             bookBean.setSpecialPhone("座机电话号码 --- > " + i);
             bookBean.setTellPhone("移动电话 ---> " + i);
             bookPinyinBean.setData(bookBean);
             itemBeanList.add(bookPinyinBean);
-            Log.i(TAG, "initAddressBookData: TAG = " + bookPinyinBean.getPinyinFirstChar());
+            String tag = bookPinyinBean.getPinyinFirstChar();
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "initAddressBookData: TAG = " + tag);
+            }
         }
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            itemBeanList.sort(new AddressPinyinSort());
-//        } else {
-        AddressBookPinyinBean[] beans = new AddressBookPinyinBean[itemBeanList.size()];
-        itemBeanList.toArray(beans);
-        Arrays.sort(beans, new AddressPinyinSort());
-        itemBeanList = Arrays.asList(beans);
-//        }
-        addressBookRvAdapter.replaceData(itemBeanList);
-        addItemDecoration.setDataList(itemBeanList);
+        refreshData(itemBeanList);
+    }
+
+    /**
+     * 刷新数据 。
+     *
+     * @param list 数据列表
+     */
+    private void refreshData(List<? extends AddressBookPinyinBean> list) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            list.sort(new AddressPinyinSort());
+        } else {
+            AddressBookPinyinBean[] beans = new AddressBookPinyinBean[list.size()];
+            list.toArray(beans);
+            Arrays.sort(beans, new AddressPinyinSort());
+            list = Arrays.asList(beans);
+        }
+        // 获取标签
+        LinkedList<String> tagList = new LinkedList<>();
+        for (int i = 0; i < list.size(); i++) {
+            String tag1 = list.get(i).getPinyinFirstChar();
+            // 是否重复
+            boolean haveRepetition = false;
+            for (int j = 0; j < tagList.size(); j++) {
+                String tag2 = tagList.get(j);
+                if (tag1.equals(tag2)) {
+                    haveRepetition = true;
+                    break;
+                }
+            }
+            if (!haveRepetition) {
+                tagList.add(tag1);
+                if (BuildConfig.DEBUG) {
+                    Log.i(TAG, "initAddressBookData: tag = " + tag1);
+                }
+            }
+        }
+        addressBookRvAdapter.replaceData(list);
+        addItemDecoration.setDataList(list);
+        addressNavView.setDataList(list);
+        addressNavView.setUserNavList(tagList);
 
     }
 
@@ -152,6 +188,31 @@ public class AddressBookLayout extends RelativeLayout {
             }
         }
     }
+
+    /**
+     * 状态切换 监听
+     */
+    private static class AddressBookItemDecorationListenerImpl implements AddressBookItemDecoration.AddressBookItemDecorationListener {
+        @Override
+        public void onFloatHeaderTag(String tag) {
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "onFloatHeaderChange: TAG = " + tag);
+            }
+
+        }
+    }
+
+    /**
+     * 导航栏 监听实现
+     */
+    private static class AddressNavViewListenerImpl implements AddressNavView.AddressNavViewListener {
+        @Override
+        public void onTouchItem(String nav, int position) {
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "onTouchItem: nav = " + nav + " , position = " + position);
+            }
+        }
+    }
     ///////////////////////////////////////////////////////////////////////////
     // 对外接口
     ///////////////////////////////////////////////////////////////////////////
@@ -163,5 +224,6 @@ public class AddressBookLayout extends RelativeLayout {
 
     public void setItemBeanList(List<AddressBookPinyinBean> itemBeanList) {
         this.itemBeanList = itemBeanList;
+        refreshData(this.itemBeanList);
     }
 }

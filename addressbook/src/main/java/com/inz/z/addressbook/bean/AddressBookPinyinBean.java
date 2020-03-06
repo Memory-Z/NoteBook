@@ -10,5 +10,16 @@ package com.inz.z.addressbook.bean;
  */
 public class AddressBookPinyinBean extends PinyinItemBean<AddressBookBean> {
 
+    /**
+     * 排序号
+     */
+    private int position = -1;
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 }

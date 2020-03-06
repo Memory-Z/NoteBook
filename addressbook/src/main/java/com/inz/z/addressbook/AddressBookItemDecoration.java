@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -17,7 +16,6 @@ import com.inz.z.addressbook.bean.AddressBookPinyinBean;
 import com.inz.z.addressbook.tool.Tools;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Create by inz
@@ -33,20 +31,20 @@ public class AddressBookItemDecoration extends RecyclerView.ItemDecoration {
     private Context mContext;
     private int headerHeight = 48;
     private int headerPaddingStart = 16;
-    private List<AddressBookPinyinBean> dataList;
+    private List<? extends AddressBookPinyinBean> dataList;
 
     private Paint headerPaint;
     private Paint textPaint;
 
-    public AddressBookItemDecoration(Context mContext, List<AddressBookPinyinBean> dataList) {
+    public AddressBookItemDecoration(Context mContext, List<? extends AddressBookPinyinBean> dataList) {
         this(mContext, 48, dataList);
     }
 
-    public AddressBookItemDecoration(Context context, int headerHeight, List<AddressBookPinyinBean> dataList) {
+    public AddressBookItemDecoration(Context context, int headerHeight, List<? extends AddressBookPinyinBean> dataList) {
         this(context, headerHeight, 16, dataList);
     }
 
-    public AddressBookItemDecoration(Context mContext, int headerHeight, int headerPaddingStart, List<AddressBookPinyinBean> dataList) {
+    public AddressBookItemDecoration(Context mContext, int headerHeight, int headerPaddingStart, List<? extends AddressBookPinyinBean> dataList) {
         this.mContext = mContext;
         this.headerHeight = Tools.dp2px(mContext, headerHeight);
         this.headerPaddingStart = Tools.dp2px(mContext, headerPaddingStart);
@@ -66,7 +64,7 @@ public class AddressBookItemDecoration extends RecyclerView.ItemDecoration {
 
     }
 
-    public void setDataList(List<AddressBookPinyinBean> dataList) {
+    public void setDataList(List<? extends AddressBookPinyinBean> dataList) {
         this.dataList = dataList;
     }
 
@@ -87,7 +85,6 @@ public class AddressBookItemDecoration extends RecyclerView.ItemDecoration {
                 } else {
                     canDraw = true;
                 }
-                Log.i(TAG, "onDraw: tag = " + tag);
                 if (canDraw) {
                     drawHeaderView(c, parent, view, tag);
                 }
@@ -191,5 +188,24 @@ public class AddressBookItemDecoration extends RecyclerView.ItemDecoration {
         int centerY = headerHeight / 2 - (fontMetricsInt.top + fontMetricsInt.bottom) / 2;
         int y = left + centerY;
         c.drawText(tag, x, y, textPaint);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // 对外接口
+    ///////////////////////////////////////////////////////////////////////////
+
+    public interface AddressBookItemDecorationListener {
+        /**
+         * 浮动 头 标签 改变
+         *
+         * @param tag 标签
+         */
+        void onFloatHeaderTag(String tag);
+    }
+
+    private AddressBookItemDecorationListener listener;
+
+    public void setListener(AddressBookItemDecorationListener listener) {
+        this.listener = listener;
     }
 }

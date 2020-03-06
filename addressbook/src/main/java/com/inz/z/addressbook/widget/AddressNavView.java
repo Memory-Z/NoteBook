@@ -6,15 +6,19 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.inz.z.addressbook.BuildConfig;
+import com.inz.z.addressbook.bean.AddressBookPinyinBean;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * 通讯录导航栏
@@ -33,9 +37,21 @@ public class AddressNavView extends LinearLayout {
     private static final int ITEM_CHECKED_TEXT_COLOR = Color.parseColor("#FF6BFF7F");
 
     private Context mContext;
+    /**
+     * 导航栏
+     */
     private LinkedList<String> navList = new LinkedList<>();
+    /**
+     * 有效的 导航栏
+     */
+    private LinkedList<String> userNavList = new LinkedList<>();
+    /**
+     * 关联数据
+     */
+    private List<? extends AddressBookPinyinBean> dataList;
+
     private LinkedList<NavItemView> navItemViewLinkedList = new LinkedList<>();
-    private RecyclerView.LayoutManager layoutManager;
+    private LinearLayoutManager layoutManager;
 
     public AddressNavView(Context context) {
         super(context);
@@ -78,7 +94,10 @@ public class AddressNavView extends LinearLayout {
         navItemViewLinkedList.clear();
         for (String nav : navList) {
             NavItemView itemView = new NavItemView(mContext);
-            itemView.setText(nav);
+            NavItemViewBean bean = new NavItemViewBean();
+            bean.setTag(nav);
+            bean.setCanClick(true);
+            itemView.setNavItemViewBean(bean);
             navItemViewLinkedList.add(itemView);
         }
     }
@@ -122,12 +141,10 @@ public class AddressNavView extends LinearLayout {
         float y = event.getY();
         int action = event.getAction();
         long time = System.currentTimeMillis();
-        Log.i(TAG, "onTouchEvent: action - " + action);
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
                 onTouchTime = time;
                 int position = (int) ((y - startY) / itemHeight);
-                Log.i(TAG, "onTouchEvent: ACTION_DOWN position = " + position);
                 onCheckedItem(position);
                 break;
             }
@@ -137,12 +154,11 @@ public class AddressNavView extends LinearLayout {
             }
             case MotionEvent.ACTION_MOVE: {
                 int position = (int) ((y - startY) / itemHeight);
-                Log.i(TAG, "onTouchEvent: ACTION_MOVE position = " + position);
                 onCheckedItem(position);
-
                 break;
             }
             case MotionEvent.ACTION_UP: {
+                clearCheckedItem();
                 if (time - onTouchTime < 500) {
                     // 按下弹起时间小于 500ms 认为是 点击事件
                     performClick();
@@ -176,7 +192,6 @@ public class AddressNavView extends LinearLayout {
         if (position >= navList.size()) {
             position = navList.size() - 1;
         }
-        Log.i(TAG, "onCheckedItem: position = " + position);
         if (onTouchItem != position) {
             if (onTouchItem >= 0 && onTouchItem < navItemViewLinkedList.size()) {
                 NavItemView itemView = navItemViewLinkedList.get(onTouchItem);
@@ -184,16 +199,55 @@ public class AddressNavView extends LinearLayout {
             }
             onTouchItem = position;
         }
+        String tag = navList.get(position);
         if (listener != null) {
-            listener.onTouchItem(navList.get(position), position);
+            listener.onTouchItem(tag, position);
         }
         if (navItemViewLinkedList.size() == navList.size()) {
             NavItemView itemView = navItemViewLinkedList.get(position);
-            itemView.setTextColor(Color.RED);
+            if (itemView.getNavItemViewBean().isCanClick()) {
+                itemView.setTextColor(Color.RED);
+            }
         }
         if (layoutManager != null) {
-            layoutManager.scrollToPosition(position);
+            int dataListPosition = getPositionByTag(tag);
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "onCheckedItem: TAG = " + tag + " , position = " + dataListPosition);
+            }
+            if (dataListPosition != -1) {
+                layoutManager.scrollToPositionWithOffset(dataListPosition, 0);
+            }
         }
+    }
+
+    /**
+     * 清除点击项
+     */
+    private void clearCheckedItem() {
+        if (onTouchItem != -1) {
+            if (onTouchItem >= 0 && onTouchItem < navItemViewLinkedList.size()) {
+                NavItemView itemView = navItemViewLinkedList.get(onTouchItem);
+                itemView.setTextColor(ITEM_BASE_TEXT_COLOR);
+            }
+        }
+    }
+
+    /**
+     * 通过标签获取 数据中 序号
+     *
+     * @param tag 标签
+     * @return 序号
+     */
+    private int getPositionByTag(@NonNull String tag) {
+        if (dataList != null) {
+            for (int i = 0; i < dataList.size(); i++) {
+                AddressBookPinyinBean bean = dataList.get(i);
+                if (bean != null && tag.equals(bean.getPinyinFirstChar())) {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -211,11 +265,43 @@ public class AddressNavView extends LinearLayout {
         this.listener = listener;
     }
 
-    public RecyclerView.LayoutManager getLayoutManager() {
+    public LinearLayoutManager getLayoutManager() {
         return layoutManager;
     }
 
-    public void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
+    public void setLayoutManager(LinearLayoutManager layoutManager) {
         this.layoutManager = layoutManager;
+    }
+
+    public LinkedList<String> getUserNavList() {
+        return userNavList;
+    }
+
+    public void setUserNavList(LinkedList<String> userNavList) {
+        for (NavItemView navItemView : navItemViewLinkedList) {
+            boolean canClick = false;
+            if (navItemView != null) {
+                NavItemViewBean bean = navItemView.getNavItemViewBean();
+                String oldNav = bean.getTag();
+                for (String nav : userNavList) {
+                    if (nav.equals(oldNav)) {
+                        canClick = true;
+                        break;
+                    }
+                }
+                bean.setCanClick(canClick);
+                navItemView.setNavItemViewBean(bean);
+            }
+        }
+        this.userNavList = userNavList;
+    }
+
+    public List<? extends AddressBookPinyinBean> getDataList() {
+        return dataList;
+    }
+
+    public void setDataList(List<? extends AddressBookPinyinBean> dataList) {
+        this.dataList = dataList;
+        invalidate();
     }
 }
