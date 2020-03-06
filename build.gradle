@@ -7,9 +7,10 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:3.6.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         classpath "com.alibaba:arouter-register:1.0.2"
@@ -23,11 +24,14 @@ buildscript {
 allprojects {
     repositories {
         google()
+        jcenter()
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
         jcenter() { url 'http://jcenter.bintray.com/' }
         mavenCentral()
 //        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://jitpack.io" }
         maven { url 'https://maven.google.com' }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         // 阿里云
         maven { url "http://maven.aliyun.com/nexus/content/repositories/releases" }
     }

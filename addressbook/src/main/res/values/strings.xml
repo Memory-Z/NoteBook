@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AddressBook</string>
+
+    <string name="_ab_user_photo">用户头像</string>
+</resources>
