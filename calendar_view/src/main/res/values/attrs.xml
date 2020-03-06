@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CalendarDayView">
+        <attr name="date_text_size" format="dimension" />
+        <attr name="date_text_color" format="color" />
+        <attr name="lunar_text_color" format="color" />
+        <attr name="tag_color" format="color" />
+        <attr name="checked_color" format="color" />
+        <attr name="current_color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="CalendarWeekView">
+        <attr name="week_color" format="color" />
+        <attr name="view_mode" format="enum">
+            <enum name="week" value="0" />
+            <enum name="month" value="1" />
+            <enum name="year" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="CalendarMonthView">
+        <attr name="start_day" format="enum">
+            <enum name="sunday" value="0" />
+            <enum name="firstday" value="1" />
+        </attr>
+    </declare-styleable>
+</resources>

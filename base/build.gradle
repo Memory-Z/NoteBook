@@ -76,8 +76,8 @@ dependencies {
     /**
      * Glide 4 图片加载器 加载大型图片
      * */
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 //    // 转换
 //    implementation 'jp.wasabeef:glide-transformations:4.0.0'
 

@@ -20,6 +20,17 @@
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
         <activity
+            android:name=".view.activity.TestCalendarActivity"
+            android:configChanges="screenSize|screenLayout|keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoteBookAppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".view.activity.MainActivity"
             android:configChanges="keyboardHidden|screenLayout|screenSize|orientation"
             android:screenOrientation="portrait"
@@ -30,11 +41,7 @@
             android:configChanges="screenSize|screenLayout|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/NoteBookAppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <!-- 组 -->
