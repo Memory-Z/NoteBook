@@ -36,6 +36,7 @@ class NoteNavFragment : AbsBaseFragment() {
 
     companion object {
         private const val TAG = "NoteNavFragment"
+
         /**
          * 显示笔记信息数量
          */
@@ -45,22 +46,27 @@ class NoteNavFragment : AbsBaseFragment() {
     }
 
     private lateinit var mNoteGroupLayoutManager: LinearLayoutManager
+
     /**
      * noteGroup 适配器
      */
     private var mNoteGroupRvAdapter: NoteGroupRvAdapter? = null
+
     /**
      * handler
      */
     private lateinit var mNoteNavHandler: Handler
+
     /**
      * 显示笔记数量
      */
     private var showNoteInfoNumber = SHOW_NOTE_INFO_NUMBER
+
     /**
      * 笔记组列表
      */
     private var noteGroupList: MutableList<NoteGroup>? = null
+
     /**
      * 线程调度池
      */

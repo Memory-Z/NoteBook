@@ -16,29 +16,29 @@
 
         <ImageView
             android:id="@+id/note_info_add_top_back_iv"
-            android:layout_width="@dimen/touch_target_size"
-            android:layout_height="@dimen/touch_target_size"
+            style="@style/NoteBookAppTheme.ImageView.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/base_image"
-            android:padding="@dimen/touch_icon_padding"
             android:src="@drawable/ic_chevron_left_black_24dp" />
 
         <TextView
             android:id="@+id/note_info_add_top_title_tv"
+            style="@style/NoteBookAppTheme.Text.Title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/border_lr_dimen"
-            android:layout_marginEnd="@dimen/border_lr_dimen"
+            android:layout_marginStart="@dimen/content_space_between_dimen"
+            android:layout_marginEnd="@dimen/content_space_between_dimen"
             android:gravity="center_vertical"
-            android:text="@string/base_title"
-            android:textSize="18sp" />
+            android:text="@string/base_title" />
 
         <TextView
             android:id="@+id/note_info_add_top_finish_tv"
+            style="@style/NoteBookAppTheme.Text"
             android:layout_width="@dimen/touch_target_size"
             android:layout_height="@dimen/touch_target_size"
             android:gravity="center"
-            android:text="@string/completed"
-            android:textSize="14sp" />
+            android:text="@string/completed" />
 
     </com.inz.z.base.view.widget.BaseNavLayout>
 
@@ -72,12 +72,12 @@
 
                 <TextView
                     android:id="@+id/note_info_add_content_top_time_tv"
+                    style="@style/NoteBookAppTheme.Text.Hint"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/min_title_height"
+                    android:layout_height="@dimen/button_normal_height"
                     android:gravity="center"
                     android:text="@string/base_time"
-                    android:textColor="@color/textGray"
-                    android:textSize="@dimen/caption_text_size" />
+                    android:textColor="@color/textGray" />
 
                 <com.inz.z.note_book.view.widget.ScheduleLayout
                     android:id="@+id/note_info_add_content_schedule_layout"
@@ -121,19 +121,19 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="@dimen/icon_normal_size"
-                    android:layout_height="@dimen/icon_normal_size"
+                    style="@style/NoteBookAppTheme.ImageView.Icon.Min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:contentDescription="@string/base_image"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_share_black_24dp" />
 
                 <TextView
-                    style="@style/NoteBookAppTheme.Text"
+                    style="@style/NoteBookAppTheme.Text.Hint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="@string/share"
-                    android:textSize="12sp" />
+                    android:text="@string/share" />
             </LinearLayout>
 
             <LinearLayout
@@ -147,19 +147,19 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="@dimen/icon_normal_size"
-                    android:layout_height="@dimen/icon_normal_size"
+                    style="@style/NoteBookAppTheme.ImageView.Icon.Min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:contentDescription="@string/base_image"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_delete_black_24dp" />
 
                 <TextView
-                    style="@style/NoteBookAppTheme.Text"
+                    style="@style/NoteBookAppTheme.Text.Hint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="@string/delete"
-                    android:textSize="12sp" />
+                    android:text="@string/delete" />
 
             </LinearLayout>
 
@@ -182,17 +182,17 @@
                 tools:ignore="UseCompoundDrawables">
 
                 <ImageView
-                    android:layout_width="@dimen/icon_normal_size"
-                    android:layout_height="@dimen/icon_normal_size"
+                    style="@style/NoteBookAppTheme.ImageView.Icon.Min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:contentDescription="@string/base_image"
                     android:src="@drawable/ic_alarm_add_black_24dp" />
 
                 <TextView
-                    style="@style/NoteBookAppTheme.Text"
+                    style="@style/NoteBookAppTheme.Text.Hint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/base_image"
-                    android:textSize="12sp" />
+                    android:text="@string/base_image" />
             </LinearLayout>
 
             <LinearLayout
@@ -204,17 +204,17 @@
                 tools:ignore="UseCompoundDrawables">
 
                 <ImageView
-                    android:layout_width="@dimen/icon_normal_size"
-                    android:layout_height="@dimen/icon_normal_size"
+                    style="@style/NoteBookAppTheme.ImageView.Icon.Min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:contentDescription="@string/base_image"
                     android:src="@drawable/ic_alarm_add_black_24dp" />
 
                 <TextView
-                    style="@style/NoteBookAppTheme.Text"
+                    style="@style/NoteBookAppTheme.Text.Hint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/base_image"
-                    android:textSize="12sp" />
+                    android:text="@string/base_image" />
             </LinearLayout>
 
             <LinearLayout
@@ -226,17 +226,17 @@
                 tools:ignore="UseCompoundDrawables">
 
                 <ImageView
-                    android:layout_width="@dimen/icon_normal_size"
-                    android:layout_height="@dimen/icon_normal_size"
+                    style="@style/NoteBookAppTheme.ImageView.Icon.Min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:contentDescription="@string/base_image"
                     android:src="@drawable/ic_alarm_add_black_24dp" />
 
                 <TextView
-                    style="@style/NoteBookAppTheme.Text"
+                    style="@style/NoteBookAppTheme.Text.Hint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/base_image"
-                    android:textSize="12sp" />
+                    android:text="@string/base_image" />
             </LinearLayout>
 
             <LinearLayout
@@ -248,17 +248,17 @@
                 tools:ignore="UseCompoundDrawables">
 
                 <ImageView
-                    android:layout_width="@dimen/icon_normal_size"
-                    android:layout_height="@dimen/icon_normal_size"
+                    style="@style/NoteBookAppTheme.ImageView.Icon.Min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:contentDescription="@string/base_image"
                     android:src="@drawable/ic_alarm_add_black_24dp" />
 
                 <TextView
-                    style="@style/NoteBookAppTheme.Text"
+                    style="@style/NoteBookAppTheme.Text.Hint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/base_image"
-                    android:textSize="12sp" />
+                    android:text="@string/base_image" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

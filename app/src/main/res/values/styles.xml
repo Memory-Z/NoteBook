@@ -64,28 +64,35 @@
     </style>
 
     <style name="NoteBookAppTheme.Text" parent="Widget.AppCompat.TextView">
-        <item name="android:textSize">@dimen/body_text_size</item>
+        <item name="android:textSize">@dimen/text_content_size</item>
         <item name="android:textColor">@color/textColor</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:text">@string/_text_format</item>
     </style>
 
+    <style name="NoteBookAppTheme.Text.Title" parent="NoteBookAppTheme.Text">
+        <item name="android:textSize">@dimen/text_title_size</item>
+    </style>
+
     <style name="NoteBookAppTheme.Text.Second" parent="NoteBookAppTheme.Text">
         <item name="android:textColor">@color/textColor70</item>
+        <item name="android:textSize">@dimen/text_content_size</item>
     </style>
 
     <style name="NoteBookAppTheme.Text.Hint" parent="NoteBookAppTheme.Text">
         <item name="android:textColor">@color/textColor50</item>
+        <item name="android:textSize">@dimen/text_hint_size</item>
     </style>
 
     <style name="NoteBookAppTheme.EditText" parent="Widget.AppCompat.EditText">
-        <item name="android:textSize">@dimen/body_text_size</item>
+        <item name="android:textSize">@dimen/text_content_size</item>
         <item name="android:textColor">@color/textColor</item>
         <item name="android:gravity">center_vertical</item>
     </style>
 
     <style name="NoteBookAppTheme.EditText.Second" parent="NoteBookAppTheme.EditText">
         <item name="android:textColor">@color/textColor70</item>
+        <item name="android:textSize">@dimen/text_hint_size</item>
     </style>
 
     <style name="NoteBookAppTheme.ImageView">
@@ -94,10 +101,28 @@
         <item name="android:contentDescription">@string/base_image</item>
     </style>
 
+    <style name="NoteBookAppTheme.ImageView.Icon" parent="NoteBookAppTheme.ImageView">
+        <item name="android:layout_width">@dimen/image_icon_size</item>
+        <item name="android:layout_height">@dimen/image_icon_size</item>
+        <item name="android:padding">@dimen/image_icon_padding_size</item>
+    </style>
+
+    <style name="NoteBookAppTheme.ImageView.Icon.Min" parent="NoteBookAppTheme.ImageView.Icon">
+        <item name="android:layout_width">@dimen/image_icon_min_size</item>
+        <item name="android:layout_height">@dimen/image_icon_min_size</item>
+        <item name="android:padding">@dimen/image_icon_min_padding_size</item>
+    </style>
+
     <style name="NoteBookAppTheme.ImageButton">
         <item name="android:tint">@color/card_inverse_color</item>
         <item name="android:scaleType">centerCrop</item>
         <item name="android:contentDescription">@string/base_image</item>
+    </style>
+
+    <style name="NoteBookAppTheme.Layout">
+        <item name="android:layout_height">@dimen/touch_target_height</item>
+        <item name="android:paddingStart">@dimen/border_lr_dimen</item>
+        <item name="android:paddingEnd">@dimen/border_lr_dimen</item>
     </style>
 
 </resources>

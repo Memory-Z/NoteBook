@@ -29,6 +29,7 @@ class MainActivity : BaseNoteActivity() {
 
     private var noteNavFragment: NoteNavFragment? = null
     private var drawerLayout: DrawerLayout? = null
+
     /**
      * 右侧更多菜单弹窗
      */
@@ -53,6 +54,12 @@ class MainActivity : BaseNoteActivity() {
         initLeftNavView()
         initContentView()
         showNoteNavFragment()
+
+
+        top_search_nav_content_rl.setOnClickListener {
+            top_search_nav_search_view.performClick()
+            top_search_nav_search_view.isIconified = false
+        }
     }
 
     override fun initData() {
@@ -67,7 +74,7 @@ class MainActivity : BaseNoteActivity() {
         top_search_nav_scan_iv.setOnClickListener {
             drawerLayout?.openDrawer(GravityCompat.START)
         }
-        top_search_nav_end_more_ll.setOnClickListener {
+        top_searche_nav_end_more_iv.setOnClickListener {
             showMoreMenuView()
         }
 //        top_search_nav_search_view.setIconifiedByDefault(false)
@@ -108,7 +115,7 @@ class MainActivity : BaseNoteActivity() {
      */
     private fun showMoreMenuView() {
         if (morePopupMenu == null) {
-            morePopupMenu = PopupMenu(mContext, top_search_nav_end_more_ll)
+            morePopupMenu = PopupMenu(mContext, top_search_nav_end_rl)
             menuInflater.inflate(R.menu.main_more, morePopupMenu!!.menu)
             morePopupMenu?.setOnMenuItemClickListener {
                 return@setOnMenuItemClickListener true

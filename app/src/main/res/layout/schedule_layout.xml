@@ -9,13 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/image_load_error"
         app:layout_constraintStart_toStartOf="parent"
-        app:text="绝密绝密"
-        app:textSize="@dimen/text_body_size" />
+        app:text="secrecy"
+        app:textColor="@color/red"
+        app:textSize="@dimen/text_title_size" />
 
     <com.inz.z.base.view.widget.BaseNavLayout
         android:id="@+id/schedule_top_bnl"
+        style="@style/NoteBookAppTheme.TopAction"
         android:layout_width="match_parent"
         android:layout_height="@dimen/tool_bar_height"
         android:background="@color/card_second_color"
@@ -32,9 +33,9 @@
             android:orientation="horizontal">
 
             <ImageView
-                style="@style/NoteBookAppTheme.ImageView"
-                android:layout_width="@dimen/photo_normal_size"
-                android:layout_height="@dimen/photo_normal_size"
+                style="@style/NoteBookAppTheme.ImageView.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:contentDescription="@string/image"
                 android:src="@drawable/ic_chevron_left_black_24dp" />
         </LinearLayout>
@@ -49,7 +50,7 @@
             android:orientation="horizontal">
 
             <TextView
-                style="@style/NoteBookAppTheme.Text"
+                style="@style/NoteBookAppTheme.Text.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/_schedule" />
@@ -57,14 +58,14 @@
 
         <LinearLayout
             android:id="@+id/schedule_top_right_ll"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/touch_target_height"
             android:layout_height="match_parent"
-            android:gravity="center_vertical">
+            android:gravity="center">
 
             <ImageView
-                style="@style/NoteBookAppTheme.ImageView"
-                android:layout_width="@dimen/photo_normal_size"
-                android:layout_height="@dimen/photo_normal_size"
+                style="@style/NoteBookAppTheme.ImageView.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:contentDescription="@string/image"
                 android:src="@drawable/ic_add_black_24dp" />
         </LinearLayout>

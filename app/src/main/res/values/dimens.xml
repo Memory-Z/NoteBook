@@ -34,6 +34,10 @@
     <!-- 触控图标边距 -->
     <dimen name="touch_icon_padding">12dp</dimen>
 
+    <dimen name="image_icon_size">@dimen/dp36</dimen>
+    <dimen name="image_icon_padding_size">@dimen/dp04</dimen>
+    <dimen name="image_icon_min_size">@dimen/dp24</dimen>
+    <dimen name="image_icon_min_padding_size">@dimen/dp02</dimen>
 
     <dimen name="app_bar_text_size">20sp</dimen>
     <dimen name="button_norma_text_size">15sp</dimen>
@@ -42,6 +46,11 @@
     <dimen name="subheading_text_size">17sp</dimen>
     <dimen name="body_text_size">15sp</dimen>
     <dimen name="caption_text_size">13sp</dimen>
+
+    <dimen name="text_title_size">@dimen/sp18</dimen>
+    <dimen name="text_title_sub_size">@dimen/sp16</dimen>
+    <dimen name="text_content_size">@dimen/sp14</dimen>
+    <dimen name="text_hint_size">@dimen/sp12</dimen>
 
     <dimen name="setting_height">160dp</dimen>
     <dimen name="image_phone_height">68dp</dimen>

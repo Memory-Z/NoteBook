@@ -19,10 +19,9 @@
 
             <ImageView
                 android:id="@+id/app_widget_top_add_iv"
-                style="@style/NoteBookAppTheme.ImageView"
-                android:layout_width="@dimen/photo_normal_size"
-                android:layout_height="@dimen/photo_normal_size"
-
+                style="@style/NoteBookAppTheme.ImageView.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:contentDescription="@string/base_image"
                 android:src="@drawable/ic_add_black_24dp" />
 

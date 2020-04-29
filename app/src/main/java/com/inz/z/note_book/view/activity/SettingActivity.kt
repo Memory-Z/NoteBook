@@ -32,8 +32,13 @@ class SettingActivity : AbsBaseActivity() {
         setting_info_nav_left_rl.setOnClickListener {
             this@SettingActivity.finish()
         }
-        setting_info_nav_bnl.setOnClickListener {
+        setting_info_cache_clear_bnl.setOnClickListener {
             Toast.makeText(mContext, "缓存清除", Toast.LENGTH_SHORT).show()
+            mContext?.let {
+                FileUtils.clearCacheData(mContext)
+                getCacheSize()
+                Toast.makeText(mContext, "缓存已清除", Toast.LENGTH_SHORT).show()
+            }
         }
         setting_info_version_name_tv.text = BuildConfig.VERSION_NAME
         setting_info_version_bnl.setOnClickListener {

@@ -331,6 +331,20 @@ public class FileUtils {
         return getCacheLogPath(context) + File.separatorChar + "crash";
     }
 
+
+    /**
+     * 清除缓存数据
+     *
+     * @param context 上下文
+     */
+    public static void clearCacheData(Context context) {
+        String fileCachePath = getCacheLogPath(context);
+        File file = new File(fileCachePath);
+        if (file.exists()) {
+            deleteFile(fileCachePath);
+        }
+    }
+
     /**
      * 是否由挂载外部存储
      *
@@ -639,6 +653,30 @@ public class FileUtils {
             }
         }
         return fileSize;
+    }
+
+    /**
+     * 删除文件夹 及 内的文件
+     *
+     * @param filePath 文件地址
+     */
+    public static void deleteFile(@NonNull String filePath) {
+        File file = new File(filePath);
+        if (file.exists()) {
+            if (file.isDirectory()) {
+                File[] files = file.listFiles();
+                if (files != null) {
+                    for (File f : files) {
+                        String fPath = f.getAbsolutePath();
+                        deleteFile(fPath);
+                    }
+                }
+            } else if (file.isFile()) {
+                boolean fD = file.delete();
+                L.i("FileUtils", "deleteFile: " + filePath + " , " + fD);
+            }
+        }
+
     }
 
 }

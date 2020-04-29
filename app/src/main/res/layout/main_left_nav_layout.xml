@@ -57,11 +57,10 @@
                     android:layout_toEndOf="@id/mln_user_photo_civ">
 
                     <TextView
-                        style="@style/NoteBookAppTheme.Text"
+                        style="@style/NoteBookAppTheme.Text.Title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/app_name"
-                        android:textSize="@dimen/text_body_size"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -86,11 +85,10 @@
 
                 <ImageView
                     android:id="@+id/mln_0_iv"
-                    style="@style/NoteBookAppTheme.ImageView"
-                    android:layout_width="@dimen/icon_normal_size"
-                    android:layout_height="@dimen/icon_normal_size"
+                    style="@style/NoteBookAppTheme.ImageView.Icon.Min"
+                    android:layout_width="@dimen/image_icon_min_size"
+                    android:layout_height="@dimen/image_icon_min_size"
                     android:contentDescription="@string/image"
-                    android:scaleType="centerInside"
                     android:src="@drawable/ic_vd_word"
                     android:tint="@null" />
 
@@ -101,7 +99,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/content_space_between_dimen"
                     android:text="@string/setting"
-                    android:textSize="@dimen/text_body_size"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -133,11 +130,10 @@
 
                 <ImageView
                     android:id="@+id/mln_1_iv"
-                    style="@style/NoteBookAppTheme.ImageView"
-                    android:layout_width="@dimen/icon_normal_size"
-                    android:layout_height="@dimen/icon_normal_size"
+                    style="@style/NoteBookAppTheme.ImageView.Icon.Min"
+                    android:layout_width="@dimen/image_icon_min_size"
+                    android:layout_height="@dimen/image_icon_min_size"
                     android:contentDescription="@string/image"
-                    android:scaleType="centerInside"
                     android:src="@drawable/ic_alarm_add_black_24dp" />
 
                 <TextView
@@ -147,7 +143,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/content_space_between_dimen"
                     android:text="@string/_schedule"
-                    android:textSize="@dimen/text_body_size"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -190,9 +185,9 @@
             android:orientation="horizontal">
 
             <ImageView
-                style="@style/NoteBookAppTheme.ImageView"
-                android:layout_width="@dimen/photo_normal_size"
-                android:layout_height="@dimen/photo_normal_size"
+                style="@style/NoteBookAppTheme.ImageView.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:contentDescription="@string/setting"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_settings_white_24dp" />
@@ -203,8 +198,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/setting"
-                android:textSize="@dimen/text_body_size" />
+                android:text="@string/setting" />
 
 
         </LinearLayout>
@@ -222,9 +216,9 @@
             android:orientation="horizontal">
 
             <ImageView
-                style="@style/NoteBookAppTheme.ImageView"
-                android:layout_width="@dimen/photo_normal_size"
-                android:layout_height="@dimen/photo_normal_size"
+                style="@style/NoteBookAppTheme.ImageView.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:contentDescription="@string/_quit"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_exit_to_app_white_24dp" />
@@ -234,8 +228,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/_quit"
-                android:textSize="@dimen/text_body_size" />
+                android:text="@string/_quit" />
 
         </LinearLayout>
 

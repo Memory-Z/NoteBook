@@ -24,24 +24,30 @@
             android:configChanges="screenSize|screenLayout|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/NoteBookAppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".view.activity.MainActivity"
             android:configChanges="keyboardHidden|screenLayout|screenSize|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/NoteBookAppTheme" />
+            android:theme="@style/NoteBookAppTheme"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+
 
         <activity
             android:name=".view.activity.SplashActivity"
             android:configChanges="screenSize|screenLayout|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/NoteBookAppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <!-- 组 -->
@@ -64,7 +70,7 @@
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/NoteBookAppTheme"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
 
 
         <!-- 透明层 -->

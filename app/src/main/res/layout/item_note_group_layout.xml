@@ -33,9 +33,9 @@
 
             <ImageView
                 android:id="@+id/item_note_group_iv"
-                style="@style/NoteBookAppTheme.ImageView"
-                android:layout_width="@dimen/button_normal_height"
-                android:layout_height="@dimen/button_normal_height"
+                style="@style/NoteBookAppTheme.ImageView.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:contentDescription="@string/base_image"
                 android:src="@drawable/ic_menu_black_24dp" />
         </LinearLayout>
@@ -44,8 +44,8 @@
             android:id="@+id/item_note_group_center_ll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/border_lr_dimen"
-            android:layout_marginEnd="@dimen/border_lr_dimen"
+            android:layout_marginStart="@dimen/content_space_between_dimen"
+            android:layout_marginEnd="@dimen/content_space_between_dimen"
             android:gravity="center_vertical"
             android:orientation="vertical">
 
@@ -57,9 +57,7 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:lines="1"
-                android:text="@{noteGroup.groupName, default = @string/base_title}"
-                android:textSize="@dimen/body_text_size"
-                android:textStyle="bold" />
+                android:text="@{noteGroup.groupName, default = @string/base_title}" />
         </LinearLayout>
 
         <LinearLayout
@@ -76,8 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@{noteGroupSize, default = @string/base_number}"
-                android:textSize="@dimen/caption_text_size" />
+                android:text="@{noteGroupSize, default = @string/base_number}" />
         </LinearLayout>
 
     </com.inz.z.base.view.widget.BaseNavLayout>

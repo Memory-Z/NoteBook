@@ -21,9 +21,9 @@
             android:layout_height="match_parent">
 
             <ImageView
-                style="@style/NoteBookAppTheme.ImageView"
-                android:layout_width="@dimen/photo_normal_size"
-                android:layout_height="@dimen/photo_normal_size"
+                style="@style/NoteBookAppTheme.ImageView.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:contentDescription="@string/base_image"
                 android:src="@drawable/ic_chevron_left_black_24dp" />
@@ -36,14 +36,12 @@
             android:layout_height="match_parent">
 
             <TextView
-                style="@style/NoteBookAppTheme.Text"
+                style="@style/NoteBookAppTheme.Text.Title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical"
-                android:text="@string/setting"
-                android:textSize="@dimen/title_size"
-                android:textStyle="bold" />
+                android:text="@string/setting" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -52,9 +50,9 @@
             android:layout_height="match_parent">
 
             <ImageView
-                style="@style/NoteBookAppTheme.ImageView"
-                android:layout_width="@dimen/photo_normal_size"
-                android:layout_height="@dimen/photo_normal_size"
+                style="@style/NoteBookAppTheme.ImageView.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:contentDescription="@string/base_image"
                 android:src="@drawable/ic_more_vert_black_24dp" />
@@ -109,9 +107,9 @@
 
                 <ImageView
                     android:id="@+id/setting_info_cache_clear_left_iv"
-                    style="@style/NoteBookAppTheme.ImageView"
-                    android:layout_width="@dimen/icon_normal_size"
-                    android:layout_height="@dimen/icon_normal_size"
+                    style="@style/NoteBookAppTheme.ImageView.Icon.Min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:contentDescription="@string/base_image"
                     android:src="@drawable/ic_settings_black_24dp" />
 
@@ -128,8 +126,7 @@
                         style="@style/NoteBookAppTheme.Text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/clear_cache"
-                        android:textSize="@dimen/subheading_text_size" />
+                        android:text="@string/clear_cache"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -148,9 +145,9 @@
                         android:textStyle="bold" />
 
                     <ImageView
-                        style="@style/NoteBookAppTheme.ImageView"
-                        android:layout_width="@dimen/icon_normal_size"
-                        android:layout_height="@dimen/icon_normal_size"
+                        style="@style/NoteBookAppTheme.ImageView.Icon.Min"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:contentDescription="@string/base_image"
                         android:src="@drawable/ic_chevron_right_black_24dp" />
                 </LinearLayout>
@@ -169,9 +166,9 @@
 
                 <ImageView
                     android:id="@+id/setting_info_version_name_left_iv"
-                    style="@style/NoteBookAppTheme.ImageView"
-                    android:layout_width="@dimen/icon_normal_size"
-                    android:layout_height="@dimen/icon_normal_size"
+                    style="@style/NoteBookAppTheme.ImageView.Icon.Min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:contentDescription="@string/base_image"
                     android:src="@drawable/ic_cached_black_24dp" />
 
@@ -188,8 +185,7 @@
                         style="@style/NoteBookAppTheme.Text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/check_app_version_update"
-                        android:textSize="@dimen/subheading_text_size" />
+                        android:text="@string/check_app_version_update"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -208,9 +204,9 @@
                         android:textStyle="bold" />
 
                     <ImageView
-                        style="@style/NoteBookAppTheme.ImageView"
-                        android:layout_width="@dimen/icon_normal_size"
-                        android:layout_height="@dimen/icon_normal_size"
+                        style="@style/NoteBookAppTheme.ImageView.Icon.Min"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:contentDescription="@string/base_image"
                         android:src="@drawable/ic_chevron_right_black_24dp" />
                 </LinearLayout>
