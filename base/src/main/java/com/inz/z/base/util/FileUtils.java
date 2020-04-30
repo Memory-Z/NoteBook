@@ -12,6 +12,7 @@ import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.inz.z.base.BuildConfig;
 import com.inz.z.base.entity.Constants;
 import com.orhanobut.logger.Logger;
 
@@ -673,7 +674,9 @@ public class FileUtils {
                 }
             } else if (file.isFile()) {
                 boolean fD = file.delete();
-                L.i("FileUtils", "deleteFile: " + filePath + " , " + fD);
+                if (BuildConfig.DEBUG) {
+                    L.i("FileUtils", "deleteFile: " + filePath + " , " + fD);
+                }
             }
         }
 

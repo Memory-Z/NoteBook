@@ -33,7 +33,6 @@ class SettingActivity : AbsBaseActivity() {
             this@SettingActivity.finish()
         }
         setting_info_cache_clear_bnl.setOnClickListener {
-            Toast.makeText(mContext, "缓存清除", Toast.LENGTH_SHORT).show()
             mContext?.let {
                 FileUtils.clearCacheData(mContext)
                 getCacheSize()
