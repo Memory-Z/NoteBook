@@ -127,7 +127,13 @@ class NoteNavFragment : AbsBaseFragment() {
             try {
                 LauncherHelper.launcherPackageName(mContext, packageName)
             } catch (e: Exception) {
-                Toast.makeText(mContext, "启动 $packageName. 失败", Toast.LENGTH_SHORT).show()
+                if (mContext != null) {
+                    Toast.makeText(
+                        mContext,
+                        getString(R.string._launche_failure_format).format(packageName),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
 
@@ -173,12 +179,9 @@ class NoteNavFragment : AbsBaseFragment() {
      * 设置日期
      */
     private fun setDateText(date: Date) {
-        note_nav_hint_year_tv.text =
-            String.format(getString(R.string.base_format_year_month), date)
-        note_nav_hint_data_tv.text =
-            String.format(getString(R.string.base_format_day), date)
-        note_nav_hint_week_tv.text =
-            String.format(getString(R.string.base_format_week), date)
+        note_nav_hint_year_tv.text = getString(R.string.base_format_year_month).format( date)
+        note_nav_hint_data_tv.text =getString(R.string.base_format_day).format(date)
+        note_nav_hint_week_tv.text =getString(R.string.base_format_week).format( date)
         // 启动时检测，确认当前时间
         checkDateText(0)
     }

@@ -45,14 +45,17 @@ class GroupActivity : AbsBaseActivity() {
      * 是否添加新组
      */
     private var isAddNewGroup = false
+
     /**
      * 当前组Id
      */
     private var currentGroupId = ""
+
     /**
      * 当前组
      */
     private var noteGroup: NoteGroup? = null
+
     /**
      * 组内笔记列表
      */
@@ -87,7 +90,8 @@ class GroupActivity : AbsBaseActivity() {
         group_content_srl.setOnRefreshListener {
             setNoteInfoListData()
             if (group_content_srl.isRefreshing) {
-                Toast.makeText(mContext, "刷新成功", Toast.LENGTH_SHORT).show()
+                Toast.makeText(mContext, getString(R.string.fresh_success), Toast.LENGTH_SHORT)
+                    .show()
                 group_content_srl.isRefreshing = false
             }
         }
@@ -106,17 +110,14 @@ class GroupActivity : AbsBaseActivity() {
             currentGroupId = bundle.getString("groupId", "")
         }
         if (isAddNewGroup || currentGroupId.isEmpty()) {
-            mGroupLayoutBinding?.groupName =
-                String.format(resources.getString(R.string.no_title_group), "")
+            mGroupLayoutBinding?.groupName = getString(R.string.no_title_group).format("")
             // 显示新建弹窗
             L.i(TAG, "get Intent data is Null , $isAddNewGroup and $currentGroupId")
             showNewGroupDialog()
         } else {
             noteGroup = NoteGroupService.findNoteGroupById(currentGroupId)
-            mGroupLayoutBinding?.groupName = noteGroup?.groupName ?: String.format(
-                resources.getString(R.string.no_title_group),
-                ""
-            )
+            mGroupLayoutBinding?.groupName =
+                noteGroup?.groupName ?: getString(R.string.no_title_group).format("")
 //            setNoteInfoListData()
         }
 
@@ -228,7 +229,7 @@ class GroupActivity : AbsBaseActivity() {
     private fun getGroupTitle(suffix: String, order: Int): String {
         var title = suffix
         if (title.isEmpty()) {
-            title = String.format(resources.getString(R.string.no_title_group), suffix)
+            title = getString(R.string.no_title_group).format(suffix)
         }
         if (order > 0) {
             title += " ($order)"

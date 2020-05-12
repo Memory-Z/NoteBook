@@ -36,12 +36,17 @@ class SettingActivity : AbsBaseActivity() {
             mContext?.let {
                 FileUtils.clearCacheData(mContext)
                 getCacheSize()
-                Toast.makeText(mContext, "缓存已清除", Toast.LENGTH_SHORT).show()
+                Toast.makeText(mContext, getString(R.string.cache_cleared), Toast.LENGTH_SHORT)
+                    .show()
             }
         }
         setting_info_version_name_tv.text = BuildConfig.VERSION_NAME
         setting_info_version_bnl.setOnClickListener {
-            Toast.makeText(mContext, "检查更新", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                mContext,
+                getString(R.string.check_app_version_update),
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
     }
@@ -55,9 +60,9 @@ class SettingActivity : AbsBaseActivity() {
         val fileSize = FileUtils.getFileSize(cachePath)
         var fileSizeStr = ""
         if (fileSize > 1024 * 1024) {
-            fileSizeStr = String.format("%.2f", fileSize.div(1024F * 1024F)) + "Mb"
+            fileSizeStr = getString(R.string.file_size_format_m).format( fileSize.div(1024F * 1024F))
         } else {
-            fileSizeStr = String.format("%.2f", fileSize.div(1024F)) + "Kb"
+            fileSizeStr = getString(R.string.file_size_fromat_k).format( fileSize.div(1024F))
         }
         L.i(TAG, "getCacheSize: fileSize = $fileSize. $fileSizeStr")
         setting_info_cache_clear_size_tv.text = fileSizeStr

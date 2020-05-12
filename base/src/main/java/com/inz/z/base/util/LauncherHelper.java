@@ -2,8 +2,14 @@ package com.inz.z.base.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+
+import androidx.annotation.NonNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 运行帮助类
@@ -20,10 +26,7 @@ public class LauncherHelper {
      * @param context     上下文
      * @param packageName 包名
      */
-    public static void launcherPackageName(Context context, String packageName) {
-        if (context == null) {
-            throw new RuntimeException(" context is null . can`t run other application. ");
-        }
+    public static void launcherPackageName(@NonNull Context context, String packageName) {
         PackageManager packageManager = context.getPackageManager();
         if (checkPackageName(packageManager, packageName)) {
             Intent intent = packageManager.getLaunchIntentForPackage(packageName);
@@ -49,6 +52,25 @@ public class LauncherHelper {
             e.printStackTrace();
         }
         return packageInfo != null;
+    }
+
+    /**
+     * 获取安装程序列表
+     *
+     * @param context 上下文
+     * @return 应用列表
+     */
+    public static List<PackageInfo> getApplicationList(@NonNull Context context) {
+        List<PackageInfo> packageInfos = new ArrayList<>();
+        PackageManager pm = context.getPackageManager();
+        List<PackageInfo> packageInfoList = pm.getInstalledPackages(PackageManager.GET_ACTIVITIES);
+        for (PackageInfo info : packageInfoList) {
+            if ((info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                // 非系统应用
+                packageInfos.add(info);
+            }
+        }
+        return packageInfos;
     }
 
 

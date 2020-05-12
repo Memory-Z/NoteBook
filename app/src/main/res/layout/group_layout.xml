@@ -16,10 +16,10 @@
 
         <ImageView
             android:id="@+id/group_backgroud_iv"
+            style="@style/NoteBookAppTheme.ImageView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:contentDescription="@string/base_image"
-            style="@style/NoteBookAppTheme.ImageView"
             android:src="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -47,7 +47,7 @@
                 android:layout_height="match_parent">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    style="@style/NoteBookAppTheme.ImageView"
+                    style="@style/NoteBookAppTheme.ImageView.Icon"
                     android:layout_width="@dimen/photo_normal_size"
                     android:layout_height="@dimen/photo_normal_size"
                     android:layout_centerInParent="true"
@@ -68,7 +68,7 @@
 
                 <TextView
                     android:id="@+id/group_top_title_tv"
-                    style="@style/Widget.AppCompat.TextView"
+                    style="@style/NoteBookAppTheme.Text.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
@@ -88,9 +88,9 @@
 
                 <ImageView
                     android:id="@+id/group_top_right_more_iv"
-                    style="@style/NoteBookAppTheme.ImageView"
-                    android:layout_width="@dimen/photo_normal_size"
-                    android:layout_height="@dimen/photo_normal_size"
+                    style="@style/NoteBookAppTheme.ImageView.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:contentDescription="@string/base_image"
                     android:src="@drawable/ic_more_vert_black_24dp" />
 
@@ -145,6 +145,7 @@
             android:backgroundTint="@color/colorPrimary"
             android:scaleType="centerInside"
             android:src="@drawable/ic_add_black_24dp"
+            android:tint="@color/white"
             app:elevation="5dp"
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"

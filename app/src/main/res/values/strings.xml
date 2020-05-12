@@ -37,5 +37,22 @@
     <string name="_text_format">文本</string>
     <string name="clear_cache">缓存清理</string>
     <string name="check_app_version_update">检查更新</string>
+    <string name="fresh_success">刷新成功</string>
+    <string name="fresh_failure">刷新失败</string>
+    <string name="loading">加载中&#8230;</string>
+    <string name="cache_cleared">缓存已清除</string>
+    <string name="file_size_format_m">%.2f Mb</string>
+    <string name="file_size_fromat_k">%.2f Kb</string>
+
+    <string name="_button">按钮</string>
+    <string name="_tips">提示</string>
+
+    <string name="_main_page">首页</string>
+    <string name="_application">应用</string>
+    <string name="_position">确定</string>
+    <string name="_negative">取消</string>
+
+    <string name="launcher_application_format">是否启动 %s ？</string>
+    <string name="_launche_failure_format">启动 %s 失败</string>
 
 </resources>

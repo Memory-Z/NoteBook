@@ -1,5 +1,6 @@
 package com.inz.z.note_book.view.widget
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -33,14 +34,17 @@ class ScheduleLayout : LinearLayout {
      * 内容
      */
     private var contentStr = ""
+
     /**
      * 更新时间
      */
     private var updateTimeStr = ""
+
     /**
      * 内容文字大小
      */
     private var contentTextSize = 24F
+
     /**
      * 是否显示选择框-
      */
@@ -78,6 +82,7 @@ class ScheduleLayout : LinearLayout {
     /**
      * 初始化配置信息
      */
+    @SuppressLint("RestrictedApi")
     private fun initAttr(context: Context?, attrs: AttributeSet?) {
         val array =
             TintTypedArray.obtainStyledAttributes(context, attrs, R.styleable.ScheduleLayout, 0, 0)
