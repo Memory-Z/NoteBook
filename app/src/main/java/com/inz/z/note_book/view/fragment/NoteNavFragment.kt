@@ -14,7 +14,7 @@ import com.inz.z.base.util.L
 import com.inz.z.base.util.LauncherHelper
 import com.inz.z.base.view.AbsBaseFragment
 import com.inz.z.note_book.R
-import com.inz.z.note_book.bean.NoteGroup
+import com.inz.z.note_book.database.bean.NoteGroup
 import com.inz.z.note_book.database.controller.NoteGroupService
 import com.inz.z.note_book.database.controller.NoteInfoController
 import com.inz.z.note_book.view.activity.GroupActivity

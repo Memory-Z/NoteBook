@@ -63,14 +63,31 @@ class LauncherApplicationService : Service() {
     }
 
     private fun setAlarm(time: Long, repeat: Boolean) {
-        val intent = Intent(Constants.CLOCK_ALARM_START_ACTION)
-        val pi = PendingIntent.getBroadcast(applicationContext, 0, intent, 0)
+        val intent = Intent(Constants.AlarmAction.ALARM_BROADCAST_BASE_ACTION)
+        val pi = PendingIntent.getBroadcast(
+            applicationContext,
+            Constants.AlarmAction.REQUEST_CODE_BASE,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
         this.setAlarm(time, repeat, pi)
     }
 
     private fun setAlarm(time: Long, repeat: Boolean, pendingIntent: PendingIntent) {
-
+        val alarmManager =
+            applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
+        if (repeat) {
+            alarmManager?.setInexactRepeating(
+                AlarmManager.RTC_WAKEUP,
+                time,
+                AlarmManager.INTERVAL_DAY,
+                pendingIntent
+            )
+        } else {
+            alarmManager?.set(AlarmManager.RTC_WAKEUP, time, pendingIntent)
+        }
     }
+
 
 
 }

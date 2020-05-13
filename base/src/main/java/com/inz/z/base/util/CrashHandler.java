@@ -216,10 +216,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private String saveLogToFile(String content, String prefix) {
         L.i(TAG, "--------------- " + content);
         String fileName = prefix + "-" + dateStr + ".log";
-        String filePath = FileUtils.getCacheCrashLogPath(mContext) + File.separator + fileName;
+        String filePath = FileUtils.getFileCrash(mContext) + File.separator + fileName;
         File dir = new File(filePath);
         boolean isMkdirs = true;
-        if (!dir.getParentFile().exists()) {
+        if (dir.getParentFile() != null && !dir.getParentFile().exists()) {
             isMkdirs = dir.getParentFile().mkdirs();
         }
         try {

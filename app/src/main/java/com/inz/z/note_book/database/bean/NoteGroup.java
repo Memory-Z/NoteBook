@@ -1,4 +1,4 @@
-package com.inz.z.note_book.bean;
+package com.inz.z.note_book.database.bean;
 
 import com.inz.z.note_book.database.DaoSession;
 import com.inz.z.note_book.database.NoteGroupDao;

@@ -1,16 +1,14 @@
 package com.inz.z.note_book.view.adapter
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
 import com.inz.z.base.util.BaseTools
 import com.inz.z.note_book.R
-import com.inz.z.note_book.bean.NoteInfo
+import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.databinding.ItemNoteLayoutBinding
 
 /**

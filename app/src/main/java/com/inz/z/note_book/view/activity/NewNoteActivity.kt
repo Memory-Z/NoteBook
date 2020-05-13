@@ -4,7 +4,7 @@ import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.R
-import com.inz.z.note_book.bean.NoteInfo
+import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteInfoController
 import kotlinx.android.synthetic.main.note_info_add_layout.*
 import java.util.*

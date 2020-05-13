@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
-import com.inz.z.note_book.bean.NoteInfo
+import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.databinding.WidgetItemNoteSampleLayoutBinding
 
 /**

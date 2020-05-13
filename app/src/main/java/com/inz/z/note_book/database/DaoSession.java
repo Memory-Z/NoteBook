@@ -8,12 +8,12 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
-import com.inz.z.note_book.bean.NoteGroup;
-import com.inz.z.note_book.bean.NoteGroupWithInfo;
-import com.inz.z.note_book.bean.NoteInfo;
-import com.inz.z.note_book.bean.OperationLogInfo;
-import com.inz.z.note_book.bean.TaskInfo;
-import com.inz.z.note_book.bean.TaskSchedule;
+import com.inz.z.note_book.database.bean.NoteGroup;
+import com.inz.z.note_book.database.bean.NoteGroupWithInfo;
+import com.inz.z.note_book.database.bean.NoteInfo;
+import com.inz.z.note_book.database.bean.OperationLogInfo;
+import com.inz.z.note_book.database.bean.TaskInfo;
+import com.inz.z.note_book.database.bean.TaskSchedule;
 
 import com.inz.z.note_book.database.NoteGroupDao;
 import com.inz.z.note_book.database.NoteGroupWithInfoDao;

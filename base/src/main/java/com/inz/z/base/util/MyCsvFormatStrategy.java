@@ -171,10 +171,10 @@ public class MyCsvFormatStrategy implements FormatStrategy {
             }
             if (logStrategy == null) {
                 // 设置为项目目录下
-                String folder = FileUtils.getProjectLogPath() + File.separatorChar + "logger";
-                if (mContext != null) {
-                    folder = FileUtils.getCacheLogPath(mContext) + File.separatorChar + "logger";
-                }
+                String folder = FileUtils.getCacheLogPath(mContext) + File.separatorChar + "logger";
+//                if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+//                    folder = FileUtils.getProjectLogPath() + File.separatorChar + "logger";
+//                }
                 HandlerThread ht = new HandlerThread("AndroidFileLogger." + folder);
                 ht.start();
                 Handler handler = new MyCsvFormatStrategy.WriteHandler(ht.getLooper(), folder, fileName, MAX_BYTES);

@@ -9,7 +9,7 @@ import android.os.Bundle
 import android.widget.RemoteViews
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
-import com.inz.z.note_book.bean.NoteInfo
+import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteController
 import com.inz.z.note_book.database.controller.NoteGroupService
 import com.inz.z.note_book.util.SPHelper

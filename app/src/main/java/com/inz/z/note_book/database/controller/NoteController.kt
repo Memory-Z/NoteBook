@@ -1,13 +1,8 @@
 package com.inz.z.note_book.database.controller
 
-import android.content.Context
-import android.net.Uri
-import androidx.core.content.FileProvider
 import com.inz.z.base.util.BaseTools
-import com.inz.z.note_book.bean.NoteGroupWithInfo
-import com.inz.z.note_book.bean.NoteInfo
-import com.inz.z.note_book.database.util.GreenDaoHelper
-import java.io.File
+import com.inz.z.note_book.database.bean.NoteGroupWithInfo
+import com.inz.z.note_book.database.bean.NoteInfo
 
 /**
  *

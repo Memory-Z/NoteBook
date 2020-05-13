@@ -1,5 +1,10 @@
 package com.inz.z.base.util;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -11,6 +16,10 @@ import android.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.PermissionChecker;
+import androidx.core.content.pm.PermissionInfoCompat;
 
 import com.inz.z.base.BuildConfig;
 import com.inz.z.base.entity.Constants;
@@ -25,6 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.security.Permission;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -86,6 +96,7 @@ public class FileUtils {
      * @param dirStr 目录名称
      * @return 文件 所在的 路径
      */
+    @RequiresPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public static String createFileDir(String dirStr) {
         String filePath = FileUtils.getProjectPath() + dirStr;
         File dir = new File(filePath);
@@ -106,6 +117,7 @@ public class FileUtils {
      * @param fileStr 文件名
      * @return 文件所在 路径
      */
+    @RequiresPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public static String createFile(@Nullable String dirStr, String fileStr) {
         String filePath = FileUtils.getProjectPath();
         if (dirStr == null || "".equals(dirStr)) {
@@ -183,6 +195,7 @@ public class FileUtils {
      *
      * @return 项目自定义地址
      */
+    @RequiresPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public static String getProjectPath() {
         File storyDir = Environment.getExternalStorageDirectory();
         String rootPath = "";
@@ -207,8 +220,15 @@ public class FileUtils {
      *
      * @return 项目文件地址
      */
+    @RequiresPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public static String getProjectFilePath() {
-        return getProjectPath() + File.separatorChar + "files";
+        String path = getProjectPath() + File.separatorChar + "files";
+        File dir = new File(path);
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        return path;
     }
 
     /**
@@ -216,6 +236,7 @@ public class FileUtils {
      *
      * @return 项目图片地址
      */
+    @RequiresPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public static String getProjectImagePath() {
         return getProjectPath() + File.separatorChar + "images";
     }
@@ -225,8 +246,15 @@ public class FileUtils {
      *
      * @return 项目配置地址
      */
+    @RequiresPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public static String getProjectConfigPath() {
-        return getProjectPath() + File.separatorChar + "config";
+        String path = getProjectPath() + File.separatorChar + "config";
+        File dir = new File(path);
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        return path;
     }
 
     /**
@@ -234,8 +262,15 @@ public class FileUtils {
      *
      * @return 项目下载地址
      */
+    @RequiresPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public static String getProjectDownloadPath() {
-        return getProjectPath() + File.separatorChar + "download";
+        String path = getProjectPath() + File.separatorChar + "download";
+        File dir = new File(path);
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        return path;
     }
 
     /**
@@ -243,8 +278,15 @@ public class FileUtils {
      *
      * @return 项目日志地址
      */
+    @RequiresPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public static String getProjectLogPath() {
-        return getProjectPath() + File.separatorChar + "logs";
+        String path = getProjectPath() + File.separatorChar + "logs";
+        File dir = new File(path);
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        return path;
     }
 
     /**
@@ -252,8 +294,15 @@ public class FileUtils {
      *
      * @return 项目缓存地址
      */
+    @RequiresPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public static String getProjectCachePath() {
-        return getProjectPath() + File.separatorChar + "cache";
+        String path = getProjectPath() + File.separatorChar + "cache";
+        File dir = new File(path);
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        return path;
     }
 
     /**
@@ -261,8 +310,15 @@ public class FileUtils {
      *
      * @return 项目崩溃文件地址
      */
+    @RequiresPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public static String getProjectCrashPath() {
-        return getProjectPath() + File.separatorChar + "crash";
+        String path = getProjectPath() + File.separatorChar + "crash";
+        File dir = new File(path);
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        return path;
     }
 
     /**
@@ -276,7 +332,7 @@ public class FileUtils {
         String cacheDirPath = "";
         if (file != null) {
             cacheDirPath = file.getAbsolutePath();
-        } else {
+        } else if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             cacheDirPath = getProjectCachePath();
         }
         return cacheDirPath;
@@ -289,7 +345,13 @@ public class FileUtils {
      * @return 缓存文件路径
      */
     public static String getCacheFilePath(Context context) {
-        return getCachePath(context) + File.separatorChar + "files";
+        String path = getCachePath(context) + File.separatorChar + "files";
+        File dir = new File(path);
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        return path;
     }
 
     /**
@@ -299,7 +361,13 @@ public class FileUtils {
      * @return 缓存图片地址
      */
     public static String getCacheImagePath(Context context) {
-        return getCachePath(context) + File.separatorChar + "images";
+        String path = getCachePath(context) + File.separatorChar + "images";
+        File dir = new File(path);
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        return path;
     }
 
     /**
@@ -309,7 +377,13 @@ public class FileUtils {
      * @return 缓存数据路径
      */
     public static String getCacheDataPath(Context context) {
-        return getCachePath(context) + File.separatorChar + "data";
+        String path = getCachePath(context) + File.separatorChar + "data";
+        File dir = new File(path);
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        return path;
     }
 
     /**
@@ -319,7 +393,13 @@ public class FileUtils {
      * @return 缓存日志路径
      */
     public static String getCacheLogPath(Context context) {
-        return getCachePath(context) + File.separatorChar + "logs";
+        String path = getCachePath(context) + File.separatorChar + "logs";
+        File dir = new File(path);
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        return path;
     }
 
     /**
@@ -329,9 +409,73 @@ public class FileUtils {
      * @return 崩溃日志路径
      */
     public static String getCacheCrashLogPath(Context context) {
-        return getCacheLogPath(context) + File.separatorChar + "crash";
+        String path = getCacheLogPath(context) + File.separatorChar + "crash";
+        File dir = new File(path);
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        return path;
     }
 
+    /**
+     * 获取缓存文件地址
+     *
+     * @param context 上下文
+     * @return 地址
+     */
+    public static String getFilePath(Context context) {
+        File file = context.getFilesDir();
+        return file.getAbsolutePath();
+    }
+
+    /**
+     * 获取 缓存文件 - 数据 地址
+     *
+     * @param context 上下文
+     * @return 地址
+     */
+    public static String getFileDataPath(Context context) {
+        String path = getFilePath(context) + File.separatorChar + "data";
+        File dir = new File(path);
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        return path;
+    }
+
+    /**
+     * 获取 缓存文件 - 图片
+     *
+     * @param context 上下文
+     * @return 地址
+     */
+    public static String getFileImagePath(Context context) {
+        String path = getFilePath(context) + File.separatorChar + "image";
+        File dir = new File(path);
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        return path;
+    }
+
+    /**
+     * 获取缓存文件 - 地址
+     *
+     * @param context 上下文
+     * @return 地址
+     */
+    public static String getFileCrash(Context context) {
+        String path = getFilePath(context) + File.separatorChar + "crash";
+        File dir = new File(path);
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        return path;
+    }
 
     /**
      * 清除缓存数据
@@ -455,6 +599,9 @@ public class FileUtils {
         } else {
             // 文件夹
             String[] fileList = file.list();
+            if (fileList == null) {
+                return;
+            }
             // 没有 子文件 的 文件夹压缩
             if (fileList.length <= 0) {
                 ZipEntry zipEntry = new ZipEntry(fileName + File.separatorChar);
@@ -475,6 +622,7 @@ public class FileUtils {
      *
      * @param systemInfo 系统信息
      */
+    @RequiresPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public static void createSystemInfoFile(String systemInfo) {
         String logPath = getProjectLogPath() + File.separatorChar + "logger" + File.separatorChar;
         String logFilePath = logPath + "system_info.log";
@@ -565,6 +713,7 @@ public class FileUtils {
      * @param context 上下文
      * @return 压缩文件路径
      */
+    @RequiresPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     public static String zipCrashLog(Context context) {
         String path = "";
         // 日志保存地址

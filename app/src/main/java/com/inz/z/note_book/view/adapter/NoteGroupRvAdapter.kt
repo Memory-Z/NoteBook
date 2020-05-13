@@ -7,7 +7,7 @@ import androidx.databinding.DataBindingUtil
 import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
 import com.inz.z.note_book.R
-import com.inz.z.note_book.bean.NoteGroup
+import com.inz.z.note_book.database.bean.NoteGroup
 import com.inz.z.note_book.database.controller.NoteGroupWithInfoService
 import com.inz.z.note_book.databinding.ItemNoteGroupLayoutBinding
 

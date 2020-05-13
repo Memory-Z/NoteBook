@@ -6,7 +6,7 @@
 
         <variable
             name="noteGroup"
-            type="com.inz.z.note_book.bean.NoteGroup" />
+            type="com.inz.z.note_book.database.bean.NoteGroup" />
 
         <variable
             name="noteGroupSize"

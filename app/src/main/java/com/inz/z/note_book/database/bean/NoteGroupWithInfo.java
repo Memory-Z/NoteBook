@@ -1,4 +1,4 @@
-package com.inz.z.note_book.bean;
+package com.inz.z.note_book.database.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;

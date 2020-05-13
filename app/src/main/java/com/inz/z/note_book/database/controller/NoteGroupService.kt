@@ -1,6 +1,6 @@
 package com.inz.z.note_book.database.controller
 
-import com.inz.z.note_book.bean.NoteGroup
+import com.inz.z.note_book.database.bean.NoteGroup
 import com.inz.z.note_book.database.NoteGroupDao
 import com.inz.z.note_book.database.util.GreenDaoHelper
 

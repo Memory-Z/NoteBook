@@ -5,7 +5,7 @@
 
         <variable
             name="noteInfo"
-            type="com.inz.z.note_book.bean.NoteInfo" />
+            type="com.inz.z.note_book.database.bean.NoteInfo" />
 
         <variable
             name="noteInfoUpdateDateStr"
