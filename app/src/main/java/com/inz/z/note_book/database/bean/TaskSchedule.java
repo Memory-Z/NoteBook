@@ -58,14 +58,15 @@ public class TaskSchedule {
      */
     private Date updateTime;
 
-    @Generated(hash = 1353636410)
+    @Generated(hash = 592026936)
     public TaskSchedule(String taskScheduleId, @NotNull String taskId,
-                        Date scheduleStartTime, Date scheduleFinishTime, int status,
-                        Date createTime, Date updateTime) {
+            Date scheduleStartTime, Date scheduleFinishTime, boolean scheduleRepeat,
+            int status, Date createTime, Date updateTime) {
         this.taskScheduleId = taskScheduleId;
         this.taskId = taskId;
         this.scheduleStartTime = scheduleStartTime;
         this.scheduleFinishTime = scheduleFinishTime;
+        this.scheduleRepeat = scheduleRepeat;
         this.status = status;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -129,6 +130,14 @@ public class TaskSchedule {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public boolean getScheduleRepeat() {
+        return this.scheduleRepeat;
+    }
+
+    public void setScheduleRepeat(boolean scheduleRepeat) {
+        this.scheduleRepeat = scheduleRepeat;
     }
 
 }

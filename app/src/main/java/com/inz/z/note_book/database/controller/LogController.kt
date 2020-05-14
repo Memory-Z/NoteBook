@@ -1,5 +1,6 @@
 package com.inz.z.note_book.database.controller
 
+import com.alibaba.fastjson.JSON
 import com.inz.z.base.util.L
 import com.inz.z.note_book.database.OperationLogInfoDao
 import com.inz.z.note_book.database.bean.OperationLogInfo
@@ -24,14 +25,14 @@ object LogController {
      */
     fun log(
         operationType: String,
-        data: String,
+        data: Any,
         describe: String,
         tableName: String
     ) {
         val log = OperationLogInfo()
         log.apply {
             val calendar = Calendar.getInstance(Locale.getDefault())
-            this.operationData = data
+            this.operationData = JSON.toJSONString(data)
             this.tableName = tableName
             this.operationType = operationType
             this.operationDescribe = describe
@@ -41,6 +42,11 @@ object LogController {
         }
         val dao = getLogDao()
         dao?.insert(log)
+    }
+
+    fun query(): List<OperationLogInfo>? {
+        val dao = getLogDao()
+        return dao?.queryBuilder()?.list()
     }
 
 }

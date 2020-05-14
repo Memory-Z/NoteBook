@@ -39,7 +39,9 @@ object NoteInfoController {
     }
 
     fun insert(noteInfo: NoteInfo) {
-        getNoteInfoDao()?.insert(noteInfo)
+        val dao = getNoteInfoDao()
+        dao?.insert(noteInfo)
+        LogController.log("insert", noteInfo, "添加笔记信息", dao?.tablename ?: "note_info")
     }
 
     /**
@@ -47,7 +49,9 @@ object NoteInfoController {
      * @param noteInfo 笔记信息
      */
     fun updateNoteInfo(noteInfo: NoteInfo) {
-        getNoteInfoDao()?.update(noteInfo)
+        val dao = getNoteInfoDao()
+        dao?.update(noteInfo)
+        LogController.log("update", noteInfo, "更新笔记信息", dao?.tablename ?: "note_info")
     }
 
     /**
@@ -55,7 +59,9 @@ object NoteInfoController {
      * @param noteInfoId 笔记ID
      */
     fun delNoteInfoById(noteInfoId: String) {
-        getNoteInfoDao()?.deleteByKey(noteInfoId)
+        val dao = getNoteInfoDao()
+        dao?.deleteByKey(noteInfoId)
+        LogController.log("delete", noteInfoId, "删除笔记信息", dao?.tablename ?: "note_info")
     }
 
 }

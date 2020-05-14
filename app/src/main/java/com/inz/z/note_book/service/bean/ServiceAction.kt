@@ -1,5 +1,7 @@
 package com.inz.z.note_book.service.bean
 
+import com.inz.z.note_book.BuildConfig
+
 /**
  *
  * @author Zhenglj
@@ -11,5 +13,5 @@ object ServiceAction {
     /**
      * 新通知
      */
-    const val NOTIFICATION_NEW_ACTION = "com.inz.z.note_book.action.NewNotification"
+    const val NOTIFICATION_NEW_ACTION = "${BuildConfig.APPLICATION_ID}.action.NewNotification"
 }

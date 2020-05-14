@@ -29,8 +29,10 @@ public class TaskInfoDao extends AbstractDao<TaskInfo, String> {
         public final static Property TaskDescribe = new Property(2, String.class, "taskDescribe", false, "TASK_DESCRIBE");
         public final static Property HaveFile = new Property(3, int.class, "haveFile", false, "HAVE_FILE");
         public final static Property Remake = new Property(4, String.class, "remake", false, "REMAKE");
-        public final static Property CreateTime = new Property(5, java.util.Date.class, "createTime", false, "CREATE_TIME");
-        public final static Property UpdateTime = new Property(6, java.util.Date.class, "updateTime", false, "UPDATE_TIME");
+        public final static Property TaskAction = new Property(5, String.class, "taskAction", false, "TASK_ACTION");
+        public final static Property TaskPackageName = new Property(6, String.class, "taskPackageName", false, "TASK_PACKAGE_NAME");
+        public final static Property CreateTime = new Property(7, java.util.Date.class, "createTime", false, "CREATE_TIME");
+        public final static Property UpdateTime = new Property(8, java.util.Date.class, "updateTime", false, "UPDATE_TIME");
     }
 
 
@@ -51,8 +53,10 @@ public class TaskInfoDao extends AbstractDao<TaskInfo, String> {
                 "\"TASK_DESCRIBE\" TEXT," + // 2: taskDescribe
                 "\"HAVE_FILE\" INTEGER NOT NULL ," + // 3: haveFile
                 "\"REMAKE\" TEXT," + // 4: remake
-                "\"CREATE_TIME\" INTEGER," + // 5: createTime
-                "\"UPDATE_TIME\" INTEGER);"); // 6: updateTime
+                "\"TASK_ACTION\" TEXT," + // 5: taskAction
+                "\"TASK_PACKAGE_NAME\" TEXT," + // 6: taskPackageName
+                "\"CREATE_TIME\" INTEGER," + // 7: createTime
+                "\"UPDATE_TIME\" INTEGER);"); // 8: updateTime
         // Add Indexes
         db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_task_info_TASK_ID ON \"task_info\"" +
                 " (\"TASK_ID\" ASC);");
@@ -85,14 +89,24 @@ public class TaskInfoDao extends AbstractDao<TaskInfo, String> {
             stmt.bindString(5, remake);
         }
  
+        String taskAction = entity.getTaskAction();
+        if (taskAction != null) {
+            stmt.bindString(6, taskAction);
+        }
+ 
+        String taskPackageName = entity.getTaskPackageName();
+        if (taskPackageName != null) {
+            stmt.bindString(7, taskPackageName);
+        }
+ 
         java.util.Date createTime = entity.getCreateTime();
         if (createTime != null) {
-            stmt.bindLong(6, createTime.getTime());
+            stmt.bindLong(8, createTime.getTime());
         }
  
         java.util.Date updateTime = entity.getUpdateTime();
         if (updateTime != null) {
-            stmt.bindLong(7, updateTime.getTime());
+            stmt.bindLong(9, updateTime.getTime());
         }
     }
 
@@ -117,14 +131,24 @@ public class TaskInfoDao extends AbstractDao<TaskInfo, String> {
             stmt.bindString(5, remake);
         }
  
+        String taskAction = entity.getTaskAction();
+        if (taskAction != null) {
+            stmt.bindString(6, taskAction);
+        }
+ 
+        String taskPackageName = entity.getTaskPackageName();
+        if (taskPackageName != null) {
+            stmt.bindString(7, taskPackageName);
+        }
+ 
         java.util.Date createTime = entity.getCreateTime();
         if (createTime != null) {
-            stmt.bindLong(6, createTime.getTime());
+            stmt.bindLong(8, createTime.getTime());
         }
  
         java.util.Date updateTime = entity.getUpdateTime();
         if (updateTime != null) {
-            stmt.bindLong(7, updateTime.getTime());
+            stmt.bindLong(9, updateTime.getTime());
         }
     }
 
@@ -141,8 +165,10 @@ public class TaskInfoDao extends AbstractDao<TaskInfo, String> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // taskDescribe
             cursor.getInt(offset + 3), // haveFile
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // remake
-            cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)), // createTime
-            cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)) // updateTime
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // taskAction
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // taskPackageName
+            cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)), // createTime
+            cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)) // updateTime
         );
         return entity;
     }
@@ -154,8 +180,10 @@ public class TaskInfoDao extends AbstractDao<TaskInfo, String> {
         entity.setTaskDescribe(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setHaveFile(cursor.getInt(offset + 3));
         entity.setRemake(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setCreateTime(cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)));
-        entity.setUpdateTime(cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)));
+        entity.setTaskAction(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setTaskPackageName(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setCreateTime(cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)));
+        entity.setUpdateTime(cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)));
      }
     
     @Override

@@ -15,11 +15,18 @@ import com.inz.z.base.util.LauncherHelper
 import com.inz.z.base.view.AbsBaseFragment
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.NoteGroup
+import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteGroupService
 import com.inz.z.note_book.database.controller.NoteInfoController
 import com.inz.z.note_book.view.activity.GroupActivity
+import com.inz.z.note_book.view.activity.MainActivityListener
 import com.inz.z.note_book.view.adapter.NoteGroupRvAdapter
 import com.inz.z.note_book.view.widget.ItemSampleNoteInfoLayout
+import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DefaultObserver
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.note_nav_hint_layout.*
 import kotlinx.android.synthetic.main.note_nav_layout.*
 import java.util.*
@@ -72,6 +79,8 @@ class NoteNavFragment : AbsBaseFragment() {
      */
     private var executorSchedule: ScheduledExecutorService? = null
 
+    val mainListener = MainListenerImpl()
+
     override fun initWindow() {
 
     }
@@ -118,7 +127,7 @@ class NoteNavFragment : AbsBaseFragment() {
 
         executorSchedule = Executors.newScheduledThreadPool(2)
 
-        val date = Calendar.getInstance(Locale.CHINA).time
+        val date = Calendar.getInstance(Locale.getDefault()).time
         setDateText(date)
 
 
@@ -179,9 +188,9 @@ class NoteNavFragment : AbsBaseFragment() {
      * 设置日期
      */
     private fun setDateText(date: Date) {
-        note_nav_hint_year_tv.text = getString(R.string.base_format_year_month).format( date)
-        note_nav_hint_data_tv.text =getString(R.string.base_format_day).format(date)
-        note_nav_hint_week_tv.text =getString(R.string.base_format_week).format( date)
+        note_nav_hint_year_tv.text = getString(R.string.base_format_year_month).format(date)
+        note_nav_hint_data_tv.text = getString(R.string.base_format_day).format(date)
+        note_nav_hint_week_tv.text = getString(R.string.base_format_week).format(date)
         // 启动时检测，确认当前时间
         checkDateText(0)
     }
@@ -227,26 +236,42 @@ class NoteNavFragment : AbsBaseFragment() {
         if (activity == null) {
             return
         }
-        note_nav_near_five_content_ll.removeAllViews()
-        val noteInfoList = NoteInfoController.findAllNoteInfoListWithLimit(
-            showNoteInfoNumber
-        )
-        if (noteInfoList.isNotEmpty()) {
-            val lp = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            for (noteInfo in noteInfoList) {
-                if (mContext != null) {
-                    val itemSampleNoteInfoLayout = ItemSampleNoteInfoLayout(mContext)
-                    itemSampleNoteInfoLayout.setSampleNoteInfo(noteInfo)
-                    itemSampleNoteInfoLayout.setSampleOnClickListener(View.OnClickListener {
-                        L.i(TAG, "itemSampleNoteInfoLayout is click. ")
-                    })
-                    note_nav_near_five_content_ll.addView(itemSampleNoteInfoLayout, lp)
+        Observable
+            .create(ObservableOnSubscribe<List<NoteInfo>?> {
+                val noteInfoList =
+                    NoteInfoController.findAllNoteInfoListWithLimit(showNoteInfoNumber)
+                it.onNext(noteInfoList)
+            })
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe(object : DefaultObserver<List<NoteInfo>?>() {
+                override fun onComplete() {
                 }
-            }
-        }
+
+                override fun onNext(t: List<NoteInfo>) {
+                    note_nav_near_five_content_ll.removeAllViews()
+                    if (t.isNotEmpty()) {
+                        val lp = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        )
+                        for (noteInfo in t) {
+                            if (mContext != null) {
+                                val itemSampleNoteInfoLayout = ItemSampleNoteInfoLayout(mContext)
+                                itemSampleNoteInfoLayout.setSampleNoteInfo(noteInfo)
+                                itemSampleNoteInfoLayout.setSampleOnClickListener(View.OnClickListener {
+                                    L.i(TAG, "itemSampleNoteInfoLayout is click. ")
+                                })
+                                note_nav_near_five_content_ll.addView(itemSampleNoteInfoLayout, lp)
+                            }
+                        }
+                    }
+                }
+
+                override fun onError(e: Throwable) {
+                }
+            })
+
     }
 //
 //    /**
@@ -338,6 +363,19 @@ class NoteNavFragment : AbsBaseFragment() {
                 }
             }
             return true
+        }
+    }
+
+    /**
+     * MainActivityListener implement
+     */
+    inner class MainListenerImpl : MainActivityListener {
+        override fun onSearchSubmit(search: String?) {
+
+        }
+
+        override fun onSearchChange(search: String?) {
+
         }
     }
 

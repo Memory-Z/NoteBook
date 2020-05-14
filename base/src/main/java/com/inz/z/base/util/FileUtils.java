@@ -478,6 +478,22 @@ public class FileUtils {
     }
 
     /**
+     * 获取文件日志地址
+     *
+     * @param context 上下文
+     * @return 地址
+     */
+    public static String getFileLogPath(Context context) {
+        String path = getFilePath(context) + File.separatorChar + "log";
+        File dir = new File(path);
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        return path;
+    }
+
+    /**
      * 清除缓存数据
      *
      * @param context 上下文

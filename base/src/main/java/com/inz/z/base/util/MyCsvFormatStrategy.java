@@ -171,7 +171,7 @@ public class MyCsvFormatStrategy implements FormatStrategy {
             }
             if (logStrategy == null) {
                 // 设置为项目目录下
-                String folder = FileUtils.getCacheLogPath(mContext) + File.separatorChar + "logger";
+                String folder = FileUtils.getFileLogPath(mContext) + File.separatorChar + "logger";
 //                if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 //                    folder = FileUtils.getProjectLogPath() + File.separatorChar + "logger";
 //                }

@@ -32,9 +32,8 @@ object NoteGroupService {
      */
     fun addNoteGroupWithGroupName(noteGroup: NoteGroup) {
         val noteGroupDao = getNoteGroupDao()
-        if (noteGroupDao != null) {
-            noteGroupDao.insert(noteGroup)
-        }
+        noteGroupDao?.insert(noteGroup)
+        LogController.log("insert", noteGroup, "添加分组", noteGroupDao?.tablename ?: "note_group")
     }
 
     /**

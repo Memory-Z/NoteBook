@@ -9,6 +9,7 @@ import com.inz.z.base.util.L
 import com.inz.z.base.util.LauncherHelper
 import com.inz.z.base.view.AbsBaseFragment
 import com.inz.z.note_book.R
+import com.inz.z.note_book.view.activity.MainActivityListener
 import com.inz.z.note_book.view.adapter.ApplicationListRvAdapter
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
@@ -35,7 +36,8 @@ class LauncherApplicationFragment : AbsBaseFragment() {
     }
 
     private var applicationListRvAdapter: ApplicationListRvAdapter? = null
-    private val handler = LauncherHandler()
+
+    val mainListener = MainListenerImpl()
 
     override fun initWindow() {}
     override fun getLayoutId(): Int {
@@ -157,11 +159,17 @@ class LauncherApplicationFragment : AbsBaseFragment() {
         }
     }
 
+    /**
+     * MainActivityListener implement
+     */
+    class MainListenerImpl : MainActivityListener {
+        override fun onSearchSubmit(search: String?) {
 
-    private inner class LauncherHandler : Handler() {
-        override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
+        }
+
+        override fun onSearchChange(search: String?) {
 
         }
     }
+
 }

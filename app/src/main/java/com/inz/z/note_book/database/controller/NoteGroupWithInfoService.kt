@@ -24,15 +24,37 @@ object NoteGroupWithInfoService {
     }
 
     fun insert(noteGroupWidthInfo: NoteGroupWithInfo) {
-        getNoteGroupWithInfoDao()?.insert(noteGroupWidthInfo)
+        val dao = getNoteGroupWithInfoDao()
+        dao?.insert(noteGroupWidthInfo)
+        LogController.log(
+            "insert",
+            noteGroupWidthInfo,
+            "添加笔录组与信息关联",
+            dao?.tablename ?: "note_group_with_info"
+        )
+
     }
 
     fun delete(groupWidthInfoId: String) {
-        getNoteGroupWithInfoDao()?.deleteByKey(groupWidthInfoId)
+        val dao = getNoteGroupWithInfoDao()
+        dao?.deleteByKey(groupWidthInfoId)
+        LogController.log(
+            "delete",
+            groupWidthInfoId,
+            "删除关联信息",
+            dao?.tablename ?: "note_group_with_info"
+        )
     }
 
     fun update(noteGroupWithInfo: NoteGroupWithInfo) {
-        getNoteGroupWithInfoDao()?.update(noteGroupWithInfo)
+        val dao = getNoteGroupWithInfoDao()
+        dao?.update(noteGroupWithInfo)
+        LogController.log(
+            "update",
+            noteGroupWithInfo,
+            "更新关联信息",
+            dao?.tablename ?: "note_group_with_info"
+        )
     }
 
     /**

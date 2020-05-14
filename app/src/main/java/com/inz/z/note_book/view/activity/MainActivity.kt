@@ -2,16 +2,13 @@ package com.inz.z.note_book.view.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.ContextMenu
-import android.view.Gravity
-import android.view.Menu
 import android.view.View
 import android.widget.PopupMenu
 import androidx.annotation.NonNull
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.inz.z.base.util.L
-import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.R
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.fragment.LauncherApplicationFragment
@@ -36,6 +33,11 @@ class MainActivity : BaseNoteActivity() {
      */
     private var morePopupMenu: PopupMenu? = null
     private var contentViewType = ContentViewType.MAIN
+
+    /**
+     * 监听列表
+     */
+    private val mainListenerMap = HashMap<ContentViewType, MainActivityListener?>()
 
 
     companion object {
@@ -62,6 +64,28 @@ class MainActivity : BaseNoteActivity() {
             top_search_nav_search_view.performClick()
             top_search_nav_search_view.isIconified = false
         }
+
+        top_search_nav_search_view?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                val keys = mainListenerMap.keys
+                for (type in keys) {
+                    if (type == contentViewType) {
+                        mainListenerMap.get(type)?.onSearchSubmit(query)
+                    }
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                val keys = mainListenerMap.keys
+                for (type in keys) {
+                    if (type == contentViewType) {
+                        mainListenerMap.get(type)?.onSearchChange(newText)
+                    }
+                }
+                return true
+            }
+        })
     }
 
     override fun initData() {
@@ -110,6 +134,7 @@ class MainActivity : BaseNoteActivity() {
         var noteNavFragment = manager.findFragmentByTag("NoteNavFragment") as NoteNavFragment?
         if (noteNavFragment == null) {
             noteNavFragment = NoteNavFragment()
+            mainListenerMap.put(ContentViewType.MAIN, noteNavFragment.mainListener)
         }
         val fragmentTransient = manager.beginTransaction()
         if (!noteNavFragment.isAdded) {
@@ -156,9 +181,6 @@ class MainActivity : BaseNoteActivity() {
             ContentViewType.APPLICATION -> {
                 showApplicationListFragment()
             }
-            else -> {
-                L.w(TAG, "targetMainFragment: no find this type: $type")
-            }
         }
         this.contentViewType = type
     }
@@ -172,11 +194,12 @@ class MainActivity : BaseNoteActivity() {
             L.w(TAG, "showApplicationListFragment: mContext is null. ")
             return
         }
-        val manager = supportFragmentManager;
+        val manager = supportFragmentManager
         var launcherFragment =
             manager.findFragmentByTag("LauncherApplicationFragment") as LauncherApplicationFragment?
         if (launcherFragment == null) {
             launcherFragment = LauncherApplicationFragment.getInstant()
+            mainListenerMap.put(ContentViewType.APPLICATION, launcherFragment.mainListener)
         }
         val transaction = manager.beginTransaction()
         if (!launcherFragment.isAdded) {

@@ -53,14 +53,17 @@ public class TaskInfo {
     private Date createTime;
     private Date updateTime;
 
-    @Generated(hash = 702691513)
+    @Generated(hash = 492981973)
     public TaskInfo(String taskId, int type, String taskDescribe, int haveFile,
-                    String remake, Date createTime, Date updateTime) {
+            String remake, String taskAction, String taskPackageName,
+            Date createTime, Date updateTime) {
         this.taskId = taskId;
         this.type = type;
         this.taskDescribe = taskDescribe;
         this.haveFile = haveFile;
         this.remake = remake;
+        this.taskAction = taskAction;
+        this.taskPackageName = taskPackageName;
         this.createTime = createTime;
         this.updateTime = updateTime;
     }
@@ -123,6 +126,22 @@ public class TaskInfo {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getTaskAction() {
+        return this.taskAction;
+    }
+
+    public void setTaskAction(String taskAction) {
+        this.taskAction = taskAction;
+    }
+
+    public String getTaskPackageName() {
+        return this.taskPackageName;
+    }
+
+    public void setTaskPackageName(String taskPackageName) {
+        this.taskPackageName = taskPackageName;
     }
 
 }
