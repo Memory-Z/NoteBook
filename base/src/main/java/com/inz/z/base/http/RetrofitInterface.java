@@ -8,6 +8,6 @@ package com.inz.z.base.http;
  * @version 1.0.0
  * Create By 2018/8/12 14:06
  */
-public interface RetrofitInterface {
+interface RetrofitInterface {
 
 }

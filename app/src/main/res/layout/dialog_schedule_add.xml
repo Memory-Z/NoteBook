@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog_gravity_bottom">
+
+    <com.inz.z.base.view.widget.BaseNavLayout
+        android:id="@+id/dialog_schedule_add_top_bnl"
+        style="@style/NoteBookAppTheme.Layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/touch_target_height"
+        android:layout_alignParentTop="true"
+        app:base_left_layout="@id/dialog_schedule_add_top_left_ll"
+        app:base_right_layout="@id/dialog_schedule_add_top_right_ll">
+
+        <LinearLayout
+            android:id="@+id/dialog_schedule_add_top_left_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/dialog_schedule_add_top_cancel_tv"
+                style="@style/NoteBookAppTheme.Text.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/image_icon_padding_size"
+                android:text="@string/cancel"
+                android:textColor="@color/textColor50" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dialog_schedule_add_top_right_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/dialog_schedule_add_top_save_tv"
+                style="@style/NoteBookAppTheme.Text.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/image_icon_padding_size"
+                android:text="@string/_save"
+                android:textColor="@color/colorPrimary" />
+        </LinearLayout>
+
+    </com.inz.z.base.view.widget.BaseNavLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/dialog_schedule_add_top_bnl">
+
+        <LinearLayout
+            android:id="@+id/dialog_schedule_add_content_nsv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/content_schedule_add" />
+
+            <com.inz.z.base.view.widget.BaseNavLayout
+                android:id="@+id/dialog_schedule_add_content_repeat_bnl"
+                style="@style/NoteBookAppTheme.Layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/touch_target_height"
+                app:base_left_layout="@id/dialog_schedule_add_content_repeat_left_ll">
+
+                <LinearLayout
+                    android:id="@+id/dialog_schedule_add_content_repeat_left_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+            </com.inz.z.base.view.widget.BaseNavLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>

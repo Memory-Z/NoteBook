@@ -150,7 +150,7 @@ class MainActivity : BaseNoteActivity() {
     private fun showMoreMenuView() {
         if (morePopupMenu == null) {
             morePopupMenu = PopupMenu(mContext, top_search_nav_end_rl)
-            menuInflater.inflate(R.menu.main_more, morePopupMenu!!.menu)
+            menuInflater.inflate(R.menu.menu_main_more, morePopupMenu!!.menu)
             morePopupMenu?.setOnMenuItemClickListener {
                 return@setOnMenuItemClickListener true
             }

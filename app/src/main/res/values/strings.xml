@@ -25,6 +25,7 @@
     <string name="remind_me">提醒我</string>
 
     <string name="_schedule">计划</string>
+    <string name="_help">帮助</string>
 
 
     <string name="setting">设置</string>
@@ -54,5 +55,6 @@
 
     <string name="launcher_application_format">是否启动 %s ？</string>
     <string name="_launche_failure_format">启动 %s 失败</string>
+    <string name="_save">保存</string>
 
 </resources>

@@ -14,15 +14,23 @@ import com.inz.z.note_book.util.Constants
  * Create by inz in 2020/01/15 15:51.
  */
 class ClockAlarmBroadcast : BroadcastReceiver() {
-    companion object {
-        private const val TAG = "AlarmBroadcast"
-    }
+    private val TAG = "AlarmBroadcast"
 
     override fun onReceive(context: Context?, intent: Intent?) {
+        L.i(TAG, "onReceive ------------- ")
         val action = intent?.action
         L.i(TAG, "onReceive: $action <<<<<< ")
         when (action) {
             Constants.CLOCK_ALARM_START_ACTION -> {
+
+            }
+            Constants.AlarmAction.ALARM_BROADCAST_BASE_ACTION -> {
+                L.i(TAG, " ALARM_BROADCAST_BASE_ACTION: ---------------------->  ")
+            }
+            Constants.AlarmAction.ALARM_BROADCAST_LAUNCHER_ACTION -> {
+
+            }
+            Constants.AlarmAction.ALARM_BROADCAST_SCHEDULE_ACTION -> {
 
             }
             else -> {

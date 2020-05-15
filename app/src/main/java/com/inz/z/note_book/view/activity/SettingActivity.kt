@@ -1,5 +1,7 @@
 package com.inz.z.note_book.view.activity
 
+import android.os.Handler
+import android.os.Message
 import android.widget.Toast
 import com.inz.z.base.util.FileUtils
 import com.inz.z.base.util.L
@@ -18,7 +20,12 @@ import java.io.File
 class SettingActivity : AbsBaseActivity() {
     companion object {
         const val TAG = "SettingActivity"
+
+        private const val HANDLER_CACHE_SIZE = 0x000A01
+        private const val HANDLER_STYLE = 0x000A02
     }
+
+    private val settingHandler = SettingHandler()
 
     override fun initWindow() {
 
@@ -60,12 +67,34 @@ class SettingActivity : AbsBaseActivity() {
         val fileSize = FileUtils.getFileSize(cachePath)
         var fileSizeStr = ""
         if (fileSize > 1024 * 1024) {
-            fileSizeStr = getString(R.string.file_size_format_m).format( fileSize.div(1024F * 1024F))
+            fileSizeStr = getString(R.string.file_size_format_m).format(fileSize.div(1024F * 1024F))
         } else {
-            fileSizeStr = getString(R.string.file_size_fromat_k).format( fileSize.div(1024F))
+            fileSizeStr = getString(R.string.file_size_fromat_k).format(fileSize.div(1024F))
         }
         L.i(TAG, "getCacheSize: fileSize = $fileSize. $fileSizeStr")
-        setting_info_cache_clear_size_tv.text = fileSizeStr
+        setting_info_cache_clear_size_tv?.text = fileSizeStr
     }
 
+    private fun changeStyle() {
+
+    }
+
+    /**
+     * 设置 Handler
+     */
+    private inner class SettingHandler : Handler() {
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            val bundle = msg.data
+            when (msg.what) {
+                HANDLER_CACHE_SIZE -> {
+                    val cacheSize = bundle?.getString("cacheSize", "") ?: ""
+
+                }
+                HANDLER_STYLE -> {
+
+                }
+            }
+        }
+    }
 }

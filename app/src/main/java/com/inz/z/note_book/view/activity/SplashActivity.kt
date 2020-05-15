@@ -80,7 +80,7 @@ class SplashActivity : AbsBaseActivity() {
      */
     private fun setRightTopTimer() {
         splash_top_end_num_tv.postDelayed({
-            if (time == 0) {
+            if (time == 1) {
                 gotoMainActivity()
             } else {
                 time -= 1

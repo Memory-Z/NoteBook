@@ -10,10 +10,12 @@ import com.inz.z.note_book.BuildConfig
  */
 object Constants {
 
+    private const val APPLICATION_ID = BuildConfig.APPLICATION_ID
+
     /**
      * 时钟开始提醒
      */
-    const val CLOCK_ALARM_START_ACTION = "${BuildConfig.APPLICATION_ID}.action.CLOCK_ALARM_START_ACTION"
+    const val CLOCK_ALARM_START_ACTION = "${APPLICATION_ID}.action.CLOCK_ALARM_START_ACTION"
 
     /**
      * 时钟广播
@@ -33,13 +35,13 @@ object Constants {
          * 默认时钟广播
          */
         const val ALARM_BROADCAST_BASE_ACTION =
-            "${BuildConfig.APPLICATION_ID}.action.ALARM_BROADCAST_BASE_ACTION"
+            "${APPLICATION_ID}.action.ALARM_BROADCAST_BASE_ACTION"
 
         /**
          * 程序启动时钟广播
          */
         const val ALARM_BROADCAST_LAUNCHER_ACTION =
-            "${BuildConfig.APPLICATION_ID}.action.ALARM_BROADCAST_LAUNCHER_ACTION"
+            "${APPLICATION_ID}.action.ALARM_BROADCAST_LAUNCHER_ACTION"
 
         /**
          * 包名
@@ -55,7 +57,7 @@ object Constants {
          * 事件计划广播
          */
         const val ALARM_BROADCAST_SCHEDULE_ACTION =
-            "${BuildConfig.APPLICATION_ID}.action.ALARM_BROADCAST_SCHEDULE_ACTION"
+            "${APPLICATION_ID}.action.ALARM_BROADCAST_SCHEDULE_ACTION"
 
     }
 }

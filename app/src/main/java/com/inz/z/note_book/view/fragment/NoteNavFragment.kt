@@ -350,8 +350,7 @@ class NoteNavFragment : AbsBaseFragment() {
             if (mContext == null) {
                 return true
             }
-            val what = msg.what
-            when (what) {
+            when (msg.what) {
                 NOTE_NAV_GET_NOTE_INFO -> {
 
                 }

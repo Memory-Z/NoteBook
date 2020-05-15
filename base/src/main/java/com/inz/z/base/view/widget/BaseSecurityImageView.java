@@ -1,5 +1,6 @@
 package com.inz.z.base.view.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -67,6 +68,7 @@ public class BaseSecurityImageView extends AppCompatImageView {
      *
      * @param attrs 配置
      */
+    @SuppressLint("RestrictedApi")
     private void initAttrs(AttributeSet attrs) {
         TintTypedArray array = TintTypedArray.obtainStyledAttributes(mContext, attrs, R.styleable.BaseSecurityImageView, 0, 0);
         messageTextColor = array.getColor(R.styleable.BaseSecurityImageView_textColor, SECURITY_TEXT_COLOR);

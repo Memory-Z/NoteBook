@@ -59,7 +59,7 @@ class NewNoteInfoSampleActivity : AbsBaseActivity() {
             try {
                 Thread.sleep(300)
             } catch (e: Exception) {
-                L.e(TAG, "thread sleep . fialog Fragmemnt is gone. ", e)
+                L.e(TAG, "thread sleep . dialog Fragment is gone. ", e)
             }
             runOnUiThread {
                 this@NewNoteInfoSampleActivity.finish()

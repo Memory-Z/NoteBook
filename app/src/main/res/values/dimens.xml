@@ -55,6 +55,8 @@
     <dimen name="text_content_size">@dimen/sp14</dimen>
     <dimen name="text_hint_size">@dimen/sp12</dimen>
 
+    <dimen name="text_max_title_size">@dimen/sp24</dimen>
+
     <dimen name="setting_height">160dp</dimen>
     <dimen name="image_phone_height">68dp</dimen>
 
