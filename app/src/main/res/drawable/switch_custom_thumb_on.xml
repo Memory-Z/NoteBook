@@ -7,7 +7,7 @@
         android:width="@dimen/dp16"
         android:height="@dimen/dp16" />
     <stroke
-        android:width="@dimen/dp01"
+        android:width="@dimen/dp02"
         android:color="@color/colorPrimary" />
 
 </shape>
