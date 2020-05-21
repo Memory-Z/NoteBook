@@ -1,5 +1,7 @@
 package com.inz.z.note_book.database.bean;
 
+import androidx.annotation.NonNull;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
@@ -144,4 +146,19 @@ public class TaskInfo {
         this.taskPackageName = taskPackageName;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return "TaskInfo{" +
+                "taskId='" + taskId + '\'' +
+                ", type=" + type +
+                ", taskDescribe='" + taskDescribe + '\'' +
+                ", haveFile=" + haveFile +
+                ", remake='" + remake + '\'' +
+                ", taskAction='" + taskAction + '\'' +
+                ", taskPackageName='" + taskPackageName + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

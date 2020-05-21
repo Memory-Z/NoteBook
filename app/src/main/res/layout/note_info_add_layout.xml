@@ -10,6 +10,7 @@
         android:id="@+id/note_info_add_top_bnl"
         android:layout_width="match_parent"
         android:layout_height="@dimen/min_title_height"
+        style="@style/NoteBookAppTheme.Layout"
         app:base_center_layout="@id/note_info_add_top_title_tv"
         app:base_left_layout="@id/note_info_add_top_back_iv"
         app:base_right_layout="@id/note_info_add_top_finish_tv">
@@ -64,6 +65,7 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
+                android:id="@+id/note_info_add_content_content_ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"

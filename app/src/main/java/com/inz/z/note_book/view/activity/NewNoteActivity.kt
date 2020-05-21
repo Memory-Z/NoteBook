@@ -1,11 +1,15 @@
 package com.inz.z.note_book.view.activity
 
+import android.view.KeyEvent
+import android.view.View
+import android.widget.Toast
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteInfoController
+import com.inz.z.note_book.view.fragment.BaseDialogFragment
 import kotlinx.android.synthetic.main.note_info_add_layout.*
 import java.util.*
 import java.util.concurrent.Executors
@@ -28,10 +32,12 @@ class NewNoteActivity : AbsBaseActivity() {
      * 笔记ID
      */
     private var noteInfoId = ""
+
     /**
      * 笔记
      */
     private var noteInfo: NoteInfo? = null
+
     /**
      * 已保存笔记内容
      */
@@ -53,17 +59,18 @@ class NewNoteActivity : AbsBaseActivity() {
 
     override fun initView() {
         note_info_add_top_finish_tv.setOnClickListener {
-            val newContent = note_info_add_content_schedule_layout.getContent()
-            if (!oldNoteContent.equals(newContent)) {
-                if (noteInfo != null) {
-                    noteInfo!!.apply {
-                        noteContent = newContent
-                        updateDate = Date()
-                    }
-                    saveNoteInfo(noteInfo!!)
-                } else {
-                    L.w(TAG, "note_info is null. ")
-                }
+            saveNoteInfo()
+        }
+        note_info_add_content_brl?.setOnClickListener {
+            note_info_add_content_content_ll?.let {
+                val count = it.childCount;
+                val lastView = it.getChildAt(count - 1)
+                lastView.performClick()
+            }
+        }
+        note_info_add_top_back_iv?.setOnClickListener {
+            if (!checkHaveChange()) {
+                this@NewNoteActivity.finish()
             }
         }
     }
@@ -98,11 +105,45 @@ class NewNoteActivity : AbsBaseActivity() {
         )
     }
 
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        if (event?.action == KeyEvent.ACTION_UP) {
+            return checkHaveChange()
+//            return true
+        }
+        return super.onKeyUp(keyCode, event)
+    }
+
+    private fun checkHaveChange(): Boolean {
+        val newContent = note_info_add_content_schedule_layout.getContent()
+        noteInfo?.let {
+            if (!newContent.equals(noteInfo?.noteContent)) {
+                showExitHintDialog()
+                return true
+            }
+        }
+        return false
+    }
+
     /**
      * 保存笔录信息
      */
-    private fun saveNoteInfo(noteInfo: NoteInfo) {
-        NoteInfoController.updateNoteInfo(noteInfo)
+    private fun saveNoteInfo() {
+        val newContent = note_info_add_content_schedule_layout.getContent()
+        if (!oldNoteContent.equals(newContent)) {
+            if (noteInfo != null) {
+                noteInfo!!.apply {
+                    noteContent = newContent
+                    updateDate = Date()
+                }
+                NoteInfoController.updateNoteInfo(noteInfo!!)
+                if (mContext != null) {
+                    Toast.makeText(mContext, getString(R.string._save), Toast.LENGTH_SHORT)
+                        .show()
+                }
+            } else {
+                L.w(TAG, "note_info is null. ")
+            }
+        }
     }
 
     /**
@@ -116,5 +157,52 @@ class NewNoteActivity : AbsBaseActivity() {
                 "noteInfo ${System.currentTimeMillis()} -- ${noteInfo?.noteContent} + {${Thread.currentThread().name}}"
             )
         }
+    }
+
+    /**
+     * 显示退出 提示 弹窗
+     */
+    private fun showExitHintDialog() {
+        if (mContext == null) {
+            L.w(TAG, "showExitHintDialog: mContext is null .")
+            return
+        }
+        val manager = supportFragmentManager
+        var hintDialog = manager.findFragmentByTag("ExitDialogFragment") as BaseDialogFragment?
+        if (hintDialog == null) {
+            hintDialog = BaseDialogFragment.Builder()
+                .setCenterMessage(getString(R.string.note_content_have_change_is_saveable))
+                .setLeftButton(
+                    getString(R.string._quit),
+                    View.OnClickListener {
+                        hideExitHintDialog()
+                        this@NewNoteActivity.finish()
+                    }
+                )
+                .setRightButton(
+                    getString(R.string._save),
+                    View.OnClickListener {
+                        saveNoteInfo()
+                        this@NewNoteActivity.finish()
+                    }
+                )
+                .build()
+        }
+        if (!hintDialog.isAdded && !hintDialog.isVisible) {
+            hintDialog.show(manager, "ExitDialogFragment")
+        }
+    }
+
+    /**
+     * 隐藏退出提示
+     */
+    private fun hideExitHintDialog() {
+        if (mContext == null) {
+            L.w(TAG, "showExitHintDialog: mContext is null .")
+            return
+        }
+        val manager = supportFragmentManager
+        val hintDialog = manager.findFragmentByTag("ExitDialogFragment") as BaseDialogFragment?
+        hintDialog?.dismissAllowingStateLoss()
     }
 }

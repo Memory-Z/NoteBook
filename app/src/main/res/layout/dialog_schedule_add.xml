@@ -63,21 +63,233 @@
 
             <include layout="@layout/content_schedule_add" />
 
+            <!-- Action 类型 -->
+            <com.inz.z.base.view.widget.BaseNavLayout
+                android:id="@+id/dialog_schedule_add_content_action_type_bnl"
+                style="@style/NoteBookAppTheme.Layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/touch_target_height"
+                app:base_center_layout="@id/dialog_schedule_add_content_action_type_right_ll"
+                app:base_left_layout="@id/dialog_schedule_add_content_action_type_left_ll">
+
+                <LinearLayout
+                    android:id="@+id/dialog_schedule_add_content_action_type_left_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/NoteBookAppTheme.Text.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/schedule_type" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/dialog_schedule_add_content_action_type_right_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/border_lr_dimen"
+                    android:gravity="center_vertical|end"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/dialog_schedule_add_content_action_type_tv"
+                        style="@style/NoteBookAppTheme.Text.Second"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_nothing" />
+
+                </LinearLayout>
+            </com.inz.z.base.view.widget.BaseNavLayout>
+
+            <!-- Action -->
+            <com.inz.z.base.view.widget.BaseNavLayout
+                android:id="@+id/dialog_schedule_add_content_action_bnl"
+                style="@style/NoteBookAppTheme.Layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/touch_target_height"
+                app:base_center_layout="@id/dialog_schedule_add_content_action_right_ll"
+                app:base_left_layout="@id/dialog_schedule_add_content_action_left_ll">
+
+                <LinearLayout
+                    android:id="@+id/dialog_schedule_add_content_action_left_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/NoteBookAppTheme.Text.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_launcher" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/dialog_schedule_add_content_action_right_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/border_lr_dimen"
+                    android:gravity="center_vertical|end"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/dialog_schedule_add_content_action_name_tv"
+                        style="@style/NoteBookAppTheme.Text.Second"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_nothing" />
+                </LinearLayout>
+
+            </com.inz.z.base.view.widget.BaseNavLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/border_lr_dimen" />
+
+            <!-- 是否重复执行 -->
             <com.inz.z.base.view.widget.BaseNavLayout
                 android:id="@+id/dialog_schedule_add_content_repeat_bnl"
                 style="@style/NoteBookAppTheme.Layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/touch_target_height"
-                app:base_left_layout="@id/dialog_schedule_add_content_repeat_left_ll">
+                app:base_center_layout="@id/dialog_schedule_add_content_repeat_left_ll"
+                app:base_right_layout="@id/dialog_schedule_add_content_repeat_right_ll">
 
                 <LinearLayout
                     android:id="@+id/dialog_schedule_add_content_repeat_left_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/border_lr_dimen"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/NoteBookAppTheme.Text.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_is_repetition" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/dialog_schedule_add_content_repeat_right_ll"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
+
+                    <Switch
+                        android:id="@+id/dialog_schedule_add_content_repeat_switch"
+                        style="@style/NoteBookAppTheme.Switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/status_bar_height" />
+                </LinearLayout>
+            </com.inz.z.base.view.widget.BaseNavLayout>
+
+            <!-- 重复日期 -->
+            <com.inz.z.base.view.widget.BaseNavLayout
+                android:id="@+id/dialog_schedule_add_content_repeat_date_bnl"
+                style="@style/NoteBookAppTheme.Layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/touch_target_height"
+                app:base_center_layout="@id/dialog_schedule_add_content_repeat_date_left_ll"
+                app:base_right_layout="@id/dialog_schedule_add_content_repeat_date_right_ll">
+
+                <LinearLayout
+                    android:id="@+id/dialog_schedule_add_content_repeat_date_left_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/NoteBookAppTheme.Text.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/custom_repeat_date" />
+
+                    <TextView
+                        android:id="@+id/dialog_schedule_add_content_repeat_date_detail_tv"
+                        style="@style/NoteBookAppTheme.Text.Hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/content_space_between_min_dimen"
+                        android:ellipsize="end"
+                        android:gravity="top"
+                        android:lines="1"
+                        android:text="@string/_never" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/dialog_schedule_add_content_repeat_date_right_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        style="@style/NoteBookAppTheme.ImageView.Icon"
+                        android:layout_width="@dimen/image_icon_size"
+                        android:layout_height="@dimen/image_icon_size"
+                        android:contentDescription="@string/image"
+                        android:src="@drawable/ic_chevron_right_black_24dp"
+                        android:tint="@color/textColor" />
+
+                </LinearLayout>
+
+            </com.inz.z.base.view.widget.BaseNavLayout>
+
+            <!-- 标签 -->
+            <com.inz.z.base.view.widget.BaseNavLayout
+                android:id="@+id/dialog_schedule_add_content_tag_bnl"
+                style="@style/NoteBookAppTheme.Layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/touch_target_height"
+                app:base_center_layout="@id/dialog_schedule_add_content_tag_right_ll"
+                app:base_left_layout="@id/dialog_schedule_add_content_tag_left_ll">
+
+                <LinearLayout
+                    android:id="@+id/dialog_schedule_add_content_tag_left_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/NoteBookAppTheme.Text.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_tag" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/dialog_schedule_add_content_tag_right_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/border_lr_dimen"
+                    android:gravity="center_vertical|end"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/dialog_schedule_add_content_tag_et"
+                        style="@style/NoteBookAppTheme.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:autofillHints="@string/_tips"
+                        android:background="@null"
+                        android:gravity="end|center_vertical"
+                        android:hint="@string/_nothing"
+                        android:inputType="text"
+                        android:labelFor="@id/dialog_schedule_add_content_tag_right_ll" />
+
 
                 </LinearLayout>
             </com.inz.z.base.view.widget.BaseNavLayout>
+
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -91,6 +91,11 @@ class ScheduleLayout : LinearLayout {
         array.recycle()
     }
 
+    override fun performClick(): Boolean {
+        mEditText?.performClick()
+        return /*mEditText?.callOnClick() ?:*/  super.performClick()
+    }
+
     /**
      * 初始化 参数
      */

@@ -26,12 +26,13 @@ public class TaskScheduleDao extends AbstractDao<TaskSchedule, String> {
     public static class Properties {
         public final static Property TaskScheduleId = new Property(0, String.class, "taskScheduleId", true, "TASK_SCHEDULE_ID");
         public final static Property TaskId = new Property(1, String.class, "taskId", false, "TASK_ID");
-        public final static Property ScheduleStartTime = new Property(2, java.util.Date.class, "scheduleStartTime", false, "SCHEDULE_START_TIME");
-        public final static Property ScheduleFinishTime = new Property(3, java.util.Date.class, "scheduleFinishTime", false, "SCHEDULE_FINISH_TIME");
+        public final static Property ScheduleTime = new Property(2, java.util.Date.class, "scheduleTime", false, "SCHEDULE_TIME");
+        public final static Property ScheduleRepeatTimeStr = new Property(3, String.class, "scheduleRepeatTimeStr", false, "SCHEDULE_REPEAT_TIME_STR");
         public final static Property ScheduleRepeat = new Property(4, boolean.class, "scheduleRepeat", false, "SCHEDULE_REPEAT");
         public final static Property Status = new Property(5, int.class, "status", false, "STATUS");
-        public final static Property CreateTime = new Property(6, java.util.Date.class, "createTime", false, "CREATE_TIME");
-        public final static Property UpdateTime = new Property(7, java.util.Date.class, "updateTime", false, "UPDATE_TIME");
+        public final static Property ScheduleTag = new Property(6, String.class, "scheduleTag", false, "SCHEDULE_TAG");
+        public final static Property CreateTime = new Property(7, java.util.Date.class, "createTime", false, "CREATE_TIME");
+        public final static Property UpdateTime = new Property(8, java.util.Date.class, "updateTime", false, "UPDATE_TIME");
     }
 
 
@@ -49,15 +50,20 @@ public class TaskScheduleDao extends AbstractDao<TaskSchedule, String> {
         db.execSQL("CREATE TABLE " + constraint + "\"task_schedule\" (" + //
                 "\"TASK_SCHEDULE_ID\" TEXT PRIMARY KEY NOT NULL ," + // 0: taskScheduleId
                 "\"TASK_ID\" TEXT NOT NULL ," + // 1: taskId
-                "\"SCHEDULE_START_TIME\" INTEGER," + // 2: scheduleStartTime
-                "\"SCHEDULE_FINISH_TIME\" INTEGER," + // 3: scheduleFinishTime
+                "\"SCHEDULE_TIME\" INTEGER," + // 2: scheduleTime
+                "\"SCHEDULE_REPEAT_TIME_STR\" TEXT," + // 3: scheduleRepeatTimeStr
                 "\"SCHEDULE_REPEAT\" INTEGER NOT NULL ," + // 4: scheduleRepeat
                 "\"STATUS\" INTEGER NOT NULL ," + // 5: status
-                "\"CREATE_TIME\" INTEGER," + // 6: createTime
-                "\"UPDATE_TIME\" INTEGER);"); // 7: updateTime
+                "\"SCHEDULE_TAG\" TEXT," + // 6: scheduleTag
+                "\"CREATE_TIME\" INTEGER," + // 7: createTime
+                "\"UPDATE_TIME\" INTEGER);"); // 8: updateTime
         // Add Indexes
         db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_task_schedule_TASK_SCHEDULE_ID ON \"task_schedule\"" +
                 " (\"TASK_SCHEDULE_ID\" ASC);");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_task_schedule_SCHEDULE_TIME ON \"task_schedule\"" +
+                " (\"SCHEDULE_TIME\" ASC);");
+        db.execSQL("CREATE INDEX " + constraint + "IDX_task_schedule_SCHEDULE_TAG ON \"task_schedule\"" +
+                " (\"SCHEDULE_TAG\" ASC);");
     }
 
     /** Drops the underlying database table. */
@@ -76,26 +82,31 @@ public class TaskScheduleDao extends AbstractDao<TaskSchedule, String> {
         }
         stmt.bindString(2, entity.getTaskId());
  
-        java.util.Date scheduleStartTime = entity.getScheduleStartTime();
-        if (scheduleStartTime != null) {
-            stmt.bindLong(3, scheduleStartTime.getTime());
+        java.util.Date scheduleTime = entity.getScheduleTime();
+        if (scheduleTime != null) {
+            stmt.bindLong(3, scheduleTime.getTime());
         }
  
-        java.util.Date scheduleFinishTime = entity.getScheduleFinishTime();
-        if (scheduleFinishTime != null) {
-            stmt.bindLong(4, scheduleFinishTime.getTime());
+        String scheduleRepeatTimeStr = entity.getScheduleRepeatTimeStr();
+        if (scheduleRepeatTimeStr != null) {
+            stmt.bindString(4, scheduleRepeatTimeStr);
         }
         stmt.bindLong(5, entity.getScheduleRepeat() ? 1L: 0L);
         stmt.bindLong(6, entity.getStatus());
  
+        String scheduleTag = entity.getScheduleTag();
+        if (scheduleTag != null) {
+            stmt.bindString(7, scheduleTag);
+        }
+ 
         java.util.Date createTime = entity.getCreateTime();
         if (createTime != null) {
-            stmt.bindLong(7, createTime.getTime());
+            stmt.bindLong(8, createTime.getTime());
         }
  
         java.util.Date updateTime = entity.getUpdateTime();
         if (updateTime != null) {
-            stmt.bindLong(8, updateTime.getTime());
+            stmt.bindLong(9, updateTime.getTime());
         }
     }
 
@@ -109,26 +120,31 @@ public class TaskScheduleDao extends AbstractDao<TaskSchedule, String> {
         }
         stmt.bindString(2, entity.getTaskId());
  
-        java.util.Date scheduleStartTime = entity.getScheduleStartTime();
-        if (scheduleStartTime != null) {
-            stmt.bindLong(3, scheduleStartTime.getTime());
+        java.util.Date scheduleTime = entity.getScheduleTime();
+        if (scheduleTime != null) {
+            stmt.bindLong(3, scheduleTime.getTime());
         }
  
-        java.util.Date scheduleFinishTime = entity.getScheduleFinishTime();
-        if (scheduleFinishTime != null) {
-            stmt.bindLong(4, scheduleFinishTime.getTime());
+        String scheduleRepeatTimeStr = entity.getScheduleRepeatTimeStr();
+        if (scheduleRepeatTimeStr != null) {
+            stmt.bindString(4, scheduleRepeatTimeStr);
         }
         stmt.bindLong(5, entity.getScheduleRepeat() ? 1L: 0L);
         stmt.bindLong(6, entity.getStatus());
  
+        String scheduleTag = entity.getScheduleTag();
+        if (scheduleTag != null) {
+            stmt.bindString(7, scheduleTag);
+        }
+ 
         java.util.Date createTime = entity.getCreateTime();
         if (createTime != null) {
-            stmt.bindLong(7, createTime.getTime());
+            stmt.bindLong(8, createTime.getTime());
         }
  
         java.util.Date updateTime = entity.getUpdateTime();
         if (updateTime != null) {
-            stmt.bindLong(8, updateTime.getTime());
+            stmt.bindLong(9, updateTime.getTime());
         }
     }
 
@@ -142,12 +158,13 @@ public class TaskScheduleDao extends AbstractDao<TaskSchedule, String> {
         TaskSchedule entity = new TaskSchedule( //
             cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // taskScheduleId
             cursor.getString(offset + 1), // taskId
-            cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)), // scheduleStartTime
-            cursor.isNull(offset + 3) ? null : new java.util.Date(cursor.getLong(offset + 3)), // scheduleFinishTime
+            cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)), // scheduleTime
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // scheduleRepeatTimeStr
             cursor.getShort(offset + 4) != 0, // scheduleRepeat
             cursor.getInt(offset + 5), // status
-            cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)), // createTime
-            cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)) // updateTime
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // scheduleTag
+            cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)), // createTime
+            cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)) // updateTime
         );
         return entity;
     }
@@ -156,12 +173,13 @@ public class TaskScheduleDao extends AbstractDao<TaskSchedule, String> {
     public void readEntity(Cursor cursor, TaskSchedule entity, int offset) {
         entity.setTaskScheduleId(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
         entity.setTaskId(cursor.getString(offset + 1));
-        entity.setScheduleStartTime(cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)));
-        entity.setScheduleFinishTime(cursor.isNull(offset + 3) ? null : new java.util.Date(cursor.getLong(offset + 3)));
+        entity.setScheduleTime(cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)));
+        entity.setScheduleRepeatTimeStr(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setScheduleRepeat(cursor.getShort(offset + 4) != 0);
         entity.setStatus(cursor.getInt(offset + 5));
-        entity.setCreateTime(cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)));
-        entity.setUpdateTime(cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)));
+        entity.setScheduleTag(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setCreateTime(cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)));
+        entity.setUpdateTime(cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)));
      }
     
     @Override

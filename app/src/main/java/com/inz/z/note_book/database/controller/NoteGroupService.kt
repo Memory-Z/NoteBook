@@ -67,11 +67,11 @@ object NoteGroupService {
     fun getLastNoteGroupOrder(): Int {
         val noteGroupDao = getNoteGroupDao()
         if (noteGroupDao != null) {
-            val noteGroupList = noteGroupDao.queryBuilder().orderDesc(NoteGroupDao.Properties.Order)
+            val noteGroupList = noteGroupDao.queryBuilder().orderDesc(NoteGroupDao.Properties.GroupOrder)
                 .limit(1)
                 .list()
             if (noteGroupList.isNotEmpty()) {
-                return noteGroupList[0].order
+                return noteGroupList[0].groupOrder
             }
         }
         return 0

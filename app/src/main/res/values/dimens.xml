@@ -16,7 +16,8 @@
     <!-- 带有图标或头像的内容有 72dp 左边距 -->
     <dimen name="have_icon_content_left_dimen">72dp</dimen>
     <!-- 内容区域间距 8dp  -->
-    <dimen name="content_space_between_dimen">8dp</dimen>
+    <dimen name="content_space_between_dimen">@dimen/dp08</dimen>
+    <dimen name="content_space_between_min_dimen">@dimen/dp04</dimen>
     <!-- 右边图标右边距 32dp  -->
     <dimen name="right_icon_right_dimen">32dp</dimen>
     <!-- 导航栏右边距56dp -->

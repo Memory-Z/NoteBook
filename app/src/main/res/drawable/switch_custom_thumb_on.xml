@@ -2,12 +2,12 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
     <solid android:color="@color/textInverseColor" />
-    <corners android:radius="@dimen/dp16" />
+    <corners android:radius="@dimen/dp24" />
     <size
-        android:width="@dimen/dp16"
-        android:height="@dimen/dp16" />
+        android:width="@dimen/dp24"
+        android:height="@dimen/dp24" />
     <stroke
-        android:width="@dimen/dp02"
+        android:width="@dimen/dp04"
         android:color="@color/colorPrimary" />
 
 </shape>

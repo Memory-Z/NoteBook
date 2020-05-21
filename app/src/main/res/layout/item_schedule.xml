@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/content_space_between_dimen"
+    android:paddingBottom="@dimen/content_space_between_dimen">
 
     <RelativeLayout
         style="@style/NoteBookAppTheme.Layout"
@@ -30,14 +32,32 @@
 
         <Switch
             android:id="@+id/item_schedule_switch"
-            style="@style/Widget.AppCompat.CompoundButton.Switch"
+            style="@style/NoteBookAppTheme.Switch"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false"
+            android:layout_height="@dimen/qmui_tab_sign_count_view_minSize_with_text"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:thumb="@drawable/switch_custom_thumb_selector"
-            android:track="@drawable/switch_custom_track_selector" />
+            android:checked="true"
+            android:gravity="center_vertical" />
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/item_schedule_content_ll"
+        style="@style/NoteBookAppTheme.Layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/content_space_between_dimen"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_schedule_content_tv"
+            style="@style/NoteBookAppTheme.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="start|top"
+            android:maxLines="2" />
+
+    </LinearLayout>
 
 </LinearLayout>

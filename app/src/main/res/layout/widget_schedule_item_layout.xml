@@ -13,7 +13,7 @@
         android:background="@drawable/bg_check_box_selector"
         android:gravity="center" />
 
-    <com.inz.z.base.view.widget.BaseRichEditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/widget_schedule_et"
         style="@style/NoteBookAppTheme.EditText"
         android:layout_width="match_parent"

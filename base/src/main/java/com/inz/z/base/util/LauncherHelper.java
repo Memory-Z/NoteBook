@@ -34,7 +34,18 @@ public class LauncherHelper {
         } else {
             throw new RuntimeException(" not find this package: " + packageName + " . ");
         }
+    }
 
+    public static PackageInfo findApplicationInfoByPackageName(@NonNull Context context, String packageName) {
+        PackageManager manager = context.getPackageManager();
+
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = manager.getPackageInfo(packageName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return packageInfo;
     }
 
     /**

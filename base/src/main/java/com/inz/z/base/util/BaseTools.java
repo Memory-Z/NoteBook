@@ -7,6 +7,9 @@ import androidx.annotation.StringRes;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -36,6 +39,7 @@ public class BaseTools {
     private static DateFormat dateFormatYM;
     private static DateFormat dateFormatMD;
     private static DateFormat dateFormatY;
+    private static DateFormat dateFormatHm;
 
     /**
      * yyyy-MM-dd HH:mm:ss
@@ -44,44 +48,57 @@ public class BaseTools {
      */
     public static DateFormat getBaseDateFormat() {
         if (baseDateFormat == null) {
-            baseDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+            baseDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         }
         return baseDateFormat;
     }
 
     public static DateFormat getDateFormatTime() {
         if (dateFormatTime == null) {
-            dateFormatTime = new SimpleDateFormat("HH:mm:ss", Locale.CHINA);
+            dateFormatTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
         }
         return dateFormatTime;
     }
 
     public static DateFormat getDateFormatYMD() {
         if (dateFormatYMD == null) {
-            dateFormatYMD = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+            dateFormatYMD = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         }
         return dateFormatYMD;
     }
 
     public static DateFormat getDateFormatYM() {
         if (dateFormatYM == null) {
-            dateFormatYM = new SimpleDateFormat("yyyy-MM", Locale.CHINA);
+            dateFormatYM = new SimpleDateFormat("yyyy-MM", Locale.getDefault());
         }
         return dateFormatYM;
     }
 
     public static DateFormat getDateFormatMD() {
         if (dateFormatMD == null) {
-            dateFormatMD = new SimpleDateFormat("MM-dd", Locale.CHINA);
+            dateFormatMD = new SimpleDateFormat("MM-dd", Locale.getDefault());
         }
         return dateFormatMD;
     }
 
     public static DateFormat getDateFormatY() {
         if (dateFormatY == null) {
-            dateFormatY = new SimpleDateFormat("yyyy", Locale.CHINA);
+            dateFormatY = new SimpleDateFormat("yyyy", Locale.getDefault());
         }
         return dateFormatY;
+    }
+
+    public static DateFormat getDateFormatHm() {
+        if (dateFormatHm == null) {
+            dateFormatHm = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        }
+        return dateFormatHm;
+    }
+
+    @NotNull
+    @Contract("_, _ -> new")
+    public static DateFormat getDateFormat(String dateFormat, Locale locale) {
+        return new SimpleDateFormat(dateFormat, locale);
     }
 
     /**

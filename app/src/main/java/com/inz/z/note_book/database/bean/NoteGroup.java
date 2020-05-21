@@ -41,7 +41,7 @@ public class NoteGroup {
     /**
      * 排序
      */
-    private int order = 0;
+    private int groupOrder = 0;
     /**
      * 创建时间
      */
@@ -51,20 +51,22 @@ public class NoteGroup {
      */
     private Date updateDate = null;
 
-    @Generated(hash = 2061129399)
+    
+
+    @Generated(hash = 395212008)
+    public NoteGroup() {
+    }
+
+    @Generated(hash = 632070205)
     public NoteGroup(String noteGroupId, String groupName, int priority,
-            int isCollectValue, int order, Date createDate, Date updateDate) {
+            int isCollectValue, int groupOrder, Date createDate, Date updateDate) {
         this.noteGroupId = noteGroupId;
         this.groupName = groupName;
         this.priority = priority;
         this.isCollectValue = isCollectValue;
-        this.order = order;
+        this.groupOrder = groupOrder;
         this.createDate = createDate;
         this.updateDate = updateDate;
-    }
-
-    @Generated(hash = 395212008)
-    public NoteGroup() {
     }
 
     public String getNoteGroupId() {
@@ -99,12 +101,12 @@ public class NoteGroup {
         this.isCollectValue = isCollectValue;
     }
 
-    public int getOrder() {
-        return this.order;
+    public int getGroupOrder() {
+        return groupOrder;
     }
 
-    public void setOrder(int order) {
-        this.order = order;
+    public void setGroupOrder(int groupOrder) {
+        this.groupOrder = groupOrder;
     }
 
     public Date getCreateDate() {

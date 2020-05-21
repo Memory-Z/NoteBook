@@ -139,7 +139,7 @@ class NoteNavFragment : AbsBaseFragment() {
                 if (mContext != null) {
                     Toast.makeText(
                         mContext,
-                        getString(R.string._launche_failure_format).format(packageName),
+                        getString(R.string._launcher_failure_format).format(packageName),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -202,7 +202,7 @@ class NoteNavFragment : AbsBaseFragment() {
         var hour: Int
         var minute: Int
         var seconds: Int
-        val date = Calendar.getInstance(Locale.CHINA)
+        val date = Calendar.getInstance(Locale.getDefault())
             .apply {
                 hour = get(Calendar.HOUR_OF_DAY)
                 minute = get(Calendar.MINUTE)

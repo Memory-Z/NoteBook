@@ -28,7 +28,7 @@ public class NoteGroupDao extends AbstractDao<NoteGroup, String> {
         public final static Property GroupName = new Property(1, String.class, "groupName", false, "GROUP_NAME");
         public final static Property Priority = new Property(2, int.class, "priority", false, "PRIORITY");
         public final static Property IsCollectValue = new Property(3, int.class, "isCollectValue", false, "IS_COLLECT_VALUE");
-        public final static Property Order = new Property(4, int.class, "order", false, "ORDER");
+        public final static Property GroupOrder = new Property(4, int.class, "groupOrder", false, "GROUP_ORDER");
         public final static Property CreateDate = new Property(5, java.util.Date.class, "createDate", false, "CREATE_DATE");
         public final static Property UpdateDate = new Property(6, java.util.Date.class, "updateDate", false, "UPDATE_DATE");
     }
@@ -50,7 +50,7 @@ public class NoteGroupDao extends AbstractDao<NoteGroup, String> {
                 "\"GROUP_NAME\" TEXT," + // 1: groupName
                 "\"PRIORITY\" INTEGER NOT NULL ," + // 2: priority
                 "\"IS_COLLECT_VALUE\" INTEGER NOT NULL ," + // 3: isCollectValue
-                "\"ORDER\" INTEGER NOT NULL ," + // 4: order
+                "\"GROUP_ORDER\" INTEGER NOT NULL ," + // 4: groupOrder
                 "\"CREATE_DATE\" INTEGER," + // 5: createDate
                 "\"UPDATE_DATE\" INTEGER);"); // 6: updateDate
     }
@@ -76,7 +76,7 @@ public class NoteGroupDao extends AbstractDao<NoteGroup, String> {
         }
         stmt.bindLong(3, entity.getPriority());
         stmt.bindLong(4, entity.getIsCollectValue());
-        stmt.bindLong(5, entity.getOrder());
+        stmt.bindLong(5, entity.getGroupOrder());
  
         java.util.Date createDate = entity.getCreateDate();
         if (createDate != null) {
@@ -104,7 +104,7 @@ public class NoteGroupDao extends AbstractDao<NoteGroup, String> {
         }
         stmt.bindLong(3, entity.getPriority());
         stmt.bindLong(4, entity.getIsCollectValue());
-        stmt.bindLong(5, entity.getOrder());
+        stmt.bindLong(5, entity.getGroupOrder());
  
         java.util.Date createDate = entity.getCreateDate();
         if (createDate != null) {
@@ -129,7 +129,7 @@ public class NoteGroupDao extends AbstractDao<NoteGroup, String> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // groupName
             cursor.getInt(offset + 2), // priority
             cursor.getInt(offset + 3), // isCollectValue
-            cursor.getInt(offset + 4), // order
+            cursor.getInt(offset + 4), // groupOrder
             cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)), // createDate
             cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)) // updateDate
         );
@@ -142,7 +142,7 @@ public class NoteGroupDao extends AbstractDao<NoteGroup, String> {
         entity.setGroupName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setPriority(cursor.getInt(offset + 2));
         entity.setIsCollectValue(cursor.getInt(offset + 3));
-        entity.setOrder(cursor.getInt(offset + 4));
+        entity.setGroupOrder(cursor.getInt(offset + 4));
         entity.setCreateDate(cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)));
         entity.setUpdateDate(cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)));
      }

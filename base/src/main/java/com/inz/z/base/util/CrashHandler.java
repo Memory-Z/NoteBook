@@ -10,6 +10,8 @@ import android.os.Process;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.inz.z.base.R;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -116,7 +118,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 public void run() {
                     // 准备消息队列
                     Looper.prepare();
-                    Toast.makeText(mContext, "很抱歉，程序出现异常，即将退出", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, mContext.getString(R.string._sorry_application_have_error_will_exit), Toast.LENGTH_SHORT).show();
                     Looper.loop();
                 }
             }).start();

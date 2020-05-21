@@ -34,8 +34,8 @@ android {
     }
 
     greendao {
-        schemaVersion 1
-        daoPackage  "${applicationIdName}.database"
+        schemaVersion 2
+        daoPackage "${applicationIdName}.database"
         targetGenDir 'src/main/java'
     }
 
@@ -82,4 +82,9 @@ dependencies {
      */
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'org.greenrobot:greendao-generator:3.2.2'
+
+    /**
+     * 日历
+     */
+    implementation 'com.haibin:calendarview:3.6.9'
 }

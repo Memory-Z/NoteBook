@@ -60,4 +60,24 @@ object Constants {
             "${APPLICATION_ID}.action.ALARM_BROADCAST_SCHEDULE_ACTION"
 
     }
+
+    /**
+     * application 请求码
+     */
+    const val APPLICATION_LIST_REQUEST_CODE_FLAG = "0x000A01"
+    const val APPLICATION_LIST_REQUEST_CODE = 0x000A01
+    const val APPLICATION_LIST_RESPONSE_CODE = 0x000A02
+
+    /**
+     * 自定义重复时间
+     */
+    const val CUSTOM_DATE_REQUEST_CODE_FLAG = "0x000A02"
+    const val CUSTOM_DATE_REQUEST_CODE = 0x000A02
+
+    /**
+     * 计划类型
+     */
+    const val SCHEDULE_TYPE_REQUEST_CODE_FLAG = "0x000A03"
+    const val SCHEDULE_TYPE_REQUEST_CODE = 0x000A03
+
 }

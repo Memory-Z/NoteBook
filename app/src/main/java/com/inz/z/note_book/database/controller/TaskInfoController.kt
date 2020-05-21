@@ -1,10 +1,8 @@
 package com.inz.z.note_book.database.controller
 
-import com.alibaba.fastjson.JSON
 import com.inz.z.note_book.database.TaskInfoDao
 import com.inz.z.note_book.database.bean.TaskInfo
 import com.inz.z.note_book.database.util.GreenDaoHelper
-import com.inz.z.note_book.database.util.GreenDaoOpenHelper
 
 /**
  * 任务控制
@@ -24,14 +22,28 @@ object TaskInfoController {
      */
     fun insertTaskInfo(taskInfo: TaskInfo) {
         val dao = getTaskInfoDao()
-        dao?.insert(taskInfo)
-        LogController.log(
-            "insert",
-            taskInfo,
-            "添加任务",
-            dao?.tablename ?: "task_info"
-        )
+        if (dao != null) {
+            val taskId = taskInfo.taskId
+            val t = queryTaskInfoById(taskId)
+            if (t == null) {
+                dao.insert(taskInfo)
+                LogController.log("insert", taskInfo, "添加任务", dao.tablename)
+            } else {
+                updateTaskInfo(taskInfo)
+            }
+        }
     }
 
+    fun queryTaskInfoById(taskId: String): TaskInfo? =
+        getTaskInfoDao()?.queryBuilder()?.where(TaskInfoDao.Properties.TaskId.eq(taskId))?.unique()
+
+
+    fun updateTaskInfo(taskInfo: TaskInfo) {
+        val dao = getTaskInfoDao()
+        if (dao != null) {
+            dao.update(taskInfo)
+            LogController.log("update", taskInfo, "更新任务", dao.tablename)
+        }
+    }
 
 }

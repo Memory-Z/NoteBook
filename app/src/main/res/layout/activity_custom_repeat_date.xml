@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.inz.z.base.view.widget.BaseNavLayout
+        android:id="@+id/activity_crd_top_bnl"
+        style="@style/NoteBookAppTheme.TopAction"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/touch_target_height"
+        app:base_center_layout="@id/activity_crd_top_center_ll"
+        app:base_left_layout="@id/activity_crd_top_left_ll"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/activity_crd_top_left_ll"
+            android:layout_width="@dimen/touch_target_height"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/NoteBookAppTheme.ImageView.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/image"
+                android:src="@drawable/ic_chevron_left_black_24dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/activity_crd_top_center_ll"
+            style="@style/NoteBookAppTheme.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/NoteBookAppTheme.Text.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_repeat_date" />
+
+        </LinearLayout>
+
+    </com.inz.z.base.view.widget.BaseNavLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/activity_crd_content_rv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_crd_top_bnl" />
+
+    <LinearLayout
+        android:id="@+id/activity_crd_content_ll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_crd_top_bnl">
+
+        <!-- 每周一 -->
+        <com.inz.z.base.view.widget.BaseNavLayout
+            android:id="@+id/activity_crd_content_week_1_bnl"
+            style="@style/NoteBookAppTheme.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/touch_target_height"
+            app:base_center_layout="@id/activity_crd_content_week_1_center_ll"
+            app:base_right_layout="@id/activity_crd_content_week_1_right_ll">
+
+            <LinearLayout
+                android:id="@+id/activity_crd_content_week_1_center_ll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/NoteBookAppTheme.Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_date_week_1" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/activity_crd_content_week_1_right_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/activity_crd_content_week_1_check_box"
+                    style="@style/NoteBookAppTheme.CheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </com.inz.z.base.view.widget.BaseNavLayout>
+
+        <!-- 每周二 -->
+        <com.inz.z.base.view.widget.BaseNavLayout
+            android:id="@+id/activity_crd_content_week_2_bnl"
+            style="@style/NoteBookAppTheme.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/touch_target_height"
+            app:base_center_layout="@id/activity_crd_content_week_2_center_ll"
+            app:base_right_layout="@id/activity_crd_content_week_2_right_ll">
+
+            <LinearLayout
+                android:id="@+id/activity_crd_content_week_2_center_ll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/NoteBookAppTheme.Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_date_week_2" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/activity_crd_content_week_2_right_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/activity_crd_content_week_2_check_box"
+                    style="@style/NoteBookAppTheme.CheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </com.inz.z.base.view.widget.BaseNavLayout>
+
+        <!-- 每周三 -->
+        <com.inz.z.base.view.widget.BaseNavLayout
+            android:id="@+id/activity_crd_content_week_3_bnl"
+            style="@style/NoteBookAppTheme.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/touch_target_height"
+            app:base_center_layout="@id/activity_crd_content_week_3_center_ll"
+            app:base_right_layout="@id/activity_crd_content_week_3_right_ll">
+
+            <LinearLayout
+                android:id="@+id/activity_crd_content_week_3_center_ll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/NoteBookAppTheme.Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_date_week_3" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/activity_crd_content_week_3_right_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/activity_crd_content_week_3_check_box"
+                    style="@style/NoteBookAppTheme.CheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </com.inz.z.base.view.widget.BaseNavLayout>
+
+        <!-- 每周四 -->
+        <com.inz.z.base.view.widget.BaseNavLayout
+            android:id="@+id/activity_crd_content_week_4_bnl"
+            style="@style/NoteBookAppTheme.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/touch_target_height"
+            app:base_center_layout="@id/activity_crd_content_week_4_center_ll"
+            app:base_right_layout="@id/activity_crd_content_week_4_right_ll">
+
+            <LinearLayout
+                android:id="@+id/activity_crd_content_week_4_center_ll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/NoteBookAppTheme.Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_date_week_4" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/activity_crd_content_week_4_right_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/activity_crd_content_week_4_check_box"
+                    style="@style/NoteBookAppTheme.CheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </com.inz.z.base.view.widget.BaseNavLayout>
+
+        <!-- 每周五 -->
+        <com.inz.z.base.view.widget.BaseNavLayout
+            android:id="@+id/activity_crd_content_week_5_bnl"
+            style="@style/NoteBookAppTheme.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/touch_target_height"
+            app:base_center_layout="@id/activity_crd_content_week_5_center_ll"
+            app:base_right_layout="@id/activity_crd_content_week_5_right_ll">
+
+            <LinearLayout
+                android:id="@+id/activity_crd_content_week_5_center_ll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/NoteBookAppTheme.Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_date_week_5" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/activity_crd_content_week_5_right_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/activity_crd_content_week_5_check_box"
+                    style="@style/NoteBookAppTheme.CheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </com.inz.z.base.view.widget.BaseNavLayout>
+
+        <!-- 每周六 -->
+        <com.inz.z.base.view.widget.BaseNavLayout
+            android:id="@+id/activity_crd_content_week_6_bnl"
+            style="@style/NoteBookAppTheme.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/touch_target_height"
+            app:base_center_layout="@id/activity_crd_content_week_6_center_ll"
+            app:base_right_layout="@id/activity_crd_content_week_6_right_ll">
+
+            <LinearLayout
+                android:id="@+id/activity_crd_content_week_6_center_ll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/NoteBookAppTheme.Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_date_week_6" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/activity_crd_content_week_6_right_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/activity_crd_content_week_6_check_box"
+                    style="@style/NoteBookAppTheme.CheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </com.inz.z.base.view.widget.BaseNavLayout>
+
+        <!-- 每周日 -->
+        <com.inz.z.base.view.widget.BaseNavLayout
+            android:id="@+id/activity_crd_content_week_7_bnl"
+            style="@style/NoteBookAppTheme.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/touch_target_height"
+            app:base_center_layout="@id/activity_crd_content_week_7_center_ll"
+            app:base_right_layout="@id/activity_crd_content_week_7_right_ll">
+
+            <LinearLayout
+                android:id="@+id/activity_crd_content_week_7_center_ll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/NoteBookAppTheme.Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_date_week_7" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/activity_crd_content_week_7_right_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/activity_crd_content_week_7_check_box"
+                    style="@style/NoteBookAppTheme.CheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </com.inz.z.base.view.widget.BaseNavLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

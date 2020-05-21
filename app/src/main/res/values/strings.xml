@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">note_book</string>
-
     <string name="input_group_title">输入分组标题</string>
     <string name="cancel">取消</string>
     <string name="create_group">创建列表</string>
@@ -10,7 +9,6 @@
     <string name="image">图片</string>
     <string name="del_group">删除分组</string>
     <string name="rename_group_title">重命名分组</string>
-
     <string name="delete">删除</string>
     <string name="share">分享</string>
     <string name="completed">完成</string>
@@ -23,11 +21,8 @@
     <string name="setting_end_date">设置截止日期</string>
     <string name="repetition">重复</string>
     <string name="remind_me">提醒我</string>
-
     <string name="_schedule">计划</string>
     <string name="_help">帮助</string>
-
-
     <string name="setting">设置</string>
     <string name="about">关于</string>
     <string name="version">版本</string>
@@ -44,17 +39,33 @@
     <string name="cache_cleared">缓存已清除</string>
     <string name="file_size_format_m">%.2f Mb</string>
     <string name="file_size_fromat_k">%.2f Kb</string>
-
     <string name="_button">按钮</string>
     <string name="_tips">提示</string>
-
     <string name="_main_page">首页</string>
     <string name="_application">应用</string>
     <string name="_position">确定</string>
     <string name="_negative">取消</string>
-
     <string name="launcher_application_format">是否启动 %s ？</string>
-    <string name="_launche_failure_format">启动 %s 失败</string>
+    <string name="_launcher_failure_format">启动 %s 失败</string>
     <string name="_save">保存</string>
+    <string name="_is_repetition">是否重复执行? </string>
+    <string name="_tag">标签</string>
+    <string name="custom_repeat_date">自定义重复日期</string>
+    <string name="_never">永不</string>
+    <string name="_date_time_format_h_m">HH:mm</string>
+    <string name="_date_time_format_M_d">%s月%s日</string>
+    <string name="_date_week_1">周一</string>
+    <string name="_date_week_2">周二</string>
+    <string name="_date_week_3">周三</string>
+    <string name="_date_week_4">周四</string>
+    <string name="_date_week_5">周五</string>
+    <string name="_date_week_6">周六</string>
+    <string name="_date_week_7">周日</string>
+    <string name="schedule_type">计划类型</string>
+    <string name="_launcher">启动</string>
+    <string name="_nothing">无</string>
+    <string name="_clock">闹钟</string>
+    <string name="note_content_is_saved">内容已保存</string>
+    <string name="note_content_have_change_is_saveable">内容有更改是否保存？</string>
 
 </resources>

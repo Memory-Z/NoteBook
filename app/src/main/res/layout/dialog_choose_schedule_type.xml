@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_card_white_base"
+    android:backgroundTint="@color/textColor30"
+    android:orientation="vertical">
+
+    <!-- 提示 -->
+    <TextView
+        android:id="@+id/dialog_choose_schedule_type_hint_tv"
+        style="@style/NoteBookAppTheme.Text.Title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/touch_target_height"
+        android:background="@drawable/bg_card_white_base"
+        android:gravity="center"
+        android:paddingStart="@dimen/border_lr_dimen"
+        android:paddingEnd="@dimen/border_lr_dimen"
+        android:text="@string/_tips" />
+
+    <!-- 启动 -->
+    <TextView
+        android:id="@+id/dialog_choose_schedule_type_launcher_tv"
+        style="@style/NoteBookAppTheme.Text.Title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/touch_target_height"
+        android:background="@drawable/bg_card_white_base"
+        android:gravity="center"
+        android:paddingStart="@dimen/border_lr_dimen"
+        android:paddingEnd="@dimen/border_lr_dimen"
+        android:text="@string/_launcher" />
+
+    <!-- 闹钟 -->
+    <TextView
+        android:id="@+id/dialog_choose_schedule_type_clock_tv"
+        style="@style/NoteBookAppTheme.Text.Title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/touch_target_height"
+        android:background="@drawable/bg_card_white_base"
+        android:gravity="center"
+        android:paddingStart="@dimen/border_lr_dimen"
+        android:paddingEnd="@dimen/border_lr_dimen"
+        android:text="@string/_clock" />
+
+    <!-- 无 -->
+    <TextView
+        android:id="@+id/dialog_choose_schedule_type_none_tv"
+        style="@style/NoteBookAppTheme.Text.Title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/touch_target_height"
+        android:background="@drawable/bg_card_white_base"
+        android:gravity="center"
+        android:paddingStart="@dimen/border_lr_dimen"
+        android:paddingEnd="@dimen/border_lr_dimen"
+        android:text="@string/_nothing" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/border_lr_dimen" />
+
+    <!-- 取消 -->
+    <TextView
+        android:id="@+id/dialog_choose_schedule_type_cancel_tv"
+        style="@style/NoteBookAppTheme.Text.Title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/touch_target_height"
+        android:background="@drawable/bg_card_white_base"
+        android:backgroundTint="@color/nearColorRed"
+        android:gravity="center"
+        android:paddingStart="@dimen/border_lr_dimen"
+        android:paddingEnd="@dimen/border_lr_dimen"
+        android:text="@string/_negative"
+        android:textColor="@color/textInverseColor" />
+
+</LinearLayout>

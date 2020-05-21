@@ -88,6 +88,20 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoteBookAppTheme" />
 
+        <!-- 应用列表 -->
+        <activity
+            android:name=".view.activity.ApplicationListActivity"
+            android:configChanges="screenLayout|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoteBookAppTheme" />
+
+        <!-- 重复日期 -->
+        <activity
+            android:name=".view.activity.CustomRepeatDateActitity"
+            android:configChanges="screenLayout|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoteBookAppTheme" />
+
         <!-- 通知服务 -->
         <service
             android:name=".service.NotificationForegroundService"

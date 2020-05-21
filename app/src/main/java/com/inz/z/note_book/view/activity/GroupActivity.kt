@@ -201,7 +201,7 @@ class GroupActivity : AbsBaseActivity() {
             noteGroup.apply {
                 noteGroupId = UUID.randomUUID().toString()
                 setGroupName(title)
-                order = noteGroupOrder + 1
+                groupOrder = noteGroupOrder + 1
                 isCollectValue = 0
                 priority = 4
                 createDate = currentDate
