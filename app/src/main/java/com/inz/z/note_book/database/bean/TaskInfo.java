@@ -3,12 +3,11 @@ package com.inz.z.note_book.database.bean;
 import androidx.annotation.NonNull;
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 
 import java.util.Date;
-
-import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * 任务信息
@@ -52,13 +51,18 @@ public class TaskInfo {
      */
     private String taskPackageName = "";
 
+    /**
+     * 任务请求码
+     */
+    private Integer taskRequestCode = -1;
+
     private Date createTime;
     private Date updateTime;
 
-    @Generated(hash = 492981973)
+    @Generated(hash = 122765172)
     public TaskInfo(String taskId, int type, String taskDescribe, int haveFile,
-            String remake, String taskAction, String taskPackageName,
-            Date createTime, Date updateTime) {
+                    String remake, String taskAction, String taskPackageName,
+                    Integer taskRequestCode, Date createTime, Date updateTime) {
         this.taskId = taskId;
         this.type = type;
         this.taskDescribe = taskDescribe;
@@ -66,6 +70,7 @@ public class TaskInfo {
         this.remake = remake;
         this.taskAction = taskAction;
         this.taskPackageName = taskPackageName;
+        this.taskRequestCode = taskRequestCode;
         this.createTime = createTime;
         this.updateTime = updateTime;
     }
@@ -146,6 +151,14 @@ public class TaskInfo {
         this.taskPackageName = taskPackageName;
     }
 
+    public Integer getTaskRequestCode() {
+        return this.taskRequestCode;
+    }
+
+    public void setTaskRequestCode(Integer taskRequestCode) {
+        this.taskRequestCode = taskRequestCode;
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -157,6 +170,7 @@ public class TaskInfo {
                 ", remake='" + remake + '\'' +
                 ", taskAction='" + taskAction + '\'' +
                 ", taskPackageName='" + taskPackageName + '\'' +
+                ", taskRequestCode=" + taskRequestCode +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';

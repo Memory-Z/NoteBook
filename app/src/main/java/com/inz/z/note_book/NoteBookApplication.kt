@@ -1,9 +1,12 @@
 package com.inz.z.note_book
 
 import android.app.Application
+import android.content.Intent
 import com.inz.z.base.util.CrashHandler
 import com.inz.z.base.util.L
+import com.inz.z.note_book.base.ActivityLifeCallbackImpl
 import com.inz.z.note_book.database.util.GreenDaoHelper
+import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.util.SPHelper
 
 /**
@@ -14,11 +17,35 @@ import com.inz.z.note_book.util.SPHelper
  */
 class NoteBookApplication : Application() {
 
+    companion object {
+        private const val TAG = "NoteBookApplication"
+    }
+
     override fun onCreate() {
         super.onCreate()
         L.initL(applicationContext)
         CrashHandler.instance(applicationContext)
         GreenDaoHelper.getInstance().initGreenDaoHelper(applicationContext)
         SPHelper.init(applicationContext)
+
+        // 设置生命周期监督
+        setActivityLifeCallback()
+    }
+
+    /**
+     * 设置生命周期回调
+     */
+    private fun setActivityLifeCallback() {
+        ActivityLifeCallbackImpl.init(
+            this,
+            object : ActivityLifeCallbackImpl.ActivityLifeCallbackListener {
+                override fun applicationInBackground(background: Boolean) {
+                    L.i(TAG, "applicationInBackground: $background")
+                    val intent = Intent()
+                    intent.action = Constants.LifeAction.LIFE_CHANGE_ACTION
+                    sendBroadcast(intent)
+                }
+            }
+        )
     }
 }

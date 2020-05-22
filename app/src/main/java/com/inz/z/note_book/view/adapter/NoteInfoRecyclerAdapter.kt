@@ -38,6 +38,7 @@ class NoteInfoRecyclerAdapter(mContext: Context?) :
         holder.mItemNoteLayoutBinding?.noteInfo = noteInfo
         holder.mItemNoteLayoutBinding?.noteInfoUpdateDateStr =
             BaseTools.getBaseDateFormat().format(noteInfo.updateDate)
+        holder.mItemNoteLayoutBinding?.noteStatusStr = noteInfo.noteStatus.getStatusStr(mContext)
     }
 
     class NoteInfoRecyclerViewHolder(itemView: View) : AbsBaseRvViewHolder(itemView) {

@@ -107,8 +107,9 @@ class NewNoteActivity : AbsBaseActivity() {
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         if (event?.action == KeyEvent.ACTION_UP) {
-            return checkHaveChange()
-//            return true
+            if (checkHaveChange()) {
+                return true
+            }
         }
         return super.onKeyUp(keyCode, event)
     }

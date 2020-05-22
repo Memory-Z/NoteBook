@@ -10,7 +10,7 @@ import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
-import com.inz.z.note_book.bean.ScheduleWeekDate
+import com.inz.z.note_book.bean.inside.ScheduleWeekDate
 import kotlinx.android.synthetic.main.item_repeat_date.view.*
 
 /**

@@ -1,5 +1,7 @@
 package com.inz.z.note_book.database.bean;
 
+import com.inz.z.note_book.bean.NoteInfoStatus;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
@@ -38,7 +40,7 @@ public class NoteInfo {
     /**
      * 状态
      *
-     * @see Status 状态
+     * @see NoteInfoStatus 日记状态
      */
     private int status = 0;
 
@@ -58,65 +60,18 @@ public class NoteInfo {
     }
 
     /**
-     * 状态
-     */
-    public enum Status {
-        /**
-         * 未完成
-         */
-        UNFINISHED,
-        /**
-         * 已完成
-         */
-        FINISHED,
-        /**
-         * 已取消
-         */
-        CANCELED,
-        /**
-         * 已超时
-         */
-        TIMEOUT
-    }
-
-    /**
      * 设置状态
      */
-    public void setNoteStatus(Status status) {
-        if (status == Status.UNFINISHED) {
-            this.status = 0;
-        }
-        if (status == Status.FINISHED) {
-            this.status = 1;
-        }
-        if (status == Status.CANCELED) {
-            this.status = -1;
-        }
-        if (status == Status.TIMEOUT) {
-            this.status = -2;
-        }
+    public void setNoteStatus(NoteInfoStatus status) {
+        this.status = status.getValue();
     }
 
     /**
      * 获取状态
      */
-    public Status getNoteStatus() {
-        Status status = Status.UNFINISHED;
-        switch (this.status) {
-            case 0:
-                status = Status.UNFINISHED;
-                break;
-            case 1:
-                status = Status.FINISHED;
-                break;
-            case -1:
-                status = Status.CANCELED;
-                break;
-            case -2:
-                status = Status.TIMEOUT;
-                break;
-        }
-        return status;
+    public NoteInfoStatus getNoteStatus() {
+        NoteInfoStatus status = NoteInfoStatus.UNFINISHED;
+        return status.getStatus(this.status);
     }
 
     public String getNoteInfoId() {

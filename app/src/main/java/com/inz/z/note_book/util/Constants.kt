@@ -80,4 +80,10 @@ object Constants {
     const val SCHEDULE_TYPE_REQUEST_CODE_FLAG = "0x000A03"
     const val SCHEDULE_TYPE_REQUEST_CODE = 0x000A03
 
+    /**
+     * 生命 周期广播
+     */
+    object LifeAction {
+        const val LIFE_CHANGE_ACTION = "${APPLICATION_ID}.action.LIFE_CHANGE_ACTION"
+    }
 }

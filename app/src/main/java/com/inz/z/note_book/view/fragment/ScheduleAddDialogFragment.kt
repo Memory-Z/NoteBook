@@ -13,14 +13,13 @@ import com.inz.z.base.util.L
 import com.inz.z.base.util.LauncherHelper
 import com.inz.z.base.view.AbsBaseDialogFragment
 import com.inz.z.note_book.R
-import com.inz.z.note_book.bean.ScheduleStatus
-import com.inz.z.note_book.bean.ScheduleWeekDate
+import com.inz.z.note_book.bean.inside.ScheduleStatus
+import com.inz.z.note_book.bean.inside.ScheduleWeekDate
 import com.inz.z.note_book.bean.inside.TaskAction
 import com.inz.z.note_book.database.bean.TaskInfo
 import com.inz.z.note_book.database.bean.TaskSchedule
 import com.inz.z.note_book.database.controller.TaskInfoController
 import com.inz.z.note_book.database.controller.TaskScheduleController
-import com.inz.z.note_book.util.ClockAlarmManager
 import kotlinx.android.synthetic.main.content_schedule_add.view.*
 import kotlinx.android.synthetic.main.dialog_schedule_add.*
 import java.util.*

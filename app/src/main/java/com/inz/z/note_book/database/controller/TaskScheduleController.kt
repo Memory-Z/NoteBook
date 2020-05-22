@@ -1,13 +1,9 @@
 package com.inz.z.note_book.database.controller
 
-import com.inz.z.note_book.bean.ScheduleStatus
 import com.inz.z.note_book.database.TaskScheduleDao
 import com.inz.z.note_book.database.bean.TaskSchedule
 import com.inz.z.note_book.database.util.GreenDaoHelper
-import com.inz.z.note_book.database.util.GreenDaoOpenHelper
-import org.greenrobot.greendao.query.WhereCondition
 import java.util.*
-import kotlin.math.min
 
 /**
  * 任务 计划 控制

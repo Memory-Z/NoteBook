@@ -31,8 +31,9 @@ public class TaskInfoDao extends AbstractDao<TaskInfo, String> {
         public final static Property Remake = new Property(4, String.class, "remake", false, "REMAKE");
         public final static Property TaskAction = new Property(5, String.class, "taskAction", false, "TASK_ACTION");
         public final static Property TaskPackageName = new Property(6, String.class, "taskPackageName", false, "TASK_PACKAGE_NAME");
-        public final static Property CreateTime = new Property(7, java.util.Date.class, "createTime", false, "CREATE_TIME");
-        public final static Property UpdateTime = new Property(8, java.util.Date.class, "updateTime", false, "UPDATE_TIME");
+        public final static Property TaskRequestCode = new Property(7, Integer.class, "taskRequestCode", false, "TASK_REQUEST_CODE");
+        public final static Property CreateTime = new Property(8, java.util.Date.class, "createTime", false, "CREATE_TIME");
+        public final static Property UpdateTime = new Property(9, java.util.Date.class, "updateTime", false, "UPDATE_TIME");
     }
 
 
@@ -55,8 +56,9 @@ public class TaskInfoDao extends AbstractDao<TaskInfo, String> {
                 "\"REMAKE\" TEXT," + // 4: remake
                 "\"TASK_ACTION\" TEXT," + // 5: taskAction
                 "\"TASK_PACKAGE_NAME\" TEXT," + // 6: taskPackageName
-                "\"CREATE_TIME\" INTEGER," + // 7: createTime
-                "\"UPDATE_TIME\" INTEGER);"); // 8: updateTime
+                "\"TASK_REQUEST_CODE\" INTEGER," + // 7: taskRequestCode
+                "\"CREATE_TIME\" INTEGER," + // 8: createTime
+                "\"UPDATE_TIME\" INTEGER);"); // 9: updateTime
         // Add Indexes
         db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_task_info_TASK_ID ON \"task_info\"" +
                 " (\"TASK_ID\" ASC);");
@@ -99,14 +101,19 @@ public class TaskInfoDao extends AbstractDao<TaskInfo, String> {
             stmt.bindString(7, taskPackageName);
         }
  
+        Integer taskRequestCode = entity.getTaskRequestCode();
+        if (taskRequestCode != null) {
+            stmt.bindLong(8, taskRequestCode);
+        }
+ 
         java.util.Date createTime = entity.getCreateTime();
         if (createTime != null) {
-            stmt.bindLong(8, createTime.getTime());
+            stmt.bindLong(9, createTime.getTime());
         }
  
         java.util.Date updateTime = entity.getUpdateTime();
         if (updateTime != null) {
-            stmt.bindLong(9, updateTime.getTime());
+            stmt.bindLong(10, updateTime.getTime());
         }
     }
 
@@ -141,14 +148,19 @@ public class TaskInfoDao extends AbstractDao<TaskInfo, String> {
             stmt.bindString(7, taskPackageName);
         }
  
+        Integer taskRequestCode = entity.getTaskRequestCode();
+        if (taskRequestCode != null) {
+            stmt.bindLong(8, taskRequestCode);
+        }
+ 
         java.util.Date createTime = entity.getCreateTime();
         if (createTime != null) {
-            stmt.bindLong(8, createTime.getTime());
+            stmt.bindLong(9, createTime.getTime());
         }
  
         java.util.Date updateTime = entity.getUpdateTime();
         if (updateTime != null) {
-            stmt.bindLong(9, updateTime.getTime());
+            stmt.bindLong(10, updateTime.getTime());
         }
     }
 
@@ -167,8 +179,9 @@ public class TaskInfoDao extends AbstractDao<TaskInfo, String> {
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // remake
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // taskAction
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // taskPackageName
-            cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)), // createTime
-            cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)) // updateTime
+            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7), // taskRequestCode
+            cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)), // createTime
+            cursor.isNull(offset + 9) ? null : new java.util.Date(cursor.getLong(offset + 9)) // updateTime
         );
         return entity;
     }
@@ -182,8 +195,9 @@ public class TaskInfoDao extends AbstractDao<TaskInfo, String> {
         entity.setRemake(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setTaskAction(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setTaskPackageName(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setCreateTime(cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)));
-        entity.setUpdateTime(cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)));
+        entity.setTaskRequestCode(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
+        entity.setCreateTime(cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)));
+        entity.setUpdateTime(cursor.isNull(offset + 9) ? null : new java.util.Date(cursor.getLong(offset + 9)));
      }
     
     @Override

@@ -1,8 +1,7 @@
 package com.inz.z.note_book.database.controller
 
 import com.inz.z.base.util.BaseTools
-import com.inz.z.calendar_view.Tools
-import com.inz.z.note_book.bean.ScheduleStatus
+import com.inz.z.note_book.bean.inside.ScheduleStatus
 import com.inz.z.note_book.database.bean.TaskInfo
 import com.inz.z.note_book.database.bean.TaskSchedule
 import java.util.*

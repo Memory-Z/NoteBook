@@ -10,6 +10,10 @@
         <variable
             name="noteInfoUpdateDateStr"
             type="String" />
+
+        <variable
+            name="noteStatusStr"
+            type="String" />
     </data>
 
     <LinearLayout
@@ -98,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:text="@{noteInfo.statusStr, default = @string/base_content}"
+                    android:text="@{noteStatusStr, default = @string/base_content}"
                     android:textSize="@dimen/caption_text_size" />
 
                 <RelativeLayout

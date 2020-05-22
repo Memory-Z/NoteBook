@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">note_book</string>
+    <string name="app_name">Note Book</string>
     <string name="input_group_title">输入分组标题</string>
     <string name="cancel">取消</string>
     <string name="create_group">创建列表</string>
@@ -67,5 +67,9 @@
     <string name="_clock">闹钟</string>
     <string name="note_content_is_saved">内容已保存</string>
     <string name="note_content_have_change_is_saveable">内容有更改是否保存？</string>
+    <string name="_unfinished">未完成</string>
+    <string name="_finished">已完成</string>
+    <string name="_canceled">已取消</string>
+    <string name="_timed_out">已超时</string>
 
 </resources>

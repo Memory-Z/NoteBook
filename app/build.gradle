@@ -15,8 +15,8 @@ android {
         applicationId applicationIdName
         minSdkVersion APP_MIN_SDK_VERSION.toInteger()
         targetSdkVersion APP_TARGET_SDK_VERSION.toInteger()
-        versionCode 1
-        versionName "1.0.0"
+        versionCode VERSION_CODE.toInteger()
+        versionName VERSION_NAME
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -34,7 +34,7 @@ android {
     }
 
     greendao {
-        schemaVersion 2
+        schemaVersion GREEN_DAO_SCHEME_VERSION.toInteger()
         daoPackage "${applicationIdName}.database"
         targetGenDir 'src/main/java'
     }

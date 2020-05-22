@@ -7,8 +7,8 @@ import androidx.annotation.NonNull;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.inz.z.note_book.R;
-import com.inz.z.note_book.bean.ScheduleStatus;
-import com.inz.z.note_book.bean.ScheduleWeekDate;
+import com.inz.z.note_book.bean.inside.ScheduleStatus;
+import com.inz.z.note_book.bean.inside.ScheduleWeekDate;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;

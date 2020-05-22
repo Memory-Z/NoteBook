@@ -1,4 +1,4 @@
-package com.inz.z.note_book.bean
+package com.inz.z.note_book.bean.inside
 
 import android.content.Context
 import com.inz.z.note_book.R

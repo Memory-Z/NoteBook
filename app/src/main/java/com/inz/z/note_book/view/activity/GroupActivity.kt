@@ -16,6 +16,7 @@ import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.R
+import com.inz.z.note_book.bean.NoteInfoStatus
 import com.inz.z.note_book.database.bean.NoteGroup
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteController
@@ -334,7 +335,7 @@ class GroupActivity : AbsBaseActivity() {
                 noteInfoId = BaseTools.getUUID()
                 setNoteTitle(noteTitle)
                 noteContent = ""
-                noteStatus = NoteInfo.Status.UNFINISHED
+                noteStatus = NoteInfoStatus.UNFINISHED
                 createDate = Date()
                 updateDate = Date()
             }
