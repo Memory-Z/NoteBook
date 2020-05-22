@@ -3,4 +3,8 @@
     <declare-styleable name="ScheduleLayout">
         <attr name="have_schedule_check_box" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="ScreenRefreshView">
+
+    </declare-styleable>
 </resources>
