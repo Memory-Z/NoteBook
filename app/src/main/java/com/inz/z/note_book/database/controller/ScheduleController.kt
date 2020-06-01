@@ -37,6 +37,34 @@ object ScheduleController {
     fun insertScheduleTask(taskInfo: TaskInfo, taskSchedule: TaskSchedule) {
         TaskInfoController.insertTaskInfo(taskInfo)
         TaskScheduleController.insertTaskSchedule(taskSchedule)
+        if (taskSchedule.scheduleRepeat) {
+            val repeatDateList = taskSchedule.scheduleRepeatDateList
+            val weekDateList = mutableListOf<Int>()
+            for (scheduleWeekDate in repeatDateList) {
+                weekDateList.add(scheduleWeekDate.value)
+            }
+            RepeatController.insertRepeatInfo(
+                taskSchedule.taskScheduleId,
+                weekDateList.toIntArray()
+            )
+        }
+    }
+
+    /**
+     * 通过时间查询计划
+     * @param weekDate 周时间
+     */
+    fun findTaskScheduleListByDate(weekDate: Int): List<TaskSchedule> {
+        val repeatInfoList = RepeatController.findRepeatListByWeekDate(weekDate)
+        val taskScheduleList = mutableListOf<TaskSchedule>()
+        for (repeatInfo in repeatInfoList) {
+            val taskSchedule =
+                TaskScheduleController.findTaskScheduleById(repeatInfo.taskScheduleId)
+            if (taskSchedule != null) {
+                taskScheduleList.add(taskSchedule)
+            }
+        }
+        return taskScheduleList
     }
 
 }

@@ -4,6 +4,7 @@ import android.content.pm.PackageInfo
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.Gravity
 import android.view.View
 import android.widget.TimePicker
@@ -288,6 +289,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment() 
         taskInfo?.apply {
             taskAction = this@ScheduleAddDialogFragment.scheduleTaskAction.value
             taskPackageName = checkedPackageName
+            taskRequestCode = SystemClock.uptimeMillis().toInt()
             updateTime = calendar.time
         }
         if (schedule == null) {
@@ -304,9 +306,16 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment() 
             scheduleRepeat = repeatable ?: false
             updateTime = calendar.time
             val checkedCalendar = Calendar.getInstance(Locale.getDefault())
-            checkedCalendar.timeInMillis = checkedDate?.time ?: calendar.timeInMillis
-            checkedCalendar.set(Calendar.HOUR_OF_DAY, checkTimeHour)
-            checkedCalendar.set(Calendar.MINUTE, checkTimeMinute)
+            checkedCalendar.apply {
+                timeInMillis = checkedDate?.time ?: calendar.timeInMillis
+                set(Calendar.HOUR_OF_DAY, checkTimeHour)
+                set(Calendar.MINUTE, checkTimeMinute)
+                set(Calendar.MILLISECOND, 0)
+            }
+            if (System.currentTimeMillis() > checkedCalendar.timeInMillis) {
+                // 当前系统时间大于 计划 时间，时间时间日期+ 1
+                checkedCalendar.set(Calendar.DATE, checkedCalendar.get(Calendar.DATE) + 1)
+            }
             scheduleTime = checkedCalendar.time
             val checkedDateList = arrayListOf<ScheduleWeekDate>()
             for (i in checkedRepeatDate.withIndex()) {

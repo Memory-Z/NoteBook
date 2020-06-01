@@ -20,6 +20,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
@@ -187,7 +188,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
         // 添加崩溃日志写入时间：
         sb.append("------------ CRASH_WRITER_TIME --------------------- \n")
-                .append(BaseTools.getBaseDateFormat().format(System.currentTimeMillis()))
+                .append(SimpleDateFormat.getDateInstance().format(System.currentTimeMillis()))
                 .append("\n")
                 .append("------------ CRASH_WRITER_TIME --------------------- \n")
                 .append("\n\n");
@@ -217,7 +218,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      */
     private String saveLogToFile(String content, String prefix) {
         L.i(TAG, "--------------- " + content);
-        String fileName = prefix + "-" + dateStr + ".log";
+        String fileName = prefix + "-" + dateStr + ".trace";
         String filePath = FileUtils.getFileCrash(mContext) + File.separator + fileName;
         File dir = new File(filePath);
         boolean isMkdirs = true;
@@ -241,5 +242,20 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      */
     private void uploadLogToService(String content) {
         Log.i(TAG, "uploadLogToService: " + content);
+    }
+
+    /**
+     * 异常信息捕获监听
+     */
+    public interface CrashHandlerListener {
+        /**
+         * 上传日志到服务器
+         *
+         * @param filePath 文件地址
+         * @param content  日志内容
+         */
+        void uploadLogToServer(String filePath, String content);
+
+        void showErrorTint();
     }
 }

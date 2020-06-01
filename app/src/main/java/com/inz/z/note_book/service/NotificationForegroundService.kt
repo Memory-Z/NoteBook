@@ -1,18 +1,18 @@
 package com.inz.z.note_book.service
 
 import android.app.*
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.os.Build
 import android.os.IBinder
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
+import com.inz.z.note_book.broadcast.ClockAlarmBroadcast
+import com.inz.z.note_book.util.ClockAlarmManager
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.view.activity.MainActivity
+import java.util.*
 
 /**
  * 通知 Foreground Service
@@ -35,6 +35,7 @@ class NotificationForegroundService : Service() {
     private var notification: Notification? = null
     private var activityLifeBroadcast: ActivityLifeBroadcast? = null
 
+    private var receiveListener: ClockAlarmBroadcastReceiveListenerImpl? = null
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -47,12 +48,20 @@ class NotificationForegroundService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             initNotification()
         }
+        receiveListener = ClockAlarmBroadcastReceiveListenerImpl()
+        ClockAlarmBroadcast.addListener(receiveListener!!)
+        bindScheduleService()
+        setLauncherCheckClock()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        L.i(TAG, "onDestroy: --------------> ")
         stopForeground(true)
         unregisterActivityLifeBroacast()
+        unbindScheduleService()
+        ClockAlarmBroadcast.removeListener(receiveListener)
+        receiveListener = null
     }
 
     /**
@@ -136,6 +145,7 @@ class NotificationForegroundService : Service() {
         activityLifeBroadcast?.apply {
             unregisterReceiver(this)
         }
+        activityLifeBroadcast = null
     }
 
     /**
@@ -183,5 +193,75 @@ class NotificationForegroundService : Service() {
                 }
             }
         }
+    }
+
+    /**
+     * 广播接收监听 实现
+     */
+    private inner class ClockAlarmBroadcastReceiveListenerImpl :
+        ClockAlarmBroadcast.ReceiveListener {
+        override fun onDayTwo(t: String) {
+            L.i(TAG, "onDayTwo: $t .")
+            scheduleService?.startCheckScheduleThread()
+        }
+
+    }
+
+    /* -------------------------------- 绑定计划Service  ---------------------------------------- */
+
+    private var scheduleService: ScheduleService? = null
+    private var scheduleServiceConnection: ScheduleServiceConnection? = null
+
+    /**
+     * 绑定 计划 Service
+     */
+    private fun bindScheduleService() {
+        if (scheduleServiceConnection == null) {
+            scheduleServiceConnection = ScheduleServiceConnection()
+        }
+        val service = Intent(applicationContext, ScheduleService::class.java)
+        bindService(service, scheduleServiceConnection!!, Context.BIND_AUTO_CREATE)
+    }
+
+    /**
+     * 解绑 计划 Service
+     */
+    private fun unbindScheduleService() {
+        if (scheduleServiceConnection != null) {
+            unbindService(scheduleServiceConnection!!)
+            scheduleServiceConnection = null
+        }
+    }
+
+    /**
+     * 计划 Service 连接
+     */
+    private inner class ScheduleServiceConnection : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName?) {
+            scheduleService = null
+        }
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val scheduleServiceBinder = service as ScheduleService.ScheduleServiceBinder?
+            scheduleServiceBinder?.apply {
+                scheduleService = this.getService()
+//                scheduleService?.startCheckScheduleThread()
+            }
+        }
+    }
+
+    /**
+     * 设置检测线程广播
+     */
+    private fun setLauncherCheckClock() {
+        L.i(TAG, "setLauncherCheckClock: ------ ")
+        val calendar = Calendar.getInstance(Locale.getDefault())
+        calendar.apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        ClockAlarmManager.setAlarm(applicationContext, calendar.timeInMillis, true)
     }
 }

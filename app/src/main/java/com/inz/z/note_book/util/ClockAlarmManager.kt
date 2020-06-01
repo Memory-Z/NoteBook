@@ -84,4 +84,12 @@ object ClockAlarmManager {
             alarmManager?.setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent)
         }
     }
+
+    /**
+     * 取消
+     */
+    fun cancelAlarm(contenxt: Context, pendingIntent: PendingIntent) {
+        val alarmManager = contenxt.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
+        alarmManager?.cancel(pendingIntent)
+    }
 }

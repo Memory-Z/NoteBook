@@ -42,7 +42,6 @@
         android:id="@+id/base_dialog_content_ll"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/content_space_between_dimen"
         android:gravity="center_vertical"
         android:minHeight="@dimen/list_nav_height"
         android:orientation="vertical"

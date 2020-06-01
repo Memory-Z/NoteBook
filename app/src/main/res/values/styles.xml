@@ -137,6 +137,7 @@
     </style>
 
     <style name="NoteBookAppTheme.ImageButton">
+        <item name="android:background">@drawable/bg_button_white</item>
         <item name="android:tint">@color/card_inverse_color</item>
         <item name="android:scaleType">centerCrop</item>
         <item name="android:contentDescription">@string/base_image</item>

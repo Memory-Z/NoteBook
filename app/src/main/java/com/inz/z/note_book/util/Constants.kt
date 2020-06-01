@@ -59,6 +59,22 @@ object Constants {
         const val ALARM_BROADCAST_SCHEDULE_ACTION =
             "${APPLICATION_ID}.action.ALARM_BROADCAST_SCHEDULE_ACTION"
 
+        /**
+         * 提示
+         */
+        const val ALARM_BROADCAST_HINT_ACTION =
+            "${APPLICATION_ID}.action.ALARM_BROADCAST_HINT_ACTION"
+
+        /**
+         * 提示消息内容
+         */
+        const val ALARM_BROADCAST_HINT_FLAG_MESSAGE = "hintMessage"
+
+        /**
+         * 闹钟
+         */
+        const val ALARM_BROADCAST_CLOCK_ACTION =
+            "${APPLICATION_ID}.action.ALARM_BROADCAST_CLOCK_ACTION"
     }
 
     /**

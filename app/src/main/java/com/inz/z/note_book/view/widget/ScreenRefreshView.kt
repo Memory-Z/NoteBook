@@ -52,6 +52,11 @@ class ScreenRefreshView : View {
 
     }
 
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        refreshHandler.removeCallbacksAndMessages(null)
+    }
+
     @SuppressLint("RestrictedApi")
     private fun initStyle(attrs: AttributeSet) {
         val typedArray = TintTypedArray.obtainStyledAttributes(

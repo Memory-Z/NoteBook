@@ -7,10 +7,11 @@
 
     <CheckBox
         android:id="@+id/widget_schedule_check_box"
-        android:layout_width="@dimen/icon_normal_size"
-        android:layout_height="@dimen/icon_normal_size"
+        style="@style/NoteBookAppTheme.CheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/content_space_between_dimen"
-        android:background="@drawable/bg_check_box_selector"
+        android:button="@null"
         android:gravity="center" />
 
     <androidx.appcompat.widget.AppCompatEditText

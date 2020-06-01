@@ -46,11 +46,12 @@ object TaskScheduleController {
     }
 
     fun findTaskScheduleById(scheduleId: String): TaskSchedule? {
-        return getTaskScheduleDao()
+        val list = getTaskScheduleDao()
             ?.queryBuilder()
             ?.where(TaskScheduleDao.Properties.TaskScheduleId.eq(scheduleId))
             ?.orderDesc(TaskScheduleDao.Properties.ScheduleTime)
-            ?.list()?.get(0)
+            ?.list()
+        return if (list?.size ?: 0 > 0) list?.get(0) else null
     }
 
     fun updateTaskSchedule(taskSchedule: TaskSchedule) {

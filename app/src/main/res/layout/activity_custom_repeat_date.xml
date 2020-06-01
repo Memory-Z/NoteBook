@@ -11,6 +11,7 @@
         android:layout_height="@dimen/touch_target_height"
         app:base_center_layout="@id/activity_crd_top_center_ll"
         app:base_left_layout="@id/activity_crd_top_left_ll"
+        app:base_right_layout="@id/activity_crd_top_right_ll"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -45,6 +46,20 @@
                 android:layout_height="wrap_content"
                 android:text="@string/custom_repeat_date" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/activity_crd_top_right_ll"
+            android:layout_width="@dimen/touch_target_size"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/NoteBookAppTheme.Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_save" />
         </LinearLayout>
 
     </com.inz.z.base.view.widget.BaseNavLayout>

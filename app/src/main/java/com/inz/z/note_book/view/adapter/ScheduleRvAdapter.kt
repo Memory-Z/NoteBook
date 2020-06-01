@@ -11,6 +11,7 @@ import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
 import com.inz.z.base.util.BaseTools
 import com.inz.z.note_book.R
+import com.inz.z.note_book.bean.inside.ScheduleStatus
 import com.inz.z.note_book.database.bean.TaskSchedule
 import kotlinx.android.synthetic.main.item_schedule.view.*
 import java.util.*
@@ -41,7 +42,7 @@ class ScheduleRvAdapter(mContext: Context?) :
     override fun onBindVH(holder: ScheduleRvViewHolder, position: Int) {
         val schedule = list[position]
         val repeat = schedule.scheduleRepeat
-        holder.scheduleRepeatSwitch.isChecked = repeat
+        holder.scheduleRepeatSwitch.isChecked = schedule.scheduleStatue == ScheduleStatus.DOING
         val time = BaseTools.getDateFormat(
             mContext.getString(R.string._date_time_format_h_m),
             Locale.getDefault()

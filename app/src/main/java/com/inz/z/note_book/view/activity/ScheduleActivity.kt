@@ -15,6 +15,7 @@ import com.inz.z.note_book.database.bean.TaskInfo
 import com.inz.z.note_book.database.bean.TaskSchedule
 import com.inz.z.note_book.database.controller.ScheduleController
 import com.inz.z.note_book.database.controller.TaskScheduleController
+import com.inz.z.note_book.util.ClockAlarmManager
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.view.adapter.ScheduleRvAdapter
 import com.inz.z.note_book.view.fragment.ScheduleAddDialogFragment
@@ -272,6 +273,8 @@ class ScheduleActivity : AbsBaseActivity() {
                     ScheduleController.insertScheduleTask(taskInfo, taskSchedule)
                 }
             }
+            // 更新广播
+            ClockAlarmManager.setAlarm(mContext, System.currentTimeMillis())
             changeCheckCalendar(
                 checkedCalendar?.time ?: Calendar.getInstance(Locale.getDefault()).time
             )

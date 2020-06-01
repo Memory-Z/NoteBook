@@ -112,6 +112,10 @@
             <!--                <action android:name="com.inz.z.note_book.action.NewNotification" />-->
             <!--            </intent-filter>-->
         </service>
+        <!-- 计划服务 -->
+        <service
+            android:name=".service.ScheduleService"
+            android:label="@string/schedule" />
 
         <!-- 闹钟 广播 -->
         <receiver
@@ -122,6 +126,8 @@
                 <action android:name="${applicationId}.action.ALARM_BROADCAST_BASE_ACTION" />
                 <action android:name="${applicationId}.action.ALARM_BROADCAST_LAUNCHER_ACTION" />
                 <action android:name="${applicationId}.action.ALARM_BROADCAST_SCHEDULE_ACTION" />
+                <action android:name="${applicationId}.action.ALARM_BROADCAST_HINT_ACTION" />
+                <action android:name="${applicationId}.action.ALARM_BROADCAST_CLOCK_ACTION" />
             </intent-filter>
         </receiver>
 

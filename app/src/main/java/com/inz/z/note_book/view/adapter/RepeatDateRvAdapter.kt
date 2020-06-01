@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
 import com.inz.z.base.util.L
@@ -26,6 +27,8 @@ class RepeatDateRvAdapter(mContext: Context) :
         private const val TAG = "RepeatDateRvAdapter"
     }
 
+    var repeatDateRvAdapterListener: RepeatDateRvAdapterListener? = null
+
     override fun onCreateVH(parent: ViewGroup, viewType: Int): RepeatDateRvViewHolder {
         val view = mLayoutInflater.inflate(R.layout.item_repeat_date, parent, false)
         return RepeatDateRvViewHolder(view)
@@ -41,25 +44,30 @@ class RepeatDateRvAdapter(mContext: Context) :
 
 
     inner class RepeatDateRvViewHolder(itemView: View) : AbsBaseRvViewHolder(itemView),
-        View.OnHoverListener {
+        View.OnClickListener {
         var textView: TextView = itemView.item_repeat_date_tv
         var checkBox: CheckBox = itemView.item_repeat_check_box
 
         init {
-            checkBox.setOnHoverListener(this)
+            checkBox.setOnClickListener(this)
         }
 
-        override fun onHover(v: View?, event: MotionEvent?): Boolean {
-            L.i(TAG, "onHover: $v")
-            val checked = checkBox.isChecked
-            when (event?.action) {
-                MotionEvent.ACTION_HOVER_ENTER -> {
-                    checkBox.isChecked = !checked
-                }
+        override fun onClick(v: View?) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                val isChecked = checkBox.isChecked
+                list.set(position, if (isChecked) 1 else 0)
+                L.i(TAG, "RepeatDateRvViewHolder is Checked : $isChecked")
+                repeatDateRvAdapterListener?.onChangeStatus(isChecked, position)
             }
-            return true
         }
+    }
 
+    interface RepeatDateRvAdapterListener {
+        /**
+         * 改变状态
+         */
+        fun onChangeStatus(checked: Boolean, position: Int)
     }
 
 }

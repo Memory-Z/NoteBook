@@ -78,10 +78,10 @@
             android:layout_width="120dp"
             android:layout_height="48dp"
             android:layout_centerInParent="true"
-            android:background="@drawable/bg_button_white"
             android:contentDescription="@string/base_image"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_add_black_24dp" />
+            android:src="@drawable/ic_add_black_24dp"
+            android:tint="@color/textInverseColor" />
 
     </RelativeLayout>
 </RelativeLayout>
