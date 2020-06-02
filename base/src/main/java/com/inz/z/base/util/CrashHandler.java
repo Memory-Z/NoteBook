@@ -10,6 +10,7 @@ import android.os.Process;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.inz.z.base.BuildConfig;
 import com.inz.z.base.R;
 
 import java.io.File;
@@ -40,7 +41,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     /**
      * 时间格式: yyyy-MM-dd HH:mm:ss
      */
-    private DateFormat dateFormat = BaseTools.getBaseDateFormat();
+    private DateFormat dateFormat;
     private Calendar calendar = Calendar.getInstance(Locale.CHINA);
     /**
      * 系统 默认处理类
@@ -49,7 +50,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     /**
      * 时间字符串
      */
-    private String dateStr = dateFormat.format(calendar.getTime());
+    private String dateStr;
     /**
      * 日志信息
      */
@@ -61,6 +62,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private static Context mContext;
     @SuppressLint("StaticFieldLeak")
     private static CrashHandler crashHandler;
+    /**
+     * 崩溃处理监听
+     */
+    private static CrashHandlerListener crashHandlerListener;
 
     /**
      * 初始化
@@ -87,6 +92,21 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         init(context);
     }
 
+    /**
+     * 初始化实例
+     *
+     * @param context  上下文
+     * @param listener 崩溃监听
+     */
+    public static void instance(Context context, CrashHandlerListener listener) {
+        instance(context);
+        crashHandlerListener = listener;
+    }
+
+    private void initData() {
+        dateFormat = SimpleDateFormat.getDateInstance();
+    }
+
     @Override
     public void uncaughtException(Thread t, Throwable e) {
         // 设置崩溃状态为 true
@@ -98,7 +118,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 Thread.sleep(3 * 1000);
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
-                Log.e(TAG, "uncaughtException: Sleep; ", e);
+                if (BuildConfig.DEBUG) {
+                    Log.e(TAG, "uncaughtException: Sleep; ", e);
+                }
             }
             Process.killProcess(Process.myPid());
             System.exit(1);
@@ -111,7 +133,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      * @param e 异常信息
      * @return 是否处理成功
      */
-    private boolean handlerException(Throwable e) {
+    private boolean handlerException(final Throwable e) {
         boolean flag = false;
         if (e != null) {
             new Thread(new Runnable() {
@@ -119,7 +141,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 public void run() {
                     // 准备消息队列
                     Looper.prepare();
-                    Toast.makeText(mContext, mContext.getString(R.string._sorry_application_have_error_will_exit), Toast.LENGTH_SHORT).show();
+                    if (crashHandlerListener != null) {
+                        crashHandlerListener.showErrorTintOnUI();
+                    } else {
+                        Toast.makeText(mContext, mContext.getString(R.string._sorry_application_have_error_will_exit), Toast.LENGTH_SHORT).show();
+                    }
                     Looper.loop();
                 }
             }).start();
@@ -156,17 +182,23 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
-            Log.e(TAG, "collectDriveInfo: an error occured when collect package info ", e);
+            if (BuildConfig.DEBUG) {
+                Log.e(TAG, "collectDriveInfo: an error occured when collect package info ", e);
+            }
         }
         Field[] fields = Build.class.getFields();
         for (Field field : fields) {
             try {
                 field.setAccessible(true);
                 logInfoMap.put(field.getName(), field.get(null).toString());
-                Log.i(TAG, "collectDriveInfo: Name: " + field.getName() + " ; Str: " + field.get(null).toString());
+                if (BuildConfig.DEBUG) {
+                    Log.i(TAG, "collectDriveInfo: Name: " + field.getName() + " ; Str: " + field.get(null).toString());
+                }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
-                Log.e(TAG, "collectDriveInfo: ", e);
+                if (BuildConfig.DEBUG) {
+                    Log.e(TAG, "collectDriveInfo: ", e);
+                }
             }
         }
     }
@@ -206,7 +238,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         // 保存到 本地
         String filePath = saveLogToFile(sb.toString(), prefix);
         // 上传日志
-        uploadLogToService(sb.toString());
+        uploadLogToService(filePath, sb.toString());
         return filePath;
     }
 
@@ -217,7 +249,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      * @param prefix  前缀
      */
     private String saveLogToFile(String content, String prefix) {
-        L.i(TAG, "--------------- " + content);
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "--------------- " + content);
+        }
         String fileName = prefix + "-" + dateStr + ".trace";
         String filePath = FileUtils.getFileCrash(mContext) + File.separator + fileName;
         File dir = new File(filePath);
@@ -238,10 +272,20 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     /**
      * 上传日志 至 服务器
      *
-     * @param content 上下文
+     * @param filePath 文件地址
+     * @param content  内容
      */
-    private void uploadLogToService(String content) {
-        Log.i(TAG, "uploadLogToService: " + content);
+    private void uploadLogToService(String filePath, String content) {
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "uploadLogToService: " + content);
+        }
+        if (crashHandlerListener != null) {
+            crashHandlerListener.uploadLogToServer(filePath, content);
+        } else {
+            if (BuildConfig.DEBUG) {
+                Log.w(TAG, "uploadLogToService: not implement listener . ");
+            }
+        }
     }
 
     /**
@@ -256,6 +300,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
          */
         void uploadLogToServer(String filePath, String content);
 
-        void showErrorTint();
+        /**
+         * 显示错误提示。在UI 线程
+         */
+        void showErrorTintOnUI();
     }
 }
