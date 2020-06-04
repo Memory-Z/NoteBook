@@ -10,8 +10,12 @@ import android.os.Process;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.inz.z.base.BuildConfig;
 import com.inz.z.base.R;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,7 +27,7 @@ import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -42,19 +46,14 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      * 时间格式: yyyy-MM-dd HH:mm:ss
      */
     private DateFormat dateFormat;
-    private Calendar calendar = Calendar.getInstance(Locale.CHINA);
     /**
      * 系统 默认处理类
      */
     private static Thread.UncaughtExceptionHandler uncaughtExceptionHandler;
     /**
-     * 时间字符串
-     */
-    private String dateStr;
-    /**
      * 日志信息
      */
-    private Map<String, Object> logInfoMap = new HashMap<>();
+    private LinkedHashMap<String, Object> logInfoMap = new LinkedHashMap<>();
     /**
      * 上下文
      */
@@ -85,7 +84,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      * <p>
      * //     * @return 自定义异常处理
      */
-    public static void instance(Context context) {
+    @SuppressWarnings("unused")
+    public synchronized static void instance(Context context) {
         if (crashHandler == null) {
             crashHandler = new CrashHandler();
         }
@@ -98,7 +98,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      * @param context  上下文
      * @param listener 崩溃监听
      */
-    public static void instance(Context context, CrashHandlerListener listener) {
+    @SuppressWarnings("unused")
+    public synchronized static void instance(Context context, CrashHandlerListener listener) {
         instance(context);
         crashHandlerListener = listener;
     }
@@ -108,9 +109,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     @Override
-    public void uncaughtException(Thread t, Throwable e) {
-        // 设置崩溃状态为 true
-        SPHelper.getInstance().setCrashState(true);
+    public void uncaughtException(@NotNull Thread t, @NotNull Throwable e) {
+        if (crashHandlerListener != null) {
+            crashHandlerListener.setHaveCrash();
+        }
         if (!handlerException(e) && uncaughtExceptionHandler != null) {
             uncaughtExceptionHandler.uncaughtException(t, e);
         } else {
@@ -190,9 +192,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         for (Field field : fields) {
             try {
                 field.setAccessible(true);
-                logInfoMap.put(field.getName(), field.get(null).toString());
+                Object object = field.get(null);
+                logInfoMap.put(field.getName(), object != null ? object.toString() : "null");
                 if (BuildConfig.DEBUG) {
-                    Log.i(TAG, "collectDriveInfo: Name: " + field.getName() + " ; Str: " + field.get(null).toString());
+                    Log.i(TAG, "collectDriveInfo: Name: " + field.getName() + " ; Str: " + object);
                 }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -252,8 +255,13 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "--------------- " + content);
         }
+        if (dateFormat == null) {
+            initData();
+        }
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        String dateStr = dateFormat.format(calendar.getTime());
         String fileName = prefix + "-" + dateStr + ".trace";
-        String filePath = FileUtils.getFileCrash(mContext) + File.separator + fileName;
+        String filePath = getCrashFileDirPath(mContext) + File.separator + fileName;
         File dir = new File(filePath);
         boolean isMkdirs = true;
         if (dir.getParentFile() != null && !dir.getParentFile().exists()) {
@@ -289,9 +297,34 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     /**
+     * 获取崩溃文件存储未知
+     *
+     * @param context 上下文
+     * @return 存放目录地址
+     */
+    private String getCrashFileDirPath(@NonNull Context context) {
+        File dir = context.getFilesDir();
+        if (!dir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdirs();
+        }
+        File crashDir = new File(dir, "crash");
+        if (!crashDir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            crashDir.mkdirs();
+        }
+        return crashDir.getAbsolutePath();
+    }
+
+    /**
      * 异常信息捕获监听
      */
     public interface CrashHandlerListener {
+        /**
+         * 设置存在崩溃信息
+         */
+        void setHaveCrash();
+
         /**
          * 上传日志到服务器
          *

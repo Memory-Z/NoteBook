@@ -25,9 +25,9 @@ public class DaoMaster extends AbstractDaoMaster {
         NoteGroupWithInfoDao.createTable(db, ifNotExists);
         NoteInfoDao.createTable(db, ifNotExists);
         OperationLogInfoDao.createTable(db, ifNotExists);
+        RepeatInfoDao.createTable(db, ifNotExists);
         TaskInfoDao.createTable(db, ifNotExists);
         TaskScheduleDao.createTable(db, ifNotExists);
-        RepeatInfoDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -36,9 +36,9 @@ public class DaoMaster extends AbstractDaoMaster {
         NoteGroupWithInfoDao.dropTable(db, ifExists);
         NoteInfoDao.dropTable(db, ifExists);
         OperationLogInfoDao.dropTable(db, ifExists);
+        RepeatInfoDao.dropTable(db, ifExists);
         TaskInfoDao.dropTable(db, ifExists);
         TaskScheduleDao.dropTable(db, ifExists);
-        RepeatInfoDao.dropTable(db, ifExists);
     }
 
     /**
@@ -61,9 +61,9 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(NoteGroupWithInfoDao.class);
         registerDaoClass(NoteInfoDao.class);
         registerDaoClass(OperationLogInfoDao.class);
+        registerDaoClass(RepeatInfoDao.class);
         registerDaoClass(TaskInfoDao.class);
         registerDaoClass(TaskScheduleDao.class);
-        registerDaoClass(RepeatInfoDao.class);
     }
 
     public DaoSession newSession() {

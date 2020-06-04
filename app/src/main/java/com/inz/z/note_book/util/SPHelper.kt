@@ -10,7 +10,7 @@ import com.inz.z.base.util.SPHelper
  * Create by inz in 2019/11/08 15:03.
  */
 object SPHelper {
-    private var instance: SPHelper? = null
+    var instance: SPHelper? = null
     /**
      * 初始化
      */
