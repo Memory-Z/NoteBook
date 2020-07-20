@@ -733,7 +733,7 @@ public class FileUtils {
     public static String zipCrashLog(Context context) {
         String path = "";
         // 日志保存地址
-        String logPath = FileUtils.getProjectLogPath() + File.separatorChar + "logger";
+        String logPath = FileUtils.getCacheLogPath(context);
         // 本地日志缓存地址
         String localLogCachePath = FileUtils.getCachePath(context);
         // 日志缓存地址

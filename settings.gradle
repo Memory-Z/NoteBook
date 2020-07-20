@@ -1,3 +1,4 @@
 rootProject.name='NoteBook'
-include ':app', ':addressbook', ':calendar_view'
+include ':app', ':addressbook'
+include ':calendar_view'
 include ':base'

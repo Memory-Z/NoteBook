@@ -1,36 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/calendar_content_ll"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <com.inz.z.calendar_view.CalendarDayView
-        android:id="@+id/calendar_day_view"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:padding="8dp"
-        app:checked_color="#A7C3C3C3"
-        app:current_color="#FF4040"
-        app:date_text_color="#58FF00"
-        app:date_text_size="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:lunar_text_color="#D9AC1A" />
-
-    <com.inz.z.calendar_view.CalendarWeekView
-        android:id="@+id/calendar_week_view"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/calendar_view_bcpb"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFF7CF"
-        android:padding="2dp"
+
+        android:text="@string/_negative"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/calendar_day_view" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.inz.z.calendar_view.CalendarMonthView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#CBF4B9"
-        app:layout_constraintTop_toBottomOf="@id/calendar_week_view" />
+    <com.inz.z.base.view.widget.WaveView
+        android:id="@+id/calendar_view_btn"
+        android:layout_width="@dimen/touch_target_height"
+        android:layout_height="@dimen/dp360" />
+
+<!--    <com.inz.z.base.view.widget.DotView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content" />-->
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

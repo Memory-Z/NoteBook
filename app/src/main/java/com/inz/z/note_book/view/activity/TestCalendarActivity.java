@@ -1,6 +1,11 @@
 package com.inz.z.note_book.view.activity;
 
+import android.view.View;
+import android.widget.LinearLayout;
+
 import com.inz.z.base.view.AbsBaseActivity;
+import com.inz.z.base.view.widget.DotView;
+import com.inz.z.base.view.widget.WaveView;
 import com.inz.z.note_book.R;
 
 /**
@@ -21,7 +26,9 @@ public class TestCalendarActivity extends AbsBaseActivity {
 
     @Override
     protected void initView() {
-
+//        LinearLayout linearLayout = findViewById(R.id.calendar_content_ll);
+//        DotView dotView = new DotView(mContext);
+//        linearLayout.addView(dotView);
     }
 
     @Override

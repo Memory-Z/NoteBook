@@ -15,8 +15,6 @@ import androidx.annotation.NonNull;
 import com.inz.z.base.BuildConfig;
 import com.inz.z.base.R;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -105,11 +103,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private void initData() {
-        dateFormat = SimpleDateFormat.getDateInstance();
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());
     }
 
     @Override
-    public void uncaughtException(@NotNull Thread t, @NotNull Throwable e) {
+    public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
         if (crashHandlerListener != null) {
             crashHandlerListener.setHaveCrash();
         }
@@ -221,9 +219,14 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             String value = (String) entry.getValue();
             sb.append(key).append(" = ").append(value).append(" ,\r\n");
         }
+        if (dateFormat == null) {
+            initData();
+        }
         // 添加崩溃日志写入时间：
         sb.append("------------ CRASH_WRITER_TIME --------------------- \n")
-                .append(SimpleDateFormat.getDateInstance().format(System.currentTimeMillis()))
+                .append(dateFormat.format(System.currentTimeMillis()))
+                .append("\n")
+                .append(BuildConfig.VERSION_NAME).append(" -- ").append(BuildConfig.VERSION_CODE)
                 .append("\n")
                 .append("------------ CRASH_WRITER_TIME --------------------- \n")
                 .append("\n\n");
@@ -303,7 +306,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      * @return 存放目录地址
      */
     private String getCrashFileDirPath(@NonNull Context context) {
-        File dir = context.getFilesDir();
+        File dir = context.getExternalCacheDir();
+        if (dir == null) {
+            dir = context.getCacheDir();
+        }
         if (!dir.exists()) {
             //noinspection ResultOfMethodCallIgnored
             dir.mkdirs();
