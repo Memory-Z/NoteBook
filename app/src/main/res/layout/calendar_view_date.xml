@@ -24,9 +24,19 @@
         android:layout_width="@dimen/touch_target_height"
         android:layout_height="@dimen/dp360" />
 
-<!--    <com.inz.z.base.view.widget.DotView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content" />-->
+    <com.inz.z.note_book.view.widget.NameImageView
+        android:layout_width="@dimen/photo_normal_size"
+        android:layout_height="@dimen/photo_normal_size"
+        app:niv_background_color="@color/colorPrimary"
+        app:niv_border_color="@color/red"
+        app:niv_border_width_size="@dimen/dp02"
+        app:niv_text="@string/base_image_loading"
+        app:niv_text_color="@color/text_white_base_color"
+        app:niv_text_size="@dimen/sp36" />
+
+    <!--    <com.inz.z.base.view.widget.DotView-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content" />-->
 
 
 </LinearLayout>

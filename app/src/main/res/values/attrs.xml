@@ -7,4 +7,14 @@
     <declare-styleable name="ScreenRefreshView">
 
     </declare-styleable>
+
+    <declare-styleable name="NameImageView">
+        <attr name="niv_text" format="string" />
+        <attr name="niv_text_color" format="color" />
+        <attr name="niv_text_size" format="dimension" />
+        <attr name="niv_background_color" format="color" />
+        <attr name="niv_border_color" format="color" />
+        <attr name="niv_border_width_size" format="dimension" />
+        <attr name="niv_border_visibility" format="boolean" />
+    </declare-styleable>
 </resources>
