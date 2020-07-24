@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/switch_custom_thumb_on_color" />
+    <corners android:radius="@dimen/dp24" />
+    <size
+        android:width="@dimen/dp24"
+        android:height="@dimen/dp24" />
+    <stroke
+        android:width="@dimen/dp04"
+        android:color="@color/switch_custom_track_on_color" />
+
+</shape>

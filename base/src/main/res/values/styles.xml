@@ -5,14 +5,38 @@
 
     </style>
 
-    <style name="BaseTActionBar" parent="Widget.AppCompat.Light.ActionBar">
+    <style name="Base">
+
+    </style>
+
+    <style name="Base.TActionBar" parent="Widget.AppCompat.Light.ActionBar">
         <item name="android:contentInsetLeft">0dp</item>
         <item name="android:contentInsetEnd">0dp</item>
         <item name="android:contentInsetStart">0dp</item>
         <item name="android:contentInsetRight">0dp</item>
     </style>
 
-    <style name="BaseCheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+    <style name="Base.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:button">@drawable/bg_check_box_selector</item>
+    </style>
+
+    <style name="Base.ScrollbarVertical">
+        <item name="android:scrollbarThumbVertical">@drawable/bg_scrollbar_thumb</item>
+        <item name="android:scrollbarTrackVertical">@drawable/bg_scrollbar_track</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:scrollbars">vertical</item>
+    </style>
+
+    <style name="Base.ScrollbarHorizontal">
+        <item name="android:scrollbarThumbHorizontal">@drawable/bg_scrollbar_thumb</item>
+        <item name="android:scrollbarTrackHorizontal">@drawable/bg_scrollbar_track</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:scrollbars">horizontal</item>
+    </style>
+
+    <style name="Base.Switch" parent="TextAppearance.AppCompat.Widget.Switch">
+        <item name="android:thumb">@drawable/switch_base_thumb_selector</item>
+        <item name="android:track">@drawable/switch_base_track_selector</item>
+        <item name="android:checked">false</item>
     </style>
 </resources>

@@ -11,6 +11,16 @@
     <color name="text_white_50_color">#80F5F5F5</color>
     <color name="text_white_20_color">#33F5F5F5</color>
 
+    <color name="scrollbar_thumb_color">@color/text_black_50_color</color>
+    <color name="scrollbar_thumb_pass_color">@color/text_black_70_color</color>
+    <color name="scrollbar_background_color">@color/text_white_50_color</color>
+    <color name="scrollbar_background_pass_color">@color/text_white_70_color</color>
+
+    <color name="switch_custom_thumb_on_color">@color/text_white_70_color</color>
+    <color name="switch_custom_thumb_off_color">@color/text_white_70_color</color>
+    <color name="switch_custom_track_on_color">@color/green</color>
+    <color name="switch_custom_track_off_color">@color/slategray</color>
+
 
     <color name="base_iamge_background_color">#EFEFEF</color>
     <!-- Base Color  -->
