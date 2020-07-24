@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'androidx.navigation.safeargs'
 
 def applicationIdName = 'com.inz.z.note_book'
 
@@ -22,8 +23,11 @@ android {
         consumerProguardFiles 'consumer-rules.pro'
     }
 
-    dataBinding {
-        enabled = true
+//    dataBinding {
+//        enabled = true
+//    }
+    buildFeatures {
+        dataBinding = true
     }
 
     buildTypes {
@@ -46,7 +50,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget  = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
 }
@@ -83,6 +87,13 @@ dependencies {
     implementation 'androidx.paging:paging-runtime-ktx:2.1.2'
     implementation 'androidx.paging:paging-common:2.1.2'
     implementation 'androidx.paging:paging-rxjava2:2.1.2'
+
+    implementation 'androidx.navigation:navigation-fragment:2.3.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
+    implementation 'androidx.navigation:navigation-ui:2.3.0'
+    implementation 'androidx.navigation:navigation-runtime:2.3.0'
+//    implementation 'androidx.navigation:navigation-safe-args-generator:2.3.0'
+//    implementation 'androidx.navigation:navigation-safe-args-gradle-plugin:2.3.0'
 
 
     implementation 'androidx.work:work-runtime:2.3.4'
