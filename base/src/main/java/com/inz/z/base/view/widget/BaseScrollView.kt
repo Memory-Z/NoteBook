@@ -2,17 +2,13 @@ package com.inz.z.base.view.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Point
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import androidx.annotation.IdRes
 import androidx.appcompat.widget.TintTypedArray
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.NestedScrollView
 import com.inz.z.base.R
 import com.inz.z.base.util.L
