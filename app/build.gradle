@@ -96,11 +96,11 @@ dependencies {
 //    implementation 'androidx.navigation:navigation-safe-args-gradle-plugin:2.3.0'
 
 
-    implementation 'androidx.work:work-runtime:2.3.4'
-    implementation 'androidx.work:work-runtime-ktx:2.3.4'
-    implementation 'androidx.work:work-rxjava2:2.3.4'
-    implementation "androidx.work:work-gcm:2.3.4"
-    androidTestImplementation "androidx.work:work-testing:2.3.4"
+    implementation 'androidx.work:work-runtime:2.4.0'
+    implementation 'androidx.work:work-runtime-ktx:2.4.0'
+    implementation 'androidx.work:work-rxjava2:2.4.0'
+    implementation "androidx.work:work-gcm:2.4.0"
+    androidTestImplementation "androidx.work:work-testing:2.4.0"
 
 
     /**

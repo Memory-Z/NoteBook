@@ -2,6 +2,7 @@ package com.inz.z.base.view.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Point
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -34,12 +35,11 @@ class BaseScrollView : LinearLayout {
     /**
      * root view
      */
-    private var rootView: NestedScrollView? = null
-    private var headerLayoutView: RelativeLayout? = null
+    private var contentHeaderLayoutView: LinearLayout? = null
     private var topFloatLayoutView: LinearLayout? = null
-    private var topNavLayoutView: LinearLayout? = null
+    private var contentTopNavLayoutView: LinearLayout? = null
     private var nesContentLayout: LinearLayout? = null
-    private var rootLayoutView: ConstraintLayout? = null
+    private var contentBodyLayoutView: LinearLayout? = null
     private var haveTopFloatView = false
     private var topFloatView: View? = null
     private var headerView: View? = null
@@ -97,24 +97,39 @@ class BaseScrollView : LinearLayout {
             mView = LayoutInflater.from(mContext).inflate(R.layout.base_scroll_view, this, true)
 
             mView!!.let {
-                rootView = it.findViewById(R.id.base_scroll_view_root_nsv)
-                rootLayoutView = it.findViewById(R.id.base_scroll_view_parent_content_cl);
-                headerLayoutView = it.findViewById(R.id.base_scroll_view_top_header_rl)
+                contentHeaderLayoutView = it.findViewById(R.id.base_scroll_view_content_header_ll)
                 topFloatLayoutView = it.findViewById(R.id.base_scroll_view_top_float_ll)
-                topNavLayoutView = it.findViewById(R.id.base_scroll_view_top_nav_ll)
+                contentTopNavLayoutView = it.findViewById(R.id.base_scroll_view_content_nav_ll)
                 contentNestedScrollView = it.findViewById(R.id.base_scroll_view_content_nsv)
+                contentNestedScrollView?.apply {
+                    setOnScrollChangeListener(NestedScrollChangeImpl())
+                }
                 nesContentLayout = it.findViewById(R.id.base_scroll_view_nsv_content_ll)
+                contentBodyLayoutView = it.findViewById(R.id.base_scroll_view_content_body_ll)
             }
         }
     }
 
 
-    override fun onTouchEvent(ev: MotionEvent?): Boolean {
-        val contentNsvTopX = contentNestedScrollView?.top ?: 0
-        val nesAtTop = contentNsvTopX == 0;
-        val floatView = !nesAtTop && haveTopFloatView
-        setTopFloatView(floatView)
-        return !nesAtTop
+    inner class NestedScrollChangeImpl : NestedScrollView.OnScrollChangeListener {
+        override fun onScrollChange(
+            v: NestedScrollView?,
+            scrollX: Int,
+            scrollY: Int,
+            oldScrollX: Int,
+            oldScrollY: Int
+        ) {
+            val loc = intArrayOf(0, 0)
+            contentTopNavLayoutView?.getLocationOnScreen(loc)
+            val locP = intArrayOf(0, 0)
+            contentNestedScrollView?.getLocationOnScreen(locP)
+
+            val nesAtTop = loc[1] - locP[1] <= 0;
+            L.i(TAG, "scroll change-- top ${locP[1]} x = ${loc[0]} , ${loc[1]} ")
+            val floatView = nesAtTop && haveTopFloatView
+            setTopFloatView(floatView, "scroll change ")
+
+        }
     }
 
     override fun performClick(): Boolean {
@@ -124,23 +139,18 @@ class BaseScrollView : LinearLayout {
     override fun onFinishInflate() {
         L.i(TAG, "onFinishInflate---")
         super.onFinishInflate()
-        setHeaderView()
-        setTopFloatView(false)
         setContentView()
+        setHeaderView()
+        setTopFloatView(false, "finish inflate ")
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         super.onLayout(changed, l, t, r, b)
-        L.i(TAG, "onLayout --- ")
-        val layoutHeight = rootView?.height ?: (b - t)
-        val lp: ViewGroup.LayoutParams? = rootLayoutView?.layoutParams
-        if (lp != null) {
-            lp.height = layoutHeight
-            rootLayoutView?.layoutParams = lp
+        val lp: ViewGroup.LayoutParams? = contentTopNavLayoutView?.layoutParams
+        if (lp != null && topFloatView != null) {
+            lp.height = topFloatView!!.height
+            contentTopNavLayoutView?.layoutParams = lp
         }
-
-
-
 
     }
 
@@ -151,30 +161,30 @@ class BaseScrollView : LinearLayout {
         if (headerViewId != 0) {
             val view: View = findViewById(headerViewId) ?: return
             removeView(view)
-            headerLayoutView?.removeView(view)
-            headerLayoutView?.addView(view)
+            contentHeaderLayoutView?.removeView(view)
+            contentHeaderLayoutView?.addView(view)
             headerView = view
         }
     }
 
-
     /**
      * set top nav layout
      */
-    private fun setTopFloatView(floatView: Boolean) {
+    private fun setTopFloatView(floatView: Boolean, tag: String) {
+        L.i(TAG, "setTopFloatView: $floatView -- $tag")
         if (topFloatViewId != 0) {
             val view: View = findViewById(topFloatViewId) ?: return
             removeView(view)
             topFloatLayoutView?.removeAllViews()
-            topNavLayoutView?.removeAllViews()
+            contentTopNavLayoutView?.removeAllViews()
             if (floatView) {
-                topNavLayoutView?.visibility = View.GONE
+                contentTopNavLayoutView?.visibility = View.INVISIBLE
 
                 topFloatLayoutView?.visibility = View.VISIBLE
                 topFloatLayoutView?.addView(view)
             } else {
-                topNavLayoutView?.visibility = View.VISIBLE
-                topNavLayoutView?.addView(view)
+                contentTopNavLayoutView?.visibility = View.VISIBLE
+                contentTopNavLayoutView?.addView(view)
 
                 topFloatLayoutView?.visibility = View.GONE
             }
@@ -189,8 +199,8 @@ class BaseScrollView : LinearLayout {
         if (contentViewId != 0) {
             val view: View = findViewById(contentViewId) ?: return
             removeView(view)
-            nesContentLayout?.removeAllViews()
-            nesContentLayout?.addView(view)
+            contentBodyLayoutView?.removeAllViews()
+            contentBodyLayoutView?.addView(view)
             contentView = view
         }
     }
