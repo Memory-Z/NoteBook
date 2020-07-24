@@ -6,6 +6,9 @@ import android.content.Intent
 import android.os.Binder
 import android.os.Bundle
 import android.os.IBinder
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleService
+import androidx.work.*
 import com.inz.z.base.util.L
 import com.inz.z.note_book.bean.inside.ScheduleStatus
 import com.inz.z.note_book.bean.inside.ScheduleWeekDate
@@ -28,7 +31,7 @@ import java.util.concurrent.ScheduledExecutorService
  * @version 1.0.0
  * Create by inz in 2020/05/25 14:13.
  */
-class ScheduleService : Service() {
+class ScheduleService : LifecycleService() {
     companion object {
         private const val TAG = "ScheduleService"
 
@@ -41,7 +44,9 @@ class ScheduleService : Service() {
     private var binder: ScheduleServiceBinder? = null
     private var executors: ScheduledExecutorService? = null
 
-    override fun onBind(intent: Intent?): IBinder? {
+
+    override fun onBind(intent: Intent): IBinder? {
+        super.onBind(intent)
         if (binder == null) {
             binder = ScheduleServiceBinder()
         }
@@ -289,5 +294,52 @@ class ScheduleService : Service() {
     fun startCheckScheduleThread() {
         L.i(TAG, "startCheckScheduleThread: ")
         executors?.execute(CheckScheduleThread())
+    }
+
+    /**
+     * 开始执行任务
+     */
+    public fun startTodoWork(taskId: String) {
+        val workManager = WorkManager.getInstance(applicationContext)
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresStorageNotLow(false)
+            .setRequiresBatteryNotLow(false)
+            .setRequiresCharging(false)
+            .build()
+
+        val data = Data.Builder()
+            .putString(Constants.WorkConstraint.TASK_SCHEDULED_ID, taskId)
+            .build()
+
+        val request = OneTimeWorkRequestBuilder<TodoWorker>()
+            .setConstraints(constraints)
+            .setInputData(data)
+            .addTag(Constants.WorkConstraint.TASK_SCHEDULED_TAG)
+            .build()
+
+        workManager.enqueue(request)
+
+        WorkManager.getInstance(applicationContext).getWorkInfoByIdLiveData(request.id)
+            .observe(
+                this,
+                androidx.lifecycle.Observer { workInfo ->
+                    if (workInfo != null) {
+                        when (workInfo.state) {
+                            WorkInfo.State.SUCCEEDED -> {
+                                L.i(TAG, "Successed. ")
+                            }
+                            WorkInfo.State.FAILED -> {
+                                L.i(TAG, "failed ")
+                            }
+                            else -> {
+                                L.i(TAG, "not deal this work info state : ${workInfo.state}")
+                            }
+                        }
+                    }
+                }
+            )
+
+
     }
 }

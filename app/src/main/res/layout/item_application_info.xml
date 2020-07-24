@@ -27,7 +27,8 @@
         android:layout_toStartOf="@id/item_app_info_right_ic_iv"
         android:layout_toEndOf="@id/item_app_info_icon_iv"
         android:ellipsize="end"
-        android:maxLines="1" />
+        android:maxLines="1"
+        android:text="@string/_application" />
 
     <ImageView
         android:id="@+id/item_app_info_right_ic_iv"

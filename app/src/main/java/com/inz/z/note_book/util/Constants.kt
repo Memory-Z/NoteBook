@@ -102,4 +102,18 @@ object Constants {
     object LifeAction {
         const val LIFE_CHANGE_ACTION = "${APPLICATION_ID}.action.LIFE_CHANGE_ACTION"
     }
+
+    /**
+     * 工作： 变量
+     */
+    object WorkConstraint {
+
+        const val TASK_SCHEDULED_ID = "taskScheduledId"
+
+        /**
+         * 任务计划 标签
+         */
+        const val TASK_SCHEDULED_TAG = "taskScheduledTag"
+    }
+
 }
