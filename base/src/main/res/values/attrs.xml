@@ -49,4 +49,12 @@
     <declare-styleable name="LoadingButton">
 
     </declare-styleable>
+
+    <!-- scroll view with header and top float view -->
+    <declare-styleable name="BaseScrollView">
+        <attr name="base_scroll_view_top_float_view_id" format="reference" />
+        <attr name="base_scroll_view_show_top_float_view" format="boolean" />
+        <attr name="base_scroll_view_header_view_id" format="reference" />
+        <attr name="base_scroll_view_content_view_id" format="reference" />
+    </declare-styleable>
 </resources>

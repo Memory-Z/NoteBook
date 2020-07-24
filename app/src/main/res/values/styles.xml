@@ -39,6 +39,14 @@
     </style>
 
     <style name="NoteBookAppTheme.Dialog.BottomToTop" parent="NoteBookAppTheme.Dialog">
+        <item name="android:windowAnimationStyle">
+            @style/NoteBookAppTheme.Animation.BottomToTop
+        </item>
+    </style>
+
+    <style name="NoteBookAppTheme.Animation" />
+
+    <style name="NoteBookAppTheme.Animation.BottomToTop" parent="NoteBookAppTheme.Animation">
         <item name="android:windowEnterAnimation">@anim/enter_bottom_to_top</item>
         <item name="android:windowExitAnimation">@anim/exit_top_to_bottom</item>
     </style>

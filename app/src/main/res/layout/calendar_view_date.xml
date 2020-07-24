@@ -6,33 +6,69 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/calendar_view_bcpb"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <!--    <Button-->
+    <!--        android:id="@+id/calendar_view_bcpb"-->
+    <!--        style="@style/Widget.AppCompat.Button"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
 
-        android:text="@string/_negative"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--        android:text="@string/_negative"-->
+    <!--        android:visibility="visible"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-    <com.inz.z.base.view.widget.WaveView
-        android:id="@+id/calendar_view_btn"
-        android:layout_width="@dimen/touch_target_height"
-        android:layout_height="@dimen/dp360" />
+    <!--    <com.inz.z.base.view.widget.WaveView-->
+    <!--        android:id="@+id/calendar_view_btn"-->
+    <!--        android:layout_width="@dimen/touch_target_height"-->
+    <!--        android:layout_height="@dimen/dp360" />-->
 
-    <com.inz.z.note_book.view.widget.NameImageView
-        android:layout_width="@dimen/photo_normal_size"
-        android:layout_height="@dimen/photo_normal_size"
-        app:niv_background_color="@color/colorPrimary"
-        app:niv_border_color="@color/red"
-        app:niv_border_width_size="@dimen/dp02"
-        app:niv_text="@string/base_image_loading"
-        app:niv_text_color="@color/text_white_base_color"
-        app:niv_text_size="@dimen/sp36" />
+    <!--    <com.inz.z.note_book.view.widget.NameImageView-->
+    <!--        android:layout_width="@dimen/photo_normal_size"-->
+    <!--        android:layout_height="@dimen/photo_normal_size"-->
+    <!--        app:niv_background_color="@color/colorPrimary"-->
+    <!--        app:niv_border_color="@color/accessoryColor"-->
+    <!--        app:niv_border_width_size="@dimen/dp02"-->
+    <!--        app:niv_text="@string/base_image_loading"-->
+    <!--        app:niv_text_color="@color/text_white_base_color"-->
+    <!--        app:niv_text_size="@dimen/sp36" />-->
+
+    <com.inz.z.base.view.widget.BaseScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:base_scroll_view_content_view_id="@id/calendar_content_ss_ll"
+        app:base_scroll_view_header_view_id="@id/calendar_view_header_tv">
+
+
+        <TextView
+            android:id="@+id/calendar_view_header_tv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp160"
+            android:background="@color/red"
+            android:gravity="center"
+            android:text="@string/_application"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp18" />
+
+        <LinearLayout
+            android:id="@+id/calendar_content_ss_ll"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp160"
+            android:background="@color/yellow"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/yellow"
+                android:gravity="center"
+                android:text="@string/_application"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp18" />
+        </LinearLayout>
+    </com.inz.z.base.view.widget.BaseScrollView>
 
     <!--    <com.inz.z.base.view.widget.DotView-->
     <!--        android:layout_width="wrap_content"-->
