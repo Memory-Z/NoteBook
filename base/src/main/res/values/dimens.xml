@@ -37,6 +37,11 @@
     <dimen name="text_body_size">16sp</dimen>
     <dimen name="text_min_body_size">12sp</dimen>
 
+    <dimen name="image_icon_size">@dimen/dp36</dimen>
+    <dimen name="image_icon_padding_size">@dimen/dp04</dimen>
+    <dimen name="image_icon_min_size">@dimen/dp24</dimen>
+    <dimen name="image_icon_min_padding_size">@dimen/dp02</dimen>
+
 
 
     <!-- Base Dimens -->

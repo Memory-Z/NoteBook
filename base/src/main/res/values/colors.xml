@@ -21,6 +21,18 @@
     <color name="switch_custom_track_on_color">@color/green</color>
     <color name="switch_custom_track_off_color">@color/slategray</color>
 
+    <color name="card_main_color">@color/text_white_70_color</color>
+
+    <color name="textColor">@color/text_black_base_color</color>
+    <color name="textColor70">@color/text_black_70_color</color>
+    <color name="textColor50">@color/text_black_50_color</color>
+    <color name="textColor30">@color/text_black_20_color</color>
+    <color name="textColor10">@color/text_black_20_color</color>
+
+    <color name="textInverseColor70">@color/text_white_70_color</color>
+
+    <color name="card_inverse_color">@color/textColor</color>
+
 
     <color name="base_iamge_background_color">#EFEFEF</color>
     <!-- Base Color  -->

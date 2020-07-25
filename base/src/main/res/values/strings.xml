@@ -19,4 +19,6 @@
     <string name="base_format_time_24">%1$tH:%1$tM:%1$tS</string>
     <string name="base_format_time_12">%1$tI:%1$tM:%1$tS %1$Tp</string>
     <string name="_sorry_application_have_error_will_exit">很抱歉，程序出现异常，即将退出</string>
+    <string name="base_button">按钮</string>
+    <string name="base_text_format">文本</string>
 </resources>

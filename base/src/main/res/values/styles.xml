@@ -16,10 +16,6 @@
         <item name="android:contentInsetRight">0dp</item>
     </style>
 
-    <style name="Base.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
-        <item name="android:button">@drawable/bg_check_box_selector</item>
-    </style>
-
     <style name="Base.ScrollbarVertical">
         <item name="android:scrollbarThumbVertical">@drawable/bg_scrollbar_thumb</item>
         <item name="android:scrollbarTrackVertical">@drawable/bg_scrollbar_track</item>
@@ -38,5 +34,115 @@
         <item name="android:thumb">@drawable/switch_base_thumb_selector</item>
         <item name="android:track">@drawable/switch_base_track_selector</item>
         <item name="android:checked">false</item>
+    </style>
+
+    <!-- 标签按钮 -->
+    <style name="Base.TextButtonTag" parent="TextAppearance.AppCompat.Widget.Button">
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:tint">@color/text_black_50_color</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:background">@color/card_main_color</item>
+        <item name="android:textSize">@dimen/text_body_size</item>
+        <item name="android:height">36dp</item>
+    </style>
+
+    <style name="Base.Text" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/text_body_size</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:text">@string/base_text_format</item>
+    </style>
+
+    <style name="Base.Text.Title" parent="Base.Text">
+        <item name="android:textSize">@dimen/text_title_size</item>
+    </style>
+
+    <style name="Base.Text.Second" parent="Base.Text">
+        <item name="android:textColor">@color/textColor70</item>
+        <item name="android:textSize">@dimen/text_body_size</item>
+    </style>
+
+    <style name="Base.Text.Hint" parent="Base.Text">
+        <item name="android:textColor">@color/textColor50</item>
+        <item name="android:textSize">@dimen/text_min_body_size</item>
+    </style>
+
+    <style name="Base.EditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">@dimen/text_body_size</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="Base.EditText.Second" parent="Base.EditText">
+        <item name="android:textColor">@color/textColor70</item>
+        <item name="android:textSize">@dimen/text_min_body_size</item>
+    </style>
+
+    <style name="Base.ImageView">
+        <item name="android:tint">@color/card_inverse_color</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:contentDescription">@string/base_image</item>
+    </style>
+
+    <style name="Base.ImageView.Tint">
+        <item name="android:tint">@color/card_inverse_color</item>
+    </style>
+
+    <style name="Base.ImageView.Icon" parent="Base.ImageView">
+        <item name="android:layout_width">@dimen/image_icon_size</item>
+        <item name="android:layout_height">@dimen/image_icon_size</item>
+        <item name="android:padding">@dimen/image_icon_padding_size</item>
+    </style>
+
+    <style name="Base.ImageView.Icon.Min" parent="Base.ImageView.Icon">
+        <item name="android:layout_width">@dimen/image_icon_min_size</item>
+        <item name="android:layout_height">@dimen/image_icon_min_size</item>
+        <item name="android:padding">@dimen/image_icon_min_padding_size</item>
+    </style>
+
+    <style name="Base.Button" parent="Widget.AppCompat.Button">
+<!--        <item name="android:background">@drawable/bg_button_white</item>-->
+        <item name="android:textSize">@dimen/text_body_size</item>
+        <item name="android:text">@string/base_button</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/textColor70</item>
+    </style>
+
+    <style name="Base.Button.Dialog" parent="Base.Button">
+<!--        <item name="android:background">@drawable/bg_dialog_btn_fill</item>-->
+        <item name="android:textColor">@color/textInverseColor70</item>
+        <item name="android:textSize">@dimen/text_body_size</item>
+        <item name="android:text">@string/base_button</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Base.ImageButton">
+<!--        <item name="android:background">@drawable/bg_button_white</item>-->
+        <item name="android:tint">@color/card_inverse_color</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:contentDescription">@string/base_image</item>
+    </style>
+
+    <style name="Base.ImageButton.Icon">
+        <item name="android:tint">@android:color/transparent</item>
+        <item name="android:layout_width">@dimen/image_icon_size</item>
+        <item name="android:layout_height">@dimen/image_icon_size</item>
+        <item name="android:padding">@dimen/image_icon_padding_size</item>
+    </style>
+
+    <style name="Base.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:layout_height">@dimen/image_icon_size</item>
+        <item name="android:layout_width">@dimen/image_icon_size</item>
+        <item name="android:padding">@dimen/dp06</item>
+        <item name="android:drawableStart">@drawable/bg_check_box_selector</item>
+        <item name="android:button">@null</item>
+    </style>
+
+    <style name="Base.Layout">
+        <item name="android:layout_height">@dimen/touch_target_height</item>
+        <item name="android:paddingStart">@dimen/border_lr_dimen</item>
+        <item name="android:paddingEnd">@dimen/border_lr_dimen</item>
     </style>
 </resources>
