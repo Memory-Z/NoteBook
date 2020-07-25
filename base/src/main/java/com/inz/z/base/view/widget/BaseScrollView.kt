@@ -8,24 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.IdRes
+import androidx.annotation.NonNull
 import androidx.appcompat.widget.TintTypedArray
 import androidx.core.widget.NestedScrollView
 import com.inz.z.base.R
-import com.inz.z.base.util.L
 
 /**
- * base scroll view. have [headerLlayout] and [topFloagLayout]
+ * base scroll view. have [#headerLlayout] and [#topFloagLayout]
  * @author Zhenglj
  * @version 1.0.0
  * Create by inz in 2020/07/24 14:17.
  */
 class BaseScrollView : LinearLayout {
 
-    companion object {
-        private const val TAG = "BaseScrollView"
-    }
-
-    private lateinit var mContext: Context
+    private var mContext: Context
     private var mView: View? = null
 
     /**
@@ -115,16 +111,13 @@ class BaseScrollView : LinearLayout {
             oldScrollX: Int,
             oldScrollY: Int
         ) {
-            val loc = intArrayOf(0, 0)
-            contentTopNavLayoutView?.getLocationOnScreen(loc)
             val locP = intArrayOf(0, 0)
             contentNestedScrollView?.getLocationOnScreen(locP)
-
+            val loc = intArrayOf(0, 0)
+            contentTopNavLayoutView?.getLocationOnScreen(loc)
             val nesAtTop = loc[1] - locP[1] <= 0;
-            L.i(TAG, "scroll change-- top ${locP[1]} x = ${loc[0]} , ${loc[1]} ")
             val floatView = nesAtTop && haveTopFloatView
-            setTopFloatView(floatView, "scroll change ")
-
+            showTopFloatView(floatView)
         }
     }
 
@@ -133,11 +126,10 @@ class BaseScrollView : LinearLayout {
     }
 
     override fun onFinishInflate() {
-        L.i(TAG, "onFinishInflate---")
         super.onFinishInflate()
         setContentView()
         setHeaderView()
-        setTopFloatView(false, "finish inflate ")
+        setTopFloatView()
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -154,37 +146,70 @@ class BaseScrollView : LinearLayout {
      * add Header view
      */
     private fun setHeaderView() {
-        if (headerViewId != 0) {
-            val view: View = findViewById(headerViewId) ?: return
-            removeView(view)
+        var view: View? = null
+        if (headerView != null) {
+            if (headerView!!.parent == null) {
+                view = headerView
+            }
+        } else {
+            if (headerViewId != 0) {
+                view = findViewById(headerViewId) ?: return
+                removeView(view)
+            }
+        }
+        view?.let {
             contentHeaderLayoutView?.removeView(view)
             contentHeaderLayoutView?.addView(view)
             headerView = view
         }
+
     }
 
     /**
      * set top nav layout
      */
-    private fun setTopFloatView(floatView: Boolean, tag: String) {
-        L.i(TAG, "setTopFloatView: $floatView -- $tag")
-        if (topFloatViewId != 0) {
-            val view: View = findViewById(topFloatViewId) ?: return
-            removeView(view)
+    private fun setTopFloatView() {
+        var view: View? = null
+        if (topFloatView != null) {
+            if (topFloatView!!.parent == null) {
+                view = topFloatView
+            }
+        } else {
+            if (topFloatViewId != 0) {
+                view = findViewById(topFloatViewId) ?: return
+                removeView(view)
+            }
+        }
+        view?.let {
             topFloatLayoutView?.removeAllViews()
             contentTopNavLayoutView?.removeAllViews()
-            if (floatView) {
+            contentTopNavLayoutView?.visibility = View.VISIBLE
+            contentTopNavLayoutView?.addView(it)
+
+            topFloatLayoutView?.visibility = View.GONE
+            topFloatView = it
+        }
+
+    }
+
+    /**
+     * change top nav visibility
+     */
+    private fun showTopFloatView(visibility: Boolean) {
+        topFloatView?.let {
+            topFloatLayoutView?.removeAllViews()
+            contentTopNavLayoutView?.removeAllViews()
+            if (visibility) {
                 contentTopNavLayoutView?.visibility = View.INVISIBLE
 
                 topFloatLayoutView?.visibility = View.VISIBLE
-                topFloatLayoutView?.addView(view)
+                topFloatLayoutView?.addView(topFloatView)
             } else {
                 contentTopNavLayoutView?.visibility = View.VISIBLE
-                contentTopNavLayoutView?.addView(view)
+                contentTopNavLayoutView?.addView(topFloatView)
 
                 topFloatLayoutView?.visibility = View.GONE
             }
-            topFloatView = view
         }
     }
 
@@ -192,12 +217,80 @@ class BaseScrollView : LinearLayout {
      * set content view
      */
     private fun setContentView() {
-        if (contentViewId != 0) {
-            val view: View = findViewById(contentViewId) ?: return
-            removeView(view)
+        var view: View? = null
+        if (contentView != null) {
+            if (contentView!!.parent == null) {
+                view = contentView
+            }
+        } else {
+            if (contentViewId != 0) {
+                view = findViewById(contentViewId) ?: return
+                removeView(view)
+            }
+        }
+        view?.let {
             contentBodyLayoutView?.removeAllViews()
             contentBodyLayoutView?.addView(view)
             contentView = view
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // 对外接口
+    ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * set header view
+     */
+    fun setHeaderViewId(@NonNull @IdRes headerViewId: Int) {
+        this.headerViewId = headerViewId
+        setHeaderView()
+    }
+
+    /**
+     * set header view
+     */
+    fun setHeaderView(headerView: View) {
+        this.headerView = headerView
+        setHeaderView()
+    }
+
+    /**
+     * set top nav view
+     */
+    fun setTopNavViewId(@NonNull @IdRes topNavLayoutId: Int, showFloatNav: Boolean) {
+        this.topFloatViewId = topNavLayoutId;
+        this.haveTopFloatView = showFloatNav
+        setTopFloatView()
+    }
+
+    /**
+     * set top nav view
+     */
+    fun setTopNavView(topNavView: View, showFloatNav: Boolean) {
+        this.topFloatView = topNavView
+        this.haveTopFloatView = showFloatNav
+        setTopFloatView()
+
+    }
+
+
+    /**
+     * set content view
+     */
+    fun setContentViewId(@NonNull @IdRes contentLayoutId: Int) {
+        this.contentViewId = contentLayoutId
+        setContentView()
+    }
+
+    /**
+     * set content view
+     */
+    fun setContentView(contentView: View) {
+        this.contentView = contentView
+        setContentView()
+
+    }
+
+
 }

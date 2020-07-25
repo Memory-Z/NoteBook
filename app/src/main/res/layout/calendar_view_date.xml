@@ -35,6 +35,7 @@
     <!--        app:niv_text_size="@dimen/sp36" />-->
 
     <com.inz.z.base.view.widget.BaseScrollView
+        android:id="@+id/calendar_max_bsv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:base_scroll_view_content_view_id="@id/calendar_content_ss_rl"
@@ -47,9 +48,9 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp480"
             app:base_scroll_view_content_view_id="@id/calendar_content_base_ss_rl"
-            app:base_scroll_view_header_view_id="@id/calendar_view_base_header_tv"
+            app:base_scroll_view_header_view_id="@id/calendar_base_nav_ll"
             app:base_scroll_view_show_top_float_view="true"
-            app:base_scroll_view_top_float_view_id="@id/calendar_base_nav_ll">
+            app:base_scroll_view_top_float_view_id="@id/calendar_view_hor_sv">
 
             <TextView
                 android:id="@+id/calendar_view_base_header_tv"
@@ -60,6 +61,139 @@
                 android:text="@string/_application"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp18" />
+
+            <HorizontalScrollView
+                android:id="@+id/calendar_view_hor_sv"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp160"
+                android:background="@color/gray">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="@dimen/dp160"
+                        android:layout_height="match_parent"
+                        android:background="@color/red"
+                        android:gravity="center"
+                        android:text="@string/_application"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp18" />
+
+                    <TextView
+                        android:layout_width="@dimen/dp160"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp08"
+                        android:background="@color/red"
+                        android:gravity="center"
+                        android:text="@string/_application"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp18" />
+
+                    <TextView
+                        android:layout_width="@dimen/dp160"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp08"
+                        android:background="@color/red"
+                        android:gravity="center"
+                        android:text="@string/_application"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp18" />
+
+                    <TextView
+                        android:layout_width="@dimen/dp160"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp08"
+                        android:background="@color/red"
+                        android:gravity="center"
+                        android:text="@string/_application"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp18" />
+
+                    <TextView
+                        android:layout_width="@dimen/dp160"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp08"
+                        android:background="@color/red"
+                        android:gravity="center"
+                        android:text="@string/_application"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp18" />
+
+                    <TextView
+                        android:layout_width="@dimen/dp160"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp08"
+                        android:background="@color/red"
+                        android:gravity="center"
+                        android:text="@string/_application"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp18" />
+
+                    <TextView
+                        android:layout_width="@dimen/dp160"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp08"
+                        android:background="@color/red"
+                        android:gravity="center"
+                        android:text="@string/_application"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp18" />
+
+                    <TextView
+                        android:layout_width="@dimen/dp160"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp08"
+                        android:background="@color/red"
+                        android:gravity="center"
+                        android:text="@string/_application"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp18" />
+
+                    <TextView
+                        android:layout_width="@dimen/dp160"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp08"
+                        android:background="@color/red"
+                        android:gravity="center"
+                        android:text="@string/_application"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp18" />
+
+                    <TextView
+                        android:layout_width="@dimen/dp160"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp08"
+                        android:background="@color/red"
+                        android:gravity="center"
+                        android:text="@string/_application"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp18" />
+
+                    <TextView
+                        android:layout_width="@dimen/dp160"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp08"
+                        android:background="@color/red"
+                        android:gravity="center"
+                        android:text="@string/_application"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp18" />
+
+                    <TextView
+                        android:layout_width="@dimen/dp160"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp08"
+                        android:background="@color/red"
+                        android:gravity="center"
+                        android:text="@string/_application"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp18" />
+
+                </LinearLayout>
+            </HorizontalScrollView>
 
             <RelativeLayout
                 android:id="@+id/calendar_content_base_ss_rl"
@@ -166,6 +300,36 @@
                 android:textSize="@dimen/sp18" />
         </LinearLayout>
     </com.inz.z.base.view.widget.BaseScrollView>
+
+
+    <RelativeLayout
+        android:id="@+id/calendar_content_out_ss_rl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp960"
+        android:background="@color/blueviolet"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@color/yellow"
+            android:gravity="center"
+            android:text="@string/_application"
+            android:textColor="@color/textBlackGray"
+            android:textSize="@dimen/sp18" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/yellow"
+            android:gravity="center"
+            android:text="@string/_unfinished"
+            android:textColor="@color/textBlackGray"
+            android:textSize="@dimen/sp18" />
+    </RelativeLayout>
 
     <!--    <com.inz.z.base.view.widget.DotView-->
     <!--        android:layout_width="wrap_content"-->
