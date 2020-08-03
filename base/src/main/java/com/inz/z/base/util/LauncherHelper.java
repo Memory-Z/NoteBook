@@ -5,9 +5,13 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,5 +88,66 @@ public class LauncherHelper {
         return packageInfos;
     }
 
+
+    /**
+     * 获取缓存文件下载地址
+     *
+     * @param context 上下文
+     * @return 地址
+     */
+    @NonNull
+    public static String getCacheDownloadFilePath(Context context) {
+        String path = FileUtils.getCacheFilePath(context) + File.separatorChar + "download";
+        File file = new File(path);
+        if (!file.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            file.mkdirs();
+        }
+        return file.getAbsolutePath();
+    }
+
+    /**
+     * 获取缓存 更新 文件 下载地址
+     *
+     * @param context 上下文
+     * @return 更新文件地址
+     */
+    @NonNull
+    public static String getCacheDownloadVersionPath(Context context) {
+        String path = getCacheDownloadFilePath(context) + File.separatorChar + "version";
+        File file = new File(path);
+        if (!file.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            file.mkdirs();
+        }
+        return file.getAbsolutePath();
+    }
+
+    /**
+     * 文件安装
+     *
+     * @param context       上下文
+     * @param applicationId 应用ID  BuildConfig.getApplicationId();
+     * @param file          文件
+     */
+    public static Intent installApk(Context context, String applicationId, File file) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Uri uri = null;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            try {
+                String authority = applicationId + ".provider";
+                uri = FileProvider.getUriForFile(context, authority, file);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            uri = Uri.fromFile(file);
+        }
+        intent.setDataAndType(uri, "application/vnd.android.package-archive");
+        return intent;
+    }
 
 }

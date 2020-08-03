@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.UiThread;
 
 import com.inz.z.base.BuildConfig;
 import com.inz.z.base.R;
@@ -342,6 +343,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         /**
          * 显示错误提示。在UI 线程
          */
+        @UiThread
         void showErrorTintOnUI();
     }
 }

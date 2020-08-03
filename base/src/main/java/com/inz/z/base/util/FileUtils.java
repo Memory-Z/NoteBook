@@ -1,10 +1,6 @@
 package com.inz.z.base.util;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -18,11 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.PermissionChecker;
-import androidx.core.content.pm.PermissionInfoCompat;
 
 import com.inz.z.base.BuildConfig;
-import com.inz.z.base.entity.Constants;
 import com.orhanobut.logger.Logger;
 
 import java.io.BufferedReader;
@@ -34,7 +27,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
-import java.security.Permission;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -51,9 +43,6 @@ import java.util.zip.ZipOutputStream;
  * Create By 2018/7/21 11:48
  */
 public class FileUtils {
-
-    // 公司名
-    private static String companyNameStr = "inz";
 
     /**
      * 检查文件是否 存在 并  创建
@@ -206,7 +195,7 @@ public class FileUtils {
             // 如果内部存储不存在，获取 扩展SD 卡地址
             rootPath = getExternalStorageDirectory();
         }
-        rootPath = rootPath + File.separatorChar + "Inz" + File.separatorChar + Constants.PROJECT_NAME;
+        rootPath = rootPath + File.separatorChar + "Inz";
         File projectFile = new File(rootPath);
         if (!projectFile.exists()) {
             //noinspection ResultOfMethodCallIgnored

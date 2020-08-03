@@ -34,7 +34,7 @@
     <color name="card_inverse_color">@color/textColor</color>
 
 
-    <color name="base_iamge_background_color">#EFEFEF</color>
+    <color name="base_image_background_color">#EFEFEF</color>
     <!-- Base Color  -->
     <!-- 灰色 -->
     <color name="tv_color">#ebebeb</color>
