@@ -17,16 +17,19 @@
         android:theme="@style/NoteBookAppTheme"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
+        <activity android:name=".view.activity.TestViewActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".view.activity.TestCalendarActivity"
             android:configChanges="screenSize|screenLayout|keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/NoteBookAppTheme">
-                        <intent-filter>
-                            <action android:name="android.intent.action.MAIN" />
 
-                            <category android:name="android.intent.category.LAUNCHER" />
-                        </intent-filter>
         </activity>
         <activity
             android:name=".view.activity.MainActivity"
