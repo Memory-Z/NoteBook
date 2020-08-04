@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="colorPrimary">#FF40A798</color>
+    <color name="colorPrimaryDark">#FF2E8177</color>
+    <color name="colorAccent">#FFFFB700</color>
+
     <color name="text_black_base_color">#FF474747</color>
     <color name="text_black_70_color">#B3474747</color>
     <color name="text_black_50_color">#80474747</color>
@@ -32,6 +36,7 @@
     <color name="textInverseColor70">@color/text_white_70_color</color>
 
     <color name="card_inverse_color">@color/textColor</color>
+    <color name="dialog_color">@color/text_white_base_color</color>
 
 
     <color name="base_image_background_color">#EFEFEF</color>

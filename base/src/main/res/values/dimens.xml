@@ -42,6 +42,7 @@
     <dimen name="image_icon_min_size">@dimen/dp24</dimen>
     <dimen name="image_icon_min_padding_size">@dimen/dp02</dimen>
 
+    <dimen name="dialog_radius">@dimen/dp04</dimen>
 
 
     <!-- Base Dimens -->

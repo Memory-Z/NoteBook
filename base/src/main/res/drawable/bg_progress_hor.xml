@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 背景 -->
+    <item android:id="@android:id/background">
+        <shape>
+            <size android:height="@dimen/dp08" />
+            <corners android:radius="@dimen/dp01" />
+            <gradient
+                android:angle="0"
+                android:endColor="#D2F8F8F8"
+                android:startColor="#A6EAEAEA" />
+        </shape>
+    </item>
+
+    <!-- 第二进度条样式，用不怎么到直接设置成了和背景色一样的颜色，隐藏起来 -->
+    <item android:id="@android:id/secondaryProgress">
+        <clip>
+            <shape>
+                <corners android:radius="@dimen/dp01" />
+                <gradient
+                    android:angle="0"
+                    android:endColor="#D3D3D3"
+                    android:startColor="#D3D3D3" />
+            </shape>
+        </clip>
+    </item>
+    <!-- 第一进度条样式 -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape>
+                <corners android:radius="@dimen/dp01" />
+                <!--                <solid android:color="@color/green" />-->
+                <gradient
+                    android:angle="0"
+                    android:endColor="@color/red"
+                    android:startColor="@color/green" />
+            </shape>
+        </clip>
+    </item>
+</layer-list>
