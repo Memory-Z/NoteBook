@@ -20,6 +20,7 @@
         <attr name="base_center_layout" format="reference" />
         <attr name="base_left_layout" format="reference" />
         <attr name="base_right_layout" format="reference" />
+        <attr name="base_layout_height" format="dimension" />
     </declare-styleable>
 
     <!-- 圆角图片 -->

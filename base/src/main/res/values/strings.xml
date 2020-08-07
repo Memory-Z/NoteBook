@@ -24,4 +24,5 @@
     <string name="_done">Done</string>
     <string name="_update_background">Background Update</string>
     <string name="base_text_format">文本</string>
+    <string name="version_update_service">版本更新服务</string>
 </resources>

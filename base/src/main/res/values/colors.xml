@@ -10,6 +10,11 @@
     <color name="text_black_50_color">#80474747</color>
     <color name="text_black_20_color">#33474747</color>
 
+    <color name="gray_base_color">#AAAAAA</color>
+    <color name="gray_70_color">#B3AAAAAA</color>
+    <color name="gray_50_color">#80AAAAAA</color>
+    <color name="gray_20_color">#33AAAAAA</color>
+
     <color name="text_white_base_color">#FFF5F5F5</color>
     <color name="text_white_70_color">#B3F5F5F5</color>
     <color name="text_white_50_color">#80F5F5F5</color>

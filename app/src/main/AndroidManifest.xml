@@ -14,10 +14,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:theme="@style/NoteBookAppTheme"
+        android:theme="@style/NoteBookAppTheme.Transparent"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
-        <activity android:name=".view.activity.TestViewActivity">
+        <activity
+            android:name=".view.activity.TestViewActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,50 +28,51 @@
         <activity
             android:name=".view.activity.TestCalendarActivity"
             android:configChanges="screenSize|screenLayout|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoteBookAppTheme">
+            android:icon="@drawable/ic_baseline_device_hub_24"
+            android:process=":test"
+            android:screenOrientation="portrait">
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
 
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".view.activity.MainActivity"
             android:configChanges="keyboardHidden|screenLayout|screenSize|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/NoteBookAppTheme"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
 
         <activity
             android:name=".view.activity.SplashActivity"
             android:configChanges="screenSize|screenLayout|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoteBookAppTheme">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
+            android:screenOrientation="portrait">
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!--                <category android:name="android.intent.category.DEFAULT" />-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
         </activity>
 
         <!-- 组 -->
         <activity
             android:name=".view.activity.GroupActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoteBookAppTheme" />
+            android:screenOrientation="portrait" />
 
         <!-- 设置 -->
         <activity
             android:name=".view.activity.SettingActivity"
             android:configChanges="screenLayout|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoteBookAppTheme" />
+            android:screenOrientation="portrait" />
 
         <!-- 笔记信息 -->
         <activity
             android:name=".view.activity.NewNoteActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/NoteBookAppTheme"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
 
 
@@ -81,29 +83,25 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:taskAffinity="com.inz.z.note_book.sample_activity"
-            android:theme="@style/NoteBookAppTheme.Transparent"
             android:windowSoftInputMode="adjustResize" />
 
         <!-- 任务计划列表 -->
         <activity
             android:name=".view.activity.ScheduleActivity"
             android:configChanges="screenLayout|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoteBookAppTheme" />
+            android:screenOrientation="portrait" />
 
         <!-- 应用列表 -->
         <activity
             android:name=".view.activity.ApplicationListActivity"
             android:configChanges="screenLayout|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoteBookAppTheme" />
+            android:screenOrientation="portrait" />
 
         <!-- 重复日期 -->
         <activity
             android:name=".view.activity.CustomRepeatDateActitity"
             android:configChanges="screenLayout|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoteBookAppTheme" />
+            android:screenOrientation="portrait" />
 
         <!-- 通知服务 -->
         <service

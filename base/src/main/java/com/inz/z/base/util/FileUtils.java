@@ -414,7 +414,13 @@ public class FileUtils {
      * @return 地址
      */
     public static String getFilePath(Context context) {
-        File file = context.getFilesDir();
+        File file = context.getExternalFilesDir(null);
+        if (file == null) {
+            file = context.getExternalCacheDir();
+        }
+        if (file == null) {
+            file = context.getFilesDir();
+        }
         return file.getAbsolutePath();
     }
 
