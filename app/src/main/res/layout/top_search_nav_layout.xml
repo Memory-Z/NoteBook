@@ -1,68 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.inz.z.base.view.widget.BaseNavLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/top_search_nav_rl"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/tool_bar_height"
+    android:layout_height="wrap_content"
     android:background="@color/card_second_color"
-    app:base_center_layout="@id/top_search_nav_content_rl"
-    app:base_left_layout="@id/top_search_nav_left_rl"
-    app:base_right_layout="@id/top_search_nav_end_rl">
+    android:fitsSystemWindows="true">
 
-    <RelativeLayout
-        android:id="@+id/top_search_nav_left_rl"
-        android:layout_width="@dimen/touch_target_height"
-        android:layout_height="match_parent">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/top_search_nav_scan_iv"
-            style="@style/NoteBookAppTheme.ImageView.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:contentDescription="@string/base_image"
-            android:src="@drawable/img_photo_1" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/top_search_nav_content_rl"
+    <com.inz.z.base.view.widget.BaseNavLayout
+        android:id="@+id/top_search_nav_rl"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/button_normal_height"
-        android:layout_marginStart="@dimen/border_lr_dimen"
-        android:layout_marginEnd="@dimen/border_lr_dimen"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center_vertical">
+        android:layout_height="@dimen/tool_bar_height"
+        app:base_center_layout="@id/top_search_nav_content_rl"
+        app:base_left_layout="@id/top_search_nav_left_rl"
+        app:base_right_layout="@id/top_search_nav_end_rl">
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/top_search_nav_search_view"
-            style="@style/Widget.AppCompat.Light.SearchView"
+        <RelativeLayout
+            android:id="@+id/top_search_nav_left_rl"
+            android:layout_width="@dimen/touch_target_height"
+            android:layout_height="match_parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/top_search_nav_scan_iv"
+                style="@style/NoteBookAppTheme.ImageView.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:contentDescription="@string/base_image"
+                android:src="@drawable/img_photo_1" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/top_search_nav_content_rl"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg_search_view_main"
-            android:inputType="text"
-            app:defaultQueryHint="@string/app_name"
-            app:iconifiedByDefault="true"
-            app:queryBackground="@null"
-            app:queryHint="@string/setting"
-            app:submitBackground="@null" />
+            android:layout_height="@dimen/button_normal_height"
+            android:layout_marginStart="@dimen/border_lr_dimen"
+            android:layout_marginEnd="@dimen/border_lr_dimen"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical">
 
-    </RelativeLayout>
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/top_search_nav_search_view"
+                style="@style/Widget.AppCompat.Light.SearchView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_search_view_main"
+                android:inputType="text"
+                app:defaultQueryHint="@string/app_name"
+                app:iconifiedByDefault="true"
+                app:queryBackground="@null"
+                app:queryHint="@string/setting"
+                app:submitBackground="@null" />
 
-    <RelativeLayout
-        android:id="@+id/top_search_nav_end_rl"
-        android:layout_width="@dimen/touch_target_height"
-        android:layout_height="match_parent">
+        </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/top_searche_nav_end_more_iv"
-            style="@style/NoteBookAppTheme.ImageView.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:contentDescription="@string/base_image"
-            android:src="@drawable/ic_more_vert_black_24dp" />
-    </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/top_search_nav_end_rl"
+            android:layout_width="@dimen/touch_target_height"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/top_searche_nav_end_more_iv"
+                style="@style/NoteBookAppTheme.ImageView.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:contentDescription="@string/base_image"
+                android:src="@drawable/ic_more_vert_black_24dp" />
+        </RelativeLayout>
 
 
-</com.inz.z.base.view.widget.BaseNavLayout>
+    </com.inz.z.base.view.widget.BaseNavLayout>
+</LinearLayout>

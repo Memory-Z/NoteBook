@@ -2,13 +2,21 @@ package com.inz.z.note_book.view.activity
 
 import android.view.View
 import android.widget.Button
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.inz.z.base.util.FileUtils
 import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.R
+import com.inz.z.note_book.database.bean.OperationLogInfo
+import com.inz.z.note_book.database.controller.LogController
+import com.inz.z.note_book.util.ExcelUtil
 import com.inz.z.note_book.view.activity.adapter.TestViewStringRvAdapter
+import com.inz.z.note_book.view.activity.test_data.TestExcelBean
 import kotlinx.android.synthetic.main.test_view_adapter.*
+import java.io.File
 
 /**
  *
@@ -45,10 +53,13 @@ class TestViewActivity : AbsBaseActivity() {
             this.adapter = testAdapter
         }
 
+        Glide.with(mContext).load(ContextCompat.getDrawable(mContext, R.drawable.img_photo_3))
+            .into(test_top_bg_iv)
+
     }
 
     override fun initData() {
-        for (i in 1..200) {
+        for (i in 1..20) {
             stringList.add("--> $i")
         }
         testAdapter?.list = stringList
@@ -57,6 +68,33 @@ class TestViewActivity : AbsBaseActivity() {
                 val p = stringList.size
                 stringList.add(" A -> $p")
                 testAdapter?.notifyItemInserted(p)
+
+                val dataList = mutableListOf<TestExcelBean>()
+                for (size in 0..10) {
+                    val bean = TestExcelBean()
+                    bean.name = "name - $size"
+                    bean.value = "v === $size"
+                    dataList.add(bean)
+                }
+
+                val logList = LogController.query()
+
+                val dirPath = FileUtils.getCacheFilePath(mContext) + File.separatorChar + "excel"
+                val dir = File(dirPath)
+                if (!dir.exists()) {
+                    dir.mkdirs()
+                }
+                val file = File(dir, "test.xls")
+
+                val clazz = OperationLogInfo::class
+                val sheetName = clazz.simpleName.toString()
+
+                ExcelUtil.writeDataToExcel(
+                    logList!!.toMutableList(),
+                    clazz,
+                    file.absolutePath,
+                    sheetName
+                )
             }
         }
     }

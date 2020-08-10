@@ -1,11 +1,13 @@
 package com.inz.z.note_book.view.activity
 
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.R
 import com.inz.z.note_book.view.app_widget.util.WidgetBroadcastUtil
 import com.inz.z.note_book.view.fragment.NoteInfoAddDialogFragment
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import kotlinx.android.synthetic.main.new_note_info_sample_layout.*
 
 /**
@@ -40,6 +42,8 @@ class NewNoteInfoSampleActivity : AbsBaseActivity() {
     }
 
     override fun initView() {
+        QMUIStatusBarHelper.setStatusBarLightMode(this)
+        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
 
     }
 

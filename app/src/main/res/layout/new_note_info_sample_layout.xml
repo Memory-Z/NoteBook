@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@android:color/transparent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <FrameLayout

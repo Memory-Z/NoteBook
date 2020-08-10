@@ -1,4 +1,4 @@
-package com.inz.z.base.http;
+package com.inz.z.note_book.http;
 
 /**
  * 网络请求地址

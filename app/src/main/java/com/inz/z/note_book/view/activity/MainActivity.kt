@@ -13,6 +13,7 @@ import com.inz.z.note_book.R
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.fragment.LauncherApplicationFragment
 import com.inz.z.note_book.view.fragment.NoteNavFragment
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.android.synthetic.main.main_left_nav_layout.*
 import kotlinx.android.synthetic.main.top_search_nav_layout.*
@@ -53,6 +54,7 @@ class MainActivity : BaseNoteActivity() {
     }
 
     override fun initView() {
+        QMUIStatusBarHelper.setStatusBarLightMode(this)
         L.i(TAG, "initView: ")
         drawerLayout = main_note_drawer_layout
         initLeftNavView()

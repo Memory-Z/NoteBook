@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <com.inz.z.base.view.widget.BaseNavLayout
         android:id="@+id/note_info_add_top_bnl"
         style="@style/NoteBookAppTheme.Layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/min_title_height"
+        android:background="@color/card_second_color"
+        android:layout_height="@dimen/tool_bar_height"
         app:base_center_layout="@id/note_info_add_top_title_tv"
         app:base_left_layout="@id/note_info_add_top_back_iv"
         app:base_right_layout="@id/note_info_add_top_finish_tv">

@@ -68,11 +68,14 @@ class NoteBookApplication : Application() {
         }
 
         override fun showErrorTintOnUI() {
-            Toast.makeText(
-                applicationContext,
-                applicationContext.getString(R.string._sorry_application_have_error_will_exit),
-                Toast.LENGTH_SHORT
-            ).show()
+            applicationContext?.apply {
+                Toast.makeText(
+                    this,
+                    this.getString(R.string._sorry_application_have_error_will_exit),
+                    Toast.LENGTH_SHORT
+                ).show()
+
+            }
         }
     }
 }

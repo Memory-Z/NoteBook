@@ -69,7 +69,7 @@ public class TestCalendarActivity extends AbsBaseActivity {
         if (outView.getParent() != null) {
             linearLayout.removeView(outView);
         }
-        baseScrollView.setContentView(outView, true);
+        baseScrollView.setContentView(outView);
     }
 
     @Override

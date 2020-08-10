@@ -19,7 +19,7 @@
         style="@style/NoteBookAppTheme.TopAction"
         android:layout_width="match_parent"
         android:layout_height="@dimen/tool_bar_height"
-        android:background="@color/card_main_color"
+        android:background="@color/card_second_color"
         app:base_center_layout="@id/schedule_top_center_ll"
         app:base_left_layout="@id/schedule_top_left_ll"
         app:base_right_layout="@id/schedule_top_right_ll"

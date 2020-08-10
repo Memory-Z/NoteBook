@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.PopupMenu
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haibin.calendarview.CalendarView
 import com.inz.z.base.util.L
@@ -19,6 +20,7 @@ import com.inz.z.note_book.util.ClockAlarmManager
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.view.adapter.ScheduleRvAdapter
 import com.inz.z.note_book.view.fragment.ScheduleAddDialogFragment
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -54,6 +56,8 @@ class ScheduleActivity : AbsBaseActivity() {
     }
 
     override fun initView() {
+        QMUIStatusBarHelper.setStatusBarLightMode(this)
+        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
         schedule_top_back_iv?.setOnClickListener {
             this@ScheduleActivity.finish()
         }

@@ -1,12 +1,10 @@
 package com.inz.z.note_book.view.activity
 
 import android.content.Intent
-import android.database.DataSetObservable
-import android.database.DataSetObserver
 import android.os.Build
-import androidx.databinding.Bindable
+import android.view.View
+import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.library.baseAdapters.BR
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.BuildConfig
@@ -32,6 +30,16 @@ class SplashActivity : AbsBaseActivity() {
 
 
     override fun initWindow() {
+        window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        // 刘海屏支持/ 设置刘海屏不显示界面内容
+
+        // 刘海屏支持/ 设置刘海屏不显示界面内容
+        val params = window.attributes
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            params.layoutInDisplayCutoutMode =
+                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+        }
     }
 
     override fun getLayoutId(): Int {
@@ -46,6 +54,10 @@ class SplashActivity : AbsBaseActivity() {
         super.setDataBindingView()
         splashLayoutBinding =
             DataBindingUtil.setContentView(this@SplashActivity, R.layout.splash_layout)
+    }
+
+    override fun getRootContentView(): View? {
+        return splash_root_brl
     }
 
     override fun initView() {

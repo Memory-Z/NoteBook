@@ -14,6 +14,7 @@
     </data>
 
     <com.inz.z.base.view.widget.BaseRelativeLayout
+        android:id="@+id/splash_root_brl"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -31,17 +32,25 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/image_load_error" />
 
-            <TextView
-                android:id="@+id/splash_top_end_num_tv"
-                android:layout_width="@dimen/icon_normal_size"
-                android:layout_height="@dimen/icon_normal_size"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="@dimen/border_lr_dimen"
-                android:layout_marginEnd="@dimen/border_lr_dimen"
-                android:gravity="center"
-                android:text="@={timeNumber, default=@string/base_number}"
-                android:textSize="@dimen/subheading_text_size" />
+                android:fitsSystemWindows="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/splash_top_end_num_tv"
+                    android:layout_width="@dimen/icon_normal_size"
+                    android:layout_height="@dimen/icon_normal_size"
+
+                    android:layout_marginTop="@dimen/border_lr_dimen"
+                    android:layout_marginEnd="@dimen/border_lr_dimen"
+                    android:gravity="center"
+                    android:text="@={timeNumber, default=@string/base_number}"
+                    android:textSize="@dimen/subheading_text_size" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/splash_bottom_ll"

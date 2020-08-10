@@ -3,6 +3,7 @@ package com.inz.z.note_book.view.activity
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseActivity
@@ -10,6 +11,7 @@ import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteInfoController
 import com.inz.z.note_book.view.fragment.BaseDialogFragment
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import kotlinx.android.synthetic.main.note_info_add_layout.*
 import java.util.*
 import java.util.concurrent.Executors
@@ -58,6 +60,8 @@ class NewNoteActivity : AbsBaseActivity() {
 
 
     override fun initView() {
+        QMUIStatusBarHelper.setStatusBarLightMode(this)
+        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
         note_info_add_top_finish_tv.setOnClickListener {
             saveNoteInfo()
         }

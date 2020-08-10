@@ -24,6 +24,7 @@ import com.inz.z.note_book.database.controller.NoteGroupService
 import com.inz.z.note_book.databinding.GroupLayoutBinding
 import com.inz.z.note_book.view.adapter.NoteInfoRecyclerAdapter
 import com.inz.z.note_book.view.fragment.NewGroupDialogFragment
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import kotlinx.android.synthetic.main.group_layout.*
 import kotlinx.android.synthetic.main.note_info_add_sample_layout.*
 import java.util.*
@@ -70,6 +71,8 @@ class GroupActivity : AbsBaseActivity() {
     }
 
     override fun initView() {
+        QMUIStatusBarHelper.setStatusBarLightMode(this)
+        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
         group_content_note_info_rv.layoutManager = LinearLayoutManager(mContext)
         mNoteInfoRecyclerAdapter = NoteInfoRecyclerAdapter(mContext)
         mNoteInfoRecyclerAdapter?.setNoteInfoRvAdapterListener(

@@ -17,20 +17,13 @@
         android:theme="@style/NoteBookAppTheme.Transparent"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
-        <activity
-            android:name=".view.activity.TestViewActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".view.activity.TestViewActivity" />
         <activity
             android:name=".view.activity.TestCalendarActivity"
             android:configChanges="screenSize|screenLayout|keyboardHidden|orientation"
             android:icon="@drawable/ic_baseline_device_hub_24"
             android:process=":test"
-            android:screenOrientation="portrait">
+            android:screenOrientation="fullSensor">
             <!--            <intent-filter>-->
             <!--                <action android:name="android.intent.action.MAIN" />-->
 
@@ -40,39 +33,38 @@
         <activity
             android:name=".view.activity.MainActivity"
             android:configChanges="keyboardHidden|screenLayout|screenSize|orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
 
         <activity
             android:name=".view.activity.SplashActivity"
-            android:configChanges="screenSize|screenLayout|keyboardHidden|orientation"
-            android:screenOrientation="portrait">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.MAIN" />-->
+            android:configChanges="screenSize|screenLayout|keyboardHidden|orientation">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <!--                <category android:name="android.intent.category.DEFAULT" />-->
-            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--            </intent-filter>-->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <!-- 组 -->
         <activity
             android:name=".view.activity.GroupActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <!-- 设置 -->
         <activity
             android:name=".view.activity.SettingActivity"
             android:configChanges="screenLayout|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
 
         <!-- 笔记信息 -->
         <activity
             android:name=".view.activity.NewNoteActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
 
 
@@ -81,7 +73,7 @@
             android:name=".view.activity.NewNoteInfoSampleActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|screenLayout"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:taskAffinity="com.inz.z.note_book.sample_activity"
             android:windowSoftInputMode="adjustResize" />
 
@@ -89,19 +81,19 @@
         <activity
             android:name=".view.activity.ScheduleActivity"
             android:configChanges="screenLayout|screenSize|keyboardHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
 
         <!-- 应用列表 -->
         <activity
             android:name=".view.activity.ApplicationListActivity"
             android:configChanges="screenLayout|screenSize|keyboardHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
 
         <!-- 重复日期 -->
         <activity
             android:name=".view.activity.CustomRepeatDateActitity"
             android:configChanges="screenLayout|screenSize|keyboardHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
 
         <!-- 通知服务 -->
         <service
