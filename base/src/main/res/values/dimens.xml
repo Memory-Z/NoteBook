@@ -11,6 +11,8 @@
     <dimen name="border_lr_dimen">16dp</dimen>
     <!-- 列表项 72dp -->
     <dimen name="list_nav_height">72dp</dimen>
+    <!-- max tool bar height -->
+    <dimen name="max_tool_bar_height">80dp</dimen>
     <!-- 标题和列表项 -->
     <dimen name="list_item_normal_height">48dp</dimen>
     <!-- 带有图标或头像的内容有 72dp 左边距 -->

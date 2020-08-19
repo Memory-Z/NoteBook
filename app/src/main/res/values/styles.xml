@@ -8,10 +8,10 @@
     </style>
 
     <style name="NoteBookAppTheme.Transparent" parent="NoteBookAppTheme">
-        <item name="android:fitsSystemWindows">true</item>
-<!--        <item name="android:windowTranslucentNavigation">true</item>-->
-<!--        <item name="android:windowTranslucentStatus">false</item>-->
-<!--        <item name="android:startColor">@android:color/transparent</item>-->
+        <item name="android:fitsSystemWindows">false</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="NoteBookAppTheme.TransparentAni" parent="NoteBookAppTheme">

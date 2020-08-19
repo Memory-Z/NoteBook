@@ -33,8 +33,7 @@
         <activity
             android:name=".view.activity.MainActivity"
             android:configChanges="keyboardHidden|screenLayout|screenSize|orientation"
-            android:screenOrientation="fullSensor"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+            android:windowSoftInputMode="adjustNothing" />
 
 
         <activity
