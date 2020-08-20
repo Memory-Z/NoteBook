@@ -46,6 +46,7 @@
         <item name="android:windowAnimationStyle">
             @style/NoteBookAppTheme.Animation.BottomToTop
         </item>
+        <item name="android:gravity">bottom</item>
     </style>
 
     <style name="NoteBookAppTheme.Animation" />
