@@ -1,6 +1,7 @@
 package com.inz.z.base.view.activity
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -17,8 +18,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.R
 import com.inz.z.base.entity.BaseChooseFileBean
+import com.inz.z.base.util.L
 import com.inz.z.base.util.ProviderUtil
 import com.inz.z.base.view.AbsBaseActivity
+import com.inz.z.base.view.activity.adapter.ChooseFileRvAdapter
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -38,10 +41,12 @@ class ChooseFileActivity : AbsBaseActivity() {
         const val MODE_LIST = 0x000901
         const val MODE_TABLE = 0x000902
 
+        const val TAG = "ChooseFileActivity"
+
         /**
          * 跳转至选择文件界面
          */
-        fun gotoChooseFileActivity(activity: AppCompatActivity, requestCode: Int) {
+        fun gotoChooseFileActivity(activity: Activity, requestCode: Int) {
             val intent = Intent(activity, ChooseFileActivity::class.java)
             val bundle = Bundle()
             intent.putExtras(bundle)
@@ -58,7 +63,9 @@ class ChooseFileActivity : AbsBaseActivity() {
         Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
 
-    private val requestPermissionCode = 0xEEE002
+    private val requestPermissionCode = 0x0002
+
+    private var chooseFileRvAdapter: ChooseFileRvAdapter? = null
 
 
     @ShowMode
@@ -77,6 +84,14 @@ class ChooseFileActivity : AbsBaseActivity() {
 
     override fun initView() {
         base_choose_file_top_r_more_iv?.setOnClickListener { createMorePopupMenu() }
+
+        layoutManager = LinearLayoutManager(mContext)
+        chooseFileRvAdapter = ChooseFileRvAdapter(mContext)
+        base_choose_file_content_rv?.apply {
+            this.adapter = chooseFileRvAdapter
+            this.layoutManager = this.layoutManager
+        }
+
     }
 
     override fun initData() {
@@ -104,6 +119,9 @@ class ChooseFileActivity : AbsBaseActivity() {
         }
     }
 
+    /**
+     * 创建弹窗
+     */
     private fun createMorePopupMenu() {
         if (mContext == null) {
             return
@@ -145,7 +163,7 @@ class ChooseFileActivity : AbsBaseActivity() {
         Observable
             .create(
                 ObservableOnSubscribe<MutableList<BaseChooseFileBean>>() {
-                    if (TextUtils.isEmpty(filePath)) {
+                    if (!TextUtils.isEmpty(filePath)) {
                         val list = ProviderUtil.queryFileListByDir(filePath)
                         it.onNext(list)
                     } else {
@@ -159,6 +177,8 @@ class ChooseFileActivity : AbsBaseActivity() {
             .subscribe(
                 object : DefaultObserver<MutableList<BaseChooseFileBean>>() {
                     override fun onNext(t: MutableList<BaseChooseFileBean>) {
+                        L.i(TAG, "queryFileList -- ${t.size} -- $t")
+                        chooseFileRvAdapter?.refreshData(t)
                     }
 
                     override fun onError(e: Throwable) {

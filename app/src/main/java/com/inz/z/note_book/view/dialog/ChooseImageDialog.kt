@@ -9,6 +9,7 @@ import android.view.Gravity
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.inz.z.base.view.AbsBaseDialogFragment
+import com.inz.z.base.view.activity.ChooseFileActivity
 import com.inz.z.note_book.R
 import com.inz.z.note_book.view.fragment.BaseDialogFragment
 import kotlinx.android.synthetic.main.dialog_choose_image.*
@@ -68,9 +69,10 @@ class ChooseImageDialog : AbsBaseDialogFragment() {
      * 选择图片 (相册)
      */
     private fun pickPhotoFromAlbum() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "image/*"
-        startActivity(intent)
+//        val intent = Intent(Intent.ACTION_GET_CONTENT)
+//        intent.type = "image/*"
+//        startActivity(intent)
+        ChooseFileActivity.gotoChooseFileActivity(requireActivity(), 800)
     }
 
     ///////////////////////////////////////////////////////////////////////////
