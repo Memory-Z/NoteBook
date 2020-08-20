@@ -34,12 +34,12 @@ public class TestCalendarActivity extends AbsBaseActivity {
 
     @Override
     protected void initView() {
-        LinearLayout linearLayout = findViewById(R.id.calendar_content_ll);
+//        LinearLayout linearLayout = findViewById(R.id.calendar_content_ll);
 //        DotView dotView = new DotView(mContext);
 //        linearLayout.addView(dotView);
-        BaseScrollView baseScrollView = findViewById(R.id.calendar_max_bsv);
-
-        View outView = findViewById(R.id.calendar_content_out_ss_rl);
+//        BaseScrollView baseScrollView = findViewById(R.id.calendar_max_bsv);
+//
+//        View outView = findViewById(R.id.calendar_content_out_ss_rl);
 //        outView.setOnRefreshListener(
 //                new SwipeRefreshLayout.OnRefreshListener() {
 //                    @Override
@@ -66,10 +66,10 @@ public class TestCalendarActivity extends AbsBaseActivity {
 //                    }
 //                }
 //        );
-        if (outView.getParent() != null) {
-            linearLayout.removeView(outView);
-        }
-        baseScrollView.setContentView(outView);
+//        if (outView.getParent() != null) {
+//            linearLayout.removeView(outView);
+//        }
+//        baseScrollView.setContentView(outView);
     }
 
     @Override
