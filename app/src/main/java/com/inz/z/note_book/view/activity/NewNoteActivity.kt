@@ -10,6 +10,7 @@ import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteInfoController
+import com.inz.z.note_book.view.dialog.ChooseImageDialog
 import com.inz.z.note_book.view.fragment.BaseDialogFragment
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import kotlinx.android.synthetic.main.note_info_add_layout.*
@@ -77,6 +78,9 @@ class NewNoteActivity : AbsBaseActivity() {
                 this@NewNoteActivity.finish()
             }
         }
+        note_iab_image_ll?.setOnClickListener {
+            showChooseImageDialog()
+        }
     }
 
     override fun initData() {
@@ -98,19 +102,17 @@ class NewNoteActivity : AbsBaseActivity() {
         executorService.scheduleAtFixedRate(checkNoteRunnable, 5, 5, TimeUnit.SECONDS)
     }
 
-    override fun onResume() {
-        super.onResume()
-        val nslHeight = note_info_add_content_content_nsv.height
-        val topHeight = note_info_add_content_top_time_tv.height
-
-        L.i(
-            TAG,
-            "onResume : ------ $nslHeight -------- $topHeight ----- ${window.attributes.height}"
-        )
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            val nslHeight = note_info_add_content_content_nsv.height
+            val topHeight = note_info_add_content_top_time_tv.height
+            note_info_add_content_schedule_layout.minimumHeight = nslHeight - topHeight
+        }
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        if (event?.action == KeyEvent.ACTION_UP) {
+        if (event?.keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
             if (checkHaveChange()) {
                 return true
             }
@@ -118,6 +120,9 @@ class NewNoteActivity : AbsBaseActivity() {
         return super.onKeyUp(keyCode, event)
     }
 
+    /**
+     * 检测是否有内容更改
+     */
     private fun checkHaveChange(): Boolean {
         val newContent = note_info_add_content_schedule_layout.getContent()
         noteInfo?.let {
@@ -209,5 +214,23 @@ class NewNoteActivity : AbsBaseActivity() {
         val manager = supportFragmentManager
         val hintDialog = manager.findFragmentByTag("ExitDialogFragment") as BaseDialogFragment?
         hintDialog?.dismissAllowingStateLoss()
+    }
+
+    /**
+     * 显示选择图片弹窗
+     */
+    private fun showChooseImageDialog() {
+        if (mContext == null) {
+            L.w(TAG, "showAddImageDialog: mContext is null.")
+            return
+        }
+        val manager = supportFragmentManager
+        var chooseImageDialog = manager.findFragmentByTag("ChooseImageDialog") as ChooseImageDialog?
+        if (chooseImageDialog == null) {
+            chooseImageDialog = ChooseImageDialog.getInstance()
+        }
+        if (!chooseImageDialog.isAdded && !chooseImageDialog.isVisible) {
+            chooseImageDialog.show(manager, "ChooseImageDialog")
+        }
     }
 }

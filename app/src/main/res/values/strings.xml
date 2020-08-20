@@ -72,4 +72,8 @@
     <string name="_canceled">已取消</string>
     <string name="_timed_out">已超时</string>
 
+    <string name="choose_image">选择图片</string>
+    <string name="take_photo">拍照</string>
+    <string name="choose_from_album">相册中选取</string>
+
 </resources>

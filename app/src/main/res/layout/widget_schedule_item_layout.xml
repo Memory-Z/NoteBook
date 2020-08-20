@@ -18,7 +18,7 @@
         android:id="@+id/widget_schedule_et"
         style="@style/NoteBookAppTheme.EditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@null"
         android:gravity="start|fill_horizontal"
         android:hint="@string/base_content"
