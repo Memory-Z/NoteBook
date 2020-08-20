@@ -25,4 +25,7 @@
     <string name="_update_background">Background Update</string>
     <string name="base_text_format">文本</string>
     <string name="version_update_service">版本更新服务</string>
+
+    <string name="list_mode">列表模式</string>
+    <string name="table_mode">表格模式</string>
 </resources>

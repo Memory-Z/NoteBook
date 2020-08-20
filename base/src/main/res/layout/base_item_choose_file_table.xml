@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="chooseFile"
+            type="com.inz.z.base.entity.BaseChooseFileBean" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/base_item_cf_table_iv"
+            style="@style/Base.ImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/base_image" />
+
+        <LinearLayout
+            android:id="@+id/base_item_cf_table_bottom_ll"
+            style="@style/Base.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/text_white_20_color"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/margin_text_layout"
+            android:paddingBottom="@dimen/margin_text_layout">
+
+            <TextView
+                style="Base.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@{chooseFile.fileName, default=@string/base_title}" />
+
+            <TextView
+                style="@style/Base.Text.Hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_text"
+                android:text="@{chooseFile.fileChangeDate, default=@string/base_content}" />
+
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/base_item_cf_table_cbox"
+            style="@style/Base.CheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/margin_layout"
+            android:layout_marginEnd="@dimen/margin_layout" />
+    </RelativeLayout>
+</layout>

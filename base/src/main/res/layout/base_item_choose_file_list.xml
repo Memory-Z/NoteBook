@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="chooseFile"
+            type="com.inz.z.base.entity.BaseChooseFileBean" />
+    </data>
+
+    <RelativeLayout
+        style="@style/Base.Layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/margin_text_layout"
+        android:paddingBottom="@dimen/margin_text_layout">
+
+        <ImageView
+            android:id="@+id/base_item_cf_list_iv"
+            style="@style/Base.ImageView"
+            android:layout_width="@dimen/list_nav_height"
+            android:layout_height="@dimen/list_nav_height"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/base_image" />
+
+        <LinearLayout
+            android:id="@+id/base_item_cf_table_bottom_ll"
+            style="@style/Base.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/margin_text_layout"
+            android:layout_marginEnd="@dimen/margin_text_layout"
+            android:layout_toStartOf="@id/base_item_cf_list_cbox"
+            android:layout_toEndOf="@id/base_item_cf_list_iv"
+            android:orientation="vertical">
+
+            <TextView
+                style="Base.Text"
+                android:layout_width="match_parent"
+                android:text="@{chooseFile.fileName, default=@string/base_title}"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1" />
+
+            <TextView
+                style="@style/Base.Text.Hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{chooseFile.fileChangeDate, default=@string/base_content}"
+                android:layout_gravity="end"
+                android:layout_marginTop="@dimen/margin_text_layout" />
+
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/base_item_cf_list_cbox"
+            style="@style/Base.CheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true" />
+
+    </RelativeLayout>
+</layout>

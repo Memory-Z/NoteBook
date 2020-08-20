@@ -3,7 +3,10 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <permission
@@ -13,6 +16,11 @@
     <uses-permission android:name="com.inz.z.base.permission.VERSION_UPDATE" />
 
     <application>
+        <!-- 文件选择界面 -->
+        <activity android:name=".view.activity.ChooseFileActivity">
+
+        </activity>
+
         <receiver
             android:name=".broadcast.VersionUpdateBroadcast"
             android:permission="com.inz.z.base.permission.VERSION_UPDATE">
@@ -30,5 +38,10 @@
                 android:name="applicationId"
                 android:value="${applicationId}" />
         </service>
+        <uses-library android:name="android.test.runner" />
     </application>
+    <instrumentation
+        android:name="androidx.test.platform.app.InstrumentationRegistry"
+        android:targetPackage="com.inz.z.base" >
+    </instrumentation>
 </manifest>
