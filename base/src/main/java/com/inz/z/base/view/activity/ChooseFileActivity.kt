@@ -2,15 +2,15 @@ package com.inz.z.base.view.activity
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.PopupMenu
 import androidx.annotation.IntDef
 import androidx.annotation.RequiresPermission
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -65,14 +65,15 @@ class ChooseFileActivity : AbsBaseActivity() {
 
     private val requestPermissionCode = 0x0002
 
-    private var chooseFileRvAdapter: ChooseFileRvAdapter? = null
+    private var chooseFileTableRvAdapter: ChooseFileRvAdapter? = null
+    private var chooseFileListRvAdapter: ChooseFileRvAdapter? = null
 
 
     @ShowMode
     private var showMode = MODE_LIST
 
 
-    private var layoutManager: RecyclerView.LayoutManager? = null
+    private var mLayoutManager: RecyclerView.LayoutManager? = null
 
     override fun initWindow() {
 
@@ -83,13 +84,15 @@ class ChooseFileActivity : AbsBaseActivity() {
     }
 
     override fun initView() {
-        base_choose_file_top_r_more_iv?.setOnClickListener { createMorePopupMenu() }
+//        base_choose_file_top_r_more_iv?.setOnClickListener { createMorePopupMenu() }
+        setSupportActionBar(base_choose_file_top_btal.toolbar)
 
-        layoutManager = LinearLayoutManager(mContext)
-        chooseFileRvAdapter = ChooseFileRvAdapter(mContext)
-        base_choose_file_content_rv?.apply {
-            this.adapter = chooseFileRvAdapter
-            this.layoutManager = this.layoutManager
+        mLayoutManager = LinearLayoutManager(mContext)
+        chooseFileTableRvAdapter = ChooseFileRvAdapter(mContext, MODE_TABLE)
+        chooseFileListRvAdapter = ChooseFileRvAdapter(mContext, MODE_LIST)
+        base_choose_file_content_rv.apply {
+            this.layoutManager = mLayoutManager
+            this.adapter = chooseFileListRvAdapter
         }
 
     }
@@ -119,6 +122,50 @@ class ChooseFileActivity : AbsBaseActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_choose_file, menu)
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
+        val menuItem = menu.findItem(R.id.menu_choose_file_mode_item)
+        var modeShowName = mContext.getString(R.string.list_mode)
+        if (showMode == MODE_LIST) {
+            modeShowName = mContext.getString(R.string.table_mode)
+        }
+        menuItem.setTitle(modeShowName)
+        return super.onMenuOpened(featureId, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_choose_file_mode_item -> {
+                var mode = MODE_LIST
+                when (showMode) {
+                    MODE_LIST -> {
+                        mLayoutManager = GridLayoutManager(mContext, 2)
+                        mode = MODE_TABLE
+                        base_choose_file_content_rv.adapter = chooseFileTableRvAdapter
+                    }
+                    MODE_TABLE -> {
+                        mLayoutManager = LinearLayoutManager(mContext)
+                        mode = MODE_LIST
+                        base_choose_file_content_rv.adapter = chooseFileListRvAdapter
+                    }
+                }
+                base_choose_file_content_rv.layoutManager = mLayoutManager
+                showMode = mode
+
+            }
+            else -> {
+
+            }
+        }
+        return super.onOptionsItemSelected(item)
+
+    }
+
     /**
      * 创建弹窗
      */
@@ -126,7 +173,7 @@ class ChooseFileActivity : AbsBaseActivity() {
         if (mContext == null) {
             return
         }
-        val moreMenu = PopupMenu(mContext, base_choose_file_top_bnl)
+        val moreMenu = PopupMenu(mContext, base_choose_file_top_btal)
         moreMenu.menuInflater.inflate(R.menu.menu_choose_file, moreMenu.menu)
         val modeMenuItem = moreMenu.menu.findItem(R.id.menu_choose_file_mode_item)
         var modeShowName = mContext.getString(R.string.table_mode)
@@ -140,14 +187,14 @@ class ChooseFileActivity : AbsBaseActivity() {
 
                     when (showMode) {
                         MODE_LIST -> {
-                            layoutManager = LinearLayoutManager(mContext)
+                            mLayoutManager = LinearLayoutManager(mContext)
                         }
                         MODE_TABLE -> {
-                            layoutManager = GridLayoutManager(mContext, 2)
+                            mLayoutManager = GridLayoutManager(mContext, 2)
                         }
                     }
 
-                    base_choose_file_content_rv.layoutManager = layoutManager
+                    base_choose_file_content_rv.layoutManager = mLayoutManager
                 }
                 else -> {
 
@@ -157,6 +204,7 @@ class ChooseFileActivity : AbsBaseActivity() {
         }
         moreMenu.show()
     }
+
 
     @RequiresPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
     private fun queryFileList(filePath: String?) {
@@ -177,8 +225,9 @@ class ChooseFileActivity : AbsBaseActivity() {
             .subscribe(
                 object : DefaultObserver<MutableList<BaseChooseFileBean>>() {
                     override fun onNext(t: MutableList<BaseChooseFileBean>) {
-                        L.i(TAG, "queryFileList -- ${t.size} -- $t")
-                        chooseFileRvAdapter?.refreshData(t)
+                        L.i(TAG, "queryFileList ${Thread.currentThread().name} -- ${t.size} -- $t")
+                        chooseFileListRvAdapter?.refreshData(t)
+                        chooseFileTableRvAdapter?.refreshData(t)
                     }
 
                     override fun onError(e: Throwable) {

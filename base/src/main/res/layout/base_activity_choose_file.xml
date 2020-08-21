@@ -4,15 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.inz.z.base.view.widget.BaseNavLayout
-        android:id="@+id/base_choose_file_top_bnl"
+    <com.inz.z.base.view.widget.BaseTopActionLayout
+        android:id="@+id/base_choose_file_top_btal"
         style="@style/Base.Layout"
         android:layout_width="0dp"
-        android:layout_height="@dimen/touch_target_height"
+        android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        app:base_center_layout="@id/base_choose_file_top_center_rl"
-        app:base_left_layout="@id/base_choose_file_top_left_ll"
-        app:base_right_layout="@id/base_choose_file_top_right_ll"
+        app:base_top_center_layout="@id/base_choose_file_top_center_rl"
+        app:base_top_left_layout="@id/base_choose_file_top_left_ll"
+        app:base_top_title="@string/base_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -34,26 +34,26 @@
 
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/base_choose_file_top_right_ll"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical">
+        <!--        <LinearLayout-->
+        <!--            android:id="@+id/base_choose_file_top_right_ll"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:gravity="center"-->
+        <!--            android:orientation="vertical">-->
 
-            <ImageView
-                android:id="@+id/base_choose_file_top_r_more_iv"
-                style="@style/Base.ImageView.Icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/base_image"
-                android:src="@drawable/ic_more_vert_black_24dp"
-                app:tint="@color/text_white_base_color" />
+        <!--            <ImageView-->
+        <!--                android:id="@+id/base_choose_file_top_r_more_iv"-->
+        <!--                style="@style/Base.ImageView.Icon"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:contentDescription="@string/base_image"-->
+        <!--                android:src="@drawable/ic_more_vert_black_24dp"-->
+        <!--                app:tint="@color/text_white_base_color" />-->
 
 
-        </LinearLayout>
+        <!--        </LinearLayout>-->
 
-    </com.inz.z.base.view.widget.BaseNavLayout>
+    </com.inz.z.base.view.widget.BaseTopActionLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/base_choose_file_content_rv"
@@ -62,7 +62,7 @@
         app:layout_constraintBottom_toTopOf="@id/base_choose_file_bottom_bnl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/base_choose_file_top_bnl" />
+        app:layout_constraintTop_toBottomOf="@id/base_choose_file_top_btal" />
 
     <com.inz.z.base.view.widget.BaseNavLayout
         android:id="@+id/base_choose_file_bottom_bnl"

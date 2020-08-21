@@ -12,6 +12,8 @@
         style="@style/Base.Layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp02"
+        android:background="@drawable/bg_card_item"
         android:paddingTop="@dimen/margin_text_layout"
         android:paddingBottom="@dimen/margin_text_layout">
 
@@ -39,18 +41,18 @@
             <TextView
                 style="Base.Text"
                 android:layout_width="match_parent"
-                android:text="@{chooseFile.fileName, default=@string/base_title}"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:lines="1" />
+                android:lines="1"
+                android:text="@{chooseFile.fileName, default=@string/base_title}" />
 
             <TextView
                 style="@style/Base.Text.Hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{chooseFile.fileChangeDate, default=@string/base_content}"
                 android:layout_gravity="end"
-                android:layout_marginTop="@dimen/margin_text_layout" />
+                android:layout_marginTop="@dimen/margin_text_layout"
+                android:text="@{chooseFile.fileChangeDate, default=@string/base_content}" />
 
         </LinearLayout>
 

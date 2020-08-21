@@ -9,6 +9,9 @@ import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.inz.z.base.entity.BaseChooseFileBean
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.Comparator
 
 /**
  *
@@ -17,6 +20,7 @@ import java.io.File
  * Create by inz in 2020/08/20 14:33.
  */
 object ProviderUtil {
+    var simpleDateFormat: SimpleDateFormat? = null
 
     /**
      * 通过文件目录查询文件列表
@@ -41,8 +45,9 @@ object ProviderUtil {
                     bean.filePath = childFile.path
                     bean.fileLength = childFile.length()
                     bean.fileIsDirectory = childFile.isDirectory
-                    bean.fileChangeDate = childFile.lastModified().toString()
+                    bean.fileChangeDate = formatDatetime(childFile.lastModified())
                     bean.fileFromDatabase = false
+                    bean.fileType = BaseChooseFileBean.FILE_TYPE_FILE
                     fileList.add(bean)
                 }
             }
@@ -80,10 +85,11 @@ object ProviderUtil {
                 bean.fileDatabaseTable = MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString()
                 bean.fileName = name
                 bean.filePath = path
-                bean.fileChangeDate = modifiedDate.toString()
+                bean.fileChangeDate = formatDatetime(modifiedDate)
                 bean.fileDatabaseId = id.toString()
                 bean.fileIsDirectory = false
                 bean.fileLength = size
+                bean.fileType = BaseChooseFileBean.FILE_TYPE_IMAGE
                 fileList.add(bean)
             }
         }
@@ -122,10 +128,11 @@ object ProviderUtil {
                 bean.fileDatabaseTable = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString()
                 bean.fileName = name
                 bean.filePath = path
-                bean.fileChangeDate = modifiedDate.toString()
+                bean.fileChangeDate = formatDatetime(modifiedDate)
                 bean.fileDatabaseId = id.toString()
                 bean.fileIsDirectory = false
                 bean.fileLength = size
+                bean.fileType = BaseChooseFileBean.FILE_TYPE_AUDIO
                 fileList.add(bean)
             }
         }
@@ -155,6 +162,16 @@ object ProviderUtil {
             else if (o2.fileIsDirectory) -1 else
                 o1.fileName.compareTo(o2.fileName)
         }
+    }
+
+    /**
+     * 时间格式化
+     */
+    fun formatDatetime(time: Long): String {
+        if (simpleDateFormat == null) {
+            simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        }
+        return simpleDateFormat!!.format(time)
     }
 
 }
