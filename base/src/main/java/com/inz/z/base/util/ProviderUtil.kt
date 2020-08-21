@@ -9,6 +9,7 @@ import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.inz.z.base.entity.BaseChooseFileBean
 import java.io.File
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.Comparator
@@ -21,6 +22,7 @@ import kotlin.Comparator
  */
 object ProviderUtil {
     var simpleDateFormat: SimpleDateFormat? = null
+    val TAG = "ProviderUtil"
 
     /**
      * 通过文件目录查询文件列表
@@ -49,6 +51,7 @@ object ProviderUtil {
                     bean.fileFromDatabase = false
                     bean.fileType = BaseChooseFileBean.FILE_TYPE_FILE
                     fileList.add(bean)
+                    Log.i(TAG, "queryFileListByDir: ----------> ${bean.fileName} ")
                 }
             }
         }
@@ -158,9 +161,15 @@ object ProviderUtil {
             if (o1 == null || o2 == null) {
                 return 0
             }
-            return if (o1.fileIsDirectory) 1
-            else if (o2.fileIsDirectory) -1 else
+            return if (o1.fileIsDirectory && !o2.fileIsDirectory) {
+                -1
+            } else if (!o1.fileIsDirectory && o2.fileIsDirectory) {
+                1
+            } else if (TextUtils.isEmpty(o1.fileName) || TextUtils.isEmpty(o2.fileName)) {
+                0
+            } else {
                 o1.fileName.compareTo(o2.fileName)
+            }
         }
     }
 

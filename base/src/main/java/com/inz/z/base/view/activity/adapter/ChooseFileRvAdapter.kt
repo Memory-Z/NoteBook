@@ -10,7 +10,6 @@ import androidx.core.widget.ImageViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.annotation.GlideOption
 import com.bumptech.glide.request.RequestOptions
 import com.inz.z.base.R
 import com.inz.z.base.base.AbsBaseRvAdapter
@@ -31,6 +30,8 @@ class ChooseFileRvAdapter :
 
     @ChooseFileActivity.ShowMode
     var showMode = ChooseFileActivity.MODE_LIST
+
+    var listener: ChooseFileRvAdapterListener? = null
 
     constructor(mContext: Context?) : super(mContext)
 
@@ -80,14 +81,37 @@ class ChooseFileRvAdapter :
                     when (bean.fileType) {
                         BaseChooseFileBean.FILE_TYPE_IMAGE -> {
                             Glide.with(mContext).load(bean.filePath).apply(requestOption)
-                                .into(iv)
+                                .into(this)
+                            ImageViewCompat.setImageTintList(this, null)
+                        }
+                        BaseChooseFileBean.FILE_TYPE_AUDIO -> {
+                            Glide.with(mContext).load(R.drawable.ic_file_music).apply(requestOption)
+                                .into(this)
+                            ImageViewCompat.setImageTintList(this, null)
+                        }
+                        BaseChooseFileBean.FILE_TYPE_VIDEO -> {
+                            Glide.with(mContext).load(R.drawable.ic_file_video)
+                                .apply(requestOption)
+                                .into(this)
+                            ImageViewCompat.setImageTintList(this, null)
+                        }
+                        BaseChooseFileBean.FILE_TYPE_APPLICATION -> {
+                            Glide.with(mContext).load(R.drawable.ic_file_installation_pa)
+                                .apply(requestOption)
+                                .into(this)
+                            ImageViewCompat.setImageTintList(this, null)
+                        }
+                        BaseChooseFileBean.FILE_TYPE_TEXT -> {
+                            Glide.with(mContext).load(R.drawable.ic_file_txt)
+                                .apply(requestOption)
+                                .into(this)
                             ImageViewCompat.setImageTintList(this, null)
                         }
                         else -> {
-                            Glide.with(mContext).load(R.drawable.ic_baseline_insert_drive_file_24)
+                            Glide.with(mContext).load(R.drawable.ic_file_unknown)
                                 .apply(requestOption)
-                                .into(iv)
-                            ImageViewCompat.setImageTintList(this, colorWhiteCsl)
+                                .into(this)
+                            ImageViewCompat.setImageTintList(this, null)
                         }
                     }
                 }
@@ -111,7 +135,7 @@ class ChooseFileRvAdapter :
                             ImageViewCompat.setImageTintList(this, null)
                         }
                         else -> {
-                            Glide.with(mContext).load(R.drawable.ic_baseline_insert_drive_file_24)
+                            Glide.with(mContext).load(R.drawable.ic_file_unknown)
                                 .apply(requestOption)
                                 .into(iv)
                             ImageViewCompat.setImageTintList(this, colorWhiteCsl)
@@ -135,19 +159,33 @@ class ChooseFileRvAdapter :
 
         init {
             baseItemChooseFileListBinding?.baseItemCfListCbox?.setOnClickListener(this)
+            baseItemChooseFileListBinding?.baseItemCfListIv?.setOnClickListener(this)
             itemView.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {
             if (adapterPosition != RecyclerView.NO_POSITION) {
+                val bean = list[adapterPosition]
                 when (v?.id) {
                     R.id.base_item_cf_list_cbox -> {
-                        val bean = list[adapterPosition]
-                        bean.checked =
+                        val checked =
                             baseItemChooseFileListBinding?.baseItemCfListCbox?.isChecked ?: false
+                        bean.checked = checked
+                        if (!checked) {
+                            listener?.removeChoseFile(adapterPosition, v)
+                        } else {
+                            listener?.addChoseFile(adapterPosition, v)
+                        }
+                    }
+                    R.id.base_item_cf_list_iv -> {
+                        listener?.showFullImage(adapterPosition, v)
                     }
                     else -> {
-                        baseItemChooseFileListBinding?.baseItemCfListCbox?.performClick()
+                        if (bean.fileIsDirectory && v != null) {
+                            listener?.openFileDirectory(adapterPosition, v)
+                        } else {
+                            baseItemChooseFileListBinding?.baseItemCfListCbox?.performClick()
+                        }
                     }
                 }
             }
@@ -161,19 +199,34 @@ class ChooseFileRvAdapter :
 
         init {
             baseItemChooseFileTableBinding?.baseItemCfTableCbox?.setOnClickListener(this)
+            baseItemChooseFileTableBinding?.baseItemCfTableIv?.setOnClickListener(this)
             itemView.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {
             if (adapterPosition != RecyclerView.NO_POSITION) {
+                val bean = list[adapterPosition]
                 when (v?.id) {
                     R.id.base_item_cf_table_cbox -> {
-                        val bean = list[adapterPosition]
-                        bean.checked =
+                        val checked =
                             baseItemChooseFileTableBinding?.baseItemCfTableCbox?.isChecked ?: false
+
+                        bean.checked = checked
+                        if (!checked) {
+                            listener?.removeChoseFile(adapterPosition, v)
+                        } else {
+                            listener?.addChoseFile(adapterPosition, v)
+                        }
+                    }
+                    R.id.base_item_cf_table_iv -> {
+                        listener?.showFullImage(adapterPosition, v)
                     }
                     else -> {
-                        baseItemChooseFileTableBinding?.baseItemCfTableCbox?.performClick()
+                        if (bean.fileIsDirectory && v != null) {
+                            listener?.openFileDirectory(adapterPosition, v)
+                        } else {
+                            baseItemChooseFileTableBinding?.baseItemCfTableCbox?.performClick()
+                        }
                     }
                 }
             }
@@ -183,5 +236,36 @@ class ChooseFileRvAdapter :
     ///////////////////////////////////////////////////////////////////////////
     // OPEN
     ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * 文件选择监听
+     */
+    interface ChooseFileRvAdapterListener {
+        /**
+         * 添加选中文件
+         */
+        fun addChoseFile(position: Int, view: View)
+
+        /**
+         * 移除选中文件
+         */
+        fun removeChoseFile(position: Int, view: View)
+
+        /**
+         * 显示全屏图像
+         */
+        fun showFullImage(position: Int, view: View)
+
+        /**
+         * 进入目录
+         */
+        fun openFileDirectory(position: Int, view: View);
+
+    }
+
+    fun changeShowMode(@ChooseFileActivity.ShowMode mode: Int) {
+
+        notifyItemInserted(0)
+    }
 
 }

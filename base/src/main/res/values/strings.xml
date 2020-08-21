@@ -28,4 +28,20 @@
 
     <string name="list_mode">列表模式</string>
     <string name="table_mode">表格模式</string>
+    <string name="choose_file">文件选择</string>
+    <string name="_audio">音频</string>
+    <string name="_video">视频</string>
+    <string name="_image">图片</string>
+    <string name="_file">文件</string>
+    <string name="_all">全部</string>
+    <string-array name="_file_type">
+        <item>@string/_all</item>
+        <item>@string/_image</item>
+        <item>@string/_audio</item>
+        <item>@string/_video</item>
+        <item>@string/_file</item>
+    </string-array>
+    <string name="_left_arrow">&lt;</string>
+    <string name="_right_arrow">&gt;</string>
+    <string name="root_directory">根目录</string>
 </resources>

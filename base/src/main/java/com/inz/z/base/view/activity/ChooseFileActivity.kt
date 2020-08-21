@@ -5,9 +5,9 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.PopupMenu
 import androidx.annotation.IntDef
 import androidx.annotation.RequiresPermission
@@ -18,9 +18,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.R
 import com.inz.z.base.entity.BaseChooseFileBean
+import com.inz.z.base.entity.BaseChooseFileNavBean
+import com.inz.z.base.util.FileUtils
 import com.inz.z.base.util.L
 import com.inz.z.base.util.ProviderUtil
 import com.inz.z.base.view.AbsBaseActivity
+import com.inz.z.base.view.activity.adapter.ChooseFileNavRvAdapter
 import com.inz.z.base.view.activity.adapter.ChooseFileRvAdapter
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
@@ -41,6 +44,12 @@ class ChooseFileActivity : AbsBaseActivity() {
         const val MODE_LIST = 0x000901
         const val MODE_TABLE = 0x000902
 
+        const val SHOW_TYPE_DIR = 0x000A01
+        const val SHOW_TYPE_IMAGE = 0x000A02
+        const val SHOW_TYPE_AUDIO = 0x000A03
+        const val SHOW_TYPE_VIDEO = 0x000A04
+
+
         const val TAG = "ChooseFileActivity"
 
         /**
@@ -56,7 +65,12 @@ class ChooseFileActivity : AbsBaseActivity() {
 
     @IntDef(MODE_LIST, MODE_TABLE)
     @Retention(AnnotationRetention.SOURCE)
+
     annotation class ShowMode
+
+    @IntDef(SHOW_TYPE_DIR, SHOW_TYPE_IMAGE, SHOW_TYPE_AUDIO, SHOW_TYPE_VIDEO)
+    @Retention(AnnotationRetention.SOURCE)
+    annotation class ShowType
 
     private val permissionArray = arrayListOf<String>(
         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -68,12 +82,22 @@ class ChooseFileActivity : AbsBaseActivity() {
     private var chooseFileTableRvAdapter: ChooseFileRvAdapter? = null
     private var chooseFileListRvAdapter: ChooseFileRvAdapter? = null
 
+    private var chooseFileNavRvAdapter: ChooseFileNavRvAdapter? = null
+
+    /**
+     * 根目录地址
+     */
+    private var mRootPath = ""
+
+    @ShowType
+    private var showType = SHOW_TYPE_DIR
 
     @ShowMode
     private var showMode = MODE_LIST
 
 
     private var mLayoutManager: RecyclerView.LayoutManager? = null
+    private var navLayoutManager: LinearLayoutManager? = null
 
     override fun initWindow() {
 
@@ -87,9 +111,20 @@ class ChooseFileActivity : AbsBaseActivity() {
 //        base_choose_file_top_r_more_iv?.setOnClickListener { createMorePopupMenu() }
         setSupportActionBar(base_choose_file_top_btal.toolbar)
 
+        navLayoutManager = LinearLayoutManager(mContext)
+        navLayoutManager?.orientation = LinearLayoutManager.HORIZONTAL
+        chooseFileNavRvAdapter = ChooseFileNavRvAdapter(mContext)
+        chooseFileNavRvAdapter?.listener = ChooseFileNavRvAdapterListenerImpl()
+        base_choose_file_nav_rv?.apply {
+            this.layoutManager = navLayoutManager
+            this.adapter = chooseFileNavRvAdapter
+        }
+
         mLayoutManager = LinearLayoutManager(mContext)
         chooseFileTableRvAdapter = ChooseFileRvAdapter(mContext, MODE_TABLE)
+        chooseFileTableRvAdapter?.listener = ChooseFileRvAdapterListenerImpl()
         chooseFileListRvAdapter = ChooseFileRvAdapter(mContext, MODE_LIST)
+        chooseFileListRvAdapter?.listener = ChooseFileRvAdapterListenerImpl()
         base_choose_file_content_rv.apply {
             this.layoutManager = mLayoutManager
             this.adapter = chooseFileListRvAdapter
@@ -98,8 +133,10 @@ class ChooseFileActivity : AbsBaseActivity() {
     }
 
     override fun initData() {
+        mRootPath = FileUtils.getSDPath()
+        addNavBody(mRootPath, getString(R.string.root_directory))
         if (checkHavePermission()) {
-            queryFileList(null)
+            checkQueryType(mRootPath)
         }
     }
 
@@ -111,13 +148,7 @@ class ChooseFileActivity : AbsBaseActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == requestPermissionCode) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    queryFileList(null)
-                }
+                checkQueryType(mRootPath)
             }
         }
     }
@@ -167,56 +198,134 @@ class ChooseFileActivity : AbsBaseActivity() {
     }
 
     /**
-     * 创建弹窗
+     * 导航栏 适配器监听实现
      */
-    private fun createMorePopupMenu() {
-        if (mContext == null) {
-            return
-        }
-        val moreMenu = PopupMenu(mContext, base_choose_file_top_btal)
-        moreMenu.menuInflater.inflate(R.menu.menu_choose_file, moreMenu.menu)
-        val modeMenuItem = moreMenu.menu.findItem(R.id.menu_choose_file_mode_item)
-        var modeShowName = mContext.getString(R.string.table_mode)
-        if (showMode == MODE_LIST) {
-            modeShowName = mContext.getString(R.string.list_mode)
-        }
-        modeMenuItem.setTitle(modeShowName)
-        moreMenu.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.menu_choose_file_mode_item -> {
-
-                    when (showMode) {
-                        MODE_LIST -> {
-                            mLayoutManager = LinearLayoutManager(mContext)
-                        }
-                        MODE_TABLE -> {
-                            mLayoutManager = GridLayoutManager(mContext, 2)
-                        }
-                    }
-
-                    base_choose_file_content_rv.layoutManager = mLayoutManager
-                }
-                else -> {
-
-                }
+    private inner class ChooseFileNavRvAdapterListenerImpl :
+        ChooseFileNavRvAdapter.ChooseFileNavRvAdapterListener {
+        override fun onNavClick(position: Int, v: View?) {
+            val bean = chooseFileNavRvAdapter?.list?.get(position)
+            bean?.let {
+                chooseFileNavRvAdapter?.chooseNav(position)
+                checkQueryType(it.path)
             }
-            return@setOnMenuItemClickListener true
         }
-        moreMenu.show()
     }
 
+    /**
+     * 选择文件监听实现
+     */
+    private inner class ChooseFileRvAdapterListenerImpl :
+        ChooseFileRvAdapter.ChooseFileRvAdapterListener {
+        override fun addChoseFile(position: Int, view: View) {
+            L.i(TAG, "addChoseFile: $position")
+        }
+
+        override fun removeChoseFile(position: Int, view: View) {
+            L.i(TAG, "removeChoseFile: $position")
+        }
+
+        override fun showFullImage(position: Int, view: View) {
+            L.i(TAG, "showFullImage: $position")
+        }
+
+        override fun openFileDirectory(position: Int, view: View) {
+            L.i(TAG, "openFileDirectory : $position")
+            var bean: BaseChooseFileBean? = null
+            when (showMode) {
+                MODE_LIST -> {
+                    bean = chooseFileListRvAdapter?.list?.get(position)
+                }
+                MODE_TABLE -> {
+                    bean = chooseFileTableRvAdapter?.list?.get(position)
+                }
+            }
+            bean?.let {
+                addNavBody(it.filePath, it.fileName)
+                checkQueryType(it.filePath)
+            }
+        }
+    }
+//
+//    /**
+//     * 创建弹窗
+//     */
+//    private fun createMorePopupMenu() {
+//        if (mContext == null) {
+//            return
+//        }
+//        val moreMenu = PopupMenu(mContext, base_choose_file_top_btal)
+//        moreMenu.menuInflater.inflate(R.menu.menu_choose_file, moreMenu.menu)
+//        val modeMenuItem = moreMenu.menu.findItem(R.id.menu_choose_file_mode_item)
+//        var modeShowName = mContext.getString(R.string.table_mode)
+//        if (showMode == MODE_LIST) {
+//            modeShowName = mContext.getString(R.string.list_mode)
+//        }
+//        modeMenuItem.setTitle(modeShowName)
+//        moreMenu.setOnMenuItemClickListener {
+//            when (it.itemId) {
+//                R.id.menu_choose_file_mode_item -> {
+//
+//                    when (showMode) {
+//                        MODE_LIST -> {
+//                            mLayoutManager = LinearLayoutManager(mContext)
+//                        }
+//                        MODE_TABLE -> {
+//                            mLayoutManager = GridLayoutManager(mContext, 2)
+//                        }
+//                    }
+//
+//                    base_choose_file_content_rv.layoutManager = mLayoutManager
+//                }
+//                else -> {
+//
+//                }
+//            }
+//            return@setOnMenuItemClickListener true
+//        }
+//        moreMenu.show()
+//    }
+
+    /**
+     * 添加导航体
+     */
+    private fun addNavBody(filePath: String, fileName: String) {
+        val bean = BaseChooseFileNavBean()
+        bean.title = fileName
+        bean.path = filePath
+        chooseFileNavRvAdapter?.addChooseFileNav(bean)
+    }
+
+    /**
+     * 检测 查询类型
+     */
+    private fun checkQueryType(filePath: String) {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            queryFileList(filePath, showType)
+        }
+    }
 
     @RequiresPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    private fun queryFileList(filePath: String?) {
+    private fun queryFileList(filePath: String?, @ShowType showType: Int) {
         Observable
             .create(
                 ObservableOnSubscribe<MutableList<BaseChooseFileBean>>() {
-                    if (!TextUtils.isEmpty(filePath)) {
-                        val list = ProviderUtil.queryFileListByDir(filePath)
-                        it.onNext(list)
-                    } else {
-                        val list = ProviderUtil.queryFileImageWithContextProvider(mContext)
-                        it.onNext(list)
+                    when (showType) {
+                        SHOW_TYPE_DIR -> {
+                            val list = ProviderUtil.queryFileListByDir(filePath)
+                            it.onNext(list)
+                        }
+                        SHOW_TYPE_AUDIO -> {
+                            val list = ProviderUtil.queryFileAudioWithContentProvider(mContext)
+                            it.onNext(list)
+                        }
+                        else -> {
+                            val list = ProviderUtil.queryFileImageWithContextProvider(mContext)
+                            it.onNext(list)
+                        }
                     }
                 }
             )
@@ -231,6 +340,7 @@ class ChooseFileActivity : AbsBaseActivity() {
                     }
 
                     override fun onError(e: Throwable) {
+                        L.e(TAG, "onError: ----> ", e)
                     }
 
                     override fun onComplete() {

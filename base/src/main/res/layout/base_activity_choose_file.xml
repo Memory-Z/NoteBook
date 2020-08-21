@@ -10,8 +10,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
+        app:base_show_custom_view="true"
         app:base_top_center_layout="@id/base_choose_file_top_center_rl"
         app:base_top_left_layout="@id/base_choose_file_top_left_ll"
+        app:base_top_right_layout="@id/base_choose_file_top_right_ll"
         app:base_top_title="@string/base_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,40 +34,59 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <Spinner
+                style="@style/Widget.AppCompat.Spinner.DropDown"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:entries="@array/_file_type" />
+
         </RelativeLayout>
 
-        <!--        <LinearLayout-->
-        <!--            android:id="@+id/base_choose_file_top_right_ll"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:gravity="center"-->
-        <!--            android:orientation="vertical">-->
+        <LinearLayout
+            android:id="@+id/base_choose_file_top_right_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <!--            <ImageView-->
-        <!--                android:id="@+id/base_choose_file_top_r_more_iv"-->
-        <!--                style="@style/Base.ImageView.Icon"-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:contentDescription="@string/base_image"-->
-        <!--                android:src="@drawable/ic_more_vert_black_24dp"-->
-        <!--                app:tint="@color/text_white_base_color" />-->
-
-
-        <!--        </LinearLayout>-->
+        </LinearLayout>
 
     </com.inz.z.base.view.widget.BaseTopActionLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/base_choose_file_nav_hsv"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_normal_height"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/base_choose_file_top_btal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/base_choose_file_nav_rv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fadingEdge="horizontal" />
+        </LinearLayout>
+
+    </HorizontalScrollView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/base_choose_file_content_rv"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:theme="@style/Base.ScrollbarVertical"
         app:layout_constraintBottom_toTopOf="@id/base_choose_file_bottom_bnl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/base_choose_file_top_btal" />
+        app:layout_constraintTop_toBottomOf="@id/base_choose_file_nav_hsv" />
 
     <com.inz.z.base.view.widget.BaseNavLayout
         android:id="@+id/base_choose_file_bottom_bnl"
+        style="@style/Base.Layout"
         android:layout_width="0dp"
         android:layout_height="@dimen/touch_target_height"
         android:background="@color/colorPrimary"

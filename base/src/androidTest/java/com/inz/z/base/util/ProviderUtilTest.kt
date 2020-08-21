@@ -22,4 +22,14 @@ class ProviderUtilTest {
             System.out.println("------------> $item")
         }
     }
+
+    @Test
+    fun queryFileListByDir() {
+        val filePath = FileUtils.getSDPath();
+        val list = ProviderUtil.queryFileListByDir(filePath)
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  ${list.size}")
+        for (item in list) {
+            System.out.println("------------> $item")
+        }
+    }
 }
