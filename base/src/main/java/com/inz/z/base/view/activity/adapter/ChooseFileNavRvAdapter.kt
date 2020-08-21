@@ -89,9 +89,9 @@ class ChooseFileNavRvAdapter(mContext: Context) :
      * 选择导航
      */
     fun chooseNav(position: Int) {
-        if (this.list.size >= position) {
+        if (this.list.size >= position + 1) {
             this.list.removeAll(
-                this.list.subList(position, this.list.size)
+                this.list.subList(position + 1, this.list.size)
             )
         }
         notifyDataSetChanged()

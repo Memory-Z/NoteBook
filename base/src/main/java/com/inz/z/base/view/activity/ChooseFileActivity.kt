@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.HorizontalScrollView
 import android.widget.PopupMenu
 import androidx.annotation.IntDef
 import androidx.annotation.RequiresPermission
@@ -293,6 +294,8 @@ class ChooseFileActivity : AbsBaseActivity() {
         bean.title = fileName
         bean.path = filePath
         chooseFileNavRvAdapter?.addChooseFileNav(bean)
+        navLayoutManager?.stackFromEnd = true
+        base_choose_file_nav_hsv?.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
     }
 
     /**

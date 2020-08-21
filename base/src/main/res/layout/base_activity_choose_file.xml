@@ -57,6 +57,7 @@
         android:id="@+id/base_choose_file_nav_hsv"
         android:layout_width="0dp"
         android:layout_height="@dimen/button_normal_height"
+        android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/base_choose_file_top_btal">
@@ -69,7 +70,8 @@
                 android:id="@+id/base_choose_file_nav_rv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:fadingEdge="horizontal" />
+                android:nestedScrollingEnabled="false"
+                android:scrollbars="none" />
         </LinearLayout>
 
     </HorizontalScrollView>
