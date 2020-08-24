@@ -8,8 +8,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.HorizontalScrollView
-import android.widget.PopupMenu
 import androidx.annotation.IntDef
 import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
@@ -32,6 +30,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DefaultObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.base_activity_choose_file.*
+import java.io.File
 
 /**
  *
@@ -51,14 +50,67 @@ class ChooseFileActivity : AbsBaseActivity() {
         const val SHOW_TYPE_VIDEO = 0x000A04
 
 
+        private const val DEFAULT_MAX_CHOOSE_FILE_COUNT = 10
+        private const val DEFAULT_TABLE_COLUMNS = 2
+
         const val TAG = "ChooseFileActivity"
 
         /**
          * 跳转至选择文件界面
          */
         fun gotoChooseFileActivity(activity: Activity, requestCode: Int) {
+            gotoChooseFileActivity(activity, requestCode, MODE_LIST, DEFAULT_TABLE_COLUMNS)
+        }
+
+        /**
+         * 跳转至选择文件界面
+         */
+        fun gotoChooseFileActivity(
+            activity: Activity,
+            requestCode: Int,
+            @ShowMode showMode: Int,
+            tableColumn: Int
+        ) {
+            gotoChooseFileActivity(activity, requestCode, showMode, SHOW_TYPE_DIR, tableColumn)
+        }
+
+        /**
+         * 跳转至选择文件界面
+         */
+        fun gotoChooseFileActivity(
+            activity: Activity,
+            requestCode: Int,
+            @ShowMode showMode: Int,
+            @ShowType showType: Int,
+            tableColumn: Int
+        ) {
+            gotoChooseFileActivity(
+                activity,
+                requestCode,
+                showMode,
+                showType,
+                tableColumn,
+                DEFAULT_MAX_CHOOSE_FILE_COUNT
+            )
+        }
+
+        /**
+         * 跳转至选择文件界面
+         */
+        fun gotoChooseFileActivity(
+            activity: Activity,
+            requestCode: Int,
+            @ShowMode showMode: Int,
+            @ShowType showType: Int,
+            tableColumn: Int,
+            maxChooseFileSize: Int
+        ) {
             val intent = Intent(activity, ChooseFileActivity::class.java)
             val bundle = Bundle()
+            bundle.putInt("showMode", showMode)
+            bundle.putInt("showType", showType)
+            bundle.putInt("tableColumn", tableColumn)
+            bundle.putInt("maxChooseFile", maxChooseFileSize)
             intent.putExtras(bundle)
             activity.startActivityForResult(intent, requestCode)
         }
@@ -66,14 +118,13 @@ class ChooseFileActivity : AbsBaseActivity() {
 
     @IntDef(MODE_LIST, MODE_TABLE)
     @Retention(AnnotationRetention.SOURCE)
-
     annotation class ShowMode
 
     @IntDef(SHOW_TYPE_DIR, SHOW_TYPE_IMAGE, SHOW_TYPE_AUDIO, SHOW_TYPE_VIDEO)
     @Retention(AnnotationRetention.SOURCE)
     annotation class ShowType
 
-    private val permissionArray = arrayListOf<String>(
+    private val permissionArray = arrayListOf(
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
@@ -90,12 +141,26 @@ class ChooseFileActivity : AbsBaseActivity() {
      */
     private var mRootPath = ""
 
+    /**
+     * max file size  can choose .
+     */
+    private var maxChooseFileCount = DEFAULT_MAX_CHOOSE_FILE_COUNT
+
     @ShowType
     private var showType = SHOW_TYPE_DIR
 
     @ShowMode
     private var showMode = MODE_LIST
 
+    /**
+     * 表单 模式下 显示列数
+     */
+    private var showTableModeColumn = DEFAULT_TABLE_COLUMNS
+
+    /**
+     * 选中的文件列表
+     */
+    private var chooseFileList: MutableList<BaseChooseFileBean> = mutableListOf()
 
     private var mLayoutManager: RecyclerView.LayoutManager? = null
     private var navLayoutManager: LinearLayoutManager? = null
@@ -121,23 +186,51 @@ class ChooseFileActivity : AbsBaseActivity() {
             this.adapter = chooseFileNavRvAdapter
         }
 
-        mLayoutManager = LinearLayoutManager(mContext)
-        chooseFileTableRvAdapter = ChooseFileRvAdapter(mContext, MODE_TABLE)
-        chooseFileTableRvAdapter?.listener = ChooseFileRvAdapterListenerImpl()
-        chooseFileListRvAdapter = ChooseFileRvAdapter(mContext, MODE_LIST)
-        chooseFileListRvAdapter?.listener = ChooseFileRvAdapterListenerImpl()
-        base_choose_file_content_rv.apply {
-            this.layoutManager = mLayoutManager
-            this.adapter = chooseFileListRvAdapter
-        }
 
     }
 
     override fun initData() {
+        val bundle = intent?.extras
+        bundle?.let {
+            showType = it.getInt("showType", SHOW_TYPE_DIR)
+            showMode = it.getInt("showMode", MODE_LIST)
+            showTableModeColumn = it.getInt("tableColumn", DEFAULT_TABLE_COLUMNS)
+            maxChooseFileCount = it.getInt("maxChooseFile", DEFAULT_MAX_CHOOSE_FILE_COUNT)
+        }
+
+        initContentRv()
+
         mRootPath = FileUtils.getSDPath()
         addNavBody(mRootPath, getString(R.string.root_directory))
         if (checkHavePermission()) {
             checkQueryType(mRootPath)
+        }
+    }
+
+    private fun initContentRv() {
+        chooseFileTableRvAdapter = ChooseFileRvAdapter(mContext, MODE_TABLE)
+        chooseFileTableRvAdapter?.listener = ChooseFileRvAdapterListenerImpl()
+        chooseFileListRvAdapter = ChooseFileRvAdapter(mContext, MODE_LIST)
+        chooseFileListRvAdapter?.listener = ChooseFileRvAdapterListenerImpl()
+        targetContentType()
+    }
+
+    private fun targetContentType() {
+        when (showMode) {
+            MODE_LIST -> {
+                mLayoutManager = LinearLayoutManager(mContext)
+                base_choose_file_content_rv.apply {
+                    this.layoutManager = mLayoutManager
+                    this.adapter = chooseFileListRvAdapter
+                }
+            }
+            MODE_TABLE -> {
+                mLayoutManager = GridLayoutManager(mContext, showTableModeColumn)
+                base_choose_file_content_rv.apply {
+                    this.layoutManager = mLayoutManager
+                    this.adapter = chooseFileTableRvAdapter
+                }
+            }
         }
     }
 
@@ -173,22 +266,8 @@ class ChooseFileActivity : AbsBaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_choose_file_mode_item -> {
-                var mode = MODE_LIST
-                when (showMode) {
-                    MODE_LIST -> {
-                        mLayoutManager = GridLayoutManager(mContext, 2)
-                        mode = MODE_TABLE
-                        base_choose_file_content_rv.adapter = chooseFileTableRvAdapter
-                    }
-                    MODE_TABLE -> {
-                        mLayoutManager = LinearLayoutManager(mContext)
-                        mode = MODE_LIST
-                        base_choose_file_content_rv.adapter = chooseFileListRvAdapter
-                    }
-                }
-                base_choose_file_content_rv.layoutManager = mLayoutManager
-                showMode = mode
-
+                showMode = if (showMode == MODE_LIST) MODE_TABLE else MODE_LIST
+                targetContentType()
             }
             else -> {
 
@@ -219,10 +298,23 @@ class ChooseFileActivity : AbsBaseActivity() {
         ChooseFileRvAdapter.ChooseFileRvAdapterListener {
         override fun addChoseFile(position: Int, view: View) {
             L.i(TAG, "addChoseFile: $position")
+            if (chooseFileList.size >= maxChooseFileCount) {
+                return
+            }
+            val bean = chooseFileListRvAdapter?.list?.get(position)
+            bean?.let {
+                chooseFileList.add(bean)
+                setChooseFileSize()
+            }
         }
 
         override fun removeChoseFile(position: Int, view: View) {
             L.i(TAG, "removeChoseFile: $position")
+            val bean = chooseFileListRvAdapter?.list?.get(position)
+            bean?.let {
+                chooseFileList.remove(bean)
+                setChooseFileSize()
+            }
         }
 
         override fun showFullImage(position: Int, view: View) {
@@ -246,45 +338,6 @@ class ChooseFileActivity : AbsBaseActivity() {
             }
         }
     }
-//
-//    /**
-//     * 创建弹窗
-//     */
-//    private fun createMorePopupMenu() {
-//        if (mContext == null) {
-//            return
-//        }
-//        val moreMenu = PopupMenu(mContext, base_choose_file_top_btal)
-//        moreMenu.menuInflater.inflate(R.menu.menu_choose_file, moreMenu.menu)
-//        val modeMenuItem = moreMenu.menu.findItem(R.id.menu_choose_file_mode_item)
-//        var modeShowName = mContext.getString(R.string.table_mode)
-//        if (showMode == MODE_LIST) {
-//            modeShowName = mContext.getString(R.string.list_mode)
-//        }
-//        modeMenuItem.setTitle(modeShowName)
-//        moreMenu.setOnMenuItemClickListener {
-//            when (it.itemId) {
-//                R.id.menu_choose_file_mode_item -> {
-//
-//                    when (showMode) {
-//                        MODE_LIST -> {
-//                            mLayoutManager = LinearLayoutManager(mContext)
-//                        }
-//                        MODE_TABLE -> {
-//                            mLayoutManager = GridLayoutManager(mContext, 2)
-//                        }
-//                    }
-//
-//                    base_choose_file_content_rv.layoutManager = mLayoutManager
-//                }
-//                else -> {
-//
-//                }
-//            }
-//            return@setOnMenuItemClickListener true
-//        }
-//        moreMenu.show()
-//    }
 
     /**
      * 添加导航体
@@ -294,8 +347,6 @@ class ChooseFileActivity : AbsBaseActivity() {
         bean.title = fileName
         bean.path = filePath
         chooseFileNavRvAdapter?.addChooseFileNav(bean)
-        navLayoutManager?.stackFromEnd = true
-        base_choose_file_nav_hsv?.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
     }
 
     /**
@@ -325,9 +376,15 @@ class ChooseFileActivity : AbsBaseActivity() {
                             val list = ProviderUtil.queryFileAudioWithContentProvider(mContext)
                             it.onNext(list)
                         }
-                        else -> {
+                        SHOW_TYPE_IMAGE -> {
                             val list = ProviderUtil.queryFileImageWithContextProvider(mContext)
                             it.onNext(list)
+                        }
+                        SHOW_TYPE_VIDEO -> {
+
+                        }
+                        else -> {
+                            it.onError(IllegalArgumentException("no find $showType this's data list"))
                         }
                     }
                 }
@@ -377,6 +434,38 @@ class ChooseFileActivity : AbsBaseActivity() {
         } else {
             return true
         }
+    }
+
+    private fun setChooseFileSize() {
+        Observable
+            .create(
+                ObservableOnSubscribe<Long> {
+                    var totalFileSize = 0L
+                    for (bean in chooseFileList) {
+                        val file = File(bean.filePath)
+                        totalFileSize += file.length()
+                    }
+                    it.onNext(totalFileSize)
+                }
+            )
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.newThread())
+            .subscribe(
+                object : DefaultObserver<Long>() {
+                    override fun onNext(t: Long) {
+
+                    }
+
+                    override fun onError(e: Throwable) {
+
+                    }
+
+                    override fun onComplete() {
+
+                    }
+                }
+            )
+
     }
 
     ///////////////////////////////////////////////////////////////////////////

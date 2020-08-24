@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Space
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.R
@@ -21,6 +22,9 @@ import kotlinx.android.synthetic.main.base_item_choose_file_nav.view.*
 class ChooseFileNavRvAdapter(mContext: Context) :
     AbsBaseRvAdapter<BaseChooseFileNavBean, ChooseFileNavRvAdapter.ChooseFileNavRvHolder>(mContext) {
 
+    private val VIEW_TYPE_ITEM = 0x000E01
+    private val VIEW_TYPE_BACK = 0x000E02
+
     private var blackCsl =
         ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.text_black_base_color))
     private var grayCsl =
@@ -28,25 +32,51 @@ class ChooseFileNavRvAdapter(mContext: Context) :
 
     var listener: ChooseFileNavRvAdapterListener? = null
 
+    override fun getItemCount(): Int {
+        return super.getItemCount() + 1
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        if (position < list.size) {
+            return VIEW_TYPE_ITEM
+        } else {
+            return VIEW_TYPE_BACK
+        }
+    }
+
     override fun onCreateVH(parent: ViewGroup, viewType: Int): ChooseFileNavRvHolder {
-        val view = mLayoutInflater.inflate(R.layout.base_item_choose_file_nav, parent, false)
-        return ChooseFileNavRvHolder(view)
+        when (viewType) {
+            VIEW_TYPE_ITEM -> {
+                val view =
+                    mLayoutInflater.inflate(R.layout.base_item_choose_file_nav, parent, false)
+                return ChooseFileNavItemRvHolder(view)
+            }
+            else -> {
+                return ChooseFileNavBackRvHolder(Space(mContext))
+            }
+        }
     }
 
     override fun onBindVH(holder: ChooseFileNavRvHolder, position: Int) {
-        val bean = list[position]
-        holder.titleNameTv.setText(bean.title)
-        val isLast = position == (list.size - 1)
-        holder.rightArrowIv.visibility = if (isLast) View.GONE else View.VISIBLE
-        holder.titleNameTv.setTextColor(
-            if (isLast)
-                blackCsl
-            else
-                grayCsl
-        )
+        if (holder is ChooseFileNavItemRvHolder) {
+            val bean = list[position]
+            holder.titleNameTv.setText(bean.title)
+            val isLast = position == (list.size - 1)
+            holder.rightArrowIv.visibility = if (isLast) View.GONE else View.VISIBLE
+            holder.titleNameTv.setTextColor(
+                if (isLast)
+                    blackCsl
+                else
+                    grayCsl
+            )
+        }
     }
 
-    open inner class ChooseFileNavRvHolder(itemView: View) : AbsBaseRvViewHolder(itemView),
+    open class ChooseFileNavRvHolder(itemView: View) : AbsBaseRvViewHolder(itemView) {
+
+    }
+
+    open inner class ChooseFileNavItemRvHolder(itemView: View) : ChooseFileNavRvHolder(itemView),
         View.OnClickListener {
         var titleNameTv = itemView.base_item_cfn_tv
         var rightArrowIv = itemView.base_item_cfn_iv
@@ -65,6 +95,11 @@ class ChooseFileNavRvAdapter(mContext: Context) :
             }
         }
     }
+
+    class ChooseFileNavBackRvHolder(itemView: View) : ChooseFileNavRvHolder(itemView) {
+
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////
     // OPEN

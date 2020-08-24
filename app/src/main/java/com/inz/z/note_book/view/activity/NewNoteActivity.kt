@@ -162,10 +162,10 @@ class NewNoteActivity : AbsBaseActivity() {
     private var checkNoteRunnable = object : Runnable {
         override fun run() {
             val noteInfo = NoteInfoController.findById(noteInfoId)
-            L.i(
-                TAG,
-                "noteInfo ${System.currentTimeMillis()} -- ${noteInfo?.noteContent} + {${Thread.currentThread().name}}"
-            )
+//            L.i(
+//                TAG,
+//                "noteInfo ${System.currentTimeMillis()} -- ${noteInfo?.noteContent} + {${Thread.currentThread().name}}"
+//            )
         }
     }
 
