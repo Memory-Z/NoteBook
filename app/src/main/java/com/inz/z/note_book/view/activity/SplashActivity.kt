@@ -85,6 +85,10 @@ class SplashActivity : AbsBaseActivity() {
         isPause = true
     }
 
+    override fun needCheckVersion(): Boolean {
+        return false
+    }
+
     private var time = 5
 
     /**

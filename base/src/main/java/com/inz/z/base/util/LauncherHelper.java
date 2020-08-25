@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 
 import java.io.File;
@@ -130,6 +131,7 @@ public class LauncherHelper {
      * @param applicationId 应用ID  BuildConfig.getApplicationId();
      * @param file          文件
      */
+    @Nullable
     public static Intent installApk(Context context, String applicationId, File file) {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
@@ -138,10 +140,11 @@ public class LauncherHelper {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             try {
-                String authority = applicationId + ".provider";
+                String authority = applicationId + ".baseFileProvider";
                 uri = FileProvider.getUriForFile(context, authority, file);
             } catch (Exception e) {
                 e.printStackTrace();
+                return null;
             }
         } else {
             uri = Uri.fromFile(file);

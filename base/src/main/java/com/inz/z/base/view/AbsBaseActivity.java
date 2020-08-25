@@ -5,6 +5,8 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -13,8 +15,30 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
+import com.alibaba.fastjson.JSONObject;
+import com.inz.z.base.BuildConfig;
+import com.inz.z.base.entity.UpdateVersionBean;
+import com.inz.z.base.util.SPHelper;
+import com.inz.z.base.view.dialog.UpdateVersionDialog;
 import com.qmuiteam.qmui.util.QMUINotchHelper;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DefaultObserver;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.HttpUrl;
 
 /**
  * @author Zhenglj
@@ -73,6 +97,12 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        checkVersion();
     }
 
     @Override
@@ -146,4 +176,126 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
         }
     }
     /* ======================= 判断是否为刘海屏 ======================= */
+
+    /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>> 版本更新 <<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
+
+    /**
+     * 是否需要检测版本更新
+     *
+     * @return 是否需要检测
+     */
+    protected boolean needCheckVersion() {
+        return true;
+    }
+
+    /**
+     * 获取当前版本号
+     *
+     * @return 当前版本号
+     */
+    protected int getCurrentVersionCode() {
+        return BuildConfig.VERSION_CODE;
+    }
+
+    /**
+     * 版本检测更新
+     */
+    private void checkVersion() {
+        boolean isLater = SPHelper.getInstance().isLaterUpdateVersion();
+        if (!needCheckVersion() || isLater) {
+            return;
+        }
+        getLastVersion();
+    }
+
+
+    /**
+     * 获取最新版本
+     */
+    private void getLastVersion() {
+        Observable
+                .create(new ObservableOnSubscribe<UpdateVersionBean>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<UpdateVersionBean> emitter) throws Exception {
+                        String checkVersionUrl = SPHelper.getInstance().getUpdateVersionUrl();
+                        if (TextUtils.isEmpty(checkVersionUrl)) {
+                            emitter.onError(new NullPointerException("check version url is empty. "));
+                        }
+                        BufferedReader reader = null;
+                        StringBuilder sb = new StringBuilder();
+                        try {
+                            URL url = new URL(checkVersionUrl);
+                            URLConnection connection = url.openConnection();
+                            connection.connect();
+                            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                            String lines;
+                            byte[] bytes = new byte[1024];
+                            while ((lines = reader.readLine()) != null) {
+                                sb.append(lines).append("\n");
+                            }
+                            reader.close();
+                        } catch (IOException e) {
+                            emitter.onError(e);
+                        } finally {
+                            if (reader != null) {
+                                try {
+                                    reader.close();
+                                } catch (IOException e) {
+                                    emitter.onError(e);
+                                }
+                            }
+                        }
+                        emitter.onNext(JSONObject.parseObject(sb.toString(), UpdateVersionBean.class));
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DefaultObserver<UpdateVersionBean>() {
+                    @Override
+                    public void onNext(UpdateVersionBean versionBean) {
+                        Log.i("baseActivity", "onNext: data" + versionBean);
+                        if (versionBean != null) {
+                            int curCode = SPHelper.getInstance().getCurrentVersionCode();
+                            Log.i("baseActivity", "checkVersion: versionCode = " + curCode);
+                            int ignoreV = SPHelper.getInstance().ignoreVersionCode();
+                            if (curCode < versionBean.getVersionCode() && versionBean.getVersionCode() != ignoreV) {
+                                for (int ignoreVersion : versionBean.getIgnoreVersion()) {
+                                    if (ignoreVersion == curCode) {
+                                        return;
+                                    }
+                                }
+                                showVersionUpdateDialog(versionBean);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("baseActivity", "getLastVersion: onError: ", e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    /**
+     * 显示新版提示弹窗
+     *
+     * @param versionBean 版本信息
+     */
+    private void showVersionUpdateDialog(UpdateVersionBean versionBean) {
+        if (mContext != null) {
+            FragmentManager fragmentManager = this.getSupportFragmentManager();
+            new UpdateVersionDialog
+                    .Builder(fragmentManager)
+                    .setUpdateVersion(versionBean)
+                    .show();
+        }
+
+    }
+
+    /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>> 版本更新 <<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
 }

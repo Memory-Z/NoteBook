@@ -3,6 +3,7 @@ package com.inz.z.base
 import android.app.Application
 import android.content.Context
 import com.inz.z.base.util.CrashHandler
+import com.inz.z.base.util.SPHelper
 
 /**
  *
@@ -12,4 +13,8 @@ import com.inz.z.base.util.CrashHandler
  */
 open class BaseConfig(var mContext: Context?) {
 
+
+    fun setInitData() {
+        SPHelper.getInstance()
+    }
 }

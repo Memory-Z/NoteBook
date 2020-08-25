@@ -43,6 +43,8 @@
     <color name="card_inverse_color">@color/textColor</color>
     <color name="dialog_color">@color/text_white_base_color</color>
 
+    <color name="danger_color">@color/red</color>
+
 
     <color name="base_image_background_color">#EFEFEF</color>
     <!-- Base Color  -->

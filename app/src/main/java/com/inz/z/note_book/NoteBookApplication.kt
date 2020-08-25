@@ -31,6 +31,9 @@ class NoteBookApplication : Application() {
         CrashHandler.instance(applicationContext, CrashHandlerListenerImpl())
         GreenDaoHelper.getInstance().initGreenDaoHelper(applicationContext)
         SPHelper.init(applicationContext)
+        SPHelper.instance?.saveUpdateVersionUrl(BuildConfig.UPDATE_VERSION_URL)
+        SPHelper.instance?.saveCurrentVersionCode(BuildConfig.VERSION_CODE)
+        SPHelper.instance?.saveLaterUpdateVersion(false)
 
         // 设置生命周期监督
         setActivityLifeCallback()

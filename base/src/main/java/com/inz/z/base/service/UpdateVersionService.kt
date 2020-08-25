@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.IBinder
+import android.os.SystemClock
 import android.text.TextUtils
 import com.inz.z.base.entity.Constants
 import com.inz.z.base.util.L
@@ -34,10 +35,6 @@ class UpdateVersionService : Service() {
 
     companion object {
         private const val TAG = "UpdateVersionService"
-    }
-
-    init {
-        initConstant(applicationContext)
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -68,13 +65,13 @@ class UpdateVersionService : Service() {
         try {
             val componentName = ComponentName(context, UpdateVersionService::class.java)
             val activityInt =
-                context.packageManager.getReceiverInfo(componentName, PackageManager.GET_META_DATA)
+                context.packageManager.getServiceInfo(componentName, PackageManager.GET_META_DATA)
             val applicationIdStr = activityInt.metaData.getString("applicationId")
             if (!TextUtils.isEmpty(applicationIdStr)) {
                 createConstant(applicationIdStr!!)
             }
-        } catch (ignore: Exception) {
-
+        } catch (e: Exception) {
+            L.e(TAG, "initConstant: ", e)
         }
     }
 
@@ -86,18 +83,30 @@ class UpdateVersionService : Service() {
 
 
     private fun startDownload(fileUrl: String) {
-        if (downloadTask == null) {
-            val file = File(LauncherHelper.getCacheDownloadVersionPath(applicationContext))
-            downloadTask = DownloadTask.Builder(fileUrl, file)
-                .setWifiRequired(false)
-                .setAutoCallbackToUIThread(false)
-                .setPassIfAlreadyCompleted(false)
-                .setMinIntervalMillisCallbackProcess(200)
-                .setConnectionCount(10)
-                .build()
-            downloadTask?.execute(OkDownloadSpeedListenerImpl())
-        } else {
-            L.w(TAG, "startDownload: task is downloading. ")
+        initConstant(applicationContext)
+        DownloadTaskThread(fileUrl, SystemClock.currentThreadTimeMillis().toString()).start()
+    }
+
+    /**
+     * 任务线程
+     */
+    private inner class DownloadTaskThread(val fileUrl: String, threadName: String) :
+        Thread(threadName) {
+        override fun run() {
+            super.run()
+            if (downloadTask == null) {
+                val file = File(LauncherHelper.getCacheDownloadVersionPath(applicationContext))
+                downloadTask = DownloadTask.Builder(fileUrl, file)
+                    .setWifiRequired(false)
+                    .setAutoCallbackToUIThread(false)
+                    .setPassIfAlreadyCompleted(false)
+                    .setMinIntervalMillisCallbackProcess(100)
+                    .setConnectionCount(1)
+                    .build()
+                downloadTask?.execute(OkDownloadSpeedListenerImpl())
+            } else {
+                L.w(TAG, "startDownload: task is downloading. ")
+            }
         }
     }
 
@@ -131,6 +140,7 @@ class UpdateVersionService : Service() {
             realCause: Exception?,
             taskSpeed: SpeedCalculator
         ) {
+            L.i(TAG, "OkDownloadSpeedListenerImpl > taskEnd: $cause -- $realCause")
             val downloadSuccess = cause == EndCause.COMPLETED
             val failureMessage = realCause?.message ?: ""
             val filePath = task.file?.absolutePath ?: ""
@@ -138,6 +148,7 @@ class UpdateVersionService : Service() {
         }
 
         override fun progress(task: DownloadTask, currentOffset: Long, taskSpeed: SpeedCalculator) {
+            L.i(TAG, "OkDownloadSpeedListenerImpl > progress: $currentOffset")
             sendProgressBroadcast(currentOffset, totalProgress, task.url)
         }
 

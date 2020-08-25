@@ -52,7 +52,10 @@ class Constants(val applicationId: String) {
 
         const val VERSION_NOTIFICATION_ID = 0x000FFF00
 
+        /**
+         * 最大显示更新提示次数
+         */
+        const val MAX_SHOW_UPDATE_NUMBER = 3
     }
-
 
 }

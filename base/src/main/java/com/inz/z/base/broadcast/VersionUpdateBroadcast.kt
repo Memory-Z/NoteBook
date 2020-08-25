@@ -25,10 +25,22 @@ public class VersionUpdateBroadcast : BroadcastReceiver() {
 
     companion object {
         private const val TAG = "VersionUpdateBroadcast"
+        private val listenerList = mutableListOf<VersionUpdateBroadcastListener>()
+
+        fun addListener(listener: VersionUpdateBroadcastListener) {
+            if (!listenerList.contains(listener)) {
+                listenerList.add(listener)
+            }
+        }
+
+        fun removeListener(listener: VersionUpdateBroadcastListener) {
+            if (listenerList.contains(listener)) {
+                listenerList.remove(listener)
+            }
+        }
     }
 
     private var mConstants: Constants? = null
-    private val listenerList = mutableListOf<VersionUpdateBroadcastListener>()
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context == null || intent == null) {
@@ -54,6 +66,7 @@ public class VersionUpdateBroadcast : BroadcastReceiver() {
                     val fileProgress =
                         it.getLong(Constants.VersionUpdate.VERSION_UPDATE_PROGRESS, 0L)
                     val fileTotal = it.getLong(Constants.VersionUpdate.VERSION_UPDATE_TOTAL, 0L)
+                    L.i(TAG, "downloading : $fileProgress - $fileTotal - $appFilePath - $appUrl")
                     if (downloadSuccess || downloadFailure) {
                         if (downloadSuccess) {
                             for (listener in listenerList) {
@@ -187,15 +200,5 @@ public class VersionUpdateBroadcast : BroadcastReceiver() {
         fun installDownloadFile(filePath: String)
     }
 
-    public fun addListener(listener: VersionUpdateBroadcastListener) {
-        if (!listenerList.contains(listener)) {
-            listenerList.add(listener)
-        }
-    }
 
-    public fun removeListener(listener: VersionUpdateBroadcastListener) {
-        if (listenerList.contains(listener)) {
-            listenerList.remove(listener)
-        }
-    }
 }

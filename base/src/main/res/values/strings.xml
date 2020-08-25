@@ -25,6 +25,17 @@
     <string name="_update_background">Background Update</string>
     <string name="base_text_format">文本</string>
     <string name="version_update_service">版本更新服务</string>
+    <string name="version_update">版本更新</string>
+    <string name="_update">更新</string>
+    <string name="_later_notification">稍后提醒</string>
+    <string name="_download">下载</string>
+    <string name="_now_install">立即安装</string>
+    <string name="_install">安装</string>
+    <string name="have_new_version_usable">有新版本可用</string>
+    <string name="new_version_name_format">新版本：%s </string>
+    <string name="_retry">重试</string>
+    <string name="ignore_current_version">不再提示</string>
+    <string name="you_can_check_new_version_in_setting">可以在“设置-检查更新”进行更新版本</string>
 
     <string name="list_mode">列表模式</string>
     <string name="table_mode">表格模式</string>
