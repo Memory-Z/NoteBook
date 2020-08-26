@@ -14,6 +14,10 @@ import com.inz.z.base.view.widget.BaseScrollView;
 import com.inz.z.base.view.widget.DotView;
 import com.inz.z.base.view.widget.WaveView;
 import com.inz.z.note_book.R;
+import com.inz.z.note_book.view.widget.CountDownProgressView;
+
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * @author Zhenglj
@@ -22,6 +26,7 @@ import com.inz.z.note_book.R;
  */
 public class TestCalendarActivity extends AbsBaseActivity {
     private static final String TAG = "TestCalendarActivity";
+
     @Override
     protected void initWindow() {
 
@@ -70,6 +75,10 @@ public class TestCalendarActivity extends AbsBaseActivity {
 //            linearLayout.removeView(outView);
 //        }
 //        baseScrollView.setContentView(outView);
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + 1);
+        CountDownProgressView pv = findViewById(R.id.test_calendar_countdown_pv);
+        pv.start(CountDownProgressView.MODE_COUNT_TIME_FIXED, calendar.getTimeInMillis());
     }
 
     @Override

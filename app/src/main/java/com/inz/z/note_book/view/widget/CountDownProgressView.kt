@@ -11,6 +11,7 @@ import androidx.annotation.IntDef
 import androidx.appcompat.widget.TintTypedArray
 import com.inz.z.note_book.R
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.math.min
 
 /**
  * 倒计时 进度
@@ -27,7 +28,7 @@ class CountDownProgressView : View {
         const val MODE_COUNT_TIME_FIXED = 0x00EEAA02
 
         private const val TIME_BASE_FORMAT = "%d.%02d"
-        private const val TIME_MINUTE_FORMAT = "%d:%d.%02d"
+        private const val TIME_MINUTE_FORMAT = "%d:%02d.%02d"
 
         private const val TIME_MODEL_TEXT = "0000:00.000"
 
@@ -140,9 +141,9 @@ class CountDownProgressView : View {
      */
     private fun calibrationFixDifTime() {
         val currentDateTime = System.currentTimeMillis()
-        val dif = fixedTime - currentDateTime
+        val dif = (fixedTime - currentDateTime) / 1000F
         if (dif > 0) {
-            currentTime = dif.toFloat()
+            currentTime = dif
         }
     }
 
@@ -272,7 +273,7 @@ class CountDownProgressView : View {
             return TIME_BASE_FORMAT.format(secondTime, millTime)
         } else {
             val mins = secondTime / 60
-            val seconds = secondTime % 60
+            val seconds = secondTime - mins * 60
             return TIME_MINUTE_FORMAT.format(mins, seconds, millTime)
         }
     }
@@ -351,7 +352,7 @@ class CountDownProgressView : View {
     /**
      * 开始
      */
-    fun start(){
+    fun start() {
         startState.set(true)
         invalidate()
     }

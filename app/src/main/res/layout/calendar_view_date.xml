@@ -341,6 +341,7 @@
     <!--        android:layout_height="match_parent" />-->
 
     <com.inz.z.note_book.view.widget.CountDownProgressView
+        android:id="@+id/test_calendar_countdown_pv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/margin_text"
