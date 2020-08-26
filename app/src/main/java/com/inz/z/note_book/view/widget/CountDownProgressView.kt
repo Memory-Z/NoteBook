@@ -29,10 +29,11 @@ class CountDownProgressView : View {
 
         private const val TIME_BASE_FORMAT = "%d.%02d"
         private const val TIME_MINUTE_FORMAT = "%d:%02d.%02d"
+        private const val TIME_HOUR_FORMAT = "%d:%02d:%02d.%02d"
 
-        private const val TIME_MODEL_TEXT = "0000:00.000"
+        private const val TIME_MODEL_TEXT = "0000:00:00.00"
 
-        private const val MAX_SHOW_SECOND = 60 * 60
+        private const val MAX_SHOW_SECOND = 60
 
 
         var progressColor: Int = Color.GREEN
@@ -272,9 +273,15 @@ class CountDownProgressView : View {
         if (secondTime < MAX_SHOW_SECOND) {
             return TIME_BASE_FORMAT.format(secondTime, millTime)
         } else {
-            val mins = secondTime / 60
+            var mins = secondTime / 60
             val seconds = secondTime - mins * 60
-            return TIME_MINUTE_FORMAT.format(mins, seconds, millTime)
+            if (mins <= MAX_SHOW_SECOND) {
+                return TIME_MINUTE_FORMAT.format(mins, seconds, millTime)
+            } else {
+                val hour = mins / 60
+                mins = mins - hour * 60
+                return TIME_HOUR_FORMAT.format(hour, mins, seconds, millTime)
+            }
         }
     }
 
