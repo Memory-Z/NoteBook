@@ -17,4 +17,11 @@
         <attr name="niv_border_width_size" format="dimension" />
         <attr name="niv_border_visibility" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="CountDownProgressView">
+        <attr name="countdown_background_color" format="color" />
+        <attr name="countdown_progress_color" format="color" />
+        <attr name="countdown_progress_width" format="dimension" />
+        <attr name="countdown_text_color" format="color" />
+    </declare-styleable>
 </resources>
