@@ -11,7 +11,6 @@ import androidx.annotation.IntDef
 import androidx.appcompat.widget.TintTypedArray
 import com.inz.z.note_book.R
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.math.min
 
 /**
  * 倒计时 进度
@@ -19,9 +18,7 @@ import kotlin.math.min
  * @version 1.0.0
  * Create by inz in 2020/08/26 09:03.
  */
-class CountDownProgressView : View {
-
-    private val TAG = "CountDownProgressView"
+class CountdownRingView : View {
 
     companion object {
         const val MODE_COUNT_TIME_SECOND = 0x00EEAA01
@@ -100,22 +97,22 @@ class CountDownProgressView : View {
         val array = TintTypedArray.obtainStyledAttributes(
             mContext,
             attrs,
-            R.styleable.CountDownProgressView,
+            R.styleable.CountdownRingView,
             0,
             0
         )
         backgroundColor = array.getColor(
-            R.styleable.CountDownProgressView_countdown_background_color,
+            R.styleable.CountdownRingView_countdown_background_color,
             Color.LTGRAY
         )
         progressColor =
-            array.getColor(R.styleable.CountDownProgressView_countdown_progress_color, Color.GREEN)
+            array.getColor(R.styleable.CountdownRingView_countdown_progress_color, Color.GREEN)
         progressWidth = array.getDimensionPixelOffset(
-            R.styleable.CountDownProgressView_countdown_progress_width,
+            R.styleable.CountdownRingView_countdown_progress_width,
             20
         )
         countdownTextColor =
-            array.getColor(R.styleable.CountDownProgressView_countdown_text_color, Color.BLACK)
+            array.getColor(R.styleable.CountdownRingView_countdown_text_color, Color.BLACK)
 
         array.recycle()
 
@@ -242,9 +239,6 @@ class CountDownProgressView : View {
         countdownTextPaint.color = countdownTextColor
         val metricsInt = countdownTextPaint.fontMetricsInt
         val cY = centerY - (metricsInt.top + metricsInt.bottom) / 2
-//        canvas.drawLine(0F, cY, size + centerX, cY, progressPaint)
-//        canvas.drawLine(0F, centerY, size + centerX, centerY, progressPaint)
-//        canvas.drawLine(centerX, 0F, centerX, centerY + size, progressPaint)
         canvas.drawText(timeStr, centerX, cY, countdownTextPaint)
     }
 

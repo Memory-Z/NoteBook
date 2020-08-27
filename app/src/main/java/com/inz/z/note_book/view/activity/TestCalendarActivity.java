@@ -1,20 +1,8 @@
 package com.inz.z.note_book.view.activity;
 
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
-
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import com.inz.z.base.util.L;
 import com.inz.z.base.view.AbsBaseActivity;
-import com.inz.z.base.view.widget.BaseScrollView;
-import com.inz.z.base.view.widget.DotView;
-import com.inz.z.base.view.widget.WaveView;
 import com.inz.z.note_book.R;
-import com.inz.z.note_book.view.widget.CountDownProgressView;
+import com.inz.z.note_book.view.widget.CountdownRingView;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -77,8 +65,8 @@ public class TestCalendarActivity extends AbsBaseActivity {
 //        baseScrollView.setContentView(outView);
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + 1);
-        CountDownProgressView pv = findViewById(R.id.test_calendar_countdown_pv);
-        pv.start(CountDownProgressView.MODE_COUNT_TIME_FIXED, calendar.getTimeInMillis());
+        CountdownRingView pv = findViewById(R.id.test_calendar_countdown_pv);
+        pv.start(CountdownRingView.MODE_COUNT_TIME_FIXED, calendar.getTimeInMillis());
     }
 
     @Override
