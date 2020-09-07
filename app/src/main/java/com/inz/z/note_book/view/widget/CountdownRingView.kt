@@ -59,6 +59,11 @@ class CountdownRingView : View {
     private var fixedTime = 0L
 
     /**
+     * 固定开始时间
+     */
+    private var fixedStartTime = 100L
+
+    /**
      * 开始状态 ： 默认未开始
      */
     private val startState = AtomicBoolean(false)
@@ -214,7 +219,7 @@ class CountdownRingView : View {
             it.drawCircle(centerX, centerY, size - progressWidth / 2F, backgroundPaint)
 
             if (countdownTime > 0) {
-                val sweepAngle = currentTime * 360F / countdownTime
+                val sweepAngle = getProgressAngle()
                 if (sweepAngle > 0) {
                     progressPaint.strokeWidth = progressWidth.toFloat()
                     progressPaint.color = progressColor
@@ -228,6 +233,23 @@ class CountdownRingView : View {
                 return
             }
             progressHandler.sendEmptyMessageDelayed(HANDLER_COUNT_DOWN_START, 10)
+        }
+    }
+
+    /**
+     * 获取进度条旋转角度
+     */
+    private fun getProgressAngle(): Float {
+        when (countdownMode) {
+            MODE_COUNT_TIME_SECOND -> {
+                return currentTime * 360F / countdownTime
+            }
+            MODE_COUNT_TIME_FIXED -> {
+                return currentTime * 360F / fixedStartTime
+            }
+            else -> {
+                return 360F
+            }
         }
     }
 
@@ -343,6 +365,7 @@ class CountdownRingView : View {
             }
             MODE_COUNT_TIME_FIXED -> {
                 fixedTime = time
+                fixedStartTime = (time - System.currentTimeMillis()) / 1000L
                 calibrationFixDifTime()
             }
         }

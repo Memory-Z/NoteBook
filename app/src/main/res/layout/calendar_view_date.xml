@@ -345,8 +345,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/margin_text"
-        app:countdown_background_color="@color/text_white_70_color"
-        app:countdown_text_color="@color/colorPrimary"
-        app:countdown_progress_color="@color/blanchedalmond" />
+        app:countdown_background_color="@color/text_black_20_color"
+        app:countdown_progress_color="@color/blanchedalmond"
+        app:countdown_text_color="@color/colorPrimary" />
+
+    <!--    <com.inz.z.note_book.view.widget.CountdownTableView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent" />-->
 
 </LinearLayout>

@@ -64,7 +64,12 @@ public class TestCalendarActivity extends AbsBaseActivity {
 //        }
 //        baseScrollView.setContentView(outView);
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
-        calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + 1);
+//        calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 18);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
         CountdownRingView pv = findViewById(R.id.test_calendar_countdown_pv);
         pv.start(CountdownRingView.MODE_COUNT_TIME_FIXED, calendar.getTimeInMillis());
     }
