@@ -11,7 +11,6 @@ import com.inz.z.note_book.BuildConfig
 import com.inz.z.note_book.R
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import kotlinx.android.synthetic.main.setting_layout.*
-import java.io.File
 
 /**
  * 设置界面
@@ -53,6 +52,8 @@ class SettingActivity : AbsBaseActivity() {
         }
         setting_info_version_name_tv.text = BuildConfig.VERSION_NAME
         setting_info_version_bnl.setOnClickListener {
+            // get last version and update.
+            getLastVersion()
             Toast.makeText(
                 mContext,
                 getString(R.string.check_app_version_update),
@@ -64,6 +65,17 @@ class SettingActivity : AbsBaseActivity() {
 
     override fun initData() {
         getCacheSize()
+    }
+
+    override fun showLastVersionToast() {
+        super.showLastVersionToast()
+        if (mContext != null) {
+            Toast.makeText(
+                mContext,
+                mContext.getString(com.inz.z.base.R.string.current_version_is_laseted),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun getCacheSize() {

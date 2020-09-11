@@ -54,7 +54,6 @@ class MainActivity : BaseNoteActivity() {
     }
 
     override fun initView() {
-        QMUIStatusBarHelper.setStatusBarLightMode(this)
         L.i(TAG, "initView: ")
         drawerLayout = main_note_drawer_layout
         initLeftNavView()
@@ -121,6 +120,7 @@ class MainActivity : BaseNoteActivity() {
         mln_0_bnl.setOnClickListener(leftMenuViewClickLisntener)
         mln_1_bnl.setOnClickListener(leftMenuViewClickLisntener)
         mln_2_bnl.setOnClickListener(leftMenuViewClickLisntener)
+        mln_3_bnl.setOnClickListener(leftMenuViewClickLisntener)
     }
 
     /**
@@ -236,6 +236,9 @@ class MainActivity : BaseNoteActivity() {
                 }
                 R.id.mln_2_bnl -> {
                     targetMainFragment(ContentViewType.APPLICATION)
+                }
+                R.id.mln_3_bnl -> {
+                    startActivity(Intent(mContext, RecordActivity::class.java))
                 }
                 else -> {
                     L.w(TAG, "LeftMenuViewClickLisntenerImpl: onClick -> not find click view. ")

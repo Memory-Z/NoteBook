@@ -36,7 +36,8 @@ class GreenDaoOpenHelper : DaoMaster.OpenHelper {
                     NoteInfoDao::class.java,
                     OperationLogInfoDao::class.java,
                     TaskInfoDao::class.java,
-                    TaskScheduleDao::class.java
+                    TaskScheduleDao::class.java,
+                    RecordInfoDao::class.java
                 )
         }
     }

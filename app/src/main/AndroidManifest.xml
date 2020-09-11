@@ -18,6 +18,7 @@
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
         <activity android:name=".view.activity.TestViewActivity" />
+        <!-- 测试界面 -->
         <activity
             android:name=".view.activity.TestCalendarActivity"
             android:configChanges="screenSize|screenLayout|keyboardHidden|orientation"
@@ -30,12 +31,13 @@
             <!--                <category android:name="android.intent.category.LAUNCHER" />-->
             <!--            </intent-filter>-->
         </activity>
+        <!-- 主页 -->
         <activity
             android:name=".view.activity.MainActivity"
             android:configChanges="keyboardHidden|screenLayout|screenSize|orientation"
             android:windowSoftInputMode="adjustNothing" />
 
-
+        <!-- 闪屏界面 -->
         <activity
             android:name=".view.activity.SplashActivity"
             android:configChanges="screenSize|screenLayout|keyboardHidden|orientation">
@@ -93,6 +95,21 @@
             android:name=".view.activity.CustomRepeatDateActitity"
             android:configChanges="screenLayout|screenSize|keyboardHidden"
             android:screenOrientation="fullSensor" />
+
+        <!-- 新记录 -->
+        <activity
+            android:name=".view.activity.NewRecordActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoteBookAppTheme.Transparent"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- 记录列表 -->
+        <activity
+            android:name=".view.activity.RecordActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoteBookAppTheme.Transparent" />
 
         <!-- 通知服务 -->
         <service

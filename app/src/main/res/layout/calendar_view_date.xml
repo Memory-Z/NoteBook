@@ -352,5 +352,34 @@
     <!--    <com.inz.z.note_book.view.widget.CountdownTableView-->
     <!--        android:layout_width="match_parent"-->
     <!--        android:layout_height="match_parent" />-->
+    <com.inz.z.note_book.view.widget.TreeLineView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/touch_target_size"
+        android:layout_marginTop="@dimen/margin_layout"
+        android:background="@color/gray_50_color"
+        app:tree_line_color="@color/red"
+        app:tree_line_have_child="true"
+        app:tree_line_have_parent="false"
+        app:tree_line_level="1" />
+
+    <com.inz.z.note_book.view.widget.TreeLineView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/touch_target_size"
+        android:background="@color/gray_50_color"
+        app:tree_line_color="@color/red"
+        app:tree_line_have_child="false"
+        app:tree_line_have_next="true"
+        app:tree_line_have_parent="true"
+        app:tree_line_level="2" />
+
+    <com.inz.z.note_book.view.widget.TreeLineView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/touch_target_size"
+        android:background="@color/gray_50_color"
+        app:tree_line_color="@color/red"
+        app:tree_line_have_child="false"
+        app:tree_line_have_next="true"
+        app:tree_line_have_parent="true"
+        app:tree_line_level="3" />
 
 </LinearLayout>

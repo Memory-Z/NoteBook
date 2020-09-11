@@ -36,6 +36,8 @@
     <string name="_retry">重试</string>
     <string name="ignore_current_version">不再提示</string>
     <string name="you_can_check_new_version_in_setting">可以在“设置-检查更新”进行更新版本</string>
+    <string name="current_version_is_laseted">当前版本已是最新的</string>
+    <string name="have_not_new_version_to_update">无可用版本</string>
 
     <string name="list_mode">列表模式</string>
     <string name="table_mode">表格模式</string>

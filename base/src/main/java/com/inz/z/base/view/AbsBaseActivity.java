@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.alibaba.fastjson.JSONObject;
 import com.inz.z.base.BuildConfig;
+import com.inz.z.base.R;
 import com.inz.z.base.entity.UpdateVersionBean;
 import com.inz.z.base.util.SPHelper;
 import com.inz.z.base.view.dialog.UpdateVersionDialog;
@@ -208,11 +210,15 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
         getLastVersion();
     }
 
+    protected void showLastVersionToast() {
+
+    }
+
 
     /**
      * 获取最新版本
      */
-    private void getLastVersion() {
+    protected void getLastVersion() {
         Observable
                 .create(new ObservableOnSubscribe<UpdateVersionBean>() {
                     @Override
@@ -245,7 +251,14 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
                                 }
                             }
                         }
-                        emitter.onNext(JSONObject.parseObject(sb.toString(), UpdateVersionBean.class));
+                        UpdateVersionBean bean = JSONObject.parseObject(sb.toString(), UpdateVersionBean.class);
+                        if (emitter != null) {
+                            if (bean != null) {
+                                emitter.onNext(bean);
+                            } else {
+                                emitter.onError(new IllegalArgumentException("get version describe failure. "));
+                            }
+                        }
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -261,10 +274,13 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
                             if (curCode < versionBean.getVersionCode() && versionBean.getVersionCode() != ignoreV) {
                                 for (int ignoreVersion : versionBean.getIgnoreVersion()) {
                                     if (ignoreVersion == curCode) {
+                                        showLastVersionToast();
                                         return;
                                     }
                                 }
                                 showVersionUpdateDialog(versionBean);
+                            } else {
+                                showLastVersionToast();
                             }
                         }
                     }
@@ -298,4 +314,16 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
     }
 
     /* >>>>>>>>>>>>>>>>>>>>>>>>>>>>> 版本更新 <<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
+
+    /**
+     * 显示提示
+     *
+     * @param message 提示内容
+     */
+    protected void showToast(String message) {
+        if (mContext != null) {
+            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+        }
+
+    }
 }

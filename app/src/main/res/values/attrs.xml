@@ -24,4 +24,13 @@
         <attr name="countdown_progress_width" format="dimension" />
         <attr name="countdown_text_color" format="color" />
     </declare-styleable>
+
+    <declare-styleable name="TreeLineView">
+        <attr name="tree_line_level" format="integer" />
+        <attr name="tree_line_have_child" format="boolean" />
+        <attr name="tree_line_have_parent" format="boolean" />
+        <attr name="tree_line_have_next" format="boolean" />
+        <attr name="tree_line_unit_width" format="dimension" />
+        <attr name="tree_line_color" format="color" />
+    </declare-styleable>
 </resources>
