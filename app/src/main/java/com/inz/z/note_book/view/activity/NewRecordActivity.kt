@@ -56,6 +56,9 @@ class NewRecordActivity : BaseNoteActivity() {
         }
         val calendar = Calendar.getInstance(Locale.getDefault())
         initRecordInfo(calendar)
+        new_record_content_et?.setText(recordInfo?.recordContent ?: "")
+        new_record_content_title_et?.setText(recordInfo?.recordTitle ?: "")
+
         new_record_time_content_title_tv?.text = BaseTools.getBaseDateFormat().format(calendar.time)
     }
 
