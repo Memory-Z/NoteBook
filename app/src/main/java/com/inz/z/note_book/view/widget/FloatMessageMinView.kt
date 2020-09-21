@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.widget.TintTypedArray
 import androidx.core.view.LayoutInflaterCompat
 import com.inz.z.note_book.R
+import kotlinx.android.synthetic.main.float_view_message_min.view.*
 
 /**
  *
@@ -60,7 +61,9 @@ class FloatMessageMinView : LinearLayout {
         if (mView == null) {
             mView =
                 LayoutInflater.from(mContext).inflate(R.layout.float_view_message_min, this, true)
-
+            float_message_min_iv.setOnClickListener {
+                floatMessageMinViewListener?.onImageClick(it)
+            }
         }
     }
 

@@ -202,8 +202,22 @@ class FloatMessageViewService : Service() {
             distanceX: Float,
             distanceY: Float
         ): Boolean {
-            val dx = ((e2?.rawX ?: 0F) - lastX).toInt()
-            val dy = ((e2?.rawY ?: 0F) - lastY).toInt()
+            var dx = ((e2?.rawX ?: 0F) - lastX).toInt()
+            var dy = ((e2?.rawY ?: 0F) - lastY).toInt()
+            if (Math.abs(dy) > mView.height) {
+                if (dy > 0) {
+                    dy -= mView.height
+                } else {
+                    dy += mView.height
+                }
+            }
+            if (Math.abs(dx) > mView.width) {
+                if (dx > 0) {
+                    dx -= mView.width
+                } else {
+                    dx += mView.width
+                }
+            }
             mParams.apply {
                 this.x = (paramsX + dx)
                 this.y = (paramsY + dy)
@@ -263,10 +277,10 @@ class FloatMessageViewService : Service() {
         }
     }
 
-    private class FloatMessageMinViewListenerImpl :
+    private inner class FloatMessageMinViewListenerImpl :
         FloatMessageMinView.FloatMessageMinViewListener {
         override fun onImageClick(v: View?) {
-
+            targetFloatView(false)
         }
     }
 

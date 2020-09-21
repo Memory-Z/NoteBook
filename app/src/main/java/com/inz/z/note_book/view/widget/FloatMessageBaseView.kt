@@ -8,6 +8,8 @@ import android.view.View
 import androidx.appcompat.widget.TintTypedArray
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.inz.z.note_book.R
+import kotlinx.android.synthetic.main.float_view_message_base.view.*
+import java.util.*
 
 /**
  *
@@ -55,10 +57,19 @@ class FloatMessageBaseView : ConstraintLayout {
         if (mView == null) {
             mView =
                 LayoutInflater.from(mContext).inflate(R.layout.float_view_message_base, this, true)
+            val calendar = Calendar.getInstance(Locale.getDefault())
+            calendar[Calendar.HOUR_OF_DAY] = 18
+            calendar[Calendar.MINUTE] = 0
+            calendar[Calendar.SECOND] = 0
+            calendar[Calendar.MILLISECOND] = 0
+            float_message_base_crv.start(
+                CountdownRingView.MODE_COUNT_TIME_FIXED,
+                calendar.timeInMillis
+            )
         }
     }
 
-    interface FloatMessageBaseViewListener{
+    interface FloatMessageBaseViewListener {
 
     }
 
