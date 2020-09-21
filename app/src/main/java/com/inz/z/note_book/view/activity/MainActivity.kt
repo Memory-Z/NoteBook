@@ -1,19 +1,26 @@
 package com.inz.z.note_book.view.activity
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.widget.PopupMenu
 import androidx.annotation.NonNull
 import androidx.appcompat.widget.SearchView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
+import com.inz.z.note_book.service.FloatMessageViewService
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.fragment.LauncherApplicationFragment
 import com.inz.z.note_book.view.fragment.NoteNavFragment
-import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.android.synthetic.main.main_left_nav_layout.*
 import kotlinx.android.synthetic.main.top_search_nav_layout.*
@@ -90,7 +97,11 @@ class MainActivity : BaseNoteActivity() {
     }
 
     override fun initData() {
+        checkPermission()
+    }
 
+    override fun needCheckVersion(): Boolean {
+        return false
     }
 
     /**
@@ -247,5 +258,26 @@ class MainActivity : BaseNoteActivity() {
         }
     }
 
+    private fun checkPermission() {
+        
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(mContext)) {
+                val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+                intent.data = Uri.parse("package:" + packageName)
+                startActivityForResult(intent, 0x00F)
+            } else {
+                startService(Intent(mContext, FloatMessageViewService::class.java))
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0x00F) {
+            if (resultCode == RESULT_OK) {
+                startService(Intent(mContext, FloatMessageViewService::class.java))
+            }
+        }
+    }
 
 }

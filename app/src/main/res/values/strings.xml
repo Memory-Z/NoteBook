@@ -84,5 +84,8 @@
     <string name="please_input_record_title">请输入记录标题</string>
     <string name="record_info_have_change_do_exit">记录信息有变化，是否退出？</string>
 
+    <string name="search_record_content">查询记录</string>
+    <string name="please_input_record_title_time">请输入记录标题、时间</string>
+
 
 </resources>

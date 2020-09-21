@@ -2,6 +2,7 @@ package com.inz.z.note_book.database.controller
 
 import com.inz.z.note_book.database.RecordInfoDao
 import com.inz.z.note_book.database.bean.RecordInfo
+import com.inz.z.note_book.database.bean.SearchContentInfo
 import com.inz.z.note_book.database.util.GreenDaoHelper
 
 /**
@@ -78,6 +79,16 @@ object RecordInfoController {
     }
 
     /**
+     * 获取存储 记录数据量
+     */
+    fun findAllCount(): Int {
+        getRecordInfoDao()?.apply {
+            return this.queryBuilder().list().size
+        }
+        return 0
+    }
+
+    /**
      * 通过时间串查询
      */
     fun queryByTime(timeStr: String): MutableList<RecordInfo>? {
@@ -90,6 +101,33 @@ object RecordInfoController {
                     )
                 }
                 .orderDesc(RecordInfoDao.Properties.RecordDate)
+                .list()
+        }
+        return null
+    }
+
+    /**
+     * 获取搜索 结果列表
+     * @param content 内容
+     * @param limit 个数
+     */
+    fun querySearchList(content: String, limit: Int): MutableList<RecordInfo>? {
+        getRecordInfoDao()?.apply {
+            val searchContentInfo = SearchContentInfoController.getSearchContentReal(
+                content,
+                SearchContentInfo.SEARCH_TYPE_RECORD
+            )
+            SearchContentInfoController.insertSearchContent(searchContentInfo)
+            val queryBuilder = this.queryBuilder()
+            return queryBuilder
+                .where(
+                    queryBuilder.or(
+                        RecordInfoDao.Properties.RecordTitle.like(content),
+                        RecordInfoDao.Properties.RecordContent.like(content)
+                    )
+                )
+                .orderDesc(RecordInfoDao.Properties.RecordDate)
+                .limit(limit)
                 .list()
         }
         return null

@@ -1,15 +1,13 @@
 package com.inz.z.note_book.viewmodel
 
-import androidx.lifecycle.LiveData
+import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.inz.z.base.util.BaseTools
 import com.inz.z.note_book.bean.record.RecordInfoStatus
 import com.inz.z.note_book.database.bean.RecordInfo
 import com.inz.z.note_book.database.controller.RecordInfoController
-import freemarker.core.StringArraySequence
 import java.util.*
-import kotlin.Comparator
 
 /**
  *
@@ -22,12 +20,17 @@ class RecordViewModel : ViewModel() {
     private var recordInfoList: MutableLiveData<MutableList<RecordInfoStatus>>? = null
 
     /**
+     * 记录列表数量
+     */
+    private var recordListSizeLiveData: MutableLiveData<Int>? = null
+
+    /**
      * 获取记录列表
      */
     fun getRecordInfoList(): MutableLiveData<MutableList<RecordInfoStatus>> {
         if (recordInfoList == null) {
             recordInfoList = MutableLiveData()
-            queryRecordList()
+            queryRecordList("")
         }
         return recordInfoList!!
     }
@@ -69,14 +72,24 @@ class RecordViewModel : ViewModel() {
      * 刷新
      */
     fun refreshRecordList() {
-        queryRecordList()
+        queryRecordList("")
     }
 
     /**
      * 查询记录列表
      */
-    private fun queryRecordList() {
-        val list = RecordInfoController.findAll()
+    fun queryRecordList(searchContent: String) {
+        var list: MutableList<RecordInfo>? = null
+        if (TextUtils.isEmpty(searchContent)) {
+            list = RecordInfoController.findAll()
+        } else {
+            list = RecordInfoController.querySearchList(searchContent, 10)
+        }
+        resetRecordList(list)
+    }
+
+    private fun resetRecordList(list: MutableList<RecordInfo>?) {
+        recordListSizeLiveData?.postValue(if (list == null) 0 else list.size)
         if (list != null && list.size > 0) {
             setRecordInfoList(list)
         }
@@ -97,4 +110,14 @@ class RecordViewModel : ViewModel() {
         }
     }
 
+    /**
+     * 获取记录数量
+     */
+    fun getRecordInfoListSize(): MutableLiveData<Int> {
+        if (recordListSizeLiveData == null) {
+            recordListSizeLiveData = MutableLiveData(0)
+            queryRecordList("")
+        }
+        return recordListSizeLiveData!!
+    }
 }

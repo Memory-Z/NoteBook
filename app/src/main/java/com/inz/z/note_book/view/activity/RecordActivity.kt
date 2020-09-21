@@ -6,9 +6,13 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.inz.z.base.util.L
 import com.inz.z.note_book.R
+import com.inz.z.note_book.database.controller.RecordInfoController
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.activity.adapter.RecordListRvAdapter
+import com.inz.z.note_book.view.dialog.RecordSearchDialog
+import com.inz.z.note_book.view.dialog.SearchDialog
 import com.inz.z.note_book.viewmodel.RecordViewModel
 import kotlinx.android.synthetic.main.activity_record.*
 
@@ -55,6 +59,10 @@ class RecordActivity : BaseNoteActivity() {
         record_content_srl?.setOnRefreshListener {
             recordViewModel?.refreshRecordList()
         }
+
+        record_top_search_rl?.setOnClickListener {
+            showRecordSearchDialog()
+        }
     }
 
     override fun initData() {
@@ -79,6 +87,12 @@ class RecordActivity : BaseNoteActivity() {
                 recordListRvAdapter?.refreshData(it)
             }
         )
+        recordViewModel?.getRecordInfoListSize()?.observe(
+            this,
+            Observer {
+                record_content_srl?.isRefreshing = false
+            }
+        )
     }
 
     inner class RecordListRvAdapterListenerImpl : RecordListRvAdapter.RecordListRvAdapterListener {
@@ -93,4 +107,36 @@ class RecordActivity : BaseNoteActivity() {
             }
         }
     }
+
+    /**
+     * 显示记录搜索弹窗
+     */
+    private fun showRecordSearchDialog() {
+        if (mContext == null) {
+            L.i(TAG, "showRecordSearchDialog: mContext is null. ")
+            return
+        }
+        var recordSearchDialog =
+            supportFragmentManager.findFragmentByTag("RecordSearchDialog") as RecordSearchDialog?
+        if (recordSearchDialog == null) {
+            recordSearchDialog = RecordSearchDialog.getInstance(
+                "",
+                object : SearchDialog.SearchDialogListener {
+                    override fun onSearchClick(search: String, v: View?) {
+                        L.i(TAG, "showRecordSearchDialog: onSearchClick: -- ")
+                        recordViewModel?.queryRecordList(search)
+                    }
+
+                    override fun onSearchContentChange(search: CharSequence?) {
+                        L.i(TAG, "showRecordSearchDialog: onSearchContentChange: -- ")
+
+                    }
+                }
+            )
+        }
+        if (!recordSearchDialog.isAdded && !recordSearchDialog.isVisible) {
+            recordSearchDialog.show(supportFragmentManager, "RecordSearchDialog")
+        }
+    }
+
 }

@@ -3,6 +3,8 @@ package com.inz.z.note_book.database.bean;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 
+import com.inz.z.base.util.BaseTools;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
@@ -10,6 +12,7 @@ import org.greenrobot.greendao.annotation.Index;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Date;
+import java.util.Locale;
 
 import org.greenrobot.greendao.annotation.Generated;
 
@@ -34,7 +37,7 @@ public class RecordInfo {
 
     @IntDef({ENABLE_STATE_BAN, ENABLE_STATE_USE})
     @Retention(RetentionPolicy.SOURCE)
-    @interface RecordEnableState{
+    @interface RecordEnableState {
 
     }
 
@@ -149,5 +152,19 @@ public class RecordInfo {
 
     public void setEnable(int enable) {
         this.enable = enable;
+    }
+
+    /**
+     * 获取记录时间： yyyy-MM-dd HH:mm
+     *
+     * @return 记录时间
+     */
+    public String getRecordDateStr() {
+        Date date = getRecordDate();
+        if (date == null) {
+            return "";
+        }
+        return BaseTools.getDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+                .format(date);
     }
 }
