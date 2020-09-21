@@ -24,7 +24,7 @@
             android:configChanges="screenSize|screenLayout|keyboardHidden|orientation"
             android:icon="@drawable/ic_baseline_device_hub_24"
             android:process=":test"
-            android:screenOrientation="fullSensor">
+            android:screenOrientation="landscape">
             <!--            <intent-filter>-->
             <!--                <action android:name="android.intent.action.MAIN" />-->
 
@@ -177,6 +177,9 @@
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <service android:name=".service.NoteInfoAppWidgetService" />
+
+        <!-- 浮动消息弹窗  -->
+        <service android:name=".service.FloatMessageViewService" />
     </application>
 
 </manifest>
