@@ -206,7 +206,13 @@ class UpdateVersionDialog : AbsBaseDialogFragment() {
             this.windowManager.defaultDisplay.getRealSize(size)
             val width = size.x * .8
             lp.width = width.toInt()
-            lp.height = (width / 3 * 5).toInt()
+            val h = (size.y * .8).toInt()
+            val ratoteH = (width / 3 * 5).toInt()
+            lp.height = if (h < ratoteH) {
+                h
+            } else {
+                ratoteH
+            }
             lp.gravity = Gravity.CENTER
             this.setBackgroundDrawableResource(android.R.color.transparent)
         }

@@ -75,6 +75,8 @@ class FloatMessageViewService : Service() {
         windowLayoutParams.apply {
             this.flags = WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON
                 .or(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                .or(WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR)
+                .or(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
                 .or(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL)
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 this.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
@@ -84,7 +86,7 @@ class FloatMessageViewService : Service() {
             width = WindowManager.LayoutParams.WRAP_CONTENT
             height = WindowManager.LayoutParams.WRAP_CONTENT
             x = realMetrics.widthPixels / 2
-            y = realMetrics.heightPixels / 2
+            y = realMetrics.heightPixels / 4
             this.format = PixelFormat.RGBA_8888
         }
         return windowLayoutParams
