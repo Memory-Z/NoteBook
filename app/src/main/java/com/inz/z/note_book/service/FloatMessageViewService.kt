@@ -85,8 +85,9 @@ class FloatMessageViewService : Service() {
             }
             width = WindowManager.LayoutParams.WRAP_CONTENT
             height = WindowManager.LayoutParams.WRAP_CONTENT
-            x = realMetrics.widthPixels / 2
-            y = realMetrics.heightPixels / 4
+            gravity = Gravity.TOP.or(Gravity.START)
+            x = realMetrics.widthPixels
+            y = realMetrics.heightPixels / 4 * 3
             this.format = PixelFormat.RGBA_8888
         }
         return windowLayoutParams
@@ -132,10 +133,8 @@ class FloatMessageViewService : Service() {
         }
 
         init {
-//            viewWidth = mView.width
-//            viewHeight = mView.height
-//            L.i(TAG, "OnTouchListenerImpl: --- $viewWidth -$viewHeight -- ${params.x}")
-//            paramsX = params.x
+            viewWidth = mView.width
+            viewHeight = mView.height
         }
 
         override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -145,19 +144,37 @@ class FloatMessageViewService : Service() {
             }
             if (event != null) {
                 val x = event.rawX
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    firstTouchX = x
-                }
-                if (event.action == MotionEvent.ACTION_UP) {
-                    val midWidth = realMetrics.widthPixels / 2
-                    val finishX = (paramsX + (x - firstTouchX)).toInt()
-                    if (Math.abs(finishX) <= midWidth) {
-                        params.x = if (finishX > 0) -midWidth else midWidth
-                    } else {
-                        params.x = if (finishX > 0) midWidth else -midWidth
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        firstTouchX = x
+                        val usableWidth = realMetrics.widthPixels - mView.width
+                        if (viewWidth >= realMetrics.widthPixels) {
+                            paramsX = 0
+                        } else {
+                            paramsX = params.x
+                        }
+                        paramsX = Math.min(paramsX, usableWidth)
                     }
-                    updateRemoteView(mView, mContext, params)
-
+                    MotionEvent.ACTION_UP -> {
+                        val midWidth = realMetrics.widthPixels / 2
+                        var dx = (x - firstTouchX).toInt()
+                        L.i(TAG, "onTouch: ---- $dx ")
+                        if (viewWidth >= realMetrics.widthPixels) {
+                            dx = 0
+                        }
+                        val usableWidth = realMetrics.widthPixels - mView.width
+                        // center  dot x
+                        var finishX = paramsX + dx
+                        L.i(TAG, "onTouch: >>>> $usableWidth - ${finishX} _-_ $dx")
+                        finishX = Math.max(0, finishX)
+                        finishX = Math.min(finishX, usableWidth)
+                        if (finishX > midWidth) {
+                            params.x = usableWidth
+                        } else {
+                            params.x = 0
+                        }
+                        updateRemoteView(mView, mContext, params)
+                    }
                 }
             }
             return gestureDetector!!.onTouchEvent(event)
@@ -183,8 +200,20 @@ class FloatMessageViewService : Service() {
                 lastX = rawX.toInt()
                 lastY = rawY.toInt()
             }
-            paramsX = mParams.x
-            paramsY = mParams.y
+            val usableWidth = realMetrics.widthPixels - mView.width
+            val usableHeight = realMetrics.heightPixels - mView.height
+            if (mView.width >= realMetrics.widthPixels) {
+                paramsX = 0
+            } else {
+                paramsX = mParams.x
+            }
+            paramsX = Math.min(paramsX, usableWidth)
+            if (mView.height >= realMetrics.heightPixels) {
+                paramsY = 0
+            } else {
+                paramsY = mParams.y
+            }
+            paramsY = Math.min(paramsY, usableHeight)
             return false
         }
 
@@ -204,23 +233,35 @@ class FloatMessageViewService : Service() {
         ): Boolean {
             var dx = ((e2?.rawX ?: 0F) - lastX).toInt()
             var dy = ((e2?.rawY ?: 0F) - lastY).toInt()
-            if (Math.abs(dy) > mView.height) {
-                if (dy > 0) {
-                    dy -= mView.height
-                } else {
-                    dy += mView.height
-                }
+            if (mView.width >= realMetrics.widthPixels) {
+                dx = 0
             }
-            if (Math.abs(dx) > mView.width) {
-                if (dx > 0) {
-                    dx -= mView.width
-                } else {
-                    dx += mView.width
-                }
+            if (mView.height >= realMetrics.heightPixels) {
+                dy = 0
             }
+            L.i(TAG, "onScroll: Width >>>>>>>>>>>  X = ${e2?.rawX} -- lX = ${lastX}")
+            L.i(
+                TAG,
+                "onScroll: Width >>>>>>>>>>>  ${paramsX} --  ${mParams.x} =+> ${mView.width} -- ${dx} ===> ${realMetrics.widthPixels}"
+            )
+            L.i(TAG, "onScroll: Height >>>>>>>>>>  Y = ${e2?.rawY} -- lY = ${lastY}")
+            L.i(
+                TAG,
+                "onScroll: Height >>>>>>>>>>  ${paramsY} --  ${mParams.y} =+> ${mView.height} - ${dy} ===> ${realMetrics.heightPixels}"
+            )
+            val usableWidth = realMetrics.widthPixels - mView.width
+            val usableHeight = realMetrics.heightPixels - mView.height
+            var endX = paramsX + dx
+            endX = Math.max(endX, 0)
+            endX = Math.min(endX, usableWidth)
+
+            var endY = paramsY + dy
+            endY = Math.max(endY, 0)
+            endY = Math.min(endY, usableHeight)
+
             mParams.apply {
-                this.x = (paramsX + dx)
-                this.y = (paramsY + dy)
+                this.x = endX
+                this.y = endY
             }
             updateRemoteView(mView, mContext, mParams)
             return true
@@ -295,6 +336,10 @@ class FloatMessageViewService : Service() {
         floatMessageBaseView?.apply {
             this.floatMessageBaseViewListener = FloatMessageBaseViewListenerImpl()
             val params = getWindownLayoutParams()
+            params.apply {
+                width = WindowManager.LayoutParams.MATCH_PARENT
+                x = 0
+            }
             this.setOnTouchListener(OnTouchListenerImpl(mContext, params, this))
             addRemoteView(this, params)
         }

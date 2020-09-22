@@ -62,7 +62,7 @@ class FloatMessageBaseView : ConstraintLayout {
             calendar[Calendar.MINUTE] = 0
             calendar[Calendar.SECOND] = 0
             calendar[Calendar.MILLISECOND] = 0
-            float_message_base_crv.start(
+            float_message_base_cdtv.start(
                 CountdownRingView.MODE_COUNT_TIME_FIXED,
                 calendar.timeInMillis
             )
