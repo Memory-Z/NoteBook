@@ -91,6 +91,8 @@ class FloatMessageMinView : LinearLayout {
         when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
                 lastOnTouchTime = time
+                touchMove.set(false)
+                return false
             }
             MotionEvent.ACTION_MOVE -> {
                 touchMove.set(true)

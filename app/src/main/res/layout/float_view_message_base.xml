@@ -2,15 +2,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/yellow">
+    android:layout_height="match_parent">
 
     <com.inz.z.note_book.view.widget.CountDownTextView
         android:id="@+id/float_message_base_cdtv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/margin_text"
-        app:cdt_background_color="@color/text_black_20_color"
+        app:cdt_background_color="@android:color/transparent"
         app:cdt_color="@color/colorPrimary"
         app:cdt_text_size="@dimen/sp16"
         app:layout_constraintEnd_toEndOf="parent"
