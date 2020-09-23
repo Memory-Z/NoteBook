@@ -1,9 +1,9 @@
 package com.inz.z.note_book.view.fragment
 
 import android.graphics.Point
+import android.text.SpannableStringBuilder
 import android.view.Gravity
 import android.view.View
-import android.widget.Button
 import androidx.annotation.DrawableRes
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
@@ -25,6 +25,12 @@ class BaseDialogFragment private constructor() : AbsBaseDialogFragment() {
 
     companion object {
         const val TAG = "BaseDialogFragment"
+
+        fun getInstant(builder: Builder): BaseDialogFragment {
+            val dialogFragment = BaseDialogFragment()
+            dialogFragment.builder = builder
+            return dialogFragment
+        }
     }
 
     private var builder: Builder? = null
@@ -64,10 +70,10 @@ class BaseDialogFragment private constructor() : AbsBaseDialogFragment() {
     /**
      * 创建
      */
-    public class Builder() {
+    class Builder() {
 
         var title = ""
-        var message = ""
+        var message: SpannableStringBuilder = SpannableStringBuilder("")
         var leftBtn = ""
         var leftListener: View.OnClickListener? = null
         var centerListener: View.OnClickListener? = null
@@ -79,18 +85,34 @@ class BaseDialogFragment private constructor() : AbsBaseDialogFragment() {
         var drawableRes: Int? = null
         var centerView: View? = null
 
+        /**
+         * 标题
+         */
         fun setTitle(title: String1): Builder {
             this.title = title
             return this@Builder
         }
 
+        /**
+         * 中间布局 与 {@link #setCenterView(message)} 冲突，高优先级
+         * @see setContentMessage
+         */
         fun setCenterView(centerView: View): Builder {
             this.centerView = centerView
             return this@Builder
         }
 
-        fun setCenterMessage(message: String1): Builder {
+        /**
+         * 中间提示消息 与  {@link #setCenterView(View)} 冲突
+         * @see setCenterView
+         */
+        fun setCenterMessage(message: SpannableStringBuilder): Builder {
             this.message = message
+            return this@Builder
+        }
+
+        fun setCenterMessage(message: String1): Builder {
+            this.message = SpannableStringBuilder(message)
             return this@Builder
         }
 
@@ -119,9 +141,7 @@ class BaseDialogFragment private constructor() : AbsBaseDialogFragment() {
         }
 
         fun build(): BaseDialogFragment {
-            val fragment = BaseDialogFragment()
-            fragment.builder = this@Builder
-            return fragment
+            return getInstant(this@Builder)
         }
     }
 
@@ -148,7 +168,7 @@ class BaseDialogFragment private constructor() : AbsBaseDialogFragment() {
     /**
      * 设置中间提示
      */
-    private fun setContentMessage(message: String1) {
+    private fun setContentMessage(message: SpannableStringBuilder) {
         base_dialog_content_message_tv?.apply {
             gravity = View.VISIBLE
             text = message

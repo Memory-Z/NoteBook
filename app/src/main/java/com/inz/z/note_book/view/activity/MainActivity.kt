@@ -1,9 +1,6 @@
 package com.inz.z.note_book.view.activity
 
-import android.Manifest
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -11,19 +8,19 @@ import android.view.View
 import android.widget.PopupMenu
 import androidx.annotation.NonNull
 import androidx.appcompat.widget.SearchView
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.service.FloatMessageViewService
 import com.inz.z.note_book.view.BaseNoteActivity
+import com.inz.z.note_book.view.fragment.BaseDialogFragment
 import com.inz.z.note_book.view.fragment.LauncherApplicationFragment
 import com.inz.z.note_book.view.fragment.NoteNavFragment
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.android.synthetic.main.main_left_nav_layout.*
 import kotlinx.android.synthetic.main.top_search_nav_layout.*
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * 主页面
@@ -50,6 +47,7 @@ class MainActivity : BaseNoteActivity() {
 
     companion object {
         const val TAG = "MainActivity"
+        private const val REQUEST_OVER_WINDOW_PERMISSION = 0x00FF
     }
 
     override fun initWindow() {
@@ -97,7 +95,7 @@ class MainActivity : BaseNoteActivity() {
     }
 
     override fun initData() {
-        checkPermission()
+        showFloatWindowTintDialog()
     }
 
     override fun needCheckVersion(): Boolean {
@@ -123,15 +121,15 @@ class MainActivity : BaseNoteActivity() {
      * 初始化左侧导航视图
      */
     private fun initLeftNavView() {
-        leftMenuViewClickLisntener = LeftMenuViewClickLisntenerImpl()
+        leftMenuViewClickListener = LeftMenuViewClickListenerImpl()
         main_left_nav_bottom_setting_ll.setOnClickListener {
             val intent = Intent(mContext, SettingActivity::class.java)
             startActivity(intent)
         }
-        mln_0_bnl.setOnClickListener(leftMenuViewClickLisntener)
-        mln_1_bnl.setOnClickListener(leftMenuViewClickLisntener)
-        mln_2_bnl.setOnClickListener(leftMenuViewClickLisntener)
-        mln_3_bnl.setOnClickListener(leftMenuViewClickLisntener)
+        mln_0_bnl.setOnClickListener(leftMenuViewClickListener)
+        mln_1_bnl.setOnClickListener(leftMenuViewClickListener)
+        mln_2_bnl.setOnClickListener(leftMenuViewClickListener)
+        mln_3_bnl.setOnClickListener(leftMenuViewClickListener)
     }
 
     /**
@@ -222,12 +220,12 @@ class MainActivity : BaseNoteActivity() {
         transaction.commitAllowingStateLoss()
     }
 
-    private var leftMenuViewClickLisntener: LeftMenuViewClickLisntenerImpl? = null
+    private var leftMenuViewClickListener: LeftMenuViewClickListenerImpl? = null
 
     /**
      * 左侧 菜单栏 点击 监听实现
      */
-    private inner class LeftMenuViewClickLisntenerImpl : View.OnClickListener {
+    private inner class LeftMenuViewClickListenerImpl : View.OnClickListener {
         override fun onClick(v: View?) {
             if (mContext == null) {
                 L.w(TAG, "LeftMenuViewClickLisntenerImpl: onClick -> mContext is null .  ")
@@ -258,26 +256,90 @@ class MainActivity : BaseNoteActivity() {
         }
     }
 
-    private fun checkPermission() {
-        
+
+    /**
+     * 是否显示消息浮窗
+     */
+    private val isShowMessageWindow = AtomicBoolean(false)
+
+    /**
+     * 显示浮窗消息窗口
+     */
+    private fun showFloatMessageWindow() {
+        isShowMessageWindow.set(true)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(mContext)) {
                 val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
                 intent.data = Uri.parse("package:" + packageName)
-                startActivityForResult(intent, 0x00F)
+                startActivityForResult(intent, REQUEST_OVER_WINDOW_PERMISSION)
             } else {
                 startService(Intent(mContext, FloatMessageViewService::class.java))
             }
+        } else {
+            startService(Intent(mContext, FloatMessageViewService::class.java))
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 0x00F) {
+        if (requestCode == REQUEST_OVER_WINDOW_PERMISSION) {
             if (resultCode == RESULT_OK) {
-                startService(Intent(mContext, FloatMessageViewService::class.java))
+                if (isShowMessageWindow.get()) {
+                    startService(Intent(mContext, FloatMessageViewService::class.java))
+                }
             }
         }
+    }
+
+    /**
+     * 显示浮窗提示弹窗
+     */
+    private fun showFloatWindowTintDialog() {
+        if (mContext == null) {
+            L.w(TAG, "showFloatWindowTintDialog: mContext is null. ")
+            return
+        }
+        val manager = supportFragmentManager
+        var showFloatDialog =
+            manager.findFragmentByTag("ShowFloatTintDialog") as BaseDialogFragment?
+        if (showFloatDialog == null) {
+            BaseDialogFragment
+            val builder = BaseDialogFragment.Builder()
+            builder.apply {
+                setTitle(mContext.getString(R.string._tips))
+                setCenterMessage(mContext.getString(R.string.show_float_window_about_countdown))
+                setLeftButton(
+                    mContext.getString(R.string.cancel),
+                    View.OnClickListener {
+                        hideFloatWindowTintDialog()
+                    }
+                )
+                setRightButton(
+                    mContext.getString(R.string._show),
+                    View.OnClickListener {
+                        showFloatMessageWindow()
+                        hideFloatWindowTintDialog()
+                    }
+                )
+            }
+            showFloatDialog = builder.build()
+        }
+        if (!showFloatDialog.isAdded && !showFloatDialog.isVisible) {
+            showFloatDialog.show(manager, "ShowFloatTintDialog")
+        }
+    }
+
+    /**
+     * 隐藏浮窗提示
+     */
+    private fun hideFloatWindowTintDialog() {
+        if (mContext == null) {
+            L.w(TAG, "hideFloatWindowTintDialog: mContext is null. ")
+            return
+        }
+        val showFloatDialog =
+            supportFragmentManager.findFragmentByTag("ShowFloatTintDialog") as BaseDialogFragment?
+        showFloatDialog?.dismissAllowingStateLoss()
     }
 
 }
