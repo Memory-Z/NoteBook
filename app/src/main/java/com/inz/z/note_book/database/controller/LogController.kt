@@ -1,5 +1,6 @@
 package com.inz.z.note_book.database.controller
 
+import androidx.annotation.NonNull
 import com.alibaba.fastjson.JSON
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
@@ -48,6 +49,50 @@ object LogController {
     fun query(): List<OperationLogInfo>? {
         val dao = getLogDao()
         return dao?.queryBuilder()?.list()
+    }
+
+    /**
+     *  通过时间查询操作日志
+     */
+    fun queryLogByTime(startTime: Date, endTime: Date): MutableList<OperationLogInfo>? {
+        getLogDao()?.apply {
+            val queryBuilder = queryBuilder()
+            return queryBuilder
+                .where(
+                    queryBuilder.and(
+                        OperationLogInfoDao.Properties.CreateTime.gt(startTime),
+                        OperationLogInfoDao.Properties.CreateTime.lt(endTime)
+                    )
+                )
+                .orderAsc(OperationLogInfoDao.Properties.CreateTime)
+                .list()
+        }
+        return null
+    }
+
+    /**
+     * 通过操作表明 查询操作日志
+     */
+    fun queryLogByTable(tableName: String): MutableList<OperationLogInfo>? {
+        getLogDao()?.apply {
+            val queryBuilder = queryBuilder()
+            return queryBuilder
+                .where(
+                    OperationLogInfoDao.Properties.TableName.eq(tableName)
+                )
+                .orderDesc(OperationLogInfoDao.Properties.CreateTime)
+                .list()
+        }
+        return null
+    }
+
+    /**
+     * 删除操作记录
+     */
+    fun deleteLog(@NonNull logInfo: OperationLogInfo) {
+        getLogDao()?.apply {
+            delete(logInfo)
+        }
     }
 
 }
