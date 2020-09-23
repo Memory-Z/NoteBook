@@ -37,7 +37,7 @@ public class SearchContentInfo {
 
     @Index
     @Id(autoincrement = true)
-    private long id;
+    private Long id;
 
     /**
      * 搜索内容
@@ -64,8 +64,8 @@ public class SearchContentInfo {
     public Date createDate;
     public Date updateDate;
 
-    @Generated(hash = 1629218002)
-    public SearchContentInfo(long id, String searchContent, int searchType, int repeatCount, int enable,
+    @Generated(hash = 620268033)
+    public SearchContentInfo(Long id, String searchContent, int searchType, int repeatCount, int enable,
                              Date createDate, Date updateDate) {
         this.id = id;
         this.searchContent = searchContent;
@@ -80,11 +80,11 @@ public class SearchContentInfo {
     public SearchContentInfo() {
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

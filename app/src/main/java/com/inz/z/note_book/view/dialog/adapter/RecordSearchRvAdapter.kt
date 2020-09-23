@@ -8,10 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
+import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.SearchContentInfo
+import kotlinx.android.synthetic.main.item_search_record.view.*
 
 /**
  * 记录搜索弹窗 适配器
@@ -70,8 +73,33 @@ class RecordSearchRvAdapter(mContext: Context) :
         return sp
     }
 
-    class RecordSearchRvViewHolder(itemView: View) : AbsBaseRvViewHolder(itemView) {
-        val contextTv: TextView = itemView.findViewById(R.id.item_search_content_tv)
+    inner class RecordSearchRvViewHolder(itemView: View) : AbsBaseRvViewHolder(itemView),
+        View.OnClickListener {
+
+        val contextTv: TextView = itemView.item_search_content_tv
+        val deleteIv = itemView.item_search_content_close_iv
+
+        init {
+            contextTv.setOnClickListener(this)
+            deleteIv.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                when (v?.id) {
+                    contextTv.id -> {
+                        recordSearchRvAdapterListener?.onItemClick(v, position)
+                    }
+                    deleteIv.id -> {
+                        recordSearchRvAdapterListener?.onDeleteClick(v, position)
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+        }
     }
 
 
@@ -88,4 +116,18 @@ class RecordSearchRvAdapter(mContext: Context) :
         this.searchContent = searchContent
         super.refreshData(list)
     }
+
+    interface RecordSearchRvAdapterListener {
+        /**
+         * 点击删除
+         */
+        fun onDeleteClick(v: View?, position: Int)
+
+        /**
+         * item View 点击
+         */
+        fun onItemClick(v: View?, position: Int)
+    }
+
+    var recordSearchRvAdapterListener: RecordSearchRvAdapterListener? = null
 }

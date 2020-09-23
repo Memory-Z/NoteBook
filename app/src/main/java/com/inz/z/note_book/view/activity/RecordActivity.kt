@@ -2,13 +2,13 @@ package com.inz.z.note_book.view.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
-import com.inz.z.note_book.database.controller.RecordInfoController
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.activity.adapter.RecordListRvAdapter
 import com.inz.z.note_book.view.dialog.RecordSearchDialog
@@ -34,6 +34,10 @@ class RecordActivity : BaseNoteActivity() {
 
     private var recordViewModel: RecordViewModel? = null
 
+    /**
+     * 搜索内容
+     */
+    private var searchRecordContent = ""
 
     override fun initWindow() {
 
@@ -84,7 +88,12 @@ class RecordActivity : BaseNoteActivity() {
             this,
             Observer {
                 record_content_srl?.isRefreshing = false
-                recordListRvAdapter?.refreshData(it)
+                if (!TextUtils.isEmpty(searchRecordContent)) {
+                    record_top_search_tv.text = searchRecordContent
+                } else {
+                    record_top_search_tv.text = mContext.getString(R.string.search_record_content)
+                }
+                recordListRvAdapter?.refreshData(it, searchRecordContent)
             }
         )
         recordViewModel?.getRecordInfoListSize()?.observe(
@@ -124,12 +133,16 @@ class RecordActivity : BaseNoteActivity() {
                 object : SearchDialog.SearchDialogListener {
                     override fun onSearchClick(search: String, v: View?) {
                         L.i(TAG, "showRecordSearchDialog: onSearchClick: -- ")
-                        recordViewModel?.queryRecordList(search)
+                        searchRecordContent = search
+                        recordViewModel?.queryRecordList(search, true)
                     }
 
                     override fun onSearchContentChange(search: CharSequence?) {
-                        L.i(TAG, "showRecordSearchDialog: onSearchContentChange: -- ")
-
+                        val str = search?.toString() ?: ""
+                        L.i(TAG, "showRecordSearchDialog: onSearchContentChange: -- $str ")
+//                        if (!TextUtils.isEmpty(str)) {
+//                            recordViewModel?.queryRecordList(str, false)
+//                        }
                     }
                 }
             )

@@ -9,6 +9,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.DialogFragment
 import com.inz.z.base.view.AbsBaseDialogFragment
 import com.inz.z.note_book.R
+import com.qmuiteam.qmui.util.QMUIKeyboardHelper
 import kotlinx.android.synthetic.main.dialog_search.*
 
 /**
@@ -79,6 +80,11 @@ abstract class SearchDialog : AbsBaseDialogFragment(), TextWatcher {
             this.attributes = lp
             this.setBackgroundDrawableResource(android.R.color.transparent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        QMUIKeyboardHelper.showKeyboard(dialog_search_top_search_et, true)
     }
 
     ///////////////////////////////////////////////////////////////////////////

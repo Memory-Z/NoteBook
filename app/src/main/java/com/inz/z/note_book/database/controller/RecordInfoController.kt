@@ -97,7 +97,7 @@ object RecordInfoController {
                 .apply {
                     this.and(
                         RecordInfoDao.Properties.Enable.eq(RecordInfo.ENABLE_STATE_USE),
-                        RecordInfoDao.Properties.RecordDate.like(timeStr)
+                        RecordInfoDao.Properties.RecordDate.like("%$timeStr%")
                     )
                 }
                 .orderDesc(RecordInfoDao.Properties.RecordDate)
@@ -111,19 +111,23 @@ object RecordInfoController {
      * @param content 内容
      * @param limit 个数
      */
-    fun querySearchList(content: String, limit: Int): MutableList<RecordInfo>? {
+    fun querySearchList(content: String, limit: Int, isSearch: Boolean): MutableList<RecordInfo>? {
         getRecordInfoDao()?.apply {
-            val searchContentInfo = SearchContentInfoController.getSearchContentReal(
-                content,
-                SearchContentInfo.SEARCH_TYPE_RECORD
-            )
-            SearchContentInfoController.insertSearchContent(searchContentInfo)
+            if (isSearch) {
+                // 新增查询内容
+                val searchContentInfo = SearchContentInfoController.getSearchContentReal(
+                    content,
+                    SearchContentInfo.SEARCH_TYPE_RECORD
+                )
+                SearchContentInfoController.insertSearchContent(searchContentInfo)
+            }
+            // 获取查询结果
             val queryBuilder = this.queryBuilder()
             return queryBuilder
                 .where(
                     queryBuilder.or(
-                        RecordInfoDao.Properties.RecordTitle.like(content),
-                        RecordInfoDao.Properties.RecordContent.like(content)
+                        RecordInfoDao.Properties.RecordTitle.like("%$content%"),
+                        RecordInfoDao.Properties.RecordContent.like("%$content%")
                     )
                 )
                 .orderDesc(RecordInfoDao.Properties.RecordDate)

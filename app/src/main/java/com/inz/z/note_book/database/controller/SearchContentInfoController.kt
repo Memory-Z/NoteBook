@@ -1,5 +1,6 @@
 package com.inz.z.note_book.database.controller
 
+import android.text.TextUtils
 import androidx.annotation.NonNull
 import com.inz.z.note_book.database.SearchContentInfoDao
 import com.inz.z.note_book.database.bean.SearchContentInfo
@@ -23,7 +24,11 @@ object SearchContentInfoController {
      */
     fun insertSearchContent(@NonNull searchContentInfo: SearchContentInfo) {
         getSearchContentDao()?.apply {
-            val info = findById(searchContentInfo.id)
+
+            var info: SearchContentInfo? = null
+            if (searchContentInfo.id != null) {
+                info = findById(searchContentInfo.id)
+            }
             if (info == null) {
                 insert(searchContentInfo)
                 LogController.log("INSERT", searchContentInfo, "添加查询内容", this.tablename)
@@ -38,12 +43,49 @@ object SearchContentInfoController {
      */
     fun updateSearchContent(@NonNull searchContentInfo: SearchContentInfo) {
         getSearchContentDao()?.apply {
-            val info = findById(searchContentInfo.id)
+
+            var info: SearchContentInfo? = null
+            if (searchContentInfo.id != null) {
+                info = findById(searchContentInfo.id)
+            }
             if (info == null) {
                 insertSearchContent(searchContentInfo)
             } else {
                 update(searchContentInfo)
                 LogController.log("UPDATE", searchContentInfo, "更新查询内容", this.tablename)
+            }
+        }
+    }
+
+    /**
+     * 删除搜素内容
+     */
+    fun deleteSearchContent(@NonNull searchContentInfo: SearchContentInfo) {
+        getSearchContentDao()?.apply {
+            this.delete(searchContentInfo)
+            LogController.log(
+                "DELETE",
+                searchContentInfo,
+                "delete search Content info. ",
+                this.tablename
+            )
+        }
+    }
+
+    /**
+     * 删除全部搜索类型
+     */
+    fun deleteAllSearchType(@SearchContentInfo.SearchType searchType: Int) {
+        getSearchContentDao()?.apply {
+            val queryBuilder = this.queryBuilder()
+            val list = queryBuilder
+                .where(
+                    SearchContentInfoDao.Properties.SearchType.eq(searchType)
+                )
+                .orderAsc(SearchContentInfoDao.Properties.CreateDate)
+                .list()
+            for (info in list) {
+                deleteSearchContent(info)
             }
         }
     }
@@ -65,7 +107,7 @@ object SearchContentInfoController {
     /**
      * 通过 内容 查询相关内容
      */
-    fun findByContentReal(
+    private fun findByContentReal(
         searchContent: String,
         @SearchContentInfo.SearchType searchType: Int
     ): SearchContentInfo? {
@@ -80,7 +122,7 @@ object SearchContentInfoController {
                 )
                 .orderDesc(SearchContentInfoDao.Properties.UpdateDate)
                 .list()
-            return if (list == null || list.size > 0) null else list.get(0)
+            return if (list == null || list.size == 0) null else list.get(0)
         }
         return null
     }
@@ -98,7 +140,8 @@ object SearchContentInfoController {
                 .where(
                     queryBuilder.and(
                         SearchContentInfoDao.Properties.SearchType.eq(searchType),
-                        SearchContentInfoDao.Properties.SearchContent.like(searchContent)
+                        SearchContentInfoDao.Properties.SearchContent.like("%$searchContent%"),
+                        SearchContentInfoDao.Properties.Enable.eq(1)
                     )
                 )
                 .orderDesc(SearchContentInfoDao.Properties.UpdateDate)

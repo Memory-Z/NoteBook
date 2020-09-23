@@ -3,6 +3,7 @@ package com.inz.z.note_book.view.dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.inz.z.base.util.L
 import com.inz.z.note_book.database.bean.SearchContentInfo
@@ -52,6 +53,7 @@ class RecordSearchDialog private constructor() : SearchDialog() {
         super.initView()
 
         recordSearchRvAdapter = RecordSearchRvAdapter(mContext)
+        recordSearchRvAdapter?.recordSearchRvAdapterListener = RecordSearchRvAdapterListenerImpl()
 
         dialog_search_content_rv.apply {
             this.layoutManager = LinearLayoutManager(mContext)
@@ -68,9 +70,9 @@ class RecordSearchDialog private constructor() : SearchDialog() {
         publishSubject = PublishSubject.create()
         publishSubject?.apply {
             this.debounce(2000, TimeUnit.MILLISECONDS)
-                .filter {
-                    return@filter !TextUtils.isEmpty(it)
-                }
+//                .filter {
+//                    return@filter !TextUtils.isEmpty(it)
+//                }
                 .switchMap(
                     Function<String, ObservableSource<List<SearchContentInfo>>> {
                         return@Function getSearchObservable(it)
@@ -94,18 +96,19 @@ class RecordSearchDialog private constructor() : SearchDialog() {
                     }
                 )
         }
-
     }
 
     override fun afterTextChanged(s: Editable?) {
         super.afterTextChanged(s)
         s?.let {
-            publishSubject?.apply {
-                if (!this.hasObservers()) {
-                    initPublishSub()
-                }
-                this.onNext(it.toString())
+            if (publishSubject == null || publishSubject?.hasComplete() ?: false) {
+                initPublishSub()
             }
+            if (!(publishSubject?.hasObservers() ?: false)) {
+                initPublishSub()
+            }
+            // publish subject 对象重置，~
+            publishSubject?.onNext(it.toString())
         }
     }
 
@@ -120,14 +123,19 @@ class RecordSearchDialog private constructor() : SearchDialog() {
                 ObservableOnSubscribe<List<SearchContentInfo>> {
                     this.searchContent = searchContent ?: ""
                     L.i(TAG, "getSearchObservable: ObservableOnSubscribe: ${this.searchContent}")
-                    val searchContentList = SearchContentInfoController.findByContentLike(
-                        this.searchContent,
-                        SearchContentInfo.SEARCH_TYPE_RECORD
-                    )
-                    if (searchContentList == null || searchContentList.isEmpty()) {
-                        it.onError(NoSuchElementException("not find this search content . "))
+                    if (!TextUtils.isEmpty(searchContent)) {
+                        val searchContentList =
+                            SearchContentInfoController.findByContentLike(
+                                this.searchContent,
+                                SearchContentInfo.SEARCH_TYPE_RECORD
+                            )
+                        if (searchContentList == null || searchContentList.isEmpty()) {
+                            it.onNext(mutableListOf())
+                        } else {
+                            it.onNext(searchContentList)
+                        }
                     } else {
-                        it.onNext(searchContentList)
+                        it.onNext(mutableListOf())
                     }
                     it.onComplete()
                 }
@@ -135,5 +143,33 @@ class RecordSearchDialog private constructor() : SearchDialog() {
             .subscribeOn(Schedulers.io())
 
 
+    }
+
+    /**
+     * 记录搜索查询 适配器监听
+     */
+    private inner class RecordSearchRvAdapterListenerImpl :
+        RecordSearchRvAdapter.RecordSearchRvAdapterListener {
+        override fun onDeleteClick(v: View?, position: Int) {
+            val searchContentInfo = recordSearchRvAdapter?.list?.get(position)
+            searchContentInfo?.let {
+                it.enable = 0
+                val calendar = Calendar.getInstance(Locale.getDefault())
+                it.updateDate = calendar.time
+                SearchContentInfoController.deleteSearchContent(it)
+                recordSearchRvAdapter?.apply {
+                    list.removeAt(position)
+                    notifyItemRemoved(position)
+                }
+            }
+        }
+
+        override fun onItemClick(v: View?, position: Int) {
+            val searchContentInfo = recordSearchRvAdapter?.list?.get(position)
+            searchContentInfo?.apply {
+                searchDialogListener?.onSearchClick(this.searchContent, v)
+                dismissAllowingStateLoss()
+            }
+        }
     }
 }
