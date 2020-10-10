@@ -56,4 +56,15 @@
         <!-- content use SwipeRefreshLayout  -->
         <attr name="base_scroll_view_content_refresh" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="BaseNoDataView">
+        <attr name="base_no_data_title" format="string" />
+        <attr name="base_no_data_message" format="string" />
+        <attr name="base_no_data_show_refresh_btn" format="boolean" />
+        <attr name="base_no_data_button_str" format="string" />
+        <attr name="base_no_data_show_refresh_spannable" format="boolean" />
+        <attr name="base_no_data_refresh_spannable" format="string" />
+        <attr name="base_no_data_refresh_btn_str" format="string" />
+        <attr name="base_no_data_image_src" format="reference" />
+    </declare-styleable>
 </resources>
