@@ -10,8 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <!--    <Button-->
         <!--        android:id="@+id/calendar_view_bcpb"-->
@@ -389,12 +389,21 @@
             app:tree_line_level="3" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/test_calendar_image_iv"
-        android:layout_width="match_parent"
-        style="@style/Base.ImageView"
-        android:scaleType="fitXY"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/_image" />
+    <!--    <ImageView-->
+    <!--        android:id="@+id/test_calendar_image_iv"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        style="@style/Base.ImageView"-->
+    <!--        android:scaleType="fitXY"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:contentDescription="@string/_image" />-->
 
+    <com.inz.z.base.view.widget.BaseNoDataView
+        android:id="@+id/test_base_no_data_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:base_no_data_button_str="@string/_image"
+        app:base_no_data_message="@string/_position"
+        app:base_no_data_refresh_spannable="@string/_image"
+        app:base_no_data_show_refresh_btn="true"
+        app:base_no_data_title="@string/_image" />
 </RelativeLayout>

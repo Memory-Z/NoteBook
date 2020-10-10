@@ -1,10 +1,15 @@
 package com.inz.z.note_book.view.activity
 
+import android.text.SpannableString
+import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseActivity
+import com.inz.z.base.view.widget.BaseNoDataView
 import com.inz.z.note_book.R
 import com.inz.z.note_book.view.widget.CountdownRingView
+import kotlinx.android.synthetic.main.calendar_view_date.*
 import java.util.*
 
 /**
@@ -64,25 +69,59 @@ class TestCalendarActivity : AbsBaseActivity() {
 //            linearLayout.removeView(outView);
 //        }
 //        baseScrollView.setContentView(outView);
-        val calendar = Calendar.getInstance(Locale.getDefault())
-        //        calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + 1);
-        calendar[Calendar.HOUR_OF_DAY] = 18
-        calendar[Calendar.MINUTE] = 0
-        calendar[Calendar.SECOND] = 0
-        calendar[Calendar.MILLISECOND] = 0
-        val pv = findViewById<CountdownRingView>(R.id.test_calendar_countdown_pv)
-        pv.start(CountdownRingView.MODE_COUNT_TIME_FIXED, calendar.timeInMillis)
-        val iv = findViewById<ImageView>(R.id.test_calendar_image_iv)
-        Glide.with(mContext).load(imgArray[position]).into(iv)
-        iv.setOnClickListener {
-            if (position < (imgArray.size - 1)) {
-                position += 1
-            } else {
-                position = 0
+//        val calendar = Calendar.getInstance(Locale.getDefault())
+//        //        calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + 1);
+//        calendar[Calendar.HOUR_OF_DAY] = 18
+//        calendar[Calendar.MINUTE] = 0
+//        calendar[Calendar.SECOND] = 0
+//        calendar[Calendar.MILLISECOND] = 0
+//        val pv = findViewById<CountdownRingView>(R.id.test_calendar_countdown_pv)
+//        pv.start(CountdownRingView.MODE_COUNT_TIME_FIXED, calendar.timeInMillis)
+//        val iv = findViewById<ImageView>(R.id.test_calendar_image_iv)
+//        Glide.with(mContext).load(imgArray[position]).into(iv)
+//        iv.setOnClickListener {
+//            if (position < (imgArray.size - 1)) {
+//                position += 1
+//            } else {
+//                position = 0
+//            }
+//            Glide.with(mContext).load(imgArray[position]).into(iv)
+//        }
+
+        test_base_no_data_view.apply {
+            setMessage(" !!!! ~~~ !!!! ")
+            setTitle("---- ")
+            listener = object : BaseNoDataView.BaseNoDataListener {
+                override fun onRefreshButtonClick(view: View?) {
+                    test_base_no_data_view.startRefresh("loading ...")
+                    test_base_no_data_view.postDelayed(
+                        {
+                            val random = Random()
+
+                            val imgRes = random.nextInt(imgResArray.size)
+                            L.i(TAG, "-------------- $imgRes")
+                            test_base_no_data_view?.stopRefresh(
+                                "success - ",
+                                true,
+                                false,
+                                SpannableString(""),
+                                imgResArray[imgRes]
+                            )
+                        },
+                        5000
+                    )
+                }
             }
-            Glide.with(mContext).load(imgArray[position]).into(iv)
+            stopRefresh("hint", true)
         }
     }
+
+    val imgResArray = intArrayOf(
+        R.drawable.img_photo_0,
+        R.drawable.img_photo_1,
+        R.drawable.img_photo_2,
+        R.drawable.img_photo_3
+    )
 
     override fun initData() {}
     override fun needCheckVersion(): Boolean {
