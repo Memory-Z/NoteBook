@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<file_type xmlns:android="http://schemas.android.com/apk/res/android">
+    <header name="jpg" value="FFD8FF" detail="JPEG" />
+    <header name="png" value="89504E47" detail="PNG" />
+    <header name="gif" value="47494638" detail="GIF" />
+    <header name="tif" value="49492A00" detail="TIFF" />
+    <header name="bmp" value="424D" detail="Windows Bitmap" />
+    <header name="dwg" value="41433130" detail="CAD" />
+    <header name="psd" value="38425053" detail="Adobe Photoshop" />
+    <header name="rtf" value="7B5C727466" detail="Rich Text Format" />
+    <header name="xml" value="3C3F786D6C" detail="XML" />
+    <header name="html" value="68746D6C3E" detail="HTML" />
+    <header name="eml" value="44656C69766572792D646174653A" detail="Email" />
+    <header name="dbx" value="CFAD12FEC5FD746F" detail="Outlook Express" />
+    <header name="pst" value="2142444E" detail="Outlook" />
+    <header name="xls" value="D0CF11E0" detail="MS Excel" />
+    <header name="doc" value="D0CF11E0" detail="MS Word" />
+    <header name="mdb" value="5374616E64617264204A" detail="MS Access" />
+    <header name="wpd" value="FF575043" detail="WordPerfect" />
+    <header name="eps" value="252150532D41646F6265" detail="Postscript" />
+    <header name="ps" value="252150532D41646F6265" detail="Postscript" />
+    <header name="pdf" value="255044462D312E" detail="Adobe Acrobat" />
+    <header name="qdf" value="AC9EBD8F" detail="Quicken" />
+    <header name="pwl" value="E3828596" detail="Windows Password" />
+    <header name="zip" value="504B0304" detail="ZIP Archive" />
+    <header name="rar" value="52617221" detail="RAR Archive" />
+    <header name="wav" value="57415645" detail="Wave" />
+    <header name="avi" value="41564920" detail="AVI" />
+    <header name="ram" value="2E7261FD" detail="Real Audio" />
+    <header name="rm" value="2E524D46" detail="Real Media" />
+    <header name="mpg" value="000001BA" detail="MPEG" />
+    <header name="mpg" value="000001B3" detail="MPEG" />
+    <header name="mov" value="6D6F6F76" detail="Quicktime" />
+    <header name="asf" value="3026B2758E66CF11" detail="Windows Media" />
+    <header name="mid" value="4D546864" detail="MIDI" />
+
+</file_type>
