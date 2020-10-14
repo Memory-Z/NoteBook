@@ -8,6 +8,7 @@ import android.text.TextUtils
 import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.inz.z.base.entity.BaseChooseFileBean
+import com.inz.z.base.entity.Constants
 import java.io.File
 import java.lang.Exception
 import java.text.SimpleDateFormat
@@ -49,7 +50,7 @@ object ProviderUtil {
                     bean.fileIsDirectory = childFile.isDirectory
                     bean.fileChangeDate = formatDatetime(childFile.lastModified())
                     bean.fileFromDatabase = false
-                    bean.fileType = BaseChooseFileBean.FILE_TYPE_FILE
+                    bean.fileType = Constants.FileType.FILE_TYPE_FILE
                     fileList.add(bean)
                     Log.i(TAG, "queryFileListByDir: ----------> ${bean.fileName} ")
                 }
@@ -92,7 +93,7 @@ object ProviderUtil {
                 bean.fileDatabaseId = id.toString()
                 bean.fileIsDirectory = false
                 bean.fileLength = size
-                bean.fileType = BaseChooseFileBean.FILE_TYPE_IMAGE
+                bean.fileType = Constants.FileType.FILE_TYPE_IMAGE
                 fileList.add(bean)
             }
         }
@@ -135,7 +136,7 @@ object ProviderUtil {
                 bean.fileDatabaseId = id.toString()
                 bean.fileIsDirectory = false
                 bean.fileLength = size
-                bean.fileType = BaseChooseFileBean.FILE_TYPE_AUDIO
+                bean.fileType = Constants.FileType.FILE_TYPE_AUDIO
                 fileList.add(bean)
             }
         }

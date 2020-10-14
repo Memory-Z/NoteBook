@@ -16,6 +16,7 @@ import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.databinding.BaseItemChooseFileListBinding
 import com.inz.z.base.databinding.BaseItemChooseFileTableBinding
 import com.inz.z.base.entity.BaseChooseFileBean
+import com.inz.z.base.entity.Constants
 import com.inz.z.base.view.activity.ChooseFileActivity
 
 /**
@@ -79,29 +80,29 @@ class ChooseFileRvAdapter :
             } else {
                 iv?.apply {
                     when (bean.fileType) {
-                        BaseChooseFileBean.FILE_TYPE_IMAGE -> {
+                        Constants.FileType.FILE_TYPE_IMAGE -> {
                             Glide.with(mContext).load(bean.filePath).apply(requestOption)
                                 .into(this)
                             ImageViewCompat.setImageTintList(this, null)
                         }
-                        BaseChooseFileBean.FILE_TYPE_AUDIO -> {
+                        Constants.FileType.FILE_TYPE_AUDIO -> {
                             Glide.with(mContext).load(R.drawable.ic_file_music).apply(requestOption)
                                 .into(this)
                             ImageViewCompat.setImageTintList(this, null)
                         }
-                        BaseChooseFileBean.FILE_TYPE_VIDEO -> {
+                        Constants.FileType.FILE_TYPE_VIDEO -> {
                             Glide.with(mContext).load(R.drawable.ic_file_video)
                                 .apply(requestOption)
                                 .into(this)
                             ImageViewCompat.setImageTintList(this, null)
                         }
-                        BaseChooseFileBean.FILE_TYPE_APPLICATION -> {
+                        Constants.FileType.FILE_TYPE_APPLICATION -> {
                             Glide.with(mContext).load(R.drawable.ic_file_installation_pa)
                                 .apply(requestOption)
                                 .into(this)
                             ImageViewCompat.setImageTintList(this, null)
                         }
-                        BaseChooseFileBean.FILE_TYPE_TEXT -> {
+                        Constants.FileType.FILE_TYPE_TEXT -> {
                             Glide.with(mContext).load(R.drawable.ic_file_txt)
                                 .apply(requestOption)
                                 .into(this)
@@ -129,7 +130,7 @@ class ChooseFileRvAdapter :
             } else {
                 iv?.apply {
                     when (bean.fileType) {
-                        BaseChooseFileBean.FILE_TYPE_IMAGE -> {
+                        Constants.FileType.FILE_TYPE_IMAGE -> {
                             Glide.with(mContext).load(bean.filePath).apply(requestOption)
                                 .into(iv)
                             ImageViewCompat.setImageTintList(this, null)
@@ -266,6 +267,26 @@ class ChooseFileRvAdapter :
     fun changeShowMode(@ChooseFileActivity.ShowMode mode: Int) {
 
         notifyItemInserted(0)
+    }
+
+    /**
+     * 获取选中文件
+     */
+    fun getSelectedFileList(): List<BaseChooseFileBean> {
+        return this.list.filter {
+            return@filter it.checked
+        }
+    }
+
+    /**
+     * 获取选中文件大小
+     */
+    fun getSelectedFileTotalSize(): Long {
+        var totalSize = 0L;
+        getSelectedFileList().forEach {
+            totalSize += it.fileLength
+        }
+        return totalSize
     }
 
 }

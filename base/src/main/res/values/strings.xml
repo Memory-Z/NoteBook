@@ -57,4 +57,8 @@
     <string name="_left_arrow">&lt;</string>
     <string name="_right_arrow">&gt;</string>
     <string name="root_directory">根目录</string>
+    <string name="file_size_k_format">%s Kb</string>
+    <string name="file_size_m_format">%s Mb</string>
+    <string name="_preview">预览</string>
+    <string name="preview_format">预览(%s)</string>
 </resources>

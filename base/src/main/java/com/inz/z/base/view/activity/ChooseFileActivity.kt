@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -18,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.R
 import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.entity.BaseChooseFileNavBean
+import com.inz.z.base.entity.Constants
+import com.inz.z.base.util.FileTypeHelper
 import com.inz.z.base.util.FileUtils
 import com.inz.z.base.util.L
 import com.inz.z.base.util.ProviderUtil
@@ -31,6 +34,8 @@ import io.reactivex.observers.DefaultObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.base_activity_choose_file.*
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  *
@@ -48,6 +53,11 @@ class ChooseFileActivity : AbsBaseActivity() {
         const val SHOW_TYPE_IMAGE = 0x000A02
         const val SHOW_TYPE_AUDIO = 0x000A03
         const val SHOW_TYPE_VIDEO = 0x000A04
+
+        const val CHOOSE_FILE_RESULT_CODE = 0x010001
+
+        const val CHOOSE_FILE_LIST_TAG = "choosedFileList"
+        const val CHOOSE_FILE_SIZE_TAG = "choosedFileSize"
 
 
         private const val DEFAULT_MAX_CHOOSE_FILE_COUNT = 10
@@ -160,7 +170,7 @@ class ChooseFileActivity : AbsBaseActivity() {
     /**
      * 选中的文件列表
      */
-    private var chooseFileList: MutableList<BaseChooseFileBean> = mutableListOf()
+    private var chooseFileList: ArrayList<BaseChooseFileBean> = arrayListOf()
 
     private var mLayoutManager: RecyclerView.LayoutManager? = null
     private var navLayoutManager: LinearLayoutManager? = null
@@ -200,11 +210,19 @@ class ChooseFileActivity : AbsBaseActivity() {
 
         initContentRv()
 
+        updateFileSizeOnView(0L)
+
         mRootPath = FileUtils.getSDPath()
         addNavBody(mRootPath, getString(R.string.root_directory))
-        if (checkHavePermission()) {
-            checkQueryType(mRootPath)
-        }
+        base_choose_file_content_rv.postDelayed(
+            {
+                if (checkHavePermission()) {
+                    checkQueryType(mRootPath)
+                }
+            },
+            100
+        )
+
     }
 
     private fun initContentRv() {
@@ -269,12 +287,28 @@ class ChooseFileActivity : AbsBaseActivity() {
                 showMode = if (showMode == MODE_LIST) MODE_TABLE else MODE_LIST
                 targetContentType()
             }
+            android.R.id.home -> {
+                chooseFileList.clear()
+                closeChooseFileView()
+            }
             else -> {
 
             }
         }
         return super.onOptionsItemSelected(item)
+    }
 
+    /**
+     * 关闭选择文件界面
+     */
+    private fun closeChooseFileView() {
+        val intent = Intent()
+        val bundle = Bundle()
+        bundle.putParcelableArrayList(CHOOSE_FILE_LIST_TAG, chooseFileList)
+        bundle.putInt(CHOOSE_FILE_SIZE_TAG, chooseFileList.size)
+        intent.putExtras(bundle)
+        setResult(CHOOSE_FILE_RESULT_CODE, intent)
+        finish()
     }
 
     /**
@@ -303,18 +337,20 @@ class ChooseFileActivity : AbsBaseActivity() {
             }
             val bean = chooseFileListRvAdapter?.list?.get(position)
             bean?.let {
-                chooseFileList.add(bean)
-                setChooseFileSize()
+                addChooseFileBean(it)
             }
+            view.postDelayed({ updateFilePreviewCountOnView(chooseFileList.size) }, 100)
+            view.postDelayed({ updateChooseFileSize() }, 100)
         }
 
         override fun removeChoseFile(position: Int, view: View) {
             L.i(TAG, "removeChoseFile: $position")
             val bean = chooseFileListRvAdapter?.list?.get(position)
             bean?.let {
-                chooseFileList.remove(bean)
-                setChooseFileSize()
+                removeChooseFileBean(it)
             }
+            view.postDelayed({ updateFilePreviewCountOnView(chooseFileList.size) }, 100)
+            view.postDelayed({ updateChooseFileSize() }, 100)
         }
 
         override fun showFullImage(position: Int, view: View) {
@@ -367,26 +403,47 @@ class ChooseFileActivity : AbsBaseActivity() {
         Observable
             .create(
                 ObservableOnSubscribe<MutableList<BaseChooseFileBean>>() {
+                    var list: MutableList<BaseChooseFileBean> = mutableListOf()
                     when (showType) {
                         SHOW_TYPE_DIR -> {
-                            val list = ProviderUtil.queryFileListByDir(filePath)
-                            it.onNext(list)
+                            list = ProviderUtil.queryFileListByDir(filePath)
                         }
                         SHOW_TYPE_AUDIO -> {
-                            val list = ProviderUtil.queryFileAudioWithContentProvider(mContext)
-                            it.onNext(list)
+                            list = ProviderUtil.queryFileAudioWithContentProvider(mContext)
                         }
                         SHOW_TYPE_IMAGE -> {
-                            val list = ProviderUtil.queryFileImageWithContextProvider(mContext)
-                            it.onNext(list)
+                            list = ProviderUtil.queryFileImageWithContextProvider(mContext)
                         }
                         SHOW_TYPE_VIDEO -> {
 
                         }
                         else -> {
                             it.onError(IllegalArgumentException("no find $showType this's data list"))
+                            return@ObservableOnSubscribe
                         }
                     }
+
+                    list.forEach { listIt ->
+                        run checkEach@{
+                            chooseFileList.forEach { chooseFileListIt ->
+                                if (listIt.filePath.equals(chooseFileListIt.filePath)) {
+                                    listIt.checked = true
+                                    return@checkEach
+                                }
+                            }
+                        }
+                    }
+                    val fileTypeHelper = FileTypeHelper(mContext)
+                    list.forEach {
+                        if (!it.fileIsDirectory) {
+                            val file = File(it.filePath)
+                            val isImage = fileTypeHelper.isImageWithFile(file)
+                            if (isImage) {
+                                it.fileType = Constants.FileType.FILE_TYPE_IMAGE
+                            }
+                        }
+                    }
+                    it.onNext(list)
                 }
             )
             .observeOn(AndroidSchedulers.mainThread())
@@ -436,11 +493,16 @@ class ChooseFileActivity : AbsBaseActivity() {
         }
     }
 
-    private fun setChooseFileSize() {
+    /**
+     * 更新选中文件大小
+     *
+     */
+    private fun updateChooseFileSize() {
         Observable
             .create(
                 ObservableOnSubscribe<Long> {
                     var totalFileSize = 0L
+                    L.i(TAG, "setChooseFileSize: size = ${chooseFileList.size}")
                     for (bean in chooseFileList) {
                         val file = File(bean.filePath)
                         totalFileSize += file.length()
@@ -453,7 +515,8 @@ class ChooseFileActivity : AbsBaseActivity() {
             .subscribe(
                 object : DefaultObserver<Long>() {
                     override fun onNext(t: Long) {
-
+                        L.i(TAG, "setChooseFileSize: --- $t")
+                        updateFileSizeOnView(t)
                     }
 
                     override fun onError(e: Throwable) {
@@ -468,6 +531,91 @@ class ChooseFileActivity : AbsBaseActivity() {
 
     }
 
+    /**
+     * 更新选中文件大小 ；
+     */
+    private fun updateFileSizeOnView(fileSize: Long) {
+        mContext?.apply {
+            val size = fileSize / 1024.0
+            val fileSizeStr = this.getString(R.string.file_size_k_format)
+                .format(Locale.getDefault(), String.format("%.2f", size))
+            base_choose_file_bottom_total_size_tv?.text = fileSizeStr
+        }
+    }
+
+    /**
+     * 更新文件预览数
+     */
+    private fun updateFilePreviewCountOnView(chooseFileSize: Int) {
+        mContext?.apply {
+            val fileSizeStr = if (chooseFileSize == 0) {
+                mContext.getString(R.string._preview)
+            } else {
+                mContext.getString(R.string.preview_format).format(chooseFileSize)
+            }
+            base_choose_file_bl_preview_tv?.apply {
+                if (chooseFileSize == 0) {
+                    setTextColor(
+                        ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                mContext,
+                                R.color.text_white_50_color
+                            )
+                        )
+                    )
+                } else {
+                    setTextColor(
+                        ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                mContext,
+                                R.color.colorAccent
+                            )
+                        )
+                    )
+                }
+                text = fileSizeStr
+            }
+        }
+    }
+
+    /**
+     * 添加选中文件
+     */
+    private fun addChooseFileBean(bean: BaseChooseFileBean) {
+        var addedFileBeanPosition = -1
+        if (chooseFileList.size > 0) {
+            for (index in 0..chooseFileList.size - 1) {
+                val fileBean = chooseFileList.get(index)
+                if (fileBean.filePath.equals(bean.filePath)) {
+                    addedFileBeanPosition = index
+                    break
+                }
+            }
+        }
+        if (addedFileBeanPosition == -1) {
+            chooseFileList.add(bean)
+        }
+
+    }
+
+    /**
+     * 移除选中文件
+     */
+    private fun removeChooseFileBean(bean: BaseChooseFileBean) {
+        var addedFileBeanPosition = -1
+        if (chooseFileList.size > 0) {
+            for (index in 0..chooseFileList.size - 1) {
+                val fileBean = chooseFileList.get(index)
+                if (fileBean.filePath.equals(bean.filePath)) {
+                    addedFileBeanPosition = index
+                    break
+                }
+            }
+        }
+        if (addedFileBeanPosition != -1) {
+            chooseFileList.removeAt(addedFileBeanPosition)
+        }
+    }
     ///////////////////////////////////////////////////////////////////////////
     // OPEN
     ///////////////////////////////////////////////////////////////////////////

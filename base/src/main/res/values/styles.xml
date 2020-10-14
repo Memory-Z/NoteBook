@@ -164,7 +164,6 @@
     </style>
 
     <style name="Base.Layout">
-        <item name="android:layout_height">@dimen/touch_target_height</item>
         <item name="android:paddingStart">@dimen/border_lr_dimen</item>
         <item name="android:paddingEnd">@dimen/border_lr_dimen</item>
     </style>

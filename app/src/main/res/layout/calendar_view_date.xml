@@ -406,4 +406,27 @@
         app:base_no_data_refresh_spannable="@string/_image"
         app:base_no_data_show_refresh_btn="true"
         app:base_no_data_title="@string/_image" />
+
+<!--    <com.google.android.material.tabs.TabLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="@dimen/button_normal_height"-->
+<!--        app:tabMode="scrollable"-->
+<!--        app:tabMinWidth="@dimen/list_nav_height"-->
+<!--        app:tabIndicatorColor="@android:color/transparent"-->
+<!--        app:tabUnboundedRipple="true"-->
+<!--        app:tabBackground="@drawable/bg_tab_item_sel"-->
+<!--        app:tabTextColor="@color/blueviolet">-->
+
+<!--        <com.google.android.material.tabs.TabItem-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="@dimen/border_lr_dimen"-->
+
+<!--            android:text="@string/_all" />-->
+<!--        <com.google.android.material.tabs.TabItem-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_margin="@dimen/border_lr_dimen"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/about" />-->
+<!--    </com.google.android.material.tabs.TabLayout>-->
 </RelativeLayout>

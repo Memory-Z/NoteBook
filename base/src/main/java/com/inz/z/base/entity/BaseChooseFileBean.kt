@@ -1,7 +1,7 @@
 package com.inz.z.base.entity
 
-import androidx.annotation.IntDef
-import androidx.annotation.NonNull
+import android.os.Parcel
+import android.os.Parcelable
 import java.io.Serializable
 
 /**
@@ -10,29 +10,8 @@ import java.io.Serializable
  * @version 1.0.0
  * Create by inz in 2020/08/20 14:08.
  */
-class BaseChooseFileBean : Serializable {
-
-    companion object {
-        const val FILE_TYPE_FILE = 0x0000A001
-        const val FILE_TYPE_IMAGE = 0x0000A002
-        const val FILE_TYPE_AUDIO = 0x0000A003
-        const val FILE_TYPE_VIDEO = 0x0000A004
-        const val FILE_TYPE_TEXT = 0x0000A005
-        const val FILE_TYPE_APPLICATION = 0x0000A006
-        const val FILE_TYPE_OTHER = 0x0000A007
-    }
-
-    @IntDef(
-        FILE_TYPE_FILE,
-        FILE_TYPE_IMAGE,
-        FILE_TYPE_AUDIO,
-        FILE_TYPE_VIDEO,
-        FILE_TYPE_TEXT,
-        FILE_TYPE_APPLICATION,
-        FILE_TYPE_OTHER
-    )
-    @Retention(AnnotationRetention.SOURCE)
-    annotation class FileType
+open class BaseChooseFileBean : Serializable, Parcelable {
+    constructor()
 
     /**
      * 文件名
@@ -57,8 +36,8 @@ class BaseChooseFileBean : Serializable {
     /**
      * 文件类型
      */
-    @FileType
-    var fileType: Int = FILE_TYPE_FILE
+    @Constants.FileType.FileTypeAnn
+    var fileType: Int = Constants.FileType.FILE_TYPE_FILE
 
     /**
      * 文件修改日期
@@ -90,9 +69,50 @@ class BaseChooseFileBean : Serializable {
      */
     var canChoose: Boolean = true
 
-    @NonNull
+    constructor(parcel: Parcel) : this() {
+        fileName = parcel.readString() ?: ""
+        filePath = parcel.readString() ?: ""
+        fileLength = parcel.readLong()
+        fileIsDirectory = parcel.readByte() != 0.toByte()
+        fileType = parcel.readInt()
+        fileChangeDate = parcel.readString() ?: ""
+        fileFromDatabase = parcel.readByte() != 0.toByte()
+        fileDatabaseTable = parcel.readString() ?: ""
+        fileDatabaseId = parcel.readString() ?: ""
+        checked = parcel.readByte() != 0.toByte()
+        canChoose = parcel.readByte() != 0.toByte()
+    }
+
     override fun toString(): String {
-        return "BaseChooseFileBean(fileName='$fileName', filePath='$filePath', fileLength=$fileLength, fileIsDirectory=$fileIsDirectory, fileChangeDate='$fileChangeDate', fileFromDatabase=$fileFromDatabase, fileDatabaseTable='$fileDatabaseTable', fileDatabaseId='$fileDatabaseId', checked=$checked, canChoose=$canChoose)"
+        return "BaseChooseFileBean(fileName='$fileName', filePath='$filePath', fileLength=$fileLength, fileIsDirectory=$fileIsDirectory, fileType=$fileType, fileChangeDate='$fileChangeDate', fileFromDatabase=$fileFromDatabase, fileDatabaseTable='$fileDatabaseTable', fileDatabaseId='$fileDatabaseId', checked=$checked, canChoose=$canChoose)"
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(fileName)
+        parcel.writeString(filePath)
+        parcel.writeLong(fileLength)
+        parcel.writeByte(if (fileIsDirectory) 1 else 0)
+        parcel.writeInt(fileType)
+        parcel.writeString(fileChangeDate)
+        parcel.writeByte(if (fileFromDatabase) 1 else 0)
+        parcel.writeString(fileDatabaseTable)
+        parcel.writeString(fileDatabaseId)
+        parcel.writeByte(if (checked) 1 else 0)
+        parcel.writeByte(if (canChoose) 1 else 0)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<BaseChooseFileBean> {
+        override fun createFromParcel(parcel: Parcel): BaseChooseFileBean {
+            return BaseChooseFileBean(parcel)
+        }
+
+        override fun newArray(size: Int): Array<BaseChooseFileBean?> {
+            return arrayOfNulls(size)
+        }
     }
 
 

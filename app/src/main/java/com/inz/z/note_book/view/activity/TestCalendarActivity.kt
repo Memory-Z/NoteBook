@@ -1,16 +1,22 @@
 package com.inz.z.note_book.view.activity
 
+import android.content.Intent
+import android.graphics.Color
 import android.text.SpannableString
 import android.view.View
-import android.widget.ImageView
-import com.bumptech.glide.Glide
+import com.google.android.material.badge.BadgeDrawable
+import com.google.android.material.badge.BadgeUtils
+import com.inz.z.base.entity.BaseChooseFileBean
+import com.inz.z.base.entity.xml.FileTypeHeaderBean
 import com.inz.z.base.util.L
+import com.inz.z.base.util.XmlFileUtils
 import com.inz.z.base.view.AbsBaseActivity
+import com.inz.z.base.view.activity.ChooseFileActivity
 import com.inz.z.base.view.widget.BaseNoDataView
 import com.inz.z.note_book.R
-import com.inz.z.note_book.view.widget.CountdownRingView
 import kotlinx.android.synthetic.main.calendar_view_date.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * @author Zhenglj
@@ -107,6 +113,12 @@ class TestCalendarActivity : AbsBaseActivity() {
                                 SpannableString(""),
                                 imgResArray[imgRes]
                             )
+                            if (imgRes == 0) {
+                                ChooseFileActivity.gotoChooseFileActivity(
+                                    this@TestCalendarActivity,
+                                    1000
+                                )
+                            }
                         },
                         5000
                     )
@@ -123,12 +135,100 @@ class TestCalendarActivity : AbsBaseActivity() {
         R.drawable.img_photo_3
     )
 
-    override fun initData() {}
+    override fun initData() {
+        xmlFileReader()
+    }
+
     override fun needCheckVersion(): Boolean {
         return false
     }
 
     companion object {
         private const val TAG = "TestCalendarActivity"
+    }
+
+    private fun xmlFileReader() {
+
+        val xmlResourceParser = mContext.resources.getXml(R.xml.file_type_header);
+        val list = XmlFileUtils.getXmlValueDataList(
+            xmlResourceParser,
+            FileTypeHeaderBean.HEADER_TAG,
+            FileTypeHeaderBean::class.java
+        )
+        L.i(TAG, " --------------- > $list")
+//        try {
+//            var eventType = xmlResourceParser.eventType
+//            while (eventType != XmlResourceParser.END_DOCUMENT) {
+//                when (eventType) {
+//                    XmlResourceParser.START_TAG -> {
+//                        val count = xmlResourceParser.attributeCount
+//                        val name = xmlResourceParser.name
+//                        if (FileTypeHeaderBean.HEADER_TAG.equals(name)) {
+//                            val fileTypeHeaderBean = FileTypeHeaderBean()
+//                            fileTypeHeaderBean.tagName = name
+//                            val fields = fileTypeHeaderBean.javaClass.declaredFields
+//                            val nameList = mutableListOf<String>()
+//                            for (index in 0..count-1) {
+//                                nameList.add(xmlResourceParser.getAttributeName(index))
+//                            }
+//                            for (field in fields) {
+//                                val n = field.name
+//                                field.isAccessible = true
+//                                var xmlValue = ""
+//
+//                                nameList.forEachIndexed { index, s ->
+//                                    if (s.equals(n)) {
+//                                        xmlValue = xmlResourceParser.getAttributeValue(index) ?: ""
+//                                        return@forEachIndexed
+//                                    }
+//                                }
+//                                if (!TextUtils.isEmpty(xmlValue)) {
+//                                    field.set(fileTypeHeaderBean, xmlValue)
+//                                }
+//                            }
+//                            L.i(
+//                                TAG,
+//                                "Start_ tag ${xmlResourceParser.name}  -- ${count} ---- $fileTypeHeaderBean"
+//                            )
+//                        }
+//                    }
+//                    XmlResourceParser.END_TAG -> {
+//                        L.i(TAG, "End_ tag")
+//                    }
+//                    XmlResourceParser.START_DOCUMENT -> {
+//                        L.i(TAG, "start_ document. ")
+//                    }
+//                    XmlResourceParser.TEXT -> {
+//                        L.i(TAG, "text: ${xmlResourceParser.text}")
+//                    }
+//                }
+//                eventType = xmlResourceParser.next()
+//            }
+//        } catch (e: Exception) {
+//            L.e(TAG, "", e)
+//        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            RESULT_OK -> {
+
+            }
+            1000 -> {
+                val bundle = data?.extras
+                bundle?.apply {
+                    val fileBeanList: ArrayList<BaseChooseFileBean>? =
+                        this.getParcelableArrayList(ChooseFileActivity.CHOOSE_FILE_LIST_TAG)
+
+                    val chooseFileSize = this.getInt(ChooseFileActivity.CHOOSE_FILE_SIZE_TAG, 0)
+                    L.i(TAG, "-----------> $fileBeanList ---------$chooseFileSize")
+                }
+            }
+            else -> {
+
+            }
+
+        }
     }
 }
