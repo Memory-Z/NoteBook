@@ -1,8 +1,11 @@
 package com.inz.z.base.base;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -76,6 +79,20 @@ public abstract class AbsBaseRvAdapter<T, VH extends RecyclerView.ViewHolder> ex
     public void loadMoreData(List<T> list) {
         this.list.addAll(list);
         notifyDataSetChanged();
+    }
+
+    /**
+     * 获取项
+     *
+     * @param position 位置
+     * @return 值
+     */
+    @Nullable
+    public T getItemByPosition(int position) {
+        if (position < 0 || position > list.size()) {
+            return null;
+        }
+        return list.get(position);
     }
 
     /**

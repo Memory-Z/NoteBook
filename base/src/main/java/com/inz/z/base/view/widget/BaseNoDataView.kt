@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.TintTypedArray
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -178,6 +179,10 @@ public open class BaseNoDataView : ConstraintLayout {
             }
         }
 
+    }
+
+    fun getButton(): Button? {
+        return mView?.base_no_data_btn
     }
 
 

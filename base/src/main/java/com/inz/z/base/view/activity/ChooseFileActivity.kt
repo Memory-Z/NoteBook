@@ -27,6 +27,7 @@ import com.inz.z.base.util.ProviderUtil
 import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.base.view.activity.adapter.ChooseFileNavRvAdapter
 import com.inz.z.base.view.activity.adapter.ChooseFileRvAdapter
+import com.inz.z.base.view.dialog.PreviewImageFragmentDialog
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -35,7 +36,6 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.base_activity_choose_file.*
 import java.io.File
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  *
@@ -196,6 +196,16 @@ class ChooseFileActivity : AbsBaseActivity() {
             this.adapter = chooseFileNavRvAdapter
         }
 
+        base_choose_file_bl_preview_tv?.setOnClickListener {
+            if (!chooseFileList.isNullOrEmpty()) {
+                val bean = chooseFileList.get(0)
+                showPreviewDialog(bean.filePath, chooseFileList)
+            } else {
+                mContext?.apply {
+                    showToast(mContext.getString(R.string.not_choose_file_to_preview))
+                }
+            }
+        }
 
     }
 
@@ -554,6 +564,7 @@ class ChooseFileActivity : AbsBaseActivity() {
                 mContext.getString(R.string.preview_format).format(chooseFileSize)
             }
             base_choose_file_bl_preview_tv?.apply {
+                this.isClickable = chooseFileSize != 0
                 if (chooseFileSize == 0) {
                     setTextColor(
                         ColorStateList.valueOf(
@@ -616,6 +627,36 @@ class ChooseFileActivity : AbsBaseActivity() {
             chooseFileList.removeAt(addedFileBeanPosition)
         }
     }
+
+
+    /* ----------------------- 显示图片预览 -------------------------- */
+
+    /**
+     * 显示图片预览弹窗
+     */
+    private fun showPreviewDialog(
+        selectedImageSrc: String,
+        selectedImageList: ArrayList<BaseChooseFileBean>?
+    ) {
+        if (mContext == null) {
+            L.w(TAG, "showPreviewDialog: mContext is null. ")
+            return
+        }
+        val manager = supportFragmentManager
+        var previewDialog =
+            manager.findFragmentByTag("PreviewImageDialog") as PreviewImageFragmentDialog?
+        if (previewDialog == null) {
+            previewDialog = PreviewImageFragmentDialog.Builder(mContext)
+                .setCurrentImageSrc(selectedImageSrc)
+                .setImageList(selectedImageList)
+                .build()
+        }
+        if (!previewDialog.isAdded || !previewDialog.isVisible) {
+            previewDialog.show(manager, "PreviewImageDialog")
+        }
+    }
+
+    /* ----------------------- 显示图片预览 -------------------------- */
     ///////////////////////////////////////////////////////////////////////////
     // OPEN
     ///////////////////////////////////////////////////////////////////////////
