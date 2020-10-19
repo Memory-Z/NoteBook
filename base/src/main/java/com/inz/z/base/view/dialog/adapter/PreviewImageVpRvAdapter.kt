@@ -3,7 +3,6 @@ package com.inz.z.base.view.dialog.adapter
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -63,7 +62,7 @@ class PreviewImageVpRvAdapter(mContext: Context?) :
     ///////////////////////////////////////////////////////////////////////////
 
     interface PreviewImageVpRvAdapterListener {
-        fun onImageClick(v: View?, position: Int);
+        fun onImageClick(v: View?, position: Int)
     }
 
 }

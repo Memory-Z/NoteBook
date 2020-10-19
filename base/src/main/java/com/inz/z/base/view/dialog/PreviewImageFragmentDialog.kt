@@ -1,8 +1,10 @@
 package com.inz.z.base.view.dialog
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
@@ -13,11 +15,11 @@ import com.inz.z.base.R
 import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.entity.BasePreviewImageBean
 import com.inz.z.base.entity.Constants
+import com.inz.z.base.util.ImageUtils
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseDialogFragment
 import com.inz.z.base.view.dialog.adapter.PreviewImageListRvAdapter
 import com.inz.z.base.view.dialog.adapter.PreviewImageVpRvAdapter
-import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import kotlinx.android.synthetic.main.base_dialog_preview_image.*
 
 /**
@@ -101,6 +103,15 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
         }
         val haveMoreImg = !selectedFileList.isNullOrEmpty()
         base_dpi_list_rv?.visibility = if (haveMoreImg) View.VISIBLE else View.GONE
+
+        if (haveMoreImg) {
+            val bean = selectedFileList?.get(0);
+            if (bean != null) {
+                val bitmap = BitmapFactory.decodeFile(bean.filePath)
+                val newBitmap = ImageUtils.resizeBitmap(bitmap, 0.1F)
+                L.i(TAG, "initData")
+            }
+        }
 
         base_dpi_top_rl.postDelayed({
             val index = getImageInListPosition(selectedImageSrc ?: "", selectedFileList)
