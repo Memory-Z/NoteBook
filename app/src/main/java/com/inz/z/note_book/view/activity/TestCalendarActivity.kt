@@ -1,13 +1,17 @@
 package com.inz.z.note_book.view.activity
 
 import android.content.Intent
-import android.graphics.Color
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.text.SpannableString
 import android.view.View
-import com.google.android.material.badge.BadgeDrawable
-import com.google.android.material.badge.BadgeUtils
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.graphics.drawable.toBitmap
 import com.inz.z.base.entity.BaseChooseFileBean
+import com.inz.z.base.entity.Constants
 import com.inz.z.base.entity.xml.FileTypeHeaderBean
+import com.inz.z.base.util.ImageUtils
 import com.inz.z.base.util.L
 import com.inz.z.base.util.XmlFileUtils
 import com.inz.z.base.view.AbsBaseActivity
@@ -16,7 +20,6 @@ import com.inz.z.base.view.widget.BaseNoDataView
 import com.inz.z.note_book.R
 import kotlinx.android.synthetic.main.calendar_view_date.*
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * @author Zhenglj
@@ -113,12 +116,50 @@ class TestCalendarActivity : AbsBaseActivity() {
                                 SpannableString(""),
                                 imgResArray[imgRes]
                             )
-                            if (imgRes == 0) {
-                                ChooseFileActivity.gotoChooseFileActivity(
-                                    this@TestCalendarActivity,
-                                    1000
+
+                            val option = BitmapFactory.Options()
+                            option.inScaled = false
+                            option.inPreferredConfig = Bitmap.Config.ARGB_8888
+                            val drawableImg =
+                                BitmapFactory.decodeResource(
+                                    mContext.resources,
+                                    R.drawable.img_icon_0,
+                                    option
+                                ).copy(Bitmap.Config.ARGB_8888, false)
+
+
+                            val drawableImg2 =
+                                BitmapFactory.decodeResource(
+                                    mContext.resources,
+                                    R.drawable.img_icon_1,
+                                    option
+                                ).copy(Bitmap.Config.ARGB_8888, false)
+                            if (drawableImg != null && drawableImg2 != null) {
+                                drawableImg.density = mContext.resources.displayMetrics.densityDpi
+                                drawableImg2.density = mContext.resources.displayMetrics.densityDpi
+                                val d = ImageUtils.mergeBitmap(
+                                    drawableImg,
+                                    drawableImg2,
+                                    Constants.BitmapMergeType.VERTICAL,
+                                    true,
+                                    1600,
+                                    0
                                 )
+                                L.i(TAG, "---------------- < ${d.width} + ${d.height} ")
                             }
+//                            if (imgRes == 0) {
+//                                ChooseFileActivity.gotoChooseFileActivity(
+//                                    this@TestCalendarActivity,
+//                                    1000
+//                                )
+//                            } else {
+//                                test_base_no_data_view?.postDelayed(
+//                                    {
+//                                        test_base_no_data_view?.getButton()?.performClick()
+//                                    },
+//                                    2000
+//                                )
+//                            }
                         },
                         5000
                     )
@@ -136,7 +177,7 @@ class TestCalendarActivity : AbsBaseActivity() {
     )
 
     override fun initData() {
-        xmlFileReader()
+//        xmlFileReader()
     }
 
     override fun needCheckVersion(): Boolean {

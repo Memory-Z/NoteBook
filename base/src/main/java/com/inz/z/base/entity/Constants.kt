@@ -82,4 +82,9 @@ class Constants(val applicationId: String) {
         annotation class FileTypeAnn
     }
 
+    object BitmapMergeType {
+        const val VERTICAL = 0x00D001
+        const val HORIZONTAL = 0x00D002
+    }
+
 }
