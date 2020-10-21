@@ -1,20 +1,23 @@
 package com.inz.z.base.util
 
 import android.Manifest
+import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
+import android.os.Build
+import android.os.Environment
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresPermission
+import com.inz.z.base.BuildConfig
 import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.entity.Constants
 import java.io.File
-import java.lang.Exception
+import java.io.FileInputStream
+import java.net.URLConnection
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.Comparator
 
 /**
  *
@@ -186,6 +189,62 @@ object ProviderUtil {
             simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         }
         return simpleDateFormat!!.format(time)
+    }
+
+    /**
+     * 插入图片文件
+     * @param context 上下文
+     * @param filePath 文件实际地址
+     * @param fileName 文件名
+     * @param mimeType 文件类型 如：image/JPEG
+     */
+    fun insertImageFileToDCIM(
+        context: Context,
+        filePath: String,
+        fileName: String
+    ) {
+        try {
+            val contentValues = ContentValues()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                contentValues.put(
+                    MediaStore.Images.Media.RELATIVE_PATH,
+                    "DCIM/${BuildConfig.LIBRARY_PACKAGE_NAME}"
+                )
+            } else {
+                contentValues.put(
+                    MediaStore.Images.Media.DATA,
+                    context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath
+                )
+            }
+            contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+            val fileNameMap = URLConnection.getFileNameMap()
+            var mimeType = fileNameMap.getContentTypeFor(fileName.replace("#", ""))
+            if (mimeType == null) {
+                mimeType = "*/*"
+            }
+            contentValues.put(MediaStore.Images.Media.MIME_TYPE, mimeType)
+            val contentProvider = context.contentResolver
+            val uri =
+                contentProvider.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+            uri?.apply {
+                val outputStream = contentProvider.openOutputStream(this)
+                outputStream?.let {
+                    val file = File(filePath)
+                    if (file.exists()) {
+                        val inputStream = FileInputStream(file)
+                        val byteArray = ByteArray(1024)
+                        var reader = inputStream.read(byteArray)
+                        while ((reader) != -1) {
+                            outputStream.write(byteArray, 0, reader)
+                            reader = inputStream.read(byteArray)
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            L.e(TAG, "insertImageFileToDCIM: ", e)
+        }
+
     }
 
 }

@@ -1,6 +1,7 @@
 package com.inz.z.note_book.view.activity
 
 import android.content.Intent
+import android.os.Environment
 import android.text.SpannableString
 import android.view.View
 import com.inz.z.base.entity.BaseChooseFileBean
@@ -117,6 +118,10 @@ class TestCalendarActivity : AbsBaseActivity() {
 
     override fun initData() {
 //        xmlFileReader()
+        val dcimFile = getExternalFilesDir(Environment.DIRECTORY_DCIM)
+        val picFile = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val dirFilePath =getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+        L.i(TAG, "---------------- $dcimFile --- $picFile -- $dirFilePath  ")
     }
 
     override fun needCheckVersion(): Boolean {
