@@ -65,4 +65,14 @@ class PreviewImageVpRvAdapter(mContext: Context?) :
         fun onImageClick(v: View?, position: Int)
     }
 
+    /**
+     * 刷新数据状态
+     */
+    fun refreshItemOnPosition(position: Int, bean: BasePreviewImageBean) {
+        val basePreviewImageBean = getItemByPosition(position)
+        if (basePreviewImageBean != null) {
+            this.list.set(position, bean)
+        }
+    }
+
 }

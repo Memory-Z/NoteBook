@@ -62,4 +62,7 @@
     <string name="_preview">预览</string>
     <string name="preview_format">预览(%s)</string>
     <string name="not_choose_file_to_preview">未选中预览文件</string>
+    <string name="_submit">提交</string>
+    <string name="cancel_checked">取消选择</string>
+    <string name="selected_file_max">已到最大选择文件数量</string>
 </resources>

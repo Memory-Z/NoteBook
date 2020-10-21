@@ -289,4 +289,30 @@ class ChooseFileRvAdapter :
         return totalSize
     }
 
+    /**
+     * 切换项数据
+     */
+    fun changeItemData(bean: BaseChooseFileBean, position: Int) {
+        val item = getItemByPosition(position)
+        if (item != null) {
+            this.list.set(position, bean)
+            notifyItemChanged(position)
+        }
+    }
+
+    /**
+     * 同步刷新 选中 数据
+     */
+    fun notifyChooseItemList(chooseList: List<BaseChooseFileBean>) {
+        this.list.forEachIndexed { index, baseChooseFileBean ->
+            chooseList.forEach {
+                if (baseChooseFileBean.filePath.equals(it.filePath)) {
+                    baseChooseFileBean.checked = it.checked
+                    return@forEach
+                }
+            }
+        }
+        notifyDataSetChanged()
+    }
+
 }

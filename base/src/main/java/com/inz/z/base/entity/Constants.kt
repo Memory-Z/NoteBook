@@ -87,4 +87,14 @@ class Constants(val applicationId: String) {
         const val HORIZONTAL = 0x00D002
     }
 
+    /**
+     * 文件显示类型
+     */
+    object FileShowType {
+        const val SHOW_TYPE_DIR = 0x000A01
+        const val SHOW_TYPE_IMAGE = 0x000A02
+        const val SHOW_TYPE_AUDIO = 0x000A03
+        const val SHOW_TYPE_VIDEO = 0x000A04
+    }
+
 }

@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -19,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.R
 import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.entity.BaseChooseFileNavBean
+import com.inz.z.base.entity.ChooseFileShowType
 import com.inz.z.base.entity.Constants
 import com.inz.z.base.util.FileTypeHelper
 import com.inz.z.base.util.FileUtils
@@ -28,6 +31,7 @@ import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.base.view.activity.adapter.ChooseFileNavRvAdapter
 import com.inz.z.base.view.activity.adapter.ChooseFileRvAdapter
 import com.inz.z.base.view.dialog.PreviewImageFragmentDialog
+import com.qmuiteam.qmui.util.QMUIDisplayHelper
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -36,6 +40,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.base_activity_choose_file.*
 import java.io.File
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  *
@@ -49,11 +54,6 @@ class ChooseFileActivity : AbsBaseActivity() {
         const val MODE_LIST = 0x000901
         const val MODE_TABLE = 0x000902
 
-        const val SHOW_TYPE_DIR = 0x000A01
-        const val SHOW_TYPE_IMAGE = 0x000A02
-        const val SHOW_TYPE_AUDIO = 0x000A03
-        const val SHOW_TYPE_VIDEO = 0x000A04
-
         const val CHOOSE_FILE_RESULT_CODE = 0x010001
 
         const val CHOOSE_FILE_LIST_TAG = "choosedFileList"
@@ -64,6 +64,12 @@ class ChooseFileActivity : AbsBaseActivity() {
         private const val DEFAULT_TABLE_COLUMNS = 2
 
         const val TAG = "ChooseFileActivity"
+
+        private const val HANDLER_ADD_CHOOSE_FILE = 0x00FF01
+        private const val HANDLER_REMOVE_CHOOSE_FILE = 0x00FF02
+        private const val HANDLER_REMOVE_CHOOSE_FILE_LIST = 0x00FF03
+        private const val HANDLER_TAG_CHOOSE_FILE = "chooseFile"
+        private const val HANDLER_TAG_CHOOSE_FILE_LIST = "chooseFileList"
 
         /**
          * 跳转至选择文件界面
@@ -81,7 +87,13 @@ class ChooseFileActivity : AbsBaseActivity() {
             @ShowMode showMode: Int,
             tableColumn: Int
         ) {
-            gotoChooseFileActivity(activity, requestCode, showMode, SHOW_TYPE_DIR, tableColumn)
+            gotoChooseFileActivity(
+                activity,
+                requestCode,
+                showMode,
+                Constants.FileShowType.SHOW_TYPE_DIR,
+                tableColumn
+            )
         }
 
         /**
@@ -91,7 +103,7 @@ class ChooseFileActivity : AbsBaseActivity() {
             activity: Activity,
             requestCode: Int,
             @ShowMode showMode: Int,
-            @ShowType showType: Int,
+            @ChooseFileShowType showType: Int,
             tableColumn: Int
         ) {
             gotoChooseFileActivity(
@@ -111,7 +123,7 @@ class ChooseFileActivity : AbsBaseActivity() {
             activity: Activity,
             requestCode: Int,
             @ShowMode showMode: Int,
-            @ShowType showType: Int,
+            @ChooseFileShowType showType: Int,
             tableColumn: Int,
             maxChooseFileSize: Int
         ) {
@@ -129,10 +141,6 @@ class ChooseFileActivity : AbsBaseActivity() {
     @IntDef(MODE_LIST, MODE_TABLE)
     @Retention(AnnotationRetention.SOURCE)
     annotation class ShowMode
-
-    @IntDef(SHOW_TYPE_DIR, SHOW_TYPE_IMAGE, SHOW_TYPE_AUDIO, SHOW_TYPE_VIDEO)
-    @Retention(AnnotationRetention.SOURCE)
-    annotation class ShowType
 
     private val permissionArray = arrayListOf(
         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -156,8 +164,8 @@ class ChooseFileActivity : AbsBaseActivity() {
      */
     private var maxChooseFileCount = DEFAULT_MAX_CHOOSE_FILE_COUNT
 
-    @ShowType
-    private var showType = SHOW_TYPE_DIR
+    @ChooseFileShowType
+    private var showType = Constants.FileShowType.SHOW_TYPE_DIR
 
     @ShowMode
     private var showMode = MODE_LIST
@@ -174,6 +182,8 @@ class ChooseFileActivity : AbsBaseActivity() {
 
     private var mLayoutManager: RecyclerView.LayoutManager? = null
     private var navLayoutManager: LinearLayoutManager? = null
+
+    private var chooseFileHandler: Handler? = null
 
     override fun initWindow() {
 
@@ -198,7 +208,7 @@ class ChooseFileActivity : AbsBaseActivity() {
 
         base_choose_file_bl_preview_tv?.setOnClickListener {
             if (!chooseFileList.isNullOrEmpty()) {
-                val bean = chooseFileList.get(0)
+                val bean = chooseFileList[0]
                 showPreviewDialog(bean.filePath, chooseFileList)
             } else {
                 mContext?.apply {
@@ -210,9 +220,11 @@ class ChooseFileActivity : AbsBaseActivity() {
     }
 
     override fun initData() {
+        chooseFileHandler = Handler(ChooseFileHandlerCallback())
+
         val bundle = intent?.extras
         bundle?.let {
-            showType = it.getInt("showType", SHOW_TYPE_DIR)
+            showType = it.getInt("showType", Constants.FileShowType.SHOW_TYPE_DIR)
             showMode = it.getInt("showMode", MODE_LIST)
             showTableModeColumn = it.getInt("tableColumn", DEFAULT_TABLE_COLUMNS)
             maxChooseFileCount = it.getInt("maxChooseFile", DEFAULT_MAX_CHOOSE_FILE_COUNT)
@@ -233,6 +245,12 @@ class ChooseFileActivity : AbsBaseActivity() {
             100
         )
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        chooseFileHandler?.removeCallbacksAndMessages(null)
+        chooseFileHandler = null
     }
 
     private fun initContentRv() {
@@ -342,25 +360,32 @@ class ChooseFileActivity : AbsBaseActivity() {
         ChooseFileRvAdapter.ChooseFileRvAdapterListener {
         override fun addChoseFile(position: Int, view: View) {
             L.i(TAG, "addChoseFile: $position")
-            if (chooseFileList.size >= maxChooseFileCount) {
+            if (maxChooseFileCount > 0 && chooseFileList.size >= maxChooseFileCount) {
+                showToast(mContext.getString(R.string.selected_file_max))
                 return
             }
             val bean = chooseFileListRvAdapter?.list?.get(position)
-            bean?.let {
-                addChooseFileBean(it)
+            chooseFileHandler?.let {
+                val message = Message.obtain()
+                val bundle = Bundle()
+                bundle.putSerializable(HANDLER_TAG_CHOOSE_FILE, bean)
+                message.what = HANDLER_ADD_CHOOSE_FILE
+                message.data = bundle
+                it.sendMessageDelayed(message, 100)
             }
-            view.postDelayed({ updateFilePreviewCountOnView(chooseFileList.size) }, 100)
-            view.postDelayed({ updateChooseFileSize() }, 100)
         }
 
         override fun removeChoseFile(position: Int, view: View) {
             L.i(TAG, "removeChoseFile: $position")
             val bean = chooseFileListRvAdapter?.list?.get(position)
-            bean?.let {
-                removeChooseFileBean(it)
+            chooseFileHandler?.let {
+                val message = Message.obtain()
+                val bundle = Bundle()
+                bundle.putSerializable(HANDLER_TAG_CHOOSE_FILE, bean)
+                message.what = HANDLER_REMOVE_CHOOSE_FILE
+                message.data = bundle
+                it.sendMessageDelayed(message, 100)
             }
-            view.postDelayed({ updateFilePreviewCountOnView(chooseFileList.size) }, 100)
-            view.postDelayed({ updateChooseFileSize() }, 100)
         }
 
         override fun showFullImage(position: Int, view: View) {
@@ -409,26 +434,26 @@ class ChooseFileActivity : AbsBaseActivity() {
     }
 
     @RequiresPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    private fun queryFileList(filePath: String?, @ShowType showType: Int) {
+    private fun queryFileList(filePath: String?, @ChooseFileShowType showType: Int) {
         Observable
             .create(
-                ObservableOnSubscribe<MutableList<BaseChooseFileBean>>() {
+                ObservableOnSubscribe<MutableList<BaseChooseFileBean>> { emitter ->
                     var list: MutableList<BaseChooseFileBean> = mutableListOf()
                     when (showType) {
-                        SHOW_TYPE_DIR -> {
+                        Constants.FileShowType.SHOW_TYPE_DIR -> {
                             list = ProviderUtil.queryFileListByDir(filePath)
                         }
-                        SHOW_TYPE_AUDIO -> {
+                        Constants.FileShowType.SHOW_TYPE_AUDIO -> {
                             list = ProviderUtil.queryFileAudioWithContentProvider(mContext)
                         }
-                        SHOW_TYPE_IMAGE -> {
+                        Constants.FileShowType.SHOW_TYPE_IMAGE -> {
                             list = ProviderUtil.queryFileImageWithContextProvider(mContext)
                         }
-                        SHOW_TYPE_VIDEO -> {
+                        Constants.FileShowType.SHOW_TYPE_VIDEO -> {
 
                         }
                         else -> {
-                            it.onError(IllegalArgumentException("no find $showType this's data list"))
+                            emitter.onError(IllegalArgumentException("no find $showType this's data list"))
                             return@ObservableOnSubscribe
                         }
                     }
@@ -436,7 +461,7 @@ class ChooseFileActivity : AbsBaseActivity() {
                     list.forEach { listIt ->
                         run checkEach@{
                             chooseFileList.forEach { chooseFileListIt ->
-                                if (listIt.filePath.equals(chooseFileListIt.filePath)) {
+                                if (listIt.filePath == chooseFileListIt.filePath) {
                                     listIt.checked = true
                                     return@checkEach
                                 }
@@ -444,16 +469,16 @@ class ChooseFileActivity : AbsBaseActivity() {
                         }
                     }
                     val fileTypeHelper = FileTypeHelper(mContext)
-                    list.forEach {
-                        if (!it.fileIsDirectory) {
-                            val file = File(it.filePath)
+                    list.forEach { fileItem ->
+                        if (!fileItem.fileIsDirectory) {
+                            val file = File(fileItem.filePath)
                             val isImage = fileTypeHelper.isImageWithFile(file)
                             if (isImage) {
-                                it.fileType = Constants.FileType.FILE_TYPE_IMAGE
+                                fileItem.fileType = Constants.FileType.FILE_TYPE_IMAGE
                             }
                         }
                     }
-                    it.onNext(list)
+                    emitter.onNext(list)
                 }
             )
             .observeOn(AndroidSchedulers.mainThread())
@@ -491,15 +516,15 @@ class ChooseFileActivity : AbsBaseActivity() {
                 needRequestPermissionArray.add(p)
             }
         }
-        if (needRequestPermissionArray.size > 0) {
+        return if (needRequestPermissionArray.size > 0) {
             ActivityCompat.requestPermissions(
                 this,
                 needRequestPermissionArray.toTypedArray(),
                 requestPermissionCode
             )
-            return false
+            false
         } else {
-            return true
+            true
         }
     }
 
@@ -595,9 +620,9 @@ class ChooseFileActivity : AbsBaseActivity() {
     private fun addChooseFileBean(bean: BaseChooseFileBean) {
         var addedFileBeanPosition = -1
         if (chooseFileList.size > 0) {
-            for (index in 0..chooseFileList.size - 1) {
-                val fileBean = chooseFileList.get(index)
-                if (fileBean.filePath.equals(bean.filePath)) {
+            for (index in 0 until chooseFileList.size) {
+                val fileBean = chooseFileList[index]
+                if (fileBean.filePath == bean.filePath) {
                     addedFileBeanPosition = index
                     break
                 }
@@ -615,9 +640,9 @@ class ChooseFileActivity : AbsBaseActivity() {
     private fun removeChooseFileBean(bean: BaseChooseFileBean) {
         var addedFileBeanPosition = -1
         if (chooseFileList.size > 0) {
-            for (index in 0..chooseFileList.size - 1) {
-                val fileBean = chooseFileList.get(index)
-                if (fileBean.filePath.equals(bean.filePath)) {
+            for (index in 0 until chooseFileList.size) {
+                val fileBean = chooseFileList[index]
+                if (fileBean.filePath == bean.filePath) {
                     addedFileBeanPosition = index
                     break
                 }
@@ -649,10 +674,92 @@ class ChooseFileActivity : AbsBaseActivity() {
             previewDialog = PreviewImageFragmentDialog.Builder(mContext)
                 .setCurrentImageSrc(selectedImageSrc)
                 .setImageList(selectedImageList)
+                .setListener(PreviewImageDialogListenerImpl())
                 .build()
         }
         if (!previewDialog.isAdded || !previewDialog.isVisible) {
             previewDialog.show(manager, "PreviewImageDialog")
+        }
+    }
+
+    /**
+     * 预览图片监听实现
+     */
+    private inner class PreviewImageDialogListenerImpl :
+        PreviewImageFragmentDialog.PreviewImageFragmentDialogListener {
+        override fun onTargetCheck(v: View?, position: Int) {
+
+        }
+
+        override fun onDialogShow() {
+            QMUIDisplayHelper.setFullScreen(this@ChooseFileActivity)
+        }
+
+        override fun onDialogHide() {
+            QMUIDisplayHelper.cancelFullScreen(this@ChooseFileActivity)
+        }
+
+        override fun onSubmit(previewImageList: List<BaseChooseFileBean>?) {
+            // 适配器中选中项 总是 >= 预览后项
+            // 取消选中的数据
+            val list = previewImageList?.filter {
+                return@filter !it.checked
+            }
+            val arrayList = ArrayList<BaseChooseFileBean>()
+            list?.forEach {
+                arrayList.add(it)
+            }
+
+            chooseFileHandler?.let {
+                val message = Message.obtain()
+                val bundle = Bundle()
+                bundle.putParcelableArrayList(HANDLER_TAG_CHOOSE_FILE_LIST, arrayList)
+                message.what = HANDLER_REMOVE_CHOOSE_FILE_LIST
+                message.data = bundle
+                it.sendMessage(message)
+            }
+        }
+    }
+
+    /**
+     * 选择文件回调
+     */
+    private inner class ChooseFileHandlerCallback : Handler.Callback {
+        override fun handleMessage(msg: Message): Boolean {
+            val bundle = msg.data
+            val bean =
+                bundle.getSerializable(HANDLER_TAG_CHOOSE_FILE) as BaseChooseFileBean?
+            when (msg.what) {
+                HANDLER_ADD_CHOOSE_FILE -> {
+                    bean?.let {
+                        addChooseFileBean(it)
+                    }
+                }
+                HANDLER_REMOVE_CHOOSE_FILE -> {
+                    bean?.let {
+                        removeChooseFileBean(it)
+                    }
+                }
+                HANDLER_REMOVE_CHOOSE_FILE_LIST -> {
+                    val fileList: ArrayList<BaseChooseFileBean>? =
+                        bundle.getParcelableArrayList(HANDLER_TAG_CHOOSE_FILE_LIST)
+                    val adapterList = chooseFileListRvAdapter?.list
+                    fileList?.forEach {
+                        removeChooseFileBean(it)
+                        adapterList?.forEachIndexed { index, baseChooseFileBean ->
+                            if (baseChooseFileBean.filePath == it.filePath) {
+                                chooseFileListRvAdapter?.changeItemData(it, index)
+                            }
+                        }
+                    }
+                }
+                else -> {
+
+                }
+            }
+            updateFilePreviewCountOnView(chooseFileList.size)
+            updateChooseFileSize()
+            return true
         }
     }
 

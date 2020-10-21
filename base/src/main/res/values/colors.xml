@@ -43,6 +43,8 @@
     <color name="card_inverse_color">@color/textColor</color>
     <color name="dialog_color">@color/text_white_base_color</color>
 
+    <color name="negative_color">#FB2A2A</color>
+    <color name="negative_color_white">#EA6464</color>
     <color name="danger_color">@color/red</color>
 
 

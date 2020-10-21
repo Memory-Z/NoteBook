@@ -24,7 +24,9 @@ class BasePreviewImageBean : BaseChooseFileBean {
         this.canChoose = bean.canChoose
     }
 
-
+    /**
+     * 是否为当前预览图片
+     */
     var isSelectedPreview: Boolean = false
     override fun toString(): String {
         return "BasePreviewImageBean(isSelectedPreview=$isSelectedPreview)"

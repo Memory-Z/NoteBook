@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black">
+    android:background="@android:color/black"
+    android:fitsSystemWindows="true">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/base_dpi_preview_vp2"
@@ -29,7 +30,7 @@
             android:id="@+id/base_dpi_top_back_iv"
             style="@style/Base.ImageView.Icon.Min"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:contentDescription="@string/_image"
@@ -53,17 +54,32 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/bg_text_click" />
+            android:background="@drawable/bg_text_submit"
+            android:gravity="center"
+            android:text="@string/_submit"
+            android:textColor="@color/text_white_base_color" />
 
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/base_dpi_bottom_rl"
+        style="@style/Base.Layout"
         android:layout_width="0dp"
         android:layout_height="@dimen/touch_target_height"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
+        <CheckBox
+            android:id="@+id/base_dpi_bottom_cbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="@string/cancel_checked"
+            android:textColor="@color/negative_color" />
 
     </RelativeLayout>
 

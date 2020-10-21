@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
+import androidx.annotation.NonNull
 import androidx.annotation.RequiresPermission
 import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.entity.Constants
@@ -29,6 +30,7 @@ object ProviderUtil {
      * 通过文件目录查询文件列表
      * @param filePath 文件目录地址
      */
+    @NonNull
     @RequiresPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
     fun queryFileListByDir(filePath: String?): MutableList<BaseChooseFileBean> {
         var path = filePath
@@ -63,6 +65,7 @@ object ProviderUtil {
     /**
      * 查询 Media.Image.Media. 文件信息
      */
+    @NonNull
     fun queryFileImageWithContextProvider(context: Context): MutableList<BaseChooseFileBean> {
         val paramArray = arrayListOf(
             MediaStore.Images.Media._ID,
@@ -105,6 +108,7 @@ object ProviderUtil {
     /**
      * 查询 Media.Audio,Media  文件信息
      */
+    @NonNull
     fun queryFileAudioWithContentProvider(context: Context): MutableList<BaseChooseFileBean> {
         val paramArray = arrayListOf(
             MediaStore.Audio.Media._ID,

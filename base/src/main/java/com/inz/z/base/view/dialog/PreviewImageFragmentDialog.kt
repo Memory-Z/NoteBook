@@ -1,10 +1,8 @@
 package com.inz.z.base.view.dialog
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
@@ -15,12 +13,11 @@ import com.inz.z.base.R
 import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.entity.BasePreviewImageBean
 import com.inz.z.base.entity.Constants
-import com.inz.z.base.util.ImageUtils
-import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseDialogFragment
 import com.inz.z.base.view.dialog.adapter.PreviewImageListRvAdapter
 import com.inz.z.base.view.dialog.adapter.PreviewImageVpRvAdapter
 import kotlinx.android.synthetic.main.base_dialog_preview_image.*
+import kotlinx.android.synthetic.main.base_dialog_preview_image.view.*
 
 /**
  *
@@ -34,28 +31,33 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
         private const val TAG = "PreviewImageFragmentDialog"
 
         fun getInstant(currentImageSrc: String): PreviewImageFragmentDialog {
-            return getInstant(currentImageSrc, null)
-
+            return getInstant(currentImageSrc, null, null)
         }
 
         fun getInstant(
             currentImageSrc: String,
-            fileList: ArrayList<BaseChooseFileBean>?
+            fileList: ArrayList<BaseChooseFileBean>?,
+            listener: PreviewImageFragmentDialogListener?
         ): PreviewImageFragmentDialog {
             val dialog = PreviewImageFragmentDialog()
             val bundle = Bundle()
             bundle.putString("currentImage", currentImageSrc)
             bundle.putParcelableArrayList("fileImageList", fileList)
             dialog.arguments = bundle
+            dialog.listener = listener
             return dialog
         }
     }
 
     private var selectedImageSrc: String? = ""
-    private var selectedFileList: ArrayList<BaseChooseFileBean>? = null
+    private var selectedFileList: List<BaseChooseFileBean>? = null
+
+    private var previewImageList: List<BasePreviewImageBean>? = null
 
     private var previewImageListRvAdapter: PreviewImageListRvAdapter? = null
     private var previewImageVpRvAdapter: PreviewImageVpRvAdapter? = null
+
+    var listener: PreviewImageFragmentDialogListener? = null
 
     override fun initWindow() {
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.Base_Dialog)
@@ -66,12 +68,12 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
     }
 
     override fun initView() {
-
         previewImageListRvAdapter = PreviewImageListRvAdapter(mContext)
         previewImageListRvAdapter?.listener = PreviewImageListRvAdapterListenerImpl()
         val linearManager = LinearLayoutManager(mContext)
         linearManager.orientation = LinearLayoutManager.HORIZONTAL
         base_dpi_list_rv.apply {
+            setItemViewCacheSize(5)
             adapter = previewImageListRvAdapter
             layoutManager = linearManager
         }
@@ -80,11 +82,13 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
         previewImageVpRvAdapter?.listener = PreviewImageVpRvAdapterListenerImpl()
         base_dpi_preview_vp2.apply {
             this.adapter = previewImageVpRvAdapter
+            offscreenPageLimit = 5
             this.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-                    L.i(TAG, "------------- $position")
                     previewImageListRvAdapter?.targetSelectedPosition(position)
+                    val bean = previewImageVpRvAdapter?.getItemByPosition(position)
+                    mView?.base_dpi_bottom_cbox?.isChecked = bean?.checked ?: false
                 }
             })
         }
@@ -93,6 +97,24 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
             dismissAllowingStateLoss()
         }
 
+        base_dpi_bottom_cbox?.setOnCheckedChangeListener { buttonView, isChecked ->
+            val position = base_dpi_preview_vp2?.currentItem
+            if (position != null) {
+                val bean = previewImageVpRvAdapter?.getItemByPosition(position)
+                if (bean != null && bean.checked != isChecked) {
+                    bean.checked = isChecked
+                    previewImageVpRvAdapter?.refreshItemOnPosition(position, bean)
+                }
+
+            }
+        }
+
+        base_dpi_top_done_tv?.setOnClickListener {
+            val previewList = previewImageVpRvAdapter?.list?.toList()
+            val fileList = resetChooseFileListWithPreview(previewList)
+            listener?.onSubmit(fileList)
+            dismissAllowingStateLoss()
+        }
 
     }
 
@@ -103,20 +125,20 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
         }
         val haveMoreImg = !selectedFileList.isNullOrEmpty()
         base_dpi_list_rv?.visibility = if (haveMoreImg) View.VISIBLE else View.GONE
-
-        if (haveMoreImg) {
-            val bean = selectedFileList?.get(0);
-            if (bean != null) {
-                val bitmap = BitmapFactory.decodeFile(bean.filePath)
-                val newBitmap = ImageUtils.resizeBitmap(bitmap, 0.1F)
-                L.i(TAG, "initData")
-            }
-        }
+//
+//        if (haveMoreImg) {
+//            val bean = selectedFileList?.get(0);
+//            if (bean != null) {
+//                val bitmap = BitmapFactory.decodeFile(bean.filePath)
+//                val newBitmap = ImageUtils.resizeBitmap(bitmap, 0.1F)
+//                L.i(TAG, "initData")
+//            }
+//        }
 
         base_dpi_top_rl.postDelayed({
             val index = getImageInListPosition(selectedImageSrc ?: "", selectedFileList)
             loadImageToRv(index)
-        }, 500)
+        }, 1000)
     }
 
     override fun onStart() {
@@ -135,6 +157,16 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        listener?.onDialogShow()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        listener?.onDialogHide()
+    }
+
     /**
      * 加载图片文件
      *
@@ -149,15 +181,15 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
                 imageFileList.add(bean)
             }
         }
+        this.previewImageList = imageFileList
         if (!imageFileList.isNullOrEmpty()) {
-            previewImageListRvAdapter?.refreshData(imageFileList)
-
+            previewImageListRvAdapter?.refreshData(this.previewImageList?.toMutableList())
         } else {
             val bean = BasePreviewImageBean()
             bean.filePath = selectedImageSrc ?: ""
             imageFileList.add(bean)
         }
-        previewImageVpRvAdapter?.refreshData(imageFileList)
+        previewImageVpRvAdapter?.refreshData(this.previewImageList)
     }
 
     /**
@@ -165,7 +197,7 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
      */
     private fun getImageInListPosition(
         currentImageSrc: String,
-        fileList: ArrayList<BaseChooseFileBean>?
+        fileList: List<BaseChooseFileBean>?
     ): Int {
         fileList?.forEachIndexed { index, baseChooseFileBean ->
             if (currentImageSrc.equals(baseChooseFileBean.filePath)) {
@@ -205,7 +237,6 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
     private inner class PreviewImageListRvAdapterListenerImpl :
         PreviewImageListRvAdapter.PreviewImageListRvAdapterListener {
         override fun onImageClick(v: View?, position: Int) {
-            L.i(TAG, "---------------  $position")
             base_dpi_preview_vp2?.currentItem = position
         }
     }
@@ -217,6 +248,23 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
         }
     }
 
+    /**
+     * 重置选中文件列表 通过 预览文件
+     */
+    private fun resetChooseFileListWithPreview(previewImageList: List<BasePreviewImageBean>?): List<BaseChooseFileBean>? {
+        selectedFileList?.forEach { file ->
+            run previewForEach@{
+                previewImageList?.forEach { preview ->
+                    if (file.filePath.equals(preview.filePath)) {
+                        file.checked = preview.checked
+                        return@previewForEach
+                    }
+                }
+            }
+        }
+        return selectedFileList
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // OPEN
     ///////////////////////////////////////////////////////////////////////////
@@ -225,6 +273,7 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
 
         private var currentImageSrc: String? = ""
         private var chooseFileList: ArrayList<BaseChooseFileBean>? = null
+        private var listener: PreviewImageFragmentDialogListener? = null
 
         fun setCurrentImageSrc(imageSrc: String): Builder {
             currentImageSrc = imageSrc
@@ -236,9 +285,38 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
             return this
         }
 
-        fun build(): PreviewImageFragmentDialog {
-            return getInstant(currentImageSrc ?: "", chooseFileList)
+        fun setListener(listener: PreviewImageFragmentDialogListener?): Builder {
+            this.listener = listener
+            return this
         }
+
+        fun build(): PreviewImageFragmentDialog {
+            return getInstant(currentImageSrc ?: "", chooseFileList, listener)
+        }
+
+    }
+
+    interface PreviewImageFragmentDialogListener {
+        /**
+         * 切换选中
+         */
+        fun onTargetCheck(v: View?, position: Int)
+
+        /**
+         * 弹窗显示
+         */
+        fun onDialogShow()
+
+        /**
+         * 弹窗消失
+         */
+        fun onDialogHide()
+
+        /**
+         * 提交
+         * @param previewImageList 选中列表
+         */
+        fun onSubmit(previewImageList: List<BaseChooseFileBean>?)
 
     }
 
