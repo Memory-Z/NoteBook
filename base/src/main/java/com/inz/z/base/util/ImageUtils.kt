@@ -1,14 +1,18 @@
 package com.inz.z.base.util
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Matrix
+import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.util.Base64
+import androidx.core.graphics.BitmapCompat
+import com.bumptech.glide.load.resource.bitmap.BitmapEncoder
 import com.inz.z.base.entity.Constants
 import com.inz.z.base.entity.MergeBitmapOrientation
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 
 /**
  * @author Zhenglj
@@ -16,6 +20,9 @@ import com.inz.z.base.entity.MergeBitmapOrientation
  * Create by inz in 2019/1/29 10:39.
  */
 object ImageUtils {
+
+    private const val TAG = "ImageUtils"
+
     /**
      * 通过Bitmap 获取Bitmap
      *
@@ -185,5 +192,37 @@ object ImageUtils {
             canvas.drawBitmap(mergeBitmap, 0F, bitmap.height.toFloat(), null)
         }
         return newBitmap
+    }
+
+
+    /**
+     * 转换 bitmap 为 字符串
+     * @param bitmap 位图
+     */
+    fun transferBitmap2Str(bitmap: Bitmap): String? {
+        var inputString: InputStream? = null
+        try {
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+            val byteArray = byteArrayOutputStream.toByteArray()
+            return Base64.encodeToString(byteArray, Base64.DEFAULT)
+        } catch (e: Exception) {
+            L.e(TAG, "tranBitmap2Str: --- failure!!  ", e)
+        }
+        return null
+    }
+
+    /**
+     * 转换 字符串为 bitmap
+     * @param bitmapStr 字符串
+     */
+    fun transferStr2Bitmap(bitmapStr: String): Bitmap? {
+        try {
+            val byteArray = Base64.decode(bitmapStr, Base64.DEFAULT)
+            return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+        } catch (e: Exception) {
+            L.e(TAG, "tranStr2Bitmap: --- failure !! ", e)
+        }
+        return null
     }
 }

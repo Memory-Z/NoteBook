@@ -183,6 +183,17 @@ class ChooseFileActivity : AbsBaseActivity() {
 
     private var chooseFileHandler: Handler? = null
 
+    /**
+     * 按钮可点击 颜色
+     */
+    private var buttonClickScl: ColorStateList? = null
+
+    /**
+     * 按钮默认颜色
+     */
+    private var buttonDefaultScl: ColorStateList? = null
+
+
     override fun initWindow() {
 
     }
@@ -192,6 +203,8 @@ class ChooseFileActivity : AbsBaseActivity() {
     }
 
     override fun initView() {
+
+        initColorStateList()
 //        base_choose_file_top_r_more_iv?.setOnClickListener { createMorePopupMenu() }
         setSupportActionBar(base_choose_file_top_btal.toolbar)
 
@@ -215,6 +228,9 @@ class ChooseFileActivity : AbsBaseActivity() {
             }
         }
 
+        base_choose_file_top_submit_tv?.setOnClickListener {
+            closeChooseFileView()
+        }
     }
 
     override fun initData() {
@@ -251,13 +267,29 @@ class ChooseFileActivity : AbsBaseActivity() {
         chooseFileHandler = null
     }
 
+    /**
+     * 初始化颜色
+     */
+    private fun initColorStateList() {
+        buttonClickScl =
+            ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.colorAccent))
+        buttonDefaultScl =
+            ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.text_black_50_color))
+    }
+
     private fun initContentRv() {
         mLayoutManager = GridLayoutManager(mContext, 1)
-        chooseFileListRvAdapter = ChooseFileRvAdapter(mContext, MODE_LIST)
+        chooseFileListRvAdapter = ChooseFileRvAdapter(mContext, showMode)
         chooseFileListRvAdapter?.listener = ChooseFileRvAdapterListenerImpl()
         base_choose_file_content_rv?.apply {
             layoutManager = mLayoutManager
             adapter = chooseFileListRvAdapter
+        }
+        val isDirContent = showType == Constants.FileShowType.SHOW_TYPE_DIR
+        base_choose_file_nav_rv?.visibility = if (isDirContent) {
+            View.VISIBLE
+        } else {
+            View.GONE
         }
         targetContentType()
     }
@@ -313,6 +345,7 @@ class ChooseFileActivity : AbsBaseActivity() {
                 targetContentType()
             }
             android.R.id.home -> {
+                // 返回
                 chooseFileList.clear()
                 closeChooseFileView()
             }
@@ -576,33 +609,34 @@ class ChooseFileActivity : AbsBaseActivity() {
      */
     private fun updateFilePreviewCountOnView(chooseFileSize: Int) {
         mContext?.apply {
-            val fileSizeStr = if (chooseFileSize == 0) {
-                mContext.getString(R.string._preview)
-            } else {
+            val haveSelected = chooseFileSize != 0
+            val fileSizeStr = if (haveSelected) {
                 mContext.getString(R.string.preview_format).format(chooseFileSize)
+            } else {
+                mContext.getString(R.string._preview)
+            }
+            val submitFileSizeStr = if (haveSelected) {
+                mContext.getString(R.string._submit_format).format(chooseFileSize)
+            } else {
+                mContext.getString(R.string._submit)
             }
             base_choose_file_bl_preview_tv?.apply {
-                this.isClickable = chooseFileSize != 0
-                if (chooseFileSize == 0) {
-                    setTextColor(
-                        ColorStateList.valueOf(
-                            ContextCompat.getColor(
-                                mContext,
-                                R.color.text_white_50_color
-                            )
-                        )
-                    )
+                this.isClickable = haveSelected
+                if (haveSelected) {
+                    setTextColor(buttonClickScl)
                 } else {
-                    setTextColor(
-                        ColorStateList.valueOf(
-                            ContextCompat.getColor(
-                                mContext,
-                                R.color.colorAccent
-                            )
-                        )
-                    )
+                    setTextColor(buttonDefaultScl)
                 }
                 text = fileSizeStr
+            }
+            base_choose_file_top_submit_tv?.apply {
+                this.isClickable = haveSelected
+                this.backgroundTintList = if (haveSelected) {
+                    buttonClickScl
+                } else {
+                    buttonDefaultScl
+                }
+                text = submitFileSizeStr
             }
         }
     }

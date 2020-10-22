@@ -34,12 +34,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <Spinner
-                style="@style/Widget.AppCompat.Spinner.DropDown"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:entries="@array/_file_type" />
-
         </RelativeLayout>
 
         <LinearLayout
@@ -48,6 +42,18 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/base_choose_file_top_submit_tv"
+                style="@style/Base.Text.Second"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/button_normal_height"
+                android:background="@drawable/bg_text_submit"
+                android:backgroundTint="@color/text_black_50_color"
+                android:clickable="false"
+                android:gravity="center"
+                android:text="@string/_submit"
+                android:textColor="@color/text_white_base_color" />
 
         </LinearLayout>
 
@@ -74,6 +80,7 @@
         android:layout_height="@dimen/button_normal_height"
         android:nestedScrollingEnabled="false"
         android:scrollbars="none"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/base_choose_file_top_btal" />
@@ -116,9 +123,10 @@
                 style="@style/Base.Text"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:clickable="false"
                 android:gravity="center"
                 android:text="@string/_preview"
-                android:textColor="@color/text_white_base_color" />
+                android:textColor="@color/text_black_50_color" />
 
         </LinearLayout>
 
