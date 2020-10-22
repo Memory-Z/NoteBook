@@ -207,7 +207,7 @@ class ChooseFileActivity : AbsBaseActivity() {
         base_choose_file_bl_preview_tv?.setOnClickListener {
             if (!chooseFileList.isNullOrEmpty()) {
                 val bean = chooseFileList[0]
-                showPreviewDialog(bean, chooseFileList)
+                showPreviewDialog(bean, chooseFileList, false)
             } else {
                 mContext?.apply {
                     showToast(mContext.getString(R.string.not_choose_file_to_preview))
@@ -389,7 +389,7 @@ class ChooseFileActivity : AbsBaseActivity() {
             L.i(TAG, "showFullImage: $position")
             val bean = chooseFileListRvAdapter?.getItemByPosition(position)
             if (bean != null) {
-                showPreviewDialog(bean, null)
+                showPreviewDialog(bean, null, true)
             }
         }
 
@@ -654,7 +654,8 @@ class ChooseFileActivity : AbsBaseActivity() {
      */
     private fun showPreviewDialog(
         selectedImageBean: BaseChooseFileBean,
-        selectedImageList: ArrayList<BaseChooseFileBean>?
+        selectedImageList: ArrayList<BaseChooseFileBean>?,
+        isPreview: Boolean
     ) {
         if (mContext == null) {
             L.w(TAG, "showPreviewDialog: mContext is null. ")
@@ -667,6 +668,7 @@ class ChooseFileActivity : AbsBaseActivity() {
             previewDialog = PreviewImageFragmentDialog.Builder(mContext)
                 .setCurrentImageBean(selectedImageBean)
                 .setImageList(selectedImageList)
+                .setIsPreview(isPreview)
                 .setListener(PreviewImageDialogListenerImpl())
                 .build()
         }
