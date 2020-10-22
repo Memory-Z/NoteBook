@@ -49,8 +49,13 @@ class ChooseFileRvAdapter :
     private val colorWhiteCsl =
         ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.text_white_base_color))
 
+
+    override fun getItemViewType(position: Int): Int {
+        return showMode
+    }
+
     override fun onCreateVH(parent: ViewGroup, viewType: Int): ChooseFileRvHolder {
-        when (showMode) {
+        when (viewType) {
             ChooseFileActivity.MODE_TABLE -> {
                 val view =
                     mLayoutInflater.inflate(R.layout.base_item_choose_file_table, parent, false)
@@ -265,8 +270,10 @@ class ChooseFileRvAdapter :
     }
 
     fun changeShowMode(@ChooseFileActivity.ShowMode mode: Int) {
+        // TODO: 2020/10/22 切换显示内容
+        this.showMode = mode
 
-        notifyItemInserted(0)
+        notifyDataSetChanged()
     }
 
     /**

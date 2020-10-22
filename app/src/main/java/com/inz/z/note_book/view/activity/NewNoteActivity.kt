@@ -29,6 +29,8 @@ class NewNoteActivity : AbsBaseActivity() {
 
     companion object {
         const val TAG = "NewNoteActivity"
+        // Reqeust code 0~65535
+        private const val IMAGE_REQUEST_CODE = 0x0FE0
     }
 
     /**
@@ -227,7 +229,7 @@ class NewNoteActivity : AbsBaseActivity() {
         val manager = supportFragmentManager
         var chooseImageDialog = manager.findFragmentByTag("ChooseImageDialog") as ChooseImageDialog?
         if (chooseImageDialog == null) {
-            chooseImageDialog = ChooseImageDialog.getInstance()
+            chooseImageDialog = ChooseImageDialog.getInstance(IMAGE_REQUEST_CODE)
         }
         if (!chooseImageDialog.isAdded && !chooseImageDialog.isVisible) {
             chooseImageDialog.show(manager, "ChooseImageDialog")

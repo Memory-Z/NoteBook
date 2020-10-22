@@ -5,6 +5,7 @@ import android.os.Environment
 import android.text.SpannableString
 import android.view.View
 import com.inz.z.base.entity.BaseChooseFileBean
+import com.inz.z.base.entity.Constants
 import com.inz.z.base.entity.xml.FileTypeHeaderBean
 import com.inz.z.base.util.L
 import com.inz.z.base.util.XmlFileUtils
@@ -120,7 +121,7 @@ class TestCalendarActivity : AbsBaseActivity() {
 //        xmlFileReader()
         val dcimFile = getExternalFilesDir(Environment.DIRECTORY_DCIM)
         val picFile = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val dirFilePath =getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+        val dirFilePath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
         L.i(TAG, "---------------- $dcimFile --- $picFile -- $dirFilePath  ")
     }
 
@@ -263,7 +264,10 @@ class TestCalendarActivity : AbsBaseActivity() {
         if (imgRes == 0) {
             ChooseFileActivity.gotoChooseFileActivity(
                 this@TestCalendarActivity,
-                1000
+                1000,
+                ChooseFileActivity.MODE_TABLE,
+                Constants.FileShowType.SHOW_TYPE_IMAGE,
+                2
             )
         } else {
             test_base_no_data_view?.postDelayed(

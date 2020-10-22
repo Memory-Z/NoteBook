@@ -17,7 +17,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.R
 import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.entity.BaseChooseFileNavBean
@@ -149,7 +148,6 @@ class ChooseFileActivity : AbsBaseActivity() {
 
     private val requestPermissionCode = 0x0002
 
-    private var chooseFileTableRvAdapter: ChooseFileRvAdapter? = null
     private var chooseFileListRvAdapter: ChooseFileRvAdapter? = null
 
     private var chooseFileNavRvAdapter: ChooseFileNavRvAdapter? = null
@@ -180,7 +178,7 @@ class ChooseFileActivity : AbsBaseActivity() {
      */
     private var chooseFileList: ArrayList<BaseChooseFileBean> = arrayListOf()
 
-    private var mLayoutManager: RecyclerView.LayoutManager? = null
+    private var mLayoutManager: GridLayoutManager? = null
     private var navLayoutManager: LinearLayoutManager? = null
 
     private var chooseFileHandler: Handler? = null
@@ -209,7 +207,7 @@ class ChooseFileActivity : AbsBaseActivity() {
         base_choose_file_bl_preview_tv?.setOnClickListener {
             if (!chooseFileList.isNullOrEmpty()) {
                 val bean = chooseFileList[0]
-                showPreviewDialog(bean.filePath, chooseFileList)
+                showPreviewDialog(bean, chooseFileList)
             } else {
                 mContext?.apply {
                     showToast(mContext.getString(R.string.not_choose_file_to_preview))
@@ -254,28 +252,27 @@ class ChooseFileActivity : AbsBaseActivity() {
     }
 
     private fun initContentRv() {
-        chooseFileTableRvAdapter = ChooseFileRvAdapter(mContext, MODE_TABLE)
-        chooseFileTableRvAdapter?.listener = ChooseFileRvAdapterListenerImpl()
+        mLayoutManager = GridLayoutManager(mContext, 1)
         chooseFileListRvAdapter = ChooseFileRvAdapter(mContext, MODE_LIST)
         chooseFileListRvAdapter?.listener = ChooseFileRvAdapterListenerImpl()
+        base_choose_file_content_rv?.apply {
+            layoutManager = mLayoutManager
+            adapter = chooseFileListRvAdapter
+        }
         targetContentType()
     }
 
+    /**
+     * 切换中间内容显示类型
+     */
     private fun targetContentType() {
-        when (showMode) {
-            MODE_LIST -> {
-                mLayoutManager = LinearLayoutManager(mContext)
-                base_choose_file_content_rv.apply {
-                    this.layoutManager = mLayoutManager
-                    this.adapter = chooseFileListRvAdapter
-                }
-            }
+        chooseFileListRvAdapter?.changeShowMode(showMode)
+        mLayoutManager?.spanCount = when (showMode) {
             MODE_TABLE -> {
-                mLayoutManager = GridLayoutManager(mContext, showTableModeColumn)
-                base_choose_file_content_rv.apply {
-                    this.layoutManager = mLayoutManager
-                    this.adapter = chooseFileTableRvAdapter
-                }
+                showTableModeColumn
+            }
+            else -> {
+                1
             }
         }
     }
@@ -364,7 +361,7 @@ class ChooseFileActivity : AbsBaseActivity() {
                 showToast(mContext.getString(R.string.selected_file_max))
                 return
             }
-            val bean = chooseFileListRvAdapter?.list?.get(position)
+            val bean = chooseFileListRvAdapter?.getItemByPosition(position)
             chooseFileHandler?.let {
                 val message = Message.obtain()
                 val bundle = Bundle()
@@ -377,7 +374,7 @@ class ChooseFileActivity : AbsBaseActivity() {
 
         override fun removeChoseFile(position: Int, view: View) {
             L.i(TAG, "removeChoseFile: $position")
-            val bean = chooseFileListRvAdapter?.list?.get(position)
+            val bean = chooseFileListRvAdapter?.getItemByPosition(position)
             chooseFileHandler?.let {
                 val message = Message.obtain()
                 val bundle = Bundle()
@@ -390,19 +387,15 @@ class ChooseFileActivity : AbsBaseActivity() {
 
         override fun showFullImage(position: Int, view: View) {
             L.i(TAG, "showFullImage: $position")
+            val bean = chooseFileListRvAdapter?.getItemByPosition(position)
+            if (bean != null) {
+                showPreviewDialog(bean, null)
+            }
         }
 
         override fun openFileDirectory(position: Int, view: View) {
             L.i(TAG, "openFileDirectory : $position")
-            var bean: BaseChooseFileBean? = null
-            when (showMode) {
-                MODE_LIST -> {
-                    bean = chooseFileListRvAdapter?.list?.get(position)
-                }
-                MODE_TABLE -> {
-                    bean = chooseFileTableRvAdapter?.list?.get(position)
-                }
-            }
+            val bean: BaseChooseFileBean? = chooseFileListRvAdapter?.list?.get(position)
             bean?.let {
                 addNavBody(it.filePath, it.fileName)
                 checkQueryType(it.filePath)
@@ -435,6 +428,7 @@ class ChooseFileActivity : AbsBaseActivity() {
 
     @RequiresPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
     private fun queryFileList(filePath: String?, @ChooseFileShowType showType: Int) {
+        L.i(TAG, "queryFileList---------- $showType")
         Observable
             .create(
                 ObservableOnSubscribe<MutableList<BaseChooseFileBean>> { emitter ->
@@ -488,7 +482,6 @@ class ChooseFileActivity : AbsBaseActivity() {
                     override fun onNext(t: MutableList<BaseChooseFileBean>) {
                         L.i(TAG, "queryFileList ${Thread.currentThread().name} -- ${t.size} -- $t")
                         chooseFileListRvAdapter?.refreshData(t)
-                        chooseFileTableRvAdapter?.refreshData(t)
                     }
 
                     override fun onError(e: Throwable) {
@@ -660,7 +653,7 @@ class ChooseFileActivity : AbsBaseActivity() {
      * 显示图片预览弹窗
      */
     private fun showPreviewDialog(
-        selectedImageSrc: String,
+        selectedImageBean: BaseChooseFileBean,
         selectedImageList: ArrayList<BaseChooseFileBean>?
     ) {
         if (mContext == null) {
@@ -672,7 +665,7 @@ class ChooseFileActivity : AbsBaseActivity() {
             manager.findFragmentByTag("PreviewImageDialog") as PreviewImageFragmentDialog?
         if (previewDialog == null) {
             previewDialog = PreviewImageFragmentDialog.Builder(mContext)
-                .setCurrentImageSrc(selectedImageSrc)
+                .setCurrentImageBean(selectedImageBean)
                 .setImageList(selectedImageList)
                 .setListener(PreviewImageDialogListenerImpl())
                 .build()

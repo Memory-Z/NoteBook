@@ -1,17 +1,12 @@
 package com.inz.z.note_book.view.dialog
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.Gravity
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.inz.z.base.view.AbsBaseDialogFragment
 import com.inz.z.base.view.activity.ChooseFileActivity
 import com.inz.z.note_book.R
-import com.inz.z.note_book.view.fragment.BaseDialogFragment
 import kotlinx.android.synthetic.main.dialog_choose_image.*
 
 /**
@@ -24,14 +19,18 @@ class ChooseImageDialog : AbsBaseDialogFragment() {
     companion object {
         private const val TAG = "ChooseImageDialog"
 
-        fun getInstance(): ChooseImageDialog {
+        private const val REQUEST_CODE_TAG = "requestCode"
+
+        fun getInstance(requestCode: Int): ChooseImageDialog {
             val dialog = ChooseImageDialog()
             val bundle = Bundle()
+            bundle.putInt(REQUEST_CODE_TAG, requestCode)
             dialog.arguments = bundle
             return dialog
         }
     }
 
+    private var requestCode = -1
 
     override fun initWindow() {
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.NoteBookAppTheme_Dialog_BottomToTop)
@@ -52,6 +51,9 @@ class ChooseImageDialog : AbsBaseDialogFragment() {
     }
 
     override fun initData() {
+        arguments?.apply {
+            requestCode = this.getInt(REQUEST_CODE_TAG, -1)
+        }
     }
 
     override fun onStart() {
@@ -72,7 +74,14 @@ class ChooseImageDialog : AbsBaseDialogFragment() {
 //        val intent = Intent(Intent.ACTION_GET_CONTENT)
 //        intent.type = "image/*"
 //        startActivity(intent)
-        ChooseFileActivity.gotoChooseFileActivity(requireActivity(), 800)
+//        ChooseFileActivity.gotoChooseFileActivity(requireActivity(), 800)
+        ChooseFileActivity.gotoChooseFileActivity(
+            requireActivity(),
+            requestCode,
+            ChooseFileActivity.MODE_TABLE,
+            com.inz.z.base.entity.Constants.FileShowType.SHOW_TYPE_IMAGE,
+            2
+        )
     }
 
     ///////////////////////////////////////////////////////////////////////////
