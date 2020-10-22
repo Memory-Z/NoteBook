@@ -1,12 +1,15 @@
 package com.inz.z.note_book.view.activity
 
+import android.content.Intent
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseActivity
+import com.inz.z.base.view.activity.ChooseFileActivity
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteInfoController
@@ -29,6 +32,7 @@ class NewNoteActivity : AbsBaseActivity() {
 
     companion object {
         const val TAG = "NewNoteActivity"
+
         // Reqeust code 0~65535
         private const val IMAGE_REQUEST_CODE = 0x0FE0
     }
@@ -120,6 +124,23 @@ class NewNoteActivity : AbsBaseActivity() {
             }
         }
         return super.onKeyUp(keyCode, event)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == IMAGE_REQUEST_CODE) {
+            when (resultCode) {
+                ChooseFileActivity.CHOOSE_FILE_RESULT_CODE -> {
+                    data?.extras?.apply {
+                        val list =
+                            this.getParcelableArrayList<BaseChooseFileBean>(ChooseFileActivity.CHOOSE_FILE_LIST_TAG)
+                        val listSize = this.getInt(ChooseFileActivity.CHOOSE_FILE_SIZE_TAG, 0)
+                        L.i(TAG, "onActivityResult: $listSize --- $list ")
+                    }
+                }
+            }
+
+        }
     }
 
     /**
@@ -235,4 +256,12 @@ class NewNoteActivity : AbsBaseActivity() {
             chooseImageDialog.show(manager, "ChooseImageDialog")
         }
     }
+
+    /* ------------------------ 添加笔记土图片内容 ---------------------- */
+
+    private fun contentAddImageViewContent() {
+
+    }
+
+    /* ------------------------ 添加笔记土图片内容 ---------------------- */
 }
