@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/calendar_content_ll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/green"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
@@ -397,36 +399,125 @@
     <!--        android:layout_height="match_parent"-->
     <!--        android:contentDescription="@string/_image" />-->
 
-    <com.inz.z.base.view.widget.BaseNoDataView
-        android:id="@+id/test_base_no_data_view"
+    <!--    <com.inz.z.base.view.widget.BaseNoDataView-->
+    <!--        android:id="@+id/test_base_no_data_view"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        app:base_no_data_button_str="@string/_image"-->
+    <!--        app:base_no_data_message="@string/_position"-->
+    <!--        app:base_no_data_refresh_spannable="@string/_image"-->
+    <!--        app:base_no_data_show_refresh_btn="true"-->
+    <!--        app:base_no_data_title="@string/_image" />-->
+
+    <!--    <com.google.android.material.tabs.TabLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="@dimen/button_normal_height"-->
+    <!--        app:tabMode="scrollable"-->
+    <!--        app:tabMinWidth="@dimen/list_nav_height"-->
+    <!--        app:tabIndicatorColor="@android:color/transparent"-->
+    <!--        app:tabUnboundedRipple="true"-->
+    <!--        app:tabBackground="@drawable/bg_tab_item_sel"-->
+    <!--        app:tabTextColor="@color/blueviolet">-->
+
+    <!--        <com.google.android.material.tabs.TabItem-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_margin="@dimen/border_lr_dimen"-->
+
+    <!--            android:text="@string/_all" />-->
+    <!--        <com.google.android.material.tabs.TabItem-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_margin="@dimen/border_lr_dimen"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:text="@string/about" />-->
+    <!--    </com.google.android.material.tabs.TabLayout>-->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+
+        <com.inz.z.note_book.view.widget.EditCursorView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/touch_target_height"
+            android:layout_marginTop="@dimen/text_content_size"
+            app:ecursor_color="@color/red"
+            app:ecursor_delay="500" />
+
+        <com.inz.z.note_book.view.widget.EditCursorView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/touch_target_height"
+            android:layout_marginTop="@dimen/text_content_size"
+            app:ecursor_color="@color/yellow"
+            app:ecursor_delay="800" />
+
+        <com.inz.z.note_book.view.widget.EditCursorView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/touch_target_height"
+            android:layout_marginTop="@dimen/text_content_size"
+            app:ecursor_color="@color/text_black_base_color"
+            app:ecursor_delay="1000" />
+
+        <com.inz.z.note_book.view.widget.EditCursorView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/touch_target_height"
+            android:layout_marginTop="@dimen/text_content_size"
+            app:ecursor_color="@color/white"
+            app:ecursor_delay="1500" />
+    </LinearLayout>
+
+    <com.inz.z.note_book.view.widget.EditContentView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:base_no_data_button_str="@string/_image"
-        app:base_no_data_message="@string/_position"
-        app:base_no_data_refresh_spannable="@string/_image"
-        app:base_no_data_show_refresh_btn="true"
-        app:base_no_data_title="@string/_image" />
+        android:layout_height="match_parent">
 
-<!--    <com.google.android.material.tabs.TabLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="@dimen/button_normal_height"-->
-<!--        app:tabMode="scrollable"-->
-<!--        app:tabMinWidth="@dimen/list_nav_height"-->
-<!--        app:tabIndicatorColor="@android:color/transparent"-->
-<!--        app:tabUnboundedRipple="true"-->
-<!--        app:tabBackground="@drawable/bg_tab_item_sel"-->
-<!--        app:tabTextColor="@color/blueviolet">-->
+        <TextView
+            style="@style/Base.Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/_submit" />
 
-<!--        <com.google.android.material.tabs.TabItem-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="@dimen/border_lr_dimen"-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/_submit"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_photo_1"
+            android:visibility="gone" />
 
-<!--            android:text="@string/_all" />-->
-<!--        <com.google.android.material.tabs.TabItem-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_margin="@dimen/border_lr_dimen"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/about" />-->
-<!--    </com.google.android.material.tabs.TabLayout>-->
+        <LinearLayout
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/touch_target_height"
+                android:text="@string/_submit" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/_submit"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_photo_3"
+                android:visibility="gone" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_height"
+                android:gravity="top|start"
+                android:hint="@string/_image"
+                android:imeOptions="actionDone"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:textColor="@color/text_white_base_color"
+                android:textIsSelectable="true"
+                tools:ignore="LabelFor" />
+        </LinearLayout>
+    </com.inz.z.note_book.view.widget.EditContentView>
 </RelativeLayout>

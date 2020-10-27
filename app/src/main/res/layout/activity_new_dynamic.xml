@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 动态 -->
+
+    <com.inz.z.base.view.widget.BaseTopActionLayout
+        android:id="@+id/new_dynamic_top_btal"
+        android:layout_width="0dp"
+        app:base_show_custom_view="true"
+        android:layout_height="@dimen/touch_target_height"
+        app:base_top_center_layout="@id/new_dynamic_top_center_rl"
+        app:base_top_left_layout="@id/new_dynamic_top_left_ll"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/new_dynamic_top_left_ll"
+            android:layout_width="@dimen/touch_target_height"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/new_dynamic_top_center_rl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </RelativeLayout>
+
+    </com.inz.z.base.view.widget.BaseTopActionLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

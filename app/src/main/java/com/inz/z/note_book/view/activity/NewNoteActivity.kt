@@ -17,6 +17,7 @@ import com.inz.z.note_book.view.dialog.ChooseImageDialog
 import com.inz.z.note_book.view.fragment.BaseDialogFragment
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import kotlinx.android.synthetic.main.note_info_add_layout.*
+import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
@@ -258,6 +259,14 @@ class NewNoteActivity : AbsBaseActivity() {
     }
 
     /* ------------------------ 添加笔记土图片内容 ---------------------- */
+
+    private class TransferImageThread: Thread() {
+
+        override fun run() {
+            super.run()
+            val file = File("")
+        }
+    }
 
     private fun contentAddImageViewContent() {
 

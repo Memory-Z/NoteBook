@@ -91,23 +91,23 @@ class TestCalendarActivity : AbsBaseActivity() {
 //            }
 //            Glide.with(mContext).load(imgArray[position]).into(iv)
 //        }
-
-        test_base_no_data_view.apply {
-            setMessage(" !!!! ~~~ !!!! ")
-            setTitle("---- ")
-            listener = object : BaseNoDataView.BaseNoDataListener {
-                override fun onRefreshButtonClick(view: View?) {
-                    test_base_no_data_view.startRefresh("loading ...")
-                    test_base_no_data_view.postDelayed(
-                        {
-                            refreshNoDataViewImage()
-                        },
-                        5000
-                    )
-                }
-            }
-            stopRefresh("hint", true)
-        }
+//
+//        test_base_no_data_view.apply {
+//            setMessage(" !!!! ~~~ !!!! ")
+//            setTitle("---- ")
+//            listener = object : BaseNoDataView.BaseNoDataListener {
+//                override fun onRefreshButtonClick(view: View?) {
+//                    test_base_no_data_view.startRefresh("loading ...")
+//                    test_base_no_data_view.postDelayed(
+//                        {
+//                            refreshNoDataViewImage()
+//                        },
+//                        5000
+//                    )
+//                }
+//            }
+//            stopRefresh("hint", true)
+//        }
     }
 
     val imgResArray = intArrayOf(
@@ -219,63 +219,63 @@ class TestCalendarActivity : AbsBaseActivity() {
     }
 
 
-    private fun refreshNoDataViewImage() {
-        val random = Random()
-        val imgRes = random.nextInt(imgResArray.size)
-        L.i(TAG, "-------------- $imgRes")
-        test_base_no_data_view?.stopRefresh(
-            "success - ",
-            canRetry = true,
-            useSpannable = false,
-            spannableStr = SpannableString(""),
-            hintImage = imgResArray[imgRes]
-        )
-//
-//                            val option = BitmapFactory.Options()
-//                            option.inScaled = false
-//                            option.inPreferredConfig = Bitmap.Config.ARGB_8888
-//                            val drawableImg =
-//                                BitmapFactory.decodeResource(
-//                                    mContext.resources,
-//                                    R.drawable.img_icon_0,
-//                                    option
-//                                ).copy(Bitmap.Config.ARGB_8888, false)
-//
-//
-//                            val drawableImg2 =
-//                                BitmapFactory.decodeResource(
-//                                    mContext.resources,
-//                                    R.drawable.img_icon_1,
-//                                    option
-//                                ).copy(Bitmap.Config.ARGB_8888, false)
-//                            if (drawableImg != null && drawableImg2 != null) {
-//                                drawableImg.density = mContext.resources.displayMetrics.densityDpi
-//                                drawableImg2.density = mContext.resources.displayMetrics.densityDpi
-//                                val d = ImageUtils.mergeBitmap(
-//                                    drawableImg,
-//                                    drawableImg2,
-//                                    Constants.BitmapMergeType.VERTICAL,
-//                                    true,
-//                                    1600,
-//                                    0
-//                                )
-//                                L.i(TAG, "---------------- < ${d.width} + ${d.height} ")
-//                            }
-        if (imgRes == 0) {
-            ChooseFileActivity.gotoChooseFileActivity(
-                this@TestCalendarActivity,
-                1000,
-                ChooseFileActivity.MODE_TABLE,
-                Constants.FileShowType.SHOW_TYPE_IMAGE,
-                2
-            )
-        } else {
-            test_base_no_data_view?.postDelayed(
-                {
-                    refreshNoDataViewImage()
-                },
-                2000
-            )
-        }
-    }
+//    private fun refreshNoDataViewImage() {
+//        val random = Random()
+//        val imgRes = random.nextInt(imgResArray.size)
+//        L.i(TAG, "-------------- $imgRes")
+//        test_base_no_data_view?.stopRefresh(
+//            "success - ",
+//            canRetry = true,
+//            useSpannable = false,
+//            spannableStr = SpannableString(""),
+//            hintImage = imgResArray[imgRes]
+//        )
+////
+////                            val option = BitmapFactory.Options()
+////                            option.inScaled = false
+////                            option.inPreferredConfig = Bitmap.Config.ARGB_8888
+////                            val drawableImg =
+////                                BitmapFactory.decodeResource(
+////                                    mContext.resources,
+////                                    R.drawable.img_icon_0,
+////                                    option
+////                                ).copy(Bitmap.Config.ARGB_8888, false)
+////
+////
+////                            val drawableImg2 =
+////                                BitmapFactory.decodeResource(
+////                                    mContext.resources,
+////                                    R.drawable.img_icon_1,
+////                                    option
+////                                ).copy(Bitmap.Config.ARGB_8888, false)
+////                            if (drawableImg != null && drawableImg2 != null) {
+////                                drawableImg.density = mContext.resources.displayMetrics.densityDpi
+////                                drawableImg2.density = mContext.resources.displayMetrics.densityDpi
+////                                val d = ImageUtils.mergeBitmap(
+////                                    drawableImg,
+////                                    drawableImg2,
+////                                    Constants.BitmapMergeType.VERTICAL,
+////                                    true,
+////                                    1600,
+////                                    0
+////                                )
+////                                L.i(TAG, "---------------- < ${d.width} + ${d.height} ")
+////                            }
+//        if (imgRes == 0) {
+//            ChooseFileActivity.gotoChooseFileActivity(
+//                this@TestCalendarActivity,
+//                1000,
+//                ChooseFileActivity.MODE_TABLE,
+//                Constants.FileShowType.SHOW_TYPE_IMAGE,
+//                2
+//            )
+//        } else {
+//            test_base_no_data_view?.postDelayed(
+//                {
+//                    refreshNoDataViewImage()
+//                },
+//                2000
+//            )
+//        }
+//    }
 }
