@@ -125,7 +125,7 @@ class EditContentView : NestedScrollView {
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-        L.i(TAG, "onInterceptTouchEvent: --- >>>>>>>>>>>>>>>>>>>>>>>>>> ")
+        L.i(TAG, "onInterceptTouchEvent: --- >>>>>>>>>>>>>>>>>>>>>>>>>> ${ev?.action}")
         ev?.let {
             if (it.action == MotionEvent.ACTION_DOWN) {
                 val x = it.rawX.toInt() - mRootLayout.left
@@ -155,16 +155,22 @@ class EditContentView : NestedScrollView {
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
         L.i(TAG, "onTouchEvent: --- > ${ev?.action}")
         ev?.let {
-            val x = it.rawX.toInt() - mRootLayout.left
-            val y = it.rawY.toInt() - mRootLayout.top
-            var view = childViewClick(x, y, mRootLayout)
-            if (view is ViewGroup) {
-                view = findLastViewGroupEditText(view)
+            if (it.action == MotionEvent.ACTION_DOWN) {
+                val x = it.rawX.toInt() - mRootLayout.left
+                val y = it.rawY.toInt() - mRootLayout.top
+                var view = findClickView(x, y, mRootLayout)
+                L.i(TAG, "onTouchEvent: ----------- ${view} ==== $mRootLayout")
+                if (view is EditText) {
+                    return false
+                }
+                if (view is ViewGroup && view == mRootLayout) {
+                    view = findLastViewGroupEditText(view)
+                    targetFocusedEditText(view, "ON_TOUCH_EVENT")
+                    return true
+                }
             }
-            targetFocusedEditText(view, "ON_TOUCH_EVENT")
-            L.i(TAG, "onTouchEvent: ----------- ${view}")
         }
-        return true
+        return super.onTouchEvent(ev)
     }
 
 
