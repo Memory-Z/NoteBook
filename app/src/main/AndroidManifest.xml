@@ -25,11 +25,11 @@
             android:configChanges="screenSize|screenLayout|keyboardHidden|orientation"
             android:icon="@drawable/ic_baseline_device_hub_24"
             android:process=":test">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
         </activity>
         <!-- 主页 -->
         <activity
@@ -41,12 +41,12 @@
         <activity
             android:name=".view.activity.SplashActivity"
             android:configChanges="screenSize|screenLayout|keyboardHidden|orientation">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.MAIN" />-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <!--                <category android:name="android.intent.category.DEFAULT" />-->
-            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--            </intent-filter>-->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <!-- 组 -->
@@ -110,6 +110,14 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/NoteBookAppTheme.Transparent" />
+
+        <!-- 新动态界面 -->
+        <activity
+            android:name=".view.activity.NewDynamicActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoteBookAppTheme.Transparent"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <!-- 通知服务 -->
         <service

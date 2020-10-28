@@ -89,6 +89,7 @@
 
     <string name="show_float_window_about_countdown">是否显示倒计时浮窗？</string>
     <string name="_show">显示</string>
+    <string name="_message">消息</string>
 
 
 </resources>

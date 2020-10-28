@@ -130,6 +130,7 @@ class MainActivity : BaseNoteActivity() {
         mln_1_bnl.setOnClickListener(leftMenuViewClickListener)
         mln_2_bnl.setOnClickListener(leftMenuViewClickListener)
         mln_3_bnl.setOnClickListener(leftMenuViewClickListener)
+        mln_4_bnl.setOnClickListener(leftMenuViewClickListener)
     }
 
     /**
@@ -248,6 +249,9 @@ class MainActivity : BaseNoteActivity() {
                 }
                 R.id.mln_3_bnl -> {
                     startActivity(Intent(mContext, RecordActivity::class.java))
+                }
+                R.id.mln_4_bnl -> {
+                    startActivity(Intent(mContext, NewDynamicActivity::class.java))
                 }
                 else -> {
                     L.w(TAG, "LeftMenuViewClickLisntenerImpl: onClick -> not find click view. ")

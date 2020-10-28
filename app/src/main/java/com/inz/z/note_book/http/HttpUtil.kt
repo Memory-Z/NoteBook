@@ -2,7 +2,12 @@ package com.inz.z.note_book.http
 
 import com.inz.z.base.http.*
 import com.inz.z.note_book.BuildConfig
+import com.inz.z.note_book.bean.response.LoginResponse
+import com.inz.z.note_book.http.observer.MyRequestInterceptor
+import com.inz.z.note_book.http.observer.MyResponseInterceptor
 import com.inz.z.note_book.util.Constants
+import io.reactivex.Observable
+import io.reactivex.Observer
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -16,7 +21,7 @@ import java.util.concurrent.TimeUnit
  * @version 1.0.0
  * Create by inz in 2020/05/15 09:12.
  */
-class HttpUtil {
+object HttpUtil {
 
     /**
      * 默认连接超时时间，单位：秒
@@ -39,6 +44,10 @@ class HttpUtil {
         if (BuildConfig.DEBUG) {
             builder.addInterceptor(HttpLogInterceptor())
         }
+        // 添加 自定义拦截器
+        builder.addInterceptor(MyRequestInterceptor())
+        builder.addInterceptor(MyResponseInterceptor())
+
         client = builder
             .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
@@ -53,7 +62,7 @@ class HttpUtil {
      * @return RetrofitInterface
      */
     @Synchronized
-    private fun getRetrofitInterface(): RetrofitInterface? {
+    private fun getRetrofitInterface(): RetrofitInterface {
         // 初始化 Retrofit 配置
         if (retrofit == null) {
             retrofit = Retrofit.Builder()
@@ -62,9 +71,11 @@ class HttpUtil {
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
+        }
+        if (retrofitInterface == null) {
             retrofitInterface = retrofit!!.create(RetrofitInterface::class.java)
         }
-        return retrofitInterface
+        return retrofitInterface!!
     }
 
     /**
@@ -160,5 +171,13 @@ class HttpUtil {
         init {
             builder = OkHttpClient.Builder()
         }
+    }
+
+
+    /**
+     * 账号/密码登录
+     */
+    fun loginByPwd(userName: String, password: String): Observable<LoginResponse> {
+        return getRetrofitInterface().login(userName, password)
     }
 }
