@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/green"
-    android:fitsSystemWindows="true"
+    android:fitsSystemWindows="false"
     android:orientation="vertical">
 
     <LinearLayout
@@ -509,7 +509,7 @@
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/setting_height"
+                android:layout_height="wrap_content"
                 android:gravity="top|start"
                 android:hint="@string/_image"
                 android:imeOptions="actionDone"
