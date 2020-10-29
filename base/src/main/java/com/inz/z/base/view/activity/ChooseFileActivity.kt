@@ -53,12 +53,6 @@ class ChooseFileActivity : AbsBaseActivity() {
         const val MODE_LIST = 0x000901
         const val MODE_TABLE = 0x000902
 
-        const val CHOOSE_FILE_RESULT_CODE = 0x010001
-
-        const val CHOOSE_FILE_LIST_TAG = "choosedFileList"
-        const val CHOOSE_FILE_SIZE_TAG = "choosedFileSize"
-
-
         private const val DEFAULT_MAX_CHOOSE_FILE_COUNT = 10
         private const val DEFAULT_TABLE_COLUMNS = 2
 
@@ -90,7 +84,7 @@ class ChooseFileActivity : AbsBaseActivity() {
                 activity,
                 requestCode,
                 showMode,
-                Constants.FileShowType.SHOW_TYPE_DIR,
+                Constants.ChooseFileConstants.SHOW_TYPE_DIR,
                 tableColumn
             )
         }
@@ -163,7 +157,7 @@ class ChooseFileActivity : AbsBaseActivity() {
     private var maxChooseFileCount = DEFAULT_MAX_CHOOSE_FILE_COUNT
 
     @ChooseFileShowType
-    private var showType = Constants.FileShowType.SHOW_TYPE_DIR
+    private var showType = Constants.ChooseFileConstants.SHOW_TYPE_DIR
 
     @ShowMode
     private var showMode = MODE_LIST
@@ -238,7 +232,7 @@ class ChooseFileActivity : AbsBaseActivity() {
 
         val bundle = intent?.extras
         bundle?.let {
-            showType = it.getInt("showType", Constants.FileShowType.SHOW_TYPE_DIR)
+            showType = it.getInt("showType", Constants.ChooseFileConstants.SHOW_TYPE_DIR)
             showMode = it.getInt("showMode", MODE_LIST)
             showTableModeColumn = it.getInt("tableColumn", DEFAULT_TABLE_COLUMNS)
             maxChooseFileCount = it.getInt("maxChooseFile", DEFAULT_MAX_CHOOSE_FILE_COUNT)
@@ -285,7 +279,7 @@ class ChooseFileActivity : AbsBaseActivity() {
             layoutManager = mLayoutManager
             adapter = chooseFileListRvAdapter
         }
-        val isDirContent = showType == Constants.FileShowType.SHOW_TYPE_DIR
+        val isDirContent = showType == Constants.ChooseFileConstants.SHOW_TYPE_DIR
         base_choose_file_nav_rv?.visibility = if (isDirContent) {
             View.VISIBLE
         } else {
@@ -362,10 +356,16 @@ class ChooseFileActivity : AbsBaseActivity() {
     private fun closeChooseFileView() {
         val intent = Intent()
         val bundle = Bundle()
-        bundle.putParcelableArrayList(CHOOSE_FILE_LIST_TAG, chooseFileList)
-        bundle.putInt(CHOOSE_FILE_SIZE_TAG, chooseFileList.size)
+        bundle.putParcelableArrayList(
+            Constants.ChooseFileConstants.CHOOSE_FILE_RESULT_LIST_TAG,
+            chooseFileList
+        )
+        bundle.putInt(
+            Constants.ChooseFileConstants.CHOOSE_FILE_RESULT_SIZE_TAG,
+            chooseFileList.size
+        )
         intent.putExtras(bundle)
-        setResult(CHOOSE_FILE_RESULT_CODE, intent)
+        setResult(Constants.ChooseFileConstants.CHOOSE_FILE_RESULT_CODE, intent)
         finish()
     }
 
@@ -467,16 +467,16 @@ class ChooseFileActivity : AbsBaseActivity() {
                 ObservableOnSubscribe<MutableList<BaseChooseFileBean>> { emitter ->
                     var list: MutableList<BaseChooseFileBean> = mutableListOf()
                     when (showType) {
-                        Constants.FileShowType.SHOW_TYPE_DIR -> {
+                        Constants.ChooseFileConstants.SHOW_TYPE_DIR -> {
                             list = ProviderUtil.queryFileListByDir(filePath)
                         }
-                        Constants.FileShowType.SHOW_TYPE_AUDIO -> {
+                        Constants.ChooseFileConstants.SHOW_TYPE_AUDIO -> {
                             list = ProviderUtil.queryFileAudioWithContentProvider(mContext)
                         }
-                        Constants.FileShowType.SHOW_TYPE_IMAGE -> {
+                        Constants.ChooseFileConstants.SHOW_TYPE_IMAGE -> {
                             list = ProviderUtil.queryFileImageWithContextProvider(mContext)
                         }
-                        Constants.FileShowType.SHOW_TYPE_VIDEO -> {
+                        Constants.ChooseFileConstants.SHOW_TYPE_VIDEO -> {
 
                         }
                         else -> {

@@ -6,10 +6,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.inz.z.base.entity.BaseChooseFileBean
+import com.inz.z.base.entity.Constants
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseActivity
-import com.inz.z.base.view.activity.ChooseFileActivity
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteInfoController
@@ -131,11 +131,14 @@ class NewNoteActivity : AbsBaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == IMAGE_REQUEST_CODE) {
             when (resultCode) {
-                ChooseFileActivity.CHOOSE_FILE_RESULT_CODE -> {
+                Constants.ChooseFileConstants.CHOOSE_FILE_RESULT_CODE -> {
                     data?.extras?.apply {
                         val list =
-                            this.getParcelableArrayList<BaseChooseFileBean>(ChooseFileActivity.CHOOSE_FILE_LIST_TAG)
-                        val listSize = this.getInt(ChooseFileActivity.CHOOSE_FILE_SIZE_TAG, 0)
+                            this.getParcelableArrayList<BaseChooseFileBean>(Constants.ChooseFileConstants.CHOOSE_FILE_RESULT_LIST_TAG)
+                        val listSize = this.getInt(
+                            Constants.ChooseFileConstants.CHOOSE_FILE_RESULT_SIZE_TAG,
+                            0
+                        )
                         L.i(TAG, "onActivityResult: $listSize --- $list ")
                     }
                 }
@@ -260,7 +263,7 @@ class NewNoteActivity : AbsBaseActivity() {
 
     /* ------------------------ 添加笔记土图片内容 ---------------------- */
 
-    private class TransferImageThread: Thread() {
+    private class TransferImageThread : Thread() {
 
         override fun run() {
             super.run()

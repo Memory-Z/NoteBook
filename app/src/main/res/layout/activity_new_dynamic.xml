@@ -39,6 +39,7 @@
             android:id="@+id/new_dynamic_top_right_ll"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/margin_layout"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -68,11 +69,27 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/new_dynamic_content_text_input_et"
+            style="@style/Base.EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/bg_card_white_base"
+            android:gravity="top|start"
+            android:maxLength="160"
             android:minHeight="@dimen/dynamic_edit_height" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/new_dynamic_content_rv"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dynamic_item_height"
+        android:layout_marginTop="@dimen/border_lr_dimen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/new_dynamic_content_text_input_layout">
+
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

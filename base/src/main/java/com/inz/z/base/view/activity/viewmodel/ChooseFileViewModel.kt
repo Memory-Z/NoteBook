@@ -75,20 +75,20 @@ class ChooseFileViewModel : ViewModel() {
                 ObservableOnSubscribe<List<BaseChooseFileBean>> {
                     var list: MutableList<BaseChooseFileBean> = mutableListOf()
                     when (showType) {
-                        Constants.FileShowType.SHOW_TYPE_DIR -> {
+                        Constants.ChooseFileConstants.SHOW_TYPE_DIR -> {
                             list = ProviderUtil.queryFileListByDir(filePath)
                         }
-                        Constants.FileShowType.SHOW_TYPE_IMAGE -> {
+                        Constants.ChooseFileConstants.SHOW_TYPE_IMAGE -> {
                             if (context != null) {
                                 list = ProviderUtil.queryFileImageWithContextProvider(context)
                             }
                         }
-                        Constants.FileShowType.SHOW_TYPE_AUDIO -> {
+                        Constants.ChooseFileConstants.SHOW_TYPE_AUDIO -> {
                             if (context != null) {
                                 list = ProviderUtil.queryFileAudioWithContentProvider(context)
                             }
                         }
-                        Constants.FileShowType.SHOW_TYPE_VIDEO -> {
+                        Constants.ChooseFileConstants.SHOW_TYPE_VIDEO -> {
                         }
                         else -> {
                             it.onError(IllegalArgumentException("not find path: {$filePath} with {$showType} ,this's data list. "))

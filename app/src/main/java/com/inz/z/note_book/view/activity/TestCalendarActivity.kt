@@ -203,13 +203,13 @@ class TestCalendarActivity : AbsBaseActivity() {
             }
             1000 -> {
                 val bundle = data?.extras
-                bundle?.apply {
-                    val fileBeanList: ArrayList<BaseChooseFileBean>? =
-                        this.getParcelableArrayList(ChooseFileActivity.CHOOSE_FILE_LIST_TAG)
-
-                    val chooseFileSize = this.getInt(ChooseFileActivity.CHOOSE_FILE_SIZE_TAG, 0)
-                    L.i(TAG, "-----------> $fileBeanList ---------$chooseFileSize")
-                }
+//                bundle?.apply {
+//                    val fileBeanList: ArrayList<BaseChooseFileBean>? =
+//                        this.getParcelableArrayList(ChooseFileActivity.CHOOSE_FILE_LIST_TAG)
+//
+//                    val chooseFileSize = this.getInt(ChooseFileActivity.CHOOSE_FILE_SIZE_TAG, 0)
+//                    L.i(TAG, "-----------> $fileBeanList ---------$chooseFileSize")
+//                }
             }
             else -> {
 

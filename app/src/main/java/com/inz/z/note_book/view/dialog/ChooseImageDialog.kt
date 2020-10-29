@@ -79,7 +79,7 @@ class ChooseImageDialog : AbsBaseDialogFragment() {
             requireActivity(),
             requestCode,
             ChooseFileActivity.MODE_TABLE,
-            com.inz.z.base.entity.Constants.FileShowType.SHOW_TYPE_IMAGE,
+            com.inz.z.base.entity.Constants.ChooseFileConstants.SHOW_TYPE_IMAGE,
             2
         )
     }
