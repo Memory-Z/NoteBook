@@ -1,19 +1,14 @@
 package com.inz.z.note_book.view.activity
 
 import android.content.Intent
-import android.os.Environment
-import android.text.SpannableString
-import android.view.View
-import com.inz.z.base.entity.BaseChooseFileBean
-import com.inz.z.base.entity.Constants
-import com.inz.z.base.entity.xml.FileTypeHeaderBean
-import com.inz.z.base.util.L
-import com.inz.z.base.util.XmlFileUtils
+import com.inz.slide_table.BaseSlideRowRvAdapter
+import com.inz.slide_table.BaseSlideRvAdapter
+import com.inz.slide_table.BaseSlideTableBean
+import com.inz.slide_table.Gold
 import com.inz.z.base.view.AbsBaseActivity
-import com.inz.z.base.view.activity.ChooseFileActivity
-import com.inz.z.base.view.widget.BaseNoDataView
 import com.inz.z.note_book.R
 import kotlinx.android.synthetic.main.calendar_view_date.*
+import java.math.BigDecimal
 import java.util.*
 
 /**
@@ -35,6 +30,11 @@ class TestCalendarActivity : AbsBaseActivity() {
         R.drawable.img_phone
     )
     var position = 0
+
+    var slideRvAdapter: BaseSlideRvAdapter? = null
+    var columnSlideRvAdapter: BaseSlideRvAdapter? = null
+    var rowTitleRvAdapter: BaseSlideRowRvAdapter? = null
+
 
     override fun initView() {
 //        LinearLayout linearLayout = findViewById(R.id.calendar_content_ll);
@@ -108,21 +108,62 @@ class TestCalendarActivity : AbsBaseActivity() {
 //            }
 //            stopRefresh("hint", true)
 //        }
+
+        slideRvAdapter = BaseSlideRvAdapter(mContext)
+        columnSlideRvAdapter = BaseSlideRvAdapter(mContext)
+        rowTitleRvAdapter = BaseSlideRowRvAdapter(mContext, slideRvAdapter)
+
+        calendar_content_stv?.apply {
+            this.setRowContentAdapter(slideRvAdapter)
+            this.setRowHeaderAdapter(columnSlideRvAdapter)
+            this.setRowTitleRvAdapter(rowTitleRvAdapter)
+            this.setTableTitle("TABLE - TABLE ")
+        }
+
     }
 
-    val imgResArray = intArrayOf(
-        R.drawable.img_photo_0,
-        R.drawable.img_photo_1,
-        R.drawable.img_photo_2,
-        R.drawable.img_photo_3
-    )
+//    val imgResArray = intArrayOf(
+//        R.drawable.img_photo_0,
+//        R.drawable.img_photo_1,
+//        R.drawable.img_photo_2,
+//        R.drawable.img_photo_3
+//    )
 
     override fun initData() {
-//        xmlFileReader()
-        val dcimFile = getExternalFilesDir(Environment.DIRECTORY_DCIM)
-        val picFile = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val dirFilePath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-        L.i(TAG, "---------------- $dcimFile --- $picFile -- $dirFilePath  ")
+////        xmlFileReader()
+//        val dcimFile = getExternalFilesDir(Environment.DIRECTORY_DCIM)
+//        val picFile = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+//        val dirFilePath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+//        L.i(TAG, "---------------- $dcimFile --- $picFile -- $dirFilePath  ")
+
+        val titleList = ArrayList<String>()
+        for (index in 0..5) {
+            titleList.add("INDEX ---- :$index")
+        }
+        initViewData()
+//        calendar_sriv.setItemList(titleList)
+//        val itemTextViewSet = SlideRowItemView.ItemTextViewSet.Builder(mContext)
+//            .setTextBackground(
+//                ContextCompat.getDrawable(mContext, R.color.card_four_color),
+//                ContextCompat.getDrawable(mContext, R.color.card_main_color),
+//                ContextCompat.getDrawable(mContext, R.color.card_inverse_four_color)
+//            )
+//            .setTextColorRes(R.color.colorAccent)
+//            .setItemWidthDp(64, 48)
+////            .setTextMargin(
+////                BaseTools.dp2px(mContext, 16F),
+////                BaseTools.dp2px(mContext, 0F),
+////                BaseTools.dp2px(mContext, 0F),
+////                BaseTools.dp2px(mContext, 0F)
+////            )
+////            .setTextPadding(
+////                BaseTools.sp2px(mContext, 4),
+////                BaseTools.sp2px(mContext, 0),
+////                BaseTools.sp2px(mContext, 4),
+////                BaseTools.sp2px(mContext, 0)
+////            )
+//            .build()
+//        calendar_sriv.setItemTextViewSet(itemTextViewSet)
     }
 
     override fun needCheckVersion(): Boolean {
@@ -133,67 +174,67 @@ class TestCalendarActivity : AbsBaseActivity() {
         private const val TAG = "TestCalendarActivity"
     }
 
-    private fun xmlFileReader() {
-
-        val xmlResourceParser = mContext.resources.getXml(R.xml.file_type_header);
-        val list = XmlFileUtils.getXmlValueDataList(
-            xmlResourceParser,
-            FileTypeHeaderBean.HEADER_TAG,
-            FileTypeHeaderBean::class.java
-        )
-        L.i(TAG, " --------------- > $list")
-//        try {
-//            var eventType = xmlResourceParser.eventType
-//            while (eventType != XmlResourceParser.END_DOCUMENT) {
-//                when (eventType) {
-//                    XmlResourceParser.START_TAG -> {
-//                        val count = xmlResourceParser.attributeCount
-//                        val name = xmlResourceParser.name
-//                        if (FileTypeHeaderBean.HEADER_TAG.equals(name)) {
-//                            val fileTypeHeaderBean = FileTypeHeaderBean()
-//                            fileTypeHeaderBean.tagName = name
-//                            val fields = fileTypeHeaderBean.javaClass.declaredFields
-//                            val nameList = mutableListOf<String>()
-//                            for (index in 0..count-1) {
-//                                nameList.add(xmlResourceParser.getAttributeName(index))
-//                            }
-//                            for (field in fields) {
-//                                val n = field.name
-//                                field.isAccessible = true
-//                                var xmlValue = ""
+//    private fun xmlFileReader() {
 //
-//                                nameList.forEachIndexed { index, s ->
-//                                    if (s.equals(n)) {
-//                                        xmlValue = xmlResourceParser.getAttributeValue(index) ?: ""
-//                                        return@forEachIndexed
-//                                    }
-//                                }
-//                                if (!TextUtils.isEmpty(xmlValue)) {
-//                                    field.set(fileTypeHeaderBean, xmlValue)
-//                                }
-//                            }
-//                            L.i(
-//                                TAG,
-//                                "Start_ tag ${xmlResourceParser.name}  -- ${count} ---- $fileTypeHeaderBean"
-//                            )
-//                        }
-//                    }
-//                    XmlResourceParser.END_TAG -> {
-//                        L.i(TAG, "End_ tag")
-//                    }
-//                    XmlResourceParser.START_DOCUMENT -> {
-//                        L.i(TAG, "start_ document. ")
-//                    }
-//                    XmlResourceParser.TEXT -> {
-//                        L.i(TAG, "text: ${xmlResourceParser.text}")
-//                    }
-//                }
-//                eventType = xmlResourceParser.next()
-//            }
-//        } catch (e: Exception) {
-//            L.e(TAG, "", e)
-//        }
-    }
+//        val xmlResourceParser = mContext.resources.getXml(R.xml.file_type_header);
+//        val list = XmlFileUtils.getXmlValueDataList(
+//            xmlResourceParser,
+//            FileTypeHeaderBean.HEADER_TAG,
+//            FileTypeHeaderBean::class.java
+//        )
+//        L.i(TAG, " --------------- > $list")
+////        try {
+////            var eventType = xmlResourceParser.eventType
+////            while (eventType != XmlResourceParser.END_DOCUMENT) {
+////                when (eventType) {
+////                    XmlResourceParser.START_TAG -> {
+////                        val count = xmlResourceParser.attributeCount
+////                        val name = xmlResourceParser.name
+////                        if (FileTypeHeaderBean.HEADER_TAG.equals(name)) {
+////                            val fileTypeHeaderBean = FileTypeHeaderBean()
+////                            fileTypeHeaderBean.tagName = name
+////                            val fields = fileTypeHeaderBean.javaClass.declaredFields
+////                            val nameList = mutableListOf<String>()
+////                            for (index in 0..count-1) {
+////                                nameList.add(xmlResourceParser.getAttributeName(index))
+////                            }
+////                            for (field in fields) {
+////                                val n = field.name
+////                                field.isAccessible = true
+////                                var xmlValue = ""
+////
+////                                nameList.forEachIndexed { index, s ->
+////                                    if (s.equals(n)) {
+////                                        xmlValue = xmlResourceParser.getAttributeValue(index) ?: ""
+////                                        return@forEachIndexed
+////                                    }
+////                                }
+////                                if (!TextUtils.isEmpty(xmlValue)) {
+////                                    field.set(fileTypeHeaderBean, xmlValue)
+////                                }
+////                            }
+////                            L.i(
+////                                TAG,
+////                                "Start_ tag ${xmlResourceParser.name}  -- ${count} ---- $fileTypeHeaderBean"
+////                            )
+////                        }
+////                    }
+////                    XmlResourceParser.END_TAG -> {
+////                        L.i(TAG, "End_ tag")
+////                    }
+////                    XmlResourceParser.START_DOCUMENT -> {
+////                        L.i(TAG, "start_ document. ")
+////                    }
+////                    XmlResourceParser.TEXT -> {
+////                        L.i(TAG, "text: ${xmlResourceParser.text}")
+////                    }
+////                }
+////                eventType = xmlResourceParser.next()
+////            }
+////        } catch (e: Exception) {
+////            L.e(TAG, "", e)
+////        }
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -278,4 +319,31 @@ class TestCalendarActivity : AbsBaseActivity() {
 //            )
 //        }
 //    }
+
+
+    private fun initViewData() {
+        val beanList = ArrayList<BaseSlideTableBean>()
+        val titleList = ArrayList<String>()
+        val random = Random()
+        for (i in 0..100) {
+            val bean = BaseSlideTableBean()
+            val gold = Gold()
+            val title = "Title$i"
+            gold.run {
+                id = "id - $i"
+                name = "name - $i $title";
+                count = random.nextInt(20) + 10
+                sellOut = random.nextInt(20)
+                price = BigDecimal.valueOf(random.nextDouble())
+            }
+            bean.setData(gold)
+            bean.setHeaderRow(i == 0)
+            beanList.add(bean)
+            titleList.add(title)
+        }
+        slideRvAdapter?.setContentData(beanList)
+        columnSlideRvAdapter?.setContentData(beanList.subList(0, 1))
+        rowTitleRvAdapter?.refreshTitleList(titleList)
+
+    }
 }

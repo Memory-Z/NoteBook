@@ -72,6 +72,8 @@ dependencies {
     implementation project(':base')
     implementation project(':calendar_view')
 
+    implementation project(':slide_table')
+
     implementation 'androidx.multidex:multidex:2.0.1'
 
     /* 添加 Android design  */
