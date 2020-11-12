@@ -44,6 +44,7 @@ public abstract class SlideRowTitleRvViewHolder extends RecyclerView.ViewHolder 
      *
      * @return 监听
      */
+    @Nullable
     protected abstract SlideTableListener getSlideTableListener();
 
     /**

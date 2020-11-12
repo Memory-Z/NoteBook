@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import android.widget.PopupMenu
+import androidx.annotation.IntDef
 import androidx.annotation.NonNull
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
@@ -16,6 +17,7 @@ import com.inz.z.note_book.service.FloatMessageViewService
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.fragment.BaseDialogFragment
 import com.inz.z.note_book.view.fragment.LauncherApplicationFragment
+import com.inz.z.note_book.view.fragment.LogFragment
 import com.inz.z.note_book.view.fragment.NoteNavFragment
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.android.synthetic.main.main_left_nav_layout.*
@@ -37,18 +39,32 @@ class MainActivity : BaseNoteActivity() {
      * 右侧更多菜单弹窗
      */
     private var morePopupMenu: PopupMenu? = null
-    private var contentViewType = ContentViewType.MAIN
 
     /**
      * 监听列表
      */
-    private val mainListenerMap = HashMap<ContentViewType, MainActivityListener?>()
+    private val mainListenerMap =
+        HashMap<@com.inz.z.note_book.view.activity.MainActivity.ContentViewType Int, MainActivityListener?>()
 
 
     companion object {
         const val TAG = "MainActivity"
         private const val REQUEST_OVER_WINDOW_PERMISSION = 0x00FF
+
+        private const val VIEW_TYPE_APPLICATION = 0xA001
+        private const val VIEW_TYPE_MAIN = 0xA002
+        private const val VIEW_TYPE_LOG = 0xA003
     }
+
+    @IntDef(VIEW_TYPE_APPLICATION, VIEW_TYPE_MAIN, VIEW_TYPE_LOG)
+    @Target(
+        AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.VALUE_PARAMETER,
+        AnnotationTarget.PROPERTY
+    )
+    private annotation class ContentViewType {}
+
+    @ContentViewType
+    private var viewType: Int = VIEW_TYPE_MAIN
 
     override fun initWindow() {
 
@@ -63,7 +79,7 @@ class MainActivity : BaseNoteActivity() {
         drawerLayout = main_note_drawer_layout
         initLeftNavView()
         initContentView()
-        targetMainFragment(ContentViewType.MAIN)
+        targetMainFragment(VIEW_TYPE_MAIN)
 
 
         top_search_nav_content_rl.setOnClickListener {
@@ -75,7 +91,7 @@ class MainActivity : BaseNoteActivity() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 val keys = mainListenerMap.keys
                 for (type in keys) {
-                    if (type == contentViewType) {
+                    if (type == viewType) {
                         mainListenerMap.get(type)?.onSearchSubmit(query)
                     }
                 }
@@ -85,7 +101,7 @@ class MainActivity : BaseNoteActivity() {
             override fun onQueryTextChange(newText: String?): Boolean {
                 val keys = mainListenerMap.keys
                 for (type in keys) {
-                    if (type == contentViewType) {
+                    if (type == viewType) {
                         mainListenerMap.get(type)?.onSearchChange(newText)
                     }
                 }
@@ -131,6 +147,7 @@ class MainActivity : BaseNoteActivity() {
         mln_2_bnl.setOnClickListener(leftMenuViewClickListener)
         mln_3_bnl.setOnClickListener(leftMenuViewClickListener)
         mln_4_bnl.setOnClickListener(leftMenuViewClickListener)
+        mln_5_bnl.setOnClickListener(leftMenuViewClickListener)
     }
 
     /**
@@ -146,7 +163,7 @@ class MainActivity : BaseNoteActivity() {
         var noteNavFragment = manager.findFragmentByTag("NoteNavFragment") as NoteNavFragment?
         if (noteNavFragment == null) {
             noteNavFragment = NoteNavFragment()
-            mainListenerMap.put(ContentViewType.MAIN, noteNavFragment.mainListener)
+            mainListenerMap.put(VIEW_TYPE_MAIN, noteNavFragment.mainListener)
         }
         val fragmentTransient = manager.beginTransaction()
         if (!noteNavFragment.isAdded) {
@@ -174,27 +191,22 @@ class MainActivity : BaseNoteActivity() {
     }
 
     /**
-     * 主界面布局内容
-     */
-    enum class ContentViewType {
-        MAIN,
-        APPLICATION
-    }
-
-    /**
      * 切换主界面显示内容
      * @param type 布局内容
      */
-    private fun targetMainFragment(@NonNull type: ContentViewType) {
-        when (type) {
-            ContentViewType.MAIN -> {
+    private fun targetMainFragment(@NonNull viewType: Int = VIEW_TYPE_MAIN) {
+        when (viewType) {
+            VIEW_TYPE_MAIN -> {
                 showNoteNavFragment()
             }
-            ContentViewType.APPLICATION -> {
+            VIEW_TYPE_APPLICATION -> {
                 showApplicationListFragment()
             }
+            VIEW_TYPE_LOG -> {
+                showLogFragment()
+            }
         }
-        this.contentViewType = type
+        this.viewType = viewType
     }
 
     /**
@@ -211,13 +223,36 @@ class MainActivity : BaseNoteActivity() {
             manager.findFragmentByTag("LauncherApplicationFragment") as LauncherApplicationFragment?
         if (launcherFragment == null) {
             launcherFragment = LauncherApplicationFragment.getInstant()
-            mainListenerMap.put(ContentViewType.APPLICATION, launcherFragment.mainListener)
+            mainListenerMap.put(VIEW_TYPE_APPLICATION, launcherFragment.mainListener)
         }
         val transaction = manager.beginTransaction()
         if (!launcherFragment.isAdded) {
             transaction.replace(R.id.note_main_fl, launcherFragment, "LauncherApplicationFragment")
         }
         transaction.show(launcherFragment)
+        transaction.commitAllowingStateLoss()
+    }
+
+    /**
+     * 显示日志界面
+     */
+    private fun showLogFragment() {
+        L.i(TAG, "showLogFragment: ")
+        if (mContext == null) {
+            L.w(TAG, "showLogFragment: mContext is null. ")
+            return
+        }
+        val manager = supportFragmentManager
+        var logFragment = manager.findFragmentByTag("LogFragment") as LogFragment?
+        if (logFragment == null) {
+            logFragment = LogFragment.getInstant()
+            mainListenerMap.put(VIEW_TYPE_LOG, logFragment.mainListener)
+        }
+        val transaction = manager.beginTransaction()
+        if (!logFragment.isAdded) {
+            transaction.replace(R.id.note_main_fl, logFragment, "LogFragment")
+        }
+        transaction.show(logFragment)
         transaction.commitAllowingStateLoss()
     }
 
@@ -236,7 +271,7 @@ class MainActivity : BaseNoteActivity() {
             drawerLayout?.closeDrawer(GravityCompat.START)
             when (id) {
                 R.id.mln_0_bnl -> {
-                    targetMainFragment(ContentViewType.MAIN)
+                    targetMainFragment(VIEW_TYPE_MAIN)
                 }
                 R.id.mln_1_bnl -> {
                     val intent = Intent(mContext, ScheduleActivity::class.java)
@@ -245,13 +280,16 @@ class MainActivity : BaseNoteActivity() {
                     startActivity(intent)
                 }
                 R.id.mln_2_bnl -> {
-                    targetMainFragment(ContentViewType.APPLICATION)
+                    targetMainFragment(VIEW_TYPE_APPLICATION)
                 }
                 R.id.mln_3_bnl -> {
                     startActivity(Intent(mContext, RecordActivity::class.java))
                 }
                 R.id.mln_4_bnl -> {
                     startActivity(Intent(mContext, NewDynamicActivity::class.java))
+                }
+                R.id.mln_5_bnl -> {
+                    targetMainFragment(VIEW_TYPE_LOG)
                 }
                 else -> {
                     L.w(TAG, "LeftMenuViewClickLisntenerImpl: onClick -> not find click view. ")

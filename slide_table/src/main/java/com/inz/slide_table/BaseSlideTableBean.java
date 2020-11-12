@@ -20,14 +20,14 @@ public class BaseSlideTableBean extends SlideTableBean<Gold> {
 
     @Nullable
     @Override
-    protected String getRowTitle() {
+    public String getRowTitle() {
         Gold gold = getData();
         return gold == null ? "" : gold.getName();
     }
 
     @NonNull
     @Override
-    protected List<String> toDataColumnList() {
+    public List<String> toDataColumnList() {
         List<String> dataList = new ArrayList<>();
         Gold gold = getData();
         if (gold != null) {
@@ -43,7 +43,7 @@ public class BaseSlideTableBean extends SlideTableBean<Gold> {
 
     @NonNull
     @Override
-    protected List<String> toDataHeaderList() {
+    public List<String> toDataHeaderList() {
         List<String> titleList=  new ArrayList<>();
         titleList.add("ID");
         titleList.add("NAME");

@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.inz.slide_table.bean.SlideTableBean;
 import com.inz.slide_table.view.SlideTableListener;
 
 import java.util.ArrayList;
@@ -19,12 +20,12 @@ import java.util.List;
  * @version 1.0.0
  * Create by inz in 2020/11/03 11:53.
  */
-public abstract class SlideRowTitleRvAdapter<VH extends SlideRowTitleRvViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class SlideRowTitleRvAdapter<T extends SlideTableBean<?>, VH extends SlideRowTitleRvViewHolder> extends RecyclerView.Adapter<VH> {
 
     private static final int NO_SELECTED_ROW = -1;
 
     protected LayoutInflater mLayoutInflater;
-    protected List<String> titleList = new ArrayList<>();
+    protected List<T> titleList = new ArrayList<>();
     protected int selectedRow = NO_SELECTED_ROW;
     protected SlideTableListener slideTableListener;
 
@@ -46,7 +47,7 @@ public abstract class SlideRowTitleRvAdapter<VH extends SlideRowTitleRvViewHolde
      *
      * @param titleList 标题列表
      */
-    public void refreshTitleList(@NonNull List<String> titleList) {
+    public void refreshTitleList(@NonNull List<T> titleList) {
         this.selectedRow = NO_SELECTED_ROW;
         this.titleList.clear();
         this.titleList.addAll(titleList);
@@ -62,7 +63,7 @@ public abstract class SlideRowTitleRvAdapter<VH extends SlideRowTitleRvViewHolde
     @Nullable
     public String getTitleByRow(int position) {
         if (position >= 0 && position < getItemCount()) {
-            return titleList.get(position);
+            return titleList.get(position).getRowTitle();
         }
         return null;
     }

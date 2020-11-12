@@ -28,8 +28,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -840,6 +843,73 @@ public class FileUtils {
             }
         }
 
+    }
+
+    /**
+     * 根据文件目录 获取所有文件列表
+     *
+     * @param filePath 文件 地址
+     * @return List$lt;File$gt;
+     */
+    public static List<File> getFileListByFilePath(String filePath) {
+        List<File> fileList = new ArrayList<>();
+        File rootFile = new File(filePath);
+        if (rootFile.exists()) {
+            if (rootFile.isFile()) {
+                fileList.add(rootFile);
+            } else if (rootFile.isDirectory()) {
+                File[] childFileArray = rootFile.listFiles();
+                for (File child : childFileArray) {
+                    String childPath = child.getAbsolutePath();
+                    fileList.addAll(getFileListByFilePath(childPath));
+                }
+            }
+        }
+        return fileList;
+    }
+
+    /**
+     * 格式化文件大小
+     *
+     * @param fileSize 文件大小
+     * @return 文件大小
+     */
+    public static String formatFileSize(long fileSize) {
+        String[] unitArray = new String[]{"byte", "KB", "MB", "GB", "TB", "EB"};
+        String unit = unitArray[0];
+        int index = 0;
+        long base = 1024;
+        long moveSize = 1;
+        double m = fileSize;
+        double n = 0;
+        while (m > base) {
+            double[] leastArray = getSizeLeast(m, base);
+            m = leastArray[0];
+            n = leastArray[1];
+            index += 1;
+            if (index > unitArray.length) {
+                unit = unitArray[unitArray.length - 1];
+            } else {
+                unit = unitArray[index];
+            }
+            moveSize *= base;
+        }
+        double total = m + n / moveSize;
+        return String.format(Locale.getDefault(), "%.2f%s", total, unit);
+    }
+
+    private static double[] getSizeLeast(double size, long base) {
+        double[] least = new double[2];
+        if (size > base) {
+            double mx = size / base;
+            double my = size % base;
+            least[0] = mx;
+            least[1] = my;
+        } else {
+            least[0] = 0;
+            least[1] = size;
+        }
+        return least;
     }
 
 }

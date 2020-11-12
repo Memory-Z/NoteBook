@@ -323,7 +323,6 @@ class TestCalendarActivity : AbsBaseActivity() {
 
     private fun initViewData() {
         val beanList = ArrayList<BaseSlideTableBean>()
-        val titleList = ArrayList<String>()
         val random = Random()
         for (i in 0..100) {
             val bean = BaseSlideTableBean()
@@ -339,11 +338,10 @@ class TestCalendarActivity : AbsBaseActivity() {
             bean.setData(gold)
             bean.setHeaderRow(i == 0)
             beanList.add(bean)
-            titleList.add(title)
         }
         slideRvAdapter?.setContentData(beanList)
         columnSlideRvAdapter?.setContentData(beanList.subList(0, 1))
-        rowTitleRvAdapter?.refreshTitleList(titleList)
+        rowTitleRvAdapter?.refreshTitleList(beanList)
 
     }
 }

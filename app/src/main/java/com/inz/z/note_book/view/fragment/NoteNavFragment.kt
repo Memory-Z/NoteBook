@@ -168,7 +168,12 @@ class NoteNavFragment : AbsBaseFragment() {
 //        setNoteGroupListView()
         noteGroupList = NoteGroupService.findAll() as MutableList<NoteGroup>
         mNoteGroupRvAdapter?.replaceNoteGroupList(noteGroupList!!)
+        // 启动时检测，确认当前时间
+        checkDateText(0)
+    }
 
+    override fun onStop() {
+        super.onStop()
     }
 
     override fun onDestroy() {
@@ -181,6 +186,13 @@ class NoteNavFragment : AbsBaseFragment() {
      */
     private fun checkDateText(delay: Long) {
         L.i(TAG, "checnDateText: ---- ${delay}. ")
+        if (this.isHidden || this.isRemoving || this.isDetached || !this.isVisible) {
+            checkDataRunnable = null
+            return
+        }
+        if (checkDataRunnable == null) {
+            checkDataRunnable = CheckDataRunnable()
+        }
         note_nav_hint_data_tv.postDelayed(checkDataRunnable, delay)
     }
 
@@ -191,40 +203,47 @@ class NoteNavFragment : AbsBaseFragment() {
         note_nav_hint_year_tv.text = getString(R.string.base_format_year_month).format(date)
         note_nav_hint_data_tv.text = getString(R.string.base_format_day).format(date)
         note_nav_hint_week_tv.text = getString(R.string.base_format_week).format(date)
-        // 启动时检测，确认当前时间
-        checkDateText(0)
     }
 
     /**
      * 检测时间线程
      */
-    private val checkDataRunnable = Runnable {
-        var hour: Int
-        var minute: Int
-        var seconds: Int
-        val date = Calendar.getInstance(Locale.getDefault())
-            .apply {
-                hour = get(Calendar.HOUR_OF_DAY)
-                minute = get(Calendar.MINUTE)
-                seconds = get(Calendar.SECOND)
-            }.time
-        when {
-            hour < 22 -> // 小于 22 点。 每两小时检测一次
-                checkDateText(2 * 60 * 60 * 1000)
-            hour < 23 -> // 小于 23 点。每一小时检测一次
-                checkDateText(60 * 60 * 1000)
-            minute < 50 -> // 小于 23点50 分，每 10 分检测一次
-                checkDateText(10 * 60 * 1000)
-            minute < 55 -> // 小于 23 点55 分每5分执行这一次
-                checkDateText(5 * 60 * 1000)
-            minute < 59 -> // 小于 23 点59 分，每 1 分钟执行一次
-                checkDateText(60 * 1000)
-            seconds < 50 -> // 小于 23 点 59 分 50s 每 10s 执行一次
-                checkDateText(10 * 1000)
-            else -> {
-                setDateText(date)
-                // 否则，每秒执行一次
-                checkDateText(1000)
+    private var checkDataRunnable: Runnable? = null
+
+
+    /**
+     * 检查数据线程
+     */
+    private inner class CheckDataRunnable : Runnable {
+
+        override fun run() {
+            var hour: Int
+            var minute: Int
+            var seconds: Int
+            val date = Calendar.getInstance(Locale.getDefault())
+                .apply {
+                    hour = get(Calendar.HOUR_OF_DAY)
+                    minute = get(Calendar.MINUTE)
+                    seconds = get(Calendar.SECOND)
+                }.time
+            when {
+                hour < 22 -> // 小于 22 点。 每两小时检测一次
+                    checkDateText(2 * 60 * 60 * 1000)
+                hour < 23 -> // 小于 23 点。每一小时检测一次
+                    checkDateText(60 * 60 * 1000)
+                minute < 50 -> // 小于 23点50 分，每 10 分检测一次
+                    checkDateText(10 * 60 * 1000)
+                minute < 55 -> // 小于 23 点55 分每5分执行这一次
+                    checkDateText(5 * 60 * 1000)
+                minute < 59 -> // 小于 23 点59 分，每 1 分钟执行一次
+                    checkDateText(60 * 1000)
+                seconds < 50 -> // 小于 23 点 59 分 50s 每 10s 执行一次
+                    checkDateText(10 * 1000)
+                else -> {
+                    setDateText(date)
+                    // 否则，每秒执行一次
+                    checkDateText(1000)
+                }
             }
         }
     }

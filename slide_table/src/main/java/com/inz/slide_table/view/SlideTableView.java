@@ -209,7 +209,7 @@ public class SlideTableView extends ConstraintLayout {
         }
     }
 
-    public <ADAPTER extends SlideRowTitleRvAdapter<? extends SlideRowTitleRvViewHolder>> void setRowTitleRvAdapter(ADAPTER adapter) {
+    public <ADAPTER extends SlideRowTitleRvAdapter<? extends SlideTableBean<?>, ? extends SlideRowTitleRvViewHolder>> void setRowTitleRvAdapter(ADAPTER adapter) {
         if (contentLeftRv != null) {
             contentLeftRv.setAdapter(adapter);
         }

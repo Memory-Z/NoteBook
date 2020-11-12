@@ -21,7 +21,7 @@ import com.inz.slide_table.view.SlideTableListener;
  * @version 1.0.0
  * Create by inz in 2020/11/03 13:24.
  */
-public class BaseSlideRowRvAdapter extends SlideRowTitleRvAdapter<BaseSlideRowRvAdapter.BaseSlideRowTitleRvViewHolder> {
+public class BaseSlideRowRvAdapter extends SlideRowTitleRvAdapter<BaseSlideTableBean, BaseSlideRowRvAdapter.BaseSlideRowTitleRvViewHolder> {
 
 
     private final SlideTableListener listener;
@@ -43,7 +43,7 @@ public class BaseSlideRowRvAdapter extends SlideRowTitleRvAdapter<BaseSlideRowRv
 
     @Override
     public void onBindViewHolder(@NonNull BaseSlideRowTitleRvViewHolder holder, int position) {
-        String title = titleList.get(position);
+        String title = titleList.get(position).getRowTitle();
         holder.titleNameTv.setText(title);
         holder.orderTv.setVisibility(showOrder ? View.VISIBLE : View.GONE);
         String orderStr = position + ".";

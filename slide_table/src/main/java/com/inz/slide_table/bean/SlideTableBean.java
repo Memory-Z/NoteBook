@@ -30,7 +30,7 @@ public abstract class SlideTableBean<T> implements Serializable {
     private boolean selectedRow = false;
 
     @Nullable
-    protected abstract String getRowTitle();
+    public abstract String getRowTitle();
 
     /**
      * 转换为数据列
@@ -38,7 +38,7 @@ public abstract class SlideTableBean<T> implements Serializable {
      * @return 显示数据列表
      */
     @NonNull
-    protected abstract List<String> toDataColumnList();
+    public abstract List<String> toDataColumnList();
 
     /**
      * 获取数据列表 列标题
@@ -46,7 +46,7 @@ public abstract class SlideTableBean<T> implements Serializable {
      * @return 列标题
      */
     @NonNull
-    protected abstract List<String> toDataHeaderList();
+    public abstract List<String> toDataHeaderList();
 
     public T getData() {
         return data;
