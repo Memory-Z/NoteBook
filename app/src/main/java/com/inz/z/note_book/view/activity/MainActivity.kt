@@ -1,8 +1,10 @@
 package com.inz.z.note_book.view.activity
 
 import android.content.Intent
+import android.icu.util.LocaleData
 import android.net.Uri
 import android.os.Bundle
+import android.os.SystemClock
 import android.provider.Settings
 import android.view.View
 import android.widget.PopupMenu
@@ -22,6 +24,7 @@ import com.inz.z.note_book.view.fragment.NoteNavFragment
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.android.synthetic.main.main_left_nav_layout.*
 import kotlinx.android.synthetic.main.top_search_nav_layout.*
+import java.time.LocalDateTime
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -192,7 +195,7 @@ class MainActivity : BaseNoteActivity() {
 
     /**
      * 切换主界面显示内容
-     * @param type 布局内容
+     * @param viewType 布局内容
      */
     private fun targetMainFragment(@NonNull viewType: Int = VIEW_TYPE_MAIN) {
         when (viewType) {
@@ -223,7 +226,7 @@ class MainActivity : BaseNoteActivity() {
             manager.findFragmentByTag("LauncherApplicationFragment") as LauncherApplicationFragment?
         if (launcherFragment == null) {
             launcherFragment = LauncherApplicationFragment.getInstant()
-            mainListenerMap.put(VIEW_TYPE_APPLICATION, launcherFragment.mainListener)
+            mainListenerMap[VIEW_TYPE_APPLICATION] = launcherFragment.mainListener
         }
         val transaction = manager.beginTransaction()
         if (!launcherFragment.isAdded) {

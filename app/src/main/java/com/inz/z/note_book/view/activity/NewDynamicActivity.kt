@@ -1,6 +1,8 @@
 package com.inz.z.note_book.view.activity
 
 import android.content.Intent
+import android.view.KeyEvent
+import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.inz.z.base.entity.BaseChooseFileBean
@@ -67,6 +69,8 @@ class NewDynamicActivity : BaseNoteActivity() {
             )
         }
 
+        setSupportActionBar(new_dynamic_top_btal.toolbar)
+
         layoutManager = LinearLayoutManager(mContext).apply {
             this.orientation = LinearLayoutManager.HORIZONTAL
         }
@@ -103,6 +107,19 @@ class NewDynamicActivity : BaseNoteActivity() {
                 }
             }
         }
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+            }
+            else -> {
+
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     /**

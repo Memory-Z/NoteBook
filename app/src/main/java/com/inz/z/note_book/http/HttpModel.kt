@@ -27,7 +27,7 @@ object HttpModel {
         observable
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-//            .onErrorResumeNext(MyHttpResponseErrorFunction<T>())
+            .onErrorResumeNext(MyHttpResponseErrorFunction<T>())
             .retry(3)
             .subscribe(object : MyDefaultObserver<T>() {
                 override fun onStart() {
@@ -59,7 +59,8 @@ object HttpModel {
         observable
             .observeOn(Schedulers.newThread())
             .subscribeOn(Schedulers.io())
-//            .onErrorResumeNext(MyHttpResponseErrorFunction<T>())
+            .onErrorResumeNext(MyHttpResponseErrorFunction<T>())
+            .retry(3)
             .subscribe(object : MyDefaultObserver<T>() {
                 override fun onStart() {
                     super.onStart()

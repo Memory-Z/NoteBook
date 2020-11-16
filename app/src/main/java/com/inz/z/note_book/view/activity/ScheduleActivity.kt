@@ -125,7 +125,6 @@ class ScheduleActivity : AbsBaseActivity() {
 
     override fun initData() {
         checkedCalendar = Calendar.getInstance(Locale.getDefault())
-        changeCheckCalendar(checkedCalendar!!.time)
 
         schedule_top_calendar_date_year_tv?.text = checkedCalendar!!.get(Calendar.YEAR).toString()
         schedule_top_calendar_date_tv?.text = getString(R.string._date_time_format_M_d).format(
@@ -134,6 +133,14 @@ class ScheduleActivity : AbsBaseActivity() {
         )
         schedule_top_calendar_date_lunar_tv?.text =
             schedule_content_calendar_view?.selectedCalendar?.lunar
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (checkedCalendar == null) {
+            checkedCalendar = Calendar.getInstance(Locale.getDefault())
+        }
+        changeCheckCalendar(checkedCalendar!!.time)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -99,9 +99,9 @@ class SplashActivity : AbsBaseActivity() {
             if (time == 1) {
                 gotoMainActivity()
             } else {
+                setRightTopTimer()
                 time -= 1
                 splashLayoutBinding.timeNumber = time.toString()
-                setRightTopTimer()
             }
         }, 1000)
     }
