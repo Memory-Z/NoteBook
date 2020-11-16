@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.fragment.app.DialogFragment;
 
 import android.view.LayoutInflater;
@@ -78,6 +79,18 @@ public abstract class AbsBaseDialogFragment extends DialogFragment {
     protected void showToast(String message) {
         if (mContext != null) {
             Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * 显示提示
+     *
+     * @param resId 资源ID
+     */
+    protected void showToast(@StringRes int resId) {
+        if (mContext != null) {
+            String message = mContext.getString(resId);
+            showToast(message);
         }
     }
 }

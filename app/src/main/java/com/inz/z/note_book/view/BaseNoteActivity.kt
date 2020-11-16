@@ -1,11 +1,14 @@
 package com.inz.z.note_book.view
 
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.FrameLayout
 import android.widget.ImageView
 import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.R
+import com.inz.z.note_book.view.widget.FullFrameLayout
 
 /**
  *
@@ -23,6 +26,10 @@ abstract class BaseNoteActivity : AbsBaseActivity() {
     override fun onResume() {
         super.onResume()
 //        addClockView()
+    }
+
+    override fun onPause() {
+        super.onPause()
 //        removeClockView()
     }
 
@@ -48,8 +55,17 @@ abstract class BaseNoteActivity : AbsBaseActivity() {
     }
 
     private fun initClockView(): View {
-        return ImageView(mContext).apply {
-            setImageResource(R.drawable.ic_vd_image)
+//        return ImageView(mContext).apply {
+//            setImageResource(R.drawable.ic_vd_image)
+//        }
+        val fullFrameLayout = FullFrameLayout(mContext)
+        val lp = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            gravity = Gravity.CENTER
         }
+        fullFrameLayout.addContentView(R.layout.dialog_lock_screen, lp)
+        return fullFrameLayout
     }
 }

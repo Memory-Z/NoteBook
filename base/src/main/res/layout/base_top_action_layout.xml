@@ -11,7 +11,7 @@
         android:layout_height="?android:attr/actionBarSize"
         android:gravity="center_vertical"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:navigationIcon="@drawable/ic_baseline_arrow_white_24"
+        app:navigationIcon="@drawable/ic_chevron_left_white_24dp"
         app:popupTheme="@style/Theme.AppCompat.DayNight"
         app:title="@string/base_image">
 
