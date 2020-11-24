@@ -1,12 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/calendar_content_ll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp180"
+        android:theme="@style/ThemeOverlay.AppCompat.DayNight.ActionBar">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/cvd_ctl_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:contentScrim="@color/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <ImageView
+                style="@style/Base.ImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/image"
+                android:src="@drawable/img_photo_1" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:background="@color/card_second_color"
+                    android:padding="@dimen/dp08"
+                    android:text="@string/app_name"
+                    android:textColor="@color/red" />
+
+                <TextView
+                    style="@style/Base.Text"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp96"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:gravity="center"
+                    android:text="@string/image"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="@dimen/status_bar_height"
+                android:theme="@style/Widget.AppCompat.Light.ActionBar.TabBar"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_chevron_left_black_24dp">
+
+                <com.inz.z.base.view.widget.BaseNavLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:base_center_layout="@id/calendar_view_date_toolbar_center_ll">
+
+                    <LinearLayout
+                        android:id="@+id/calendar_view_date_toolbar_center_ll"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/Base.Text.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="@string/app_name"
+                            android:textColor="@color/text_black_base_color"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </com.inz.z.base.view.widget.BaseNavLayout>
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+    <!--<RelativeLayout -->
+    <!--    xmlns:tools="http://schemas.android.com/tools"-->
+    <!--    android:id="@+id/calendar_content_ll"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    android:fitsSystemWindows="true"-->
+    <!--    android:orientation="vertical">-->
 
     <!--    <LinearLayout-->
     <!--        android:layout_width="match_parent"-->
@@ -520,11 +622,11 @@
     <!--        </LinearLayout>-->
     <!--    </com.inz.z.note_book.view.widget.EditContentView>-->
 
-    <com.inz.slide_table.view.SlideTableView
-        android:id="@+id/calendar_content_stv"
-        android:layout_width="match_parent"
-        app:slide_table_row_title_width="@dimen/dp96"
-        android:layout_height="match_parent" />
+    <!--    <com.inz.slide_table.view.SlideTableView-->
+    <!--        android:id="@+id/calendar_content_stv"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        app:slide_table_row_title_width="@dimen/dp96"-->
+    <!--        android:layout_height="match_parent" />-->
     <!--        <HorizontalScrollView-->
     <!--            android:layout_width="match_parent"-->
     <!--            android:layout_height="wrap_content">-->
@@ -538,4 +640,5 @@
     <!--                app:slide_item_width="@dimen/dp96" />-->
     <!--        </HorizontalScrollView>-->
 
-</RelativeLayout>
+    <!--</RelativeLayout>-->
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

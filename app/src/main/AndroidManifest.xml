@@ -24,12 +24,13 @@
             android:name=".view.activity.TestCalendarActivity"
             android:configChanges="screenSize|screenLayout|keyboardHidden|orientation"
             android:icon="@drawable/ic_baseline_device_hub_24"
-            android:process=":test">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.MAIN" />-->
+            android:process=":test"
+            android:theme="@style/NoteBookAppTheme.Transparent">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--            </intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <!-- 主页 -->
         <activity
@@ -41,12 +42,12 @@
         <activity
             android:name=".view.activity.SplashActivity"
             android:configChanges="screenSize|screenLayout|keyboardHidden|orientation">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--                <category android:name="android.intent.category.DEFAULT" />-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
         </activity>
 
         <!-- 组 -->

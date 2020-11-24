@@ -1,6 +1,7 @@
 package com.inz.z.note_book.view.activity
 
 import android.content.Intent
+import androidx.core.content.ContextCompat
 import com.inz.slide_table.BaseSlideRowRvAdapter
 import com.inz.slide_table.BaseSlideRvAdapter
 import com.inz.slide_table.BaseSlideTableBean
@@ -108,18 +109,19 @@ class TestCalendarActivity : AbsBaseActivity() {
 //            }
 //            stopRefresh("hint", true)
 //        }
+//
+//        slideRvAdapter = BaseSlideRvAdapter(mContext)
+//        columnSlideRvAdapter = BaseSlideRvAdapter(mContext)
+//        rowTitleRvAdapter = BaseSlideRowRvAdapter(mContext, slideRvAdapter)
 
-        slideRvAdapter = BaseSlideRvAdapter(mContext)
-        columnSlideRvAdapter = BaseSlideRvAdapter(mContext)
-        rowTitleRvAdapter = BaseSlideRowRvAdapter(mContext, slideRvAdapter)
+//        calendar_content_stv?.apply {
+//            this.setRowContentAdapter(slideRvAdapter)
+//            this.setRowHeaderAdapter(columnSlideRvAdapter)
+//            this.setRowTitleRvAdapter(rowTitleRvAdapter)
+//            this.setTableTitle("TABLE - TABLE ")
+//        }
 
-        calendar_content_stv?.apply {
-            this.setRowContentAdapter(slideRvAdapter)
-            this.setRowHeaderAdapter(columnSlideRvAdapter)
-            this.setRowTitleRvAdapter(rowTitleRvAdapter)
-            this.setTableTitle("TABLE - TABLE ")
-        }
-
+        cvd_ctl_layout.contentScrim = ContextCompat.getDrawable(mContext, R.drawable.img_photo_3)
     }
 
 //    val imgResArray = intArrayOf(
