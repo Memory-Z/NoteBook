@@ -10,6 +10,7 @@ import com.inz.z.base.util.LauncherHelper
 import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.R
 import com.inz.z.note_book.util.Constants
+import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.adapter.ApplicationListRvAdapter
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
@@ -25,7 +26,7 @@ import kotlinx.android.synthetic.main.fragment_launcher.*
  * @version 1.0.0
  * Create by inz in 2020/05/18 16:48.
  */
-class ApplicationListActivity : AbsBaseActivity() {
+class ApplicationListActivity : BaseNoteActivity() {
 
     companion object {
         private const val TAG = "ApplicationListActivity"

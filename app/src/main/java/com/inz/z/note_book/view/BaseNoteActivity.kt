@@ -31,27 +31,8 @@ abstract class BaseNoteActivity : AbsBaseActivity() {
 
     protected var lockView: View? = null
 
-    override fun initWindow() {
-
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val haveNavigation = checkNavigation(mContext)
-        L.i(TAG, "onResume: $haveNavigation")
-        if (haveNavigation) {
-            val navigationBarHeight = getNavigationBarHeight(this)
-            L.i(TAG, "onResume:  $navigationBarHeight")
-            val contentView: ContentFrameLayout? = findViewById(android.R.id.content)
-            contentView?.apply {
-                this.setPadding(
-                    paddingLeft,
-                    paddingTop,
-                    paddingRight,
-                    paddingBottom + navigationBarHeight
-                )
-            }
-        }
+    override fun resetBottomNavigationBar(): Boolean {
+        return true
     }
 
     override fun onResume() {
@@ -100,42 +81,4 @@ abstract class BaseNoteActivity : AbsBaseActivity() {
         return fullFrameLayout
     }
 
-
-    /* -------------------- 底部状态栏 ------------------------ */
-
-    /**
-     * 检测是否存在底部栏
-     */
-    private fun checkNavigation(context: Context): Boolean {
-        var haveNavigationBar = false
-        val barId = context.resources.getIdentifier("config_showNavigationBar", "bool", "android")
-        if (barId > 0) {
-            haveNavigationBar = context.resources.getBoolean(barId)
-        }
-        try {
-            val className = Class.forName("android.os.SystemProperties")
-            val method = className.getMethod("get", String::class.java)
-            val navBarOverride = method.invoke(className, "qemu.hw.mainkeys")
-            if ("1".equals(navBarOverride)) {
-                // 不存在 虚拟按键
-                haveNavigationBar = false
-            } else if ("0".equals(navBarOverride)) {
-                // 存在 虚拟按键
-                haveNavigationBar = true
-//                val navigationBarHeight = getNavigationBarHeight(this)
-//                L.i(TAG, "checkNavigate:  $navigationBarHeight")
-            }
-        } catch (ignore: Exception) {
-        }
-        return haveNavigationBar
-    }
-
-    /**
-     * 获取底部导航栏高度
-     */
-    protected fun getNavigationBarHeight(activity: Activity): Int {
-        val resId = activity.resources.getIdentifier("navigation_bar_height", "dimen", "android")
-        return activity.resources.getDimensionPixelSize(resId)
-    }
-    /* -------------------- 底部状态栏 ------------------------ */
 }

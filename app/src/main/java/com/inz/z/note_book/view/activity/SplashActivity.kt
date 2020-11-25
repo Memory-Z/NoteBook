@@ -42,6 +42,10 @@ class SplashActivity : AbsBaseActivity() {
         }
     }
 
+    override fun resetBottomNavigationBar(): Boolean {
+        return false
+    }
+
     override fun getLayoutId(): Int {
         return R.layout.splash_layout
     }

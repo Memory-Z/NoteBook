@@ -13,6 +13,7 @@ import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteInfoController
+import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.dialog.ChooseImageDialog
 import com.inz.z.note_book.view.fragment.BaseDialogFragment
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
@@ -29,7 +30,7 @@ import java.util.concurrent.TimeUnit
  * @version 1.0.0
  * Create by inz in 2019/10/25 16:36.
  */
-class NewNoteActivity : AbsBaseActivity() {
+class NewNoteActivity : BaseNoteActivity() {
 
     companion object {
         const val TAG = "NewNoteActivity"
@@ -66,6 +67,9 @@ class NewNoteActivity : AbsBaseActivity() {
         return R.layout.note_info_add_layout
     }
 
+    override fun setNavigationBar() {
+
+    }
 
     override fun initView() {
         QMUIStatusBarHelper.setStatusBarLightMode(this)

@@ -2,8 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
     <com.inz.z.base.view.widget.BaseSecurityImageView
         android:layout_width="match_parent"
@@ -19,7 +18,7 @@
         style="@style/NoteBookAppTheme.TopAction"
         android:layout_width="match_parent"
         android:layout_height="@dimen/tool_bar_height"
-        android:background="@color/card_second_color"
+        android:layout_marginTop="@dimen/status_bar_height"
         app:base_center_layout="@id/schedule_top_center_ll"
         app:base_left_layout="@id/schedule_top_left_ll"
         app:base_right_layout="@id/schedule_top_right_ll"
@@ -103,7 +102,7 @@
             android:layout_centerVertical="true"
             android:contentDescription="@string/image"
             android:src="@drawable/ic_date_range_black_24dp"
-            android:tint="@color/colorPrimary" />
+            app:tint="@color/colorPrimary" />
 
         <LinearLayout
             android:id="@+id/schedule_top_calendar_date_content_ll"

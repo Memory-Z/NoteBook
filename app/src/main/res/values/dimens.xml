@@ -35,6 +35,7 @@
     <!-- 触控图标边距 -->
     <dimen name="touch_icon_padding">12dp</dimen>
 
+    <dimen name="top_status_with_toolbar_size">@dimen/dp80</dimen>
     <dimen name="layout_padding">@dimen/dp08</dimen>
     <dimen name="layout_nav_padding">@dimen/dp14</dimen>
 

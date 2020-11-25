@@ -178,6 +178,9 @@ class NoteNavFragment : AbsBaseFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        if (checkDataRunnable != null) {
+            checkDataRunnable = null
+        }
         mNoteNavHandler.removeCallbacksAndMessages(null)
     }
 
@@ -217,6 +220,9 @@ class NoteNavFragment : AbsBaseFragment() {
     private inner class CheckDataRunnable : Runnable {
 
         override fun run() {
+            if (mContext == null) {
+                return
+            }
             var hour: Int
             var minute: Int
             var seconds: Int

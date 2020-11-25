@@ -192,6 +192,10 @@ class ChooseFileActivity : AbsBaseActivity() {
 
     }
 
+    override fun resetBottomNavigationBar(): Boolean {
+        return false
+    }
+
     override fun getLayoutId(): Int {
         return R.layout.base_activity_choose_file
     }

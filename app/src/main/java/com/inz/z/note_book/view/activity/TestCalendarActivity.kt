@@ -36,6 +36,9 @@ class TestCalendarActivity : AbsBaseActivity() {
     var columnSlideRvAdapter: BaseSlideRvAdapter? = null
     var rowTitleRvAdapter: BaseSlideRowRvAdapter? = null
 
+    override fun resetBottomNavigationBar(): Boolean {
+        return false
+    }
 
     override fun initView() {
 //        LinearLayout linearLayout = findViewById(R.id.calendar_content_ll);

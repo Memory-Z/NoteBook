@@ -1,7 +1,9 @@
 package com.inz.z.base.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ContentFrameLayout;
 import androidx.fragment.app.FragmentManager;
 
 import com.alibaba.fastjson.JSONObject;
@@ -29,6 +32,7 @@ import com.qmuiteam.qmui.util.QMUINotchHelper;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -60,6 +64,13 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
     protected abstract void initData();
 
     /**
+     * 是否需要重新设置 底部导航栏
+     *
+     * @return true 设置paddingBottom
+     */
+    protected abstract boolean resetBottomNavigationBar();
+
+    /**
      * 是否使用 DataBinding , 返回true时，{@linkplain #setDataBindingView()} 必须复写
      *
      * @return 默认不使用
@@ -80,6 +91,9 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 //        initWindowDefault();
         initWindow();
+        if (resetBottomNavigationBar()) {
+            setNavigationBar();
+        }
         if (!useDataBinding()) {
             setContentView(getLayoutId());
         } else {
@@ -326,4 +340,63 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
         }
 
     }
+
+    /* -------------------- 底部状态栏 ------------------------ */
+
+    /**
+     * 设置导航栏
+     */
+    protected void setNavigationBar() {
+        boolean haveNavigation = checkNavigation(this);
+        if (haveNavigation) {
+            int navigationBarHeight = getNavigationBarHeight(this);
+
+            ContentFrameLayout contentView = findViewById(android.R.id.content);
+            if (contentView != null) {
+                contentView.setPadding(
+                        contentView.getPaddingLeft(),
+                        contentView.getPaddingTop(),
+                        contentView.getPaddingTop(),
+                        contentView.getPaddingBottom() + navigationBarHeight
+                );
+            }
+        }
+    }
+
+    /**
+     * 检测是否存在底部栏
+     */
+    private boolean checkNavigation(Context context) {
+        boolean haveNavigationBar = false;
+        Resources resources = context.getResources();
+        int barId = resources.getIdentifier("config_showNavigationBar", "bool", "android");
+        if (barId > 0) {
+            haveNavigationBar = resources.getBoolean(barId);
+        }
+        try {
+            Class className = Class.forName("android.os.SystemProperties");
+            Method method = className.getMethod("get", String.class);
+            String navBarOverride = (String) method.invoke(className, "qemu.hw.mainkeys");
+            if ("1".equals(navBarOverride)) {
+                // 不存在 虚拟按键
+                haveNavigationBar = false;
+            } else if ("0".equals(navBarOverride)) {
+                // 存在 虚拟按键
+                haveNavigationBar = true;
+//                val navigationBarHeight = getNavigationBarHeight(this)
+//                L.i(TAG, "checkNavigate:  $navigationBarHeight")
+            }
+        } catch (Exception ignore) {
+        }
+        return haveNavigationBar;
+    }
+
+    /**
+     * 获取底部导航栏高度
+     */
+    protected int getNavigationBarHeight(Activity activity) {
+        int resId = activity.getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+        return activity.getResources().getDimensionPixelSize(resId);
+    }
+    /* -------------------- 底部状态栏 ------------------------ */
 }

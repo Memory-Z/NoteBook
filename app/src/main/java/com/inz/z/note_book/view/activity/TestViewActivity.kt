@@ -58,6 +58,10 @@ class TestViewActivity : AbsBaseActivity() {
 
     }
 
+    override fun resetBottomNavigationBar(): Boolean {
+        return false
+    }
+
     override fun initData() {
         for (i in 1..20) {
             stringList.add("--> $i")

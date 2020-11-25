@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/status_bar_height"
-    >
+    android:background="@drawable/bg_text_mulite">
 
     <com.inz.z.base.view.widget.BaseNavLayout
         android:id="@+id/top_search_nav_rl"
         android:layout_width="match_parent"
         android:layout_height="@dimen/tool_bar_height"
+        android:layout_marginTop="@dimen/status_bar_height"
         app:base_center_layout="@id/top_search_nav_content_rl"
         app:base_left_layout="@id/top_search_nav_left_rl"
         app:base_right_layout="@id/top_search_nav_end_rl">

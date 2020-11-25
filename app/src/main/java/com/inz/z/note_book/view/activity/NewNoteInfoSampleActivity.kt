@@ -5,6 +5,7 @@ import androidx.core.content.ContextCompat
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.R
+import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.app_widget.util.WidgetBroadcastUtil
 import com.inz.z.note_book.view.fragment.NoteInfoAddDialogFragment
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
@@ -16,7 +17,7 @@ import kotlinx.android.synthetic.main.new_note_info_sample_layout.*
  * @version 1.0.0
  * Create by inz in 2019/11/12 13:46.
  */
-class NewNoteInfoSampleActivity : AbsBaseActivity() {
+class NewNoteInfoSampleActivity : BaseNoteActivity() {
 
     companion object {
         const val TAG = "NewNoteInfoSampleActivity"

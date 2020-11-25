@@ -18,6 +18,7 @@ import com.inz.z.note_book.database.controller.ScheduleController
 import com.inz.z.note_book.database.controller.TaskScheduleController
 import com.inz.z.note_book.util.ClockAlarmManager
 import com.inz.z.note_book.util.Constants
+import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.adapter.ScheduleRvAdapter
 import com.inz.z.note_book.view.fragment.ScheduleAddDialogFragment
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
@@ -36,7 +37,7 @@ import java.util.*
  * @version 1.0.0
  * Create by inz in 2019/11/14 10:30.
  */
-class ScheduleActivity : AbsBaseActivity() {
+class ScheduleActivity : BaseNoteActivity() {
     companion object {
         private const val TAG = "ScheduleActivity"
     }
