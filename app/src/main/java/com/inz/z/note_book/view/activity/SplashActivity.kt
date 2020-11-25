@@ -31,7 +31,7 @@ class SplashActivity : AbsBaseActivity() {
 
     override fun initWindow() {
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         // 刘海屏支持/ 设置刘海屏不显示界面内容
 
         // 刘海屏支持/ 设置刘海屏不显示界面内容

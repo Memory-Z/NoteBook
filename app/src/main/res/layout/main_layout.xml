@@ -8,6 +8,7 @@
     <RelativeLayout
         android:id="@+id/note_main_content_rl"
         android:layout_width="match_parent"
+        android:fitsSystemWindows="false"
         android:layout_height="match_parent">
 
         <include

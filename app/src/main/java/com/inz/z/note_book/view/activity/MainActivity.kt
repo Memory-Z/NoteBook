@@ -1,12 +1,14 @@
 package com.inz.z.note_book.view.activity
 
 import android.content.Intent
+import android.graphics.Color
 import android.icu.util.LocaleData
 import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
 import android.provider.Settings
 import android.view.View
+import android.view.WindowManager
 import android.widget.PopupMenu
 import androidx.annotation.IntDef
 import androidx.annotation.NonNull
@@ -21,6 +23,7 @@ import com.inz.z.note_book.view.fragment.BaseDialogFragment
 import com.inz.z.note_book.view.fragment.LauncherApplicationFragment
 import com.inz.z.note_book.view.fragment.LogFragment
 import com.inz.z.note_book.view.fragment.NoteNavFragment
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import kotlinx.android.synthetic.main.main_layout.*
 import kotlinx.android.synthetic.main.main_left_nav_layout.*
 import kotlinx.android.synthetic.main.top_search_nav_layout.*
@@ -70,7 +73,7 @@ class MainActivity : BaseNoteActivity() {
     private var viewType: Int = VIEW_TYPE_MAIN
 
     override fun initWindow() {
-
+        QMUIStatusBarHelper.setStatusBarLightMode(this)
     }
 
     override fun getLayoutId(): Int {
