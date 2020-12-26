@@ -70,6 +70,7 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
     <dimen name="widget_margin">8dp</dimen>
     <dimen name="line_size">2dp</dimen>
+    <dimen name="seek_min_height">@dimen/dp02</dimen>
     <!-- 主页-左侧栏顶部高度 -->
     <dimen name="nav_left_top_height">90dp</dimen>
 
