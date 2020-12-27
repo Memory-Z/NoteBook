@@ -1,5 +1,6 @@
 package com.inz.z.note_book.view.fragment
 
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.util.L
@@ -15,6 +16,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DefaultObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_sys_file_image.*
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  *
@@ -27,6 +29,8 @@ class SysFileImageFragment : BaseSysFileFragment() {
     companion object {
         private const val TAG = "SysFileImageFragment"
     }
+
+    private val currentPage = AtomicInteger(0)
 
     override fun getInstance(): BaseSysFileFragment {
         val fragment = SysFileImageFragment()
@@ -45,21 +49,29 @@ class SysFileImageFragment : BaseSysFileFragment() {
 
     override fun initView() {
         imageAdapter = SysFileImageRvAdapter(mContext)
+            .apply {
+                this.listener = SysFileImageRvAdapterListenerImpl()
+            }
         fm_sys_file_image_rv?.apply {
             this.adapter = imageAdapter
             this.layoutManager = LinearLayoutManager(mContext)
         }
+        fm_sys_file_image_srl?.setOnRefreshListener {
+            fm_sys_file_image_srl?.isRefreshing = false
+            currentPage.set(0)
+            loadImageList(currentPage.get())
+        }
     }
 
     override fun initData() {
-        loadImageList()
+        loadImageList(currentPage.get())
     }
 
-    private fun loadImageList() {
+    private fun loadImageList(page: Int) {
         Observable.create(
             ObservableOnSubscribe<List<LocalImageInfo>> {
                 L.i(TAG, "loadImageList: ----${Thread.currentThread().name}")
-                val list = LocalMediaHelper.getLocalPicture(mContext, 0)
+                val list = LocalMediaHelper.getLocalPicture(mContext, page)
                 it.onNext(list)
             }
         )
@@ -68,7 +80,12 @@ class SysFileImageFragment : BaseSysFileFragment() {
             .subscribe(object : DefaultObserver<List<LocalImageInfo>>() {
                 override fun onNext(t: List<LocalImageInfo>) {
                     L.i(TAG, "loadImageList: ----${Thread.currentThread().name}")
-                    imageAdapter?.refreshData(t)
+                    val p = currentPage.addAndGet(1)
+                    if (p > 1) {
+                        imageAdapter?.loadMoreData(t.toMutableList())
+                    } else {
+                        imageAdapter?.refreshData(t)
+                    }
                 }
 
                 override fun onError(e: Throwable) {
@@ -79,5 +96,14 @@ class SysFileImageFragment : BaseSysFileFragment() {
 
                 }
             })
+    }
+
+    private inner class SysFileImageRvAdapterListenerImpl :
+        SysFileImageRvAdapter.SysFileImageRvAdapterListener {
+        override fun onLoadMore(v: View?, position: Int) {
+            val page = currentPage.get()
+            L.i(TAG, "onLoadMore:  ---- $page")
+            loadImageList(page)
+        }
     }
 }

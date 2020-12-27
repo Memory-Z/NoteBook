@@ -89,7 +89,7 @@ public abstract class AbsBaseRvAdapter<T, VH extends RecyclerView.ViewHolder> ex
      */
     @Nullable
     public T getItemByPosition(int position) {
-        if (position < 0 || position > list.size()) {
+        if (position < 0 || position >= list.size()) {
             return null;
         }
         return list.get(position);
