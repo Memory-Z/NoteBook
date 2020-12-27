@@ -95,4 +95,6 @@
     <string name="operation_log">操作日志</string>
     <string name="system_log">系统日志</string>
 
+    <string name="sys_file_list">系统文件</string>
+
 </resources>

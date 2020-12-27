@@ -120,6 +120,14 @@
             android:theme="@style/NoteBookAppTheme.Transparent"
             android:windowSoftInputMode="adjustPan|stateHidden" />
 
+        <!-- 系统文件界面  -->
+        <activity
+            android:name=".view.activity.SystemFileActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoteBookAppTheme.Transparent"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+
         <!-- 通知服务 -->
         <service
             android:name=".service.NotificationForegroundService"

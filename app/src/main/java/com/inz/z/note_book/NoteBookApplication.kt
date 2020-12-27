@@ -43,6 +43,10 @@ class NoteBookApplication : Application() {
         LocalMediaHelper.getLocalPicture(this, 1)
         LocalMediaHelper.getLocalPicture(this, 2)
         LocalMediaHelper.getLocalPicture(this, 3)
+
+        LocalMediaHelper.getLocalAudioList(this, 0)
+        LocalMediaHelper.getLocalAudioList(this, 1)
+        LocalMediaHelper.getLocalAudioList(this, 2)
     }
 
     /**

@@ -43,6 +43,10 @@ public class LocalImageInfo {
      */
     private Long localImageSize = -1L;
     /**
+     * 图片类型
+     */
+    private String localImageMimeType = "";
+    /**
      * 图片修改时间
      */
     private String localImageDate = "";
@@ -55,15 +59,16 @@ public class LocalImageInfo {
      */
     private Date updateDate = null;
 
-    @Generated(hash = 1576803393)
+    @Generated(hash = 875972229)
     public LocalImageInfo(Long id, String localImageId, String localImageName,
-                          String localImagePath, Long localImageSize, String localImageDate,
-                          Date createDate, Date updateDate) {
+            String localImagePath, Long localImageSize, String localImageMimeType,
+            String localImageDate, Date createDate, Date updateDate) {
         this.id = id;
         this.localImageId = localImageId;
         this.localImageName = localImageName;
         this.localImagePath = localImagePath;
         this.localImageSize = localImageSize;
+        this.localImageMimeType = localImageMimeType;
         this.localImageDate = localImageDate;
         this.createDate = createDate;
         this.updateDate = updateDate;
@@ -153,5 +158,13 @@ public class LocalImageInfo {
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +
                 '}';
+    }
+
+    public String getLocalImageMimeType() {
+        return this.localImageMimeType;
+    }
+
+    public void setLocalImageMimeType(String localImageMimeType) {
+        this.localImageMimeType = localImageMimeType;
     }
 }
