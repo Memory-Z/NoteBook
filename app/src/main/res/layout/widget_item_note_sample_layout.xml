@@ -27,11 +27,6 @@
             android:layout_marginEnd="@dimen/content_space_between_dimen"
             android:orientation="horizontal">
 
-            <CheckBox
-                android:id="@+id/item_note_sample_left_cb"
-                style="@style/NoteBookAppTheme.CheckBox"
-                android:layout_width="@dimen/image_icon_size"
-                android:layout_height="@dimen/image_icon_size" />
         </LinearLayout>
 
         <LinearLayout

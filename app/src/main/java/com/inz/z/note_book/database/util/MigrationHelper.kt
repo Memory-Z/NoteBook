@@ -49,6 +49,19 @@ class MigrationHelper {
             }
             return columns
         }
+
+        private fun getTableIsUsable(
+            db: Database,
+            tableName: String
+        ): Boolean {
+            try {
+                db.rawQuery("SELECT * FROM $tableName limit  1", null).use {
+                    return true
+                }
+            } catch (e: Exception) {
+                return false
+            }
+        }
     }
 
     @SafeVarargs
@@ -77,6 +90,10 @@ class MigrationHelper {
             val properties =
                 ArrayList<String?>()
             val createTableStringBuilder = StringBuilder()
+            val haveOldTable = getTableIsUsable(db, tableName)
+            if (!haveOldTable) {
+                return
+            }
             createTableStringBuilder.append("CREATE TABLE ").append(tempTableName).append(" (")
             for (j in daoConfig.properties.indices) {
                 val columnName = daoConfig.properties[j].columnName
@@ -123,6 +140,10 @@ class MigrationHelper {
                 ArrayList()
             val propertiesQuery: MutableList<String?> =
                 ArrayList()
+            val haveOldTable = getTableIsUsable(db, tempTableName)
+            if (!haveOldTable) {
+                return
+            }
             for (j in daoConfig.properties.indices) {
                 val columnName = daoConfig.properties[j].columnName
                 if (getColumns(db, tempTableName).contains(columnName)) {

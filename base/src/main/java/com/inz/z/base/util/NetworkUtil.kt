@@ -21,9 +21,9 @@ object NetworkUtil {
      * 获取当前网络IP 地址 ，就方法
      */
     fun getIpAddress(context: Context): String? {
-        val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val info: NetworkInfo = manager.activeNetworkInfo
-        if (info.isConnected) {
+        val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        val info: NetworkInfo? = manager?.activeNetworkInfo
+        if (info != null && info.isConnected) {
             if (info.type == ConnectivityManager.TYPE_MOBILE) {
                 try {
                     val en: Enumeration<NetworkInterface> = NetworkInterface.getNetworkInterfaces()
@@ -82,33 +82,10 @@ object NetworkUtil {
         constructor(listener: NetworkStateListener?) : super() {
             this.listener = listener
         }
-
-        override fun onCapabilitiesChanged(
-            network: Network?,
-            networkCapabilities: NetworkCapabilities?
-        ) {
-            super.onCapabilitiesChanged(network, networkCapabilities)
-        }
-
-        override fun onLost(network: Network?) {
-            super.onLost(network)
-        }
-
-        override fun onLinkPropertiesChanged(network: Network?, linkProperties: LinkProperties?) {
-            super.onLinkPropertiesChanged(network, linkProperties)
-        }
-
         override fun onUnavailable() {
             super.onUnavailable()
         }
 
-        override fun onLosing(network: Network?, maxMsToLive: Int) {
-            super.onLosing(network, maxMsToLive)
-        }
-
-        override fun onAvailable(network: Network?) {
-            super.onAvailable(network)
-        }
     }
 
     public interface NetworkStateListener {

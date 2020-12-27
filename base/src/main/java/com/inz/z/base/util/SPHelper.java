@@ -192,7 +192,7 @@ public class SPHelper {
     }
 
     /**
-     * 保存 Set String 类型数据
+     * 保存 Set 类型数据
      *
      * @param key   键
      * @param value 值
@@ -242,5 +242,104 @@ public class SPHelper {
      */
     public boolean isCrash() {
         return getSharedBoolean("isCrash");
+    }
+
+    /**
+     * 版本更新获取地址
+     *
+     * @param url 地址
+     */
+    public void saveUpdateVersionUrl(String url) {
+        setSharedString("updateVersionUrl", url);
+    }
+
+    /**
+     * 获取版本更新获取地址
+     *
+     * @return 版本更新获取地址
+     */
+    public String getUpdateVersionUrl() {
+        return getSharedString("updateVersionUrl");
+    }
+
+    /**
+     * 保存当前版本
+     *
+     * @param versionCode 版本号
+     */
+    public void saveCurrentVersionCode(int versionCode) {
+        setSharedInteger("currentVersionCode", versionCode);
+    }
+
+    /**
+     * 获取当前版本 号
+     *
+     * @return 版本号
+     */
+    public int getCurrentVersionCode() {
+        return getSharedInteger("currentVersionCode");
+    }
+
+    /**
+     * 是否稍后提示更新
+     *
+     * @param later 是否稍后提示
+     */
+    public void saveLaterUpdateVersion(boolean later) {
+        setSharedBoolean("laterUpdateVersion", later);
+    }
+
+    /**
+     * 是否稍后提示更新
+     *
+     * @return 是否稍后提示
+     */
+    public boolean isLaterUpdateVersion() {
+        return getSharedBoolean("laterUpdateVersion");
+    }
+
+    /**
+     * 设置忽略版本号
+     *
+     * @param versionCode 版本
+     */
+    public void saveIgnoreCurrentVersion(int versionCode) {
+        setSharedInteger("ignoreVersionCode", versionCode);
+    }
+
+    /**
+     * 获取忽略 的版本号
+     *
+     * @return 版本号
+     */
+    public int ignoreVersionCode() {
+        return getSharedInteger("ignoreVersionCode");
+    }
+
+    /**
+     * 设置当前版本显示次数
+     *
+     * @param versionCode 版本号
+     */
+    public void saveShowUpdateVersionNum(int versionCode) {
+        int showNum = getShowUpdateVersionNum(versionCode);
+        showNum += 1;
+        String shareName = "showUpdateVersionName_" + versionCode;
+        delShare(shareName);
+        setSharedInteger(shareName, showNum);
+        setSharedString("showUpdateVersionNum", shareName);
+
+    }
+
+    /**
+     * 获取当前版本显示更新次数
+     *
+     * @param versionCode 版本号
+     * @return 显示次数
+     */
+    public int getShowUpdateVersionNum(int versionCode) {
+        String shareName = "showUpdateVersionName_" + versionCode;
+        return getSharedInteger(shareName);
+
     }
 }

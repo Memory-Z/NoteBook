@@ -1,339 +1,644 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/calendar_content_ll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!--    <Button-->
-    <!--        android:id="@+id/calendar_view_bcpb"-->
-    <!--        style="@style/Widget.AppCompat.Button"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-
-    <!--        android:text="@string/_negative"-->
-    <!--        android:visibility="visible"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--    <com.inz.z.base.view.widget.WaveView-->
-    <!--        android:id="@+id/calendar_view_btn"-->
-    <!--        android:layout_width="@dimen/touch_target_height"-->
-    <!--        android:layout_height="@dimen/dp360" />-->
-
-    <!--    <com.inz.z.note_book.view.widget.NameImageView-->
-    <!--        android:layout_width="@dimen/photo_normal_size"-->
-    <!--        android:layout_height="@dimen/photo_normal_size"-->
-    <!--        app:niv_background_color="@color/colorPrimary"-->
-    <!--        app:niv_border_color="@color/accessoryColor"-->
-    <!--        app:niv_border_width_size="@dimen/dp02"-->
-    <!--        app:niv_text="@string/base_image_loading"-->
-    <!--        app:niv_text_color="@color/text_white_base_color"-->
-    <!--        app:niv_text_size="@dimen/sp36" />-->
-
-    <com.inz.z.base.view.widget.BaseScrollView
-        android:id="@+id/calendar_max_bsv"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:base_scroll_view_content_view_id="@id/calendar_content_ss_rl"
-        app:base_scroll_view_header_view_id="@id/calendar_header_bsv"
-        app:base_scroll_view_show_top_float_view="true"
-        app:base_scroll_view_top_float_view_id="@id/calendar_nav_ll">
+        android:layout_height="@dimen/dp180"
+        android:theme="@style/ThemeOverlay.AppCompat.DayNight.ActionBar">
 
-        <com.inz.z.base.view.widget.BaseScrollView
-            android:id="@+id/calendar_header_bsv"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/cvd_ctl_layout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp480"
-            app:base_scroll_view_content_view_id="@id/calendar_content_base_ss_rl"
-            app:base_scroll_view_header_view_id="@id/calendar_base_nav_ll"
-            app:base_scroll_view_show_top_float_view="true"
-            app:base_scroll_view_top_float_view_id="@id/calendar_view_hor_sv">
+            android:layout_height="wrap_content"
+            app:contentScrim="@color/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <TextView
-                android:id="@+id/calendar_view_base_header_tv"
+            <ImageView
+                style="@style/Base.ImageView"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp160"
-                android:background="@color/red"
-                android:gravity="center"
-                android:text="@string/_application"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp18" />
-
-            <HorizontalScrollView
-                android:id="@+id/calendar_view_hor_sv"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp160"
-                android:background="@color/gray">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="@dimen/dp160"
-                        android:layout_height="match_parent"
-                        android:background="@color/red"
-                        android:gravity="center"
-                        android:text="@string/_application"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp18" />
-
-                    <TextView
-                        android:layout_width="@dimen/dp160"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/dp08"
-                        android:background="@color/red"
-                        android:gravity="center"
-                        android:text="@string/_application"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp18" />
-
-                    <TextView
-                        android:layout_width="@dimen/dp160"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/dp08"
-                        android:background="@color/red"
-                        android:gravity="center"
-                        android:text="@string/_application"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp18" />
-
-                    <TextView
-                        android:layout_width="@dimen/dp160"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/dp08"
-                        android:background="@color/red"
-                        android:gravity="center"
-                        android:text="@string/_application"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp18" />
-
-                    <TextView
-                        android:layout_width="@dimen/dp160"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/dp08"
-                        android:background="@color/red"
-                        android:gravity="center"
-                        android:text="@string/_application"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp18" />
-
-                    <TextView
-                        android:layout_width="@dimen/dp160"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/dp08"
-                        android:background="@color/red"
-                        android:gravity="center"
-                        android:text="@string/_application"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp18" />
-
-                    <TextView
-                        android:layout_width="@dimen/dp160"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/dp08"
-                        android:background="@color/red"
-                        android:gravity="center"
-                        android:text="@string/_application"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp18" />
-
-                    <TextView
-                        android:layout_width="@dimen/dp160"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/dp08"
-                        android:background="@color/red"
-                        android:gravity="center"
-                        android:text="@string/_application"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp18" />
-
-                    <TextView
-                        android:layout_width="@dimen/dp160"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/dp08"
-                        android:background="@color/red"
-                        android:gravity="center"
-                        android:text="@string/_application"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp18" />
-
-                    <TextView
-                        android:layout_width="@dimen/dp160"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/dp08"
-                        android:background="@color/red"
-                        android:gravity="center"
-                        android:text="@string/_application"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp18" />
-
-                    <TextView
-                        android:layout_width="@dimen/dp160"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/dp08"
-                        android:background="@color/red"
-                        android:gravity="center"
-                        android:text="@string/_application"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp18" />
-
-                    <TextView
-                        android:layout_width="@dimen/dp160"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/dp08"
-                        android:background="@color/red"
-                        android:gravity="center"
-                        android:text="@string/_application"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp18" />
-
-                </LinearLayout>
-            </HorizontalScrollView>
-
-            <RelativeLayout
-                android:id="@+id/calendar_content_base_ss_rl"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp960"
-                android:background="@color/green"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:background="@color/yellow"
-                    android:gravity="center"
-                    android:text="@string/about"
-                    android:textColor="@color/textBlackGray"
-                    android:textSize="@dimen/sp18" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/yellow"
-                    android:gravity="center"
-                    android:text="@string/about"
-                    android:textColor="@color/textBlackGray"
-                    android:textSize="@dimen/sp18" />
-            </RelativeLayout>
-
+                android:layout_height="match_parent"
+                android:contentDescription="@string/image"
+                android:src="@drawable/img_photo_1" />
             <LinearLayout
-                android:id="@+id/calendar_base_nav_ll"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp48"
-                android:background="@color/beige"
-                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_height="@dimen/dp48"
+                    android:background="@color/card_second_color"
+                    android:padding="@dimen/dp08"
                     android:text="@string/app_name"
-                    android:textColor="@color/textBlackGray"
-                    android:textSize="@dimen/sp18" />
+                    android:textColor="@color/red" />
+
+                <TextView
+                    style="@style/Base.Text"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp96"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:gravity="center"
+                    android:text="@string/image"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
             </LinearLayout>
 
-        </com.inz.z.base.view.widget.BaseScrollView>
-
-
-        <TextView
-            android:id="@+id/calendar_view_header_tv"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp160"
-            android:background="@color/red"
-            android:gravity="center"
-            android:text="@string/_application"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp18" />
-
-        <RelativeLayout
-            android:id="@+id/calendar_content_ss_rl"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp960"
-            android:background="@color/green"
-            android:orientation="vertical"
-            android:visibility="visible">
-
-            <TextView
+            <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:background="@color/yellow"
-                android:gravity="center"
-                android:text="@string/_application"
-                android:textColor="@color/textBlackGray"
-                android:textSize="@dimen/sp18" />
+                android:layout_height="?actionBarSize"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="@dimen/status_bar_height"
+                android:theme="@style/Widget.AppCompat.Light.ActionBar.TabBar"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_chevron_left_black_24dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@color/yellow"
-                android:gravity="center"
-                android:text="@string/_unfinished"
-                android:textColor="@color/textBlackGray"
-                android:textSize="@dimen/sp18" />
-        </RelativeLayout>
+                <com.inz.z.base.view.widget.BaseNavLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:base_center_layout="@id/calendar_view_date_toolbar_center_ll">
+
+                    <LinearLayout
+                        android:id="@+id/calendar_view_date_toolbar_center_ll"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/Base.Text.Title"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="@string/app_name"
+                            android:textColor="@color/text_black_base_color"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </com.inz.z.base.view.widget.BaseNavLayout>
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <LinearLayout
-            android:id="@+id/calendar_nav_ll"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:background="@color/beige"
-            android:gravity="center"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/app_name"
-                android:textColor="@color/textBlackGray"
-                android:textSize="@dimen/sp18" />
+                android:text="@string/app_name" />
         </LinearLayout>
-    </com.inz.z.base.view.widget.BaseScrollView>
+    </androidx.core.widget.NestedScrollView>
+    <!--<RelativeLayout -->
+    <!--    xmlns:tools="http://schemas.android.com/tools"-->
+    <!--    android:id="@+id/calendar_content_ll"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    android:fitsSystemWindows="true"-->
+    <!--    android:orientation="vertical">-->
+
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:orientation="vertical"-->
+    <!--        android:visibility="gone">-->
+
+    <!--        &lt;!&ndash;    <Button&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:id="@+id/calendar_view_bcpb"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        style="@style/Widget.AppCompat.Button"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:layout_height="wrap_content"&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;        android:text="@string/_negative"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:visibility="visible"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        app:layout_constraintTop_toTopOf="parent" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;    <com.inz.z.base.view.widget.WaveView&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:id="@+id/calendar_view_btn"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:layout_width="@dimen/touch_target_height"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:layout_height="@dimen/dp360" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;    <com.inz.z.note_book.view.widget.NameImageView&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:layout_width="@dimen/photo_normal_size"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:layout_height="@dimen/photo_normal_size"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        app:niv_background_color="@color/colorPrimary"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        app:niv_border_color="@color/accessoryColor"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        app:niv_border_width_size="@dimen/dp02"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        app:niv_text="@string/base_image_loading"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        app:niv_text_color="@color/text_white_base_color"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        app:niv_text_size="@dimen/sp36" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;    <com.inz.z.base.view.widget.BaseScrollView&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:id="@+id/calendar_max_bsv"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:layout_height="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        app:base_scroll_view_content_view_id="@id/calendar_content_ss_rl"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        app:base_scroll_view_header_view_id="@id/calendar_header_bsv"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        app:base_scroll_view_show_top_float_view="true"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        app:base_scroll_view_top_float_view_id="@id/calendar_nav_ll">&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;        <com.inz.z.base.view.widget.BaseScrollView&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:id="@+id/calendar_header_bsv"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:layout_height="@dimen/dp480"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            app:base_scroll_view_content_view_id="@id/calendar_content_base_ss_rl"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            app:base_scroll_view_header_view_id="@id/calendar_base_nav_ll"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            app:base_scroll_view_show_top_float_view="true"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            app:base_scroll_view_top_float_view_id="@id/calendar_view_hor_sv">&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;            <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:id="@+id/calendar_view_base_header_tv"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_height="@dimen/dp160"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:background="@color/red"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:text="@string/_application"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:textColor="@color/white"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:textSize="@dimen/sp18" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;            <HorizontalScrollView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:id="@+id/calendar_view_hor_sv"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_height="@dimen/dp160"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:background="@color/gray">&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;                <LinearLayout&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:layout_height="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:orientation="horizontal">&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;                    <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_width="@dimen/dp160"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_height="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:background="@color/red"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:text="@string/_application"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textColor="@color/white"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textSize="@dimen/sp18" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;                    <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_width="@dimen/dp160"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_height="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_marginStart="@dimen/dp08"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:background="@color/red"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:text="@string/_application"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textColor="@color/white"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textSize="@dimen/sp18" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;                    <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_width="@dimen/dp160"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_height="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_marginStart="@dimen/dp08"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:background="@color/red"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:text="@string/_application"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textColor="@color/white"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textSize="@dimen/sp18" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;                    <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_width="@dimen/dp160"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_height="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_marginStart="@dimen/dp08"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:background="@color/red"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:text="@string/_application"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textColor="@color/white"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textSize="@dimen/sp18" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;                    <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_width="@dimen/dp160"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_height="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_marginStart="@dimen/dp08"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:background="@color/red"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:text="@string/_application"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textColor="@color/white"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textSize="@dimen/sp18" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;                    <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_width="@dimen/dp160"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_height="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_marginStart="@dimen/dp08"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:background="@color/red"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:text="@string/_application"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textColor="@color/white"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textSize="@dimen/sp18" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;                    <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_width="@dimen/dp160"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_height="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_marginStart="@dimen/dp08"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:background="@color/red"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:text="@string/_application"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textColor="@color/white"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textSize="@dimen/sp18" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;                    <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_width="@dimen/dp160"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_height="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_marginStart="@dimen/dp08"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:background="@color/red"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:text="@string/_application"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textColor="@color/white"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textSize="@dimen/sp18" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;                    <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_width="@dimen/dp160"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_height="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_marginStart="@dimen/dp08"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:background="@color/red"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:text="@string/_application"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textColor="@color/white"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textSize="@dimen/sp18" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;                    <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_width="@dimen/dp160"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_height="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_marginStart="@dimen/dp08"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:background="@color/red"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:text="@string/_application"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textColor="@color/white"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textSize="@dimen/sp18" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;                    <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_width="@dimen/dp160"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_height="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_marginStart="@dimen/dp08"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:background="@color/red"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:text="@string/_application"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textColor="@color/white"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textSize="@dimen/sp18" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;                    <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_width="@dimen/dp160"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_height="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:layout_marginStart="@dimen/dp08"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:background="@color/red"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:text="@string/_application"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textColor="@color/white"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                        android:textSize="@dimen/sp18" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;                </LinearLayout>&ndash;&gt;-->
+    <!--        &lt;!&ndash;            </HorizontalScrollView>&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;            <RelativeLayout&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:id="@+id/calendar_content_base_ss_rl"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_height="@dimen/dp960"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:background="@color/green"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:orientation="vertical"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:visibility="visible">&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;                <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:layout_alignParentTop="true"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:background="@color/yellow"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:text="@string/about"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:textColor="@color/textBlackGray"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:textSize="@dimen/sp18" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;                <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:layout_alignParentBottom="true"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:background="@color/yellow"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:text="@string/about"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:textColor="@color/textBlackGray"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:textSize="@dimen/sp18" />&ndash;&gt;-->
+    <!--        &lt;!&ndash;            </RelativeLayout>&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;            <LinearLayout&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:id="@+id/calendar_base_nav_ll"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_height="@dimen/dp48"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:background="@color/beige"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:orientation="vertical">&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;                <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:text="@string/app_name"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:textColor="@color/textBlackGray"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                    android:textSize="@dimen/sp18" />&ndash;&gt;-->
+    <!--        &lt;!&ndash;            </LinearLayout>&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;        </com.inz.z.base.view.widget.BaseScrollView>&ndash;&gt;-->
 
 
-    <RelativeLayout
-        android:id="@+id/calendar_content_out_ss_rl"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp960"
-        android:background="@color/blueviolet"
-        android:orientation="vertical"
-        android:visibility="visible">
+    <!--        &lt;!&ndash;        <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:id="@+id/calendar_view_header_tv"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:layout_height="@dimen/dp160"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:background="@color/red"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:text="@string/_application"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:textColor="@color/white"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:textSize="@dimen/sp18" />&ndash;&gt;-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:background="@color/yellow"
-            android:gravity="center"
-            android:text="@string/_application"
-            android:textColor="@color/textBlackGray"
-            android:textSize="@dimen/sp18" />
+    <!--        &lt;!&ndash;        <RelativeLayout&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:id="@+id/calendar_content_ss_rl"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:layout_height="@dimen/dp960"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:background="@color/green"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:orientation="vertical"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:visibility="visible">&ndash;&gt;-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/yellow"
-            android:gravity="center"
-            android:text="@string/_unfinished"
-            android:textColor="@color/textBlackGray"
-            android:textSize="@dimen/sp18" />
-    </RelativeLayout>
+    <!--        &lt;!&ndash;            <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_alignParentTop="true"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:background="@color/yellow"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:text="@string/_application"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:textColor="@color/textBlackGray"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:textSize="@dimen/sp18" />&ndash;&gt;-->
 
-    <!--    <com.inz.z.base.view.widget.DotView-->
+    <!--        &lt;!&ndash;            <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_alignParentBottom="true"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:background="@color/yellow"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:text="@string/_unfinished"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:textColor="@color/textBlackGray"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:textSize="@dimen/sp18" />&ndash;&gt;-->
+    <!--        &lt;!&ndash;        </RelativeLayout>&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;        <LinearLayout&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:id="@+id/calendar_nav_ll"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:layout_height="@dimen/dp48"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:background="@color/beige"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:orientation="vertical">&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;            <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:text="@string/app_name"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:textColor="@color/textBlackGray"&ndash;&gt;-->
+    <!--        &lt;!&ndash;                android:textSize="@dimen/sp18" />&ndash;&gt;-->
+    <!--        &lt;!&ndash;        </LinearLayout>&ndash;&gt;-->
+    <!--        &lt;!&ndash;    </com.inz.z.base.view.widget.BaseScrollView>&ndash;&gt;-->
+
+
+    <!--        &lt;!&ndash;    <RelativeLayout&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:id="@+id/calendar_content_out_ss_rl"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:layout_height="@dimen/dp960"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:background="@color/blueviolet"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:orientation="vertical"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:visibility="visible">&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;        <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:layout_alignParentTop="true"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:background="@color/yellow"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:text="@string/_application"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:textColor="@color/textBlackGray"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:textSize="@dimen/sp18" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;        <TextView&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:layout_alignParentBottom="true"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:background="@color/yellow"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:gravity="center"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:text="@string/_unfinished"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:textColor="@color/textBlackGray"&ndash;&gt;-->
+    <!--        &lt;!&ndash;            android:textSize="@dimen/sp18" />&ndash;&gt;-->
+    <!--        &lt;!&ndash;    </RelativeLayout>&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;    <com.inz.z.base.view.widget.DotView&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:layout_height="wrap_content" />&ndash;&gt;-->
+
+    <!--        &lt;!&ndash;    <com.inz.z.note_book.view.widget.CountDownView&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:layout_height="match_parent" />&ndash;&gt;-->
+
+    <!--        <com.inz.z.note_book.view.widget.CountdownRingView-->
+    <!--            android:id="@+id/test_calendar_countdown_pv"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:padding="@dimen/margin_text"-->
+    <!--            app:countdown_background_color="@color/text_black_20_color"-->
+    <!--            app:countdown_progress_color="@color/blanchedalmond"-->
+    <!--            app:countdown_text_color="@color/colorPrimary" />-->
+
+    <!--        &lt;!&ndash;    <com.inz.z.note_book.view.widget.CountdownTableView&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:layout_width="match_parent"&ndash;&gt;-->
+    <!--        &lt;!&ndash;        android:layout_height="match_parent" />&ndash;&gt;-->
+    <!--        <com.inz.z.note_book.view.widget.TreeLineView-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="@dimen/touch_target_size"-->
+    <!--            android:layout_marginTop="@dimen/margin_layout"-->
+    <!--            android:background="@color/gray_50_color"-->
+    <!--            app:tree_line_color="@color/red"-->
+    <!--            app:tree_line_have_child="true"-->
+    <!--            app:tree_line_have_parent="false"-->
+    <!--            app:tree_line_level="1" />-->
+
+    <!--        <com.inz.z.note_book.view.widget.TreeLineView-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="@dimen/touch_target_size"-->
+    <!--            android:background="@color/gray_50_color"-->
+    <!--            app:tree_line_color="@color/red"-->
+    <!--            app:tree_line_have_child="false"-->
+    <!--            app:tree_line_have_next="true"-->
+    <!--            app:tree_line_have_parent="true"-->
+    <!--            app:tree_line_level="2" />-->
+
+    <!--        <com.inz.z.note_book.view.widget.TreeLineView-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="@dimen/touch_target_size"-->
+    <!--            android:background="@color/gray_50_color"-->
+    <!--            app:tree_line_color="@color/red"-->
+    <!--            app:tree_line_have_child="false"-->
+    <!--            app:tree_line_have_next="true"-->
+    <!--            app:tree_line_have_parent="true"-->
+    <!--            app:tree_line_level="3" />-->
+    <!--    </LinearLayout>-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/test_calendar_image_iv"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        style="@style/Base.ImageView"-->
+    <!--        android:scaleType="fitXY"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:contentDescription="@string/_image" />-->
+
+    <!--    <com.inz.z.base.view.widget.BaseNoDataView-->
+    <!--        android:id="@+id/test_base_no_data_view"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        app:base_no_data_button_str="@string/_image"-->
+    <!--        app:base_no_data_message="@string/_position"-->
+    <!--        app:base_no_data_refresh_spannable="@string/_image"-->
+    <!--        app:base_no_data_show_refresh_btn="true"-->
+    <!--        app:base_no_data_title="@string/_image" />-->
+
+    <!--    <com.google.android.material.tabs.TabLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="@dimen/button_normal_height"-->
+    <!--        app:tabMode="scrollable"-->
+    <!--        app:tabMinWidth="@dimen/list_nav_height"-->
+    <!--        app:tabIndicatorColor="@android:color/transparent"-->
+    <!--        app:tabUnboundedRipple="true"-->
+    <!--        app:tabBackground="@drawable/bg_tab_item_sel"-->
+    <!--        app:tabTextColor="@color/blueviolet">-->
+
+    <!--        <com.google.android.material.tabs.TabItem-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_margin="@dimen/border_lr_dimen"-->
+
+    <!--            android:text="@string/_all" />-->
+    <!--        <com.google.android.material.tabs.TabItem-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_margin="@dimen/border_lr_dimen"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:text="@string/about" />-->
+    <!--    </com.google.android.material.tabs.TabLayout>-->
+
+    <!--    <LinearLayout-->
     <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content" />-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_centerInParent="true"-->
+    <!--        android:orientation="vertical"-->
+    <!--        android:visibility="gone">-->
 
 
-</LinearLayout>
+    <!--        <com.inz.z.note_book.view.widget.EditCursorView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="@dimen/touch_target_height"-->
+    <!--            android:layout_marginTop="@dimen/text_content_size"-->
+    <!--            app:ecursor_color="@color/red"-->
+    <!--            app:ecursor_delay="500" />-->
+
+    <!--        <com.inz.z.note_book.view.widget.EditCursorView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="@dimen/touch_target_height"-->
+    <!--            android:layout_marginTop="@dimen/text_content_size"-->
+    <!--            app:ecursor_color="@color/yellow"-->
+    <!--            app:ecursor_delay="800" />-->
+
+    <!--        <com.inz.z.note_book.view.widget.EditCursorView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="@dimen/touch_target_height"-->
+    <!--            android:layout_marginTop="@dimen/text_content_size"-->
+    <!--            app:ecursor_color="@color/text_black_base_color"-->
+    <!--            app:ecursor_delay="1000" />-->
+
+    <!--        <com.inz.z.note_book.view.widget.EditCursorView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="@dimen/touch_target_height"-->
+    <!--            android:layout_marginTop="@dimen/text_content_size"-->
+    <!--            app:ecursor_color="@color/white"-->
+    <!--            app:ecursor_delay="1500" />-->
+    <!--    </LinearLayout>-->
+
+    <!--    <com.inz.z.note_book.view.widget.EditContentView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent">-->
+
+    <!--        <TextView-->
+    <!--            style="@style/Base.Text"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:gravity="center"-->
+    <!--            android:text="@string/_submit" />-->
+
+    <!--        <ImageView-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:contentDescription="@string/_submit"-->
+    <!--            android:scaleType="centerCrop"-->
+    <!--            android:src="@drawable/img_photo_1"-->
+    <!--            android:visibility="visible" />-->
+
+    <!--        <LinearLayout-->
+    <!--            android:layout_width="match_parent"-->
+
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:orientation="vertical">-->
+
+    <!--            <CheckBox-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="@dimen/touch_target_height"-->
+    <!--                android:text="@string/_submit" />-->
+
+    <!--            <ImageView-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:contentDescription="@string/_submit"-->
+    <!--                android:scaleType="centerCrop"-->
+    <!--                android:src="@drawable/img_photo_3"-->
+    <!--                android:visibility="visible" />-->
+
+    <!--            <EditText-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:gravity="top|start"-->
+    <!--                android:hint="@string/_image"-->
+    <!--                android:imeOptions="actionDone"-->
+    <!--                android:importantForAutofill="no"-->
+    <!--                android:inputType="textMultiLine"-->
+    <!--                android:textColor="@color/text_white_base_color"-->
+    <!--                android:textIsSelectable="true"-->
+    <!--                tools:ignore="LabelFor" />-->
+    <!--        </LinearLayout>-->
+    <!--    </com.inz.z.note_book.view.widget.EditContentView>-->
+
+    <!--    <com.inz.slide_table.view.SlideTableView-->
+    <!--        android:id="@+id/calendar_content_stv"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        app:slide_table_row_title_width="@dimen/dp96"-->
+    <!--        android:layout_height="match_parent" />-->
+    <!--        <HorizontalScrollView-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content">-->
+
+    <!--            <com.inz.slide_table.view.SlideRowItemView-->
+    <!--                android:id="@+id/calendar_sriv"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                android:background="@color/blueviolet"-->
+    <!--                app:slide_item_margin_left="16dp"-->
+    <!--                app:slide_item_width="@dimen/dp96" />-->
+    <!--        </HorizontalScrollView>-->
+
+    <!--</RelativeLayout>-->
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

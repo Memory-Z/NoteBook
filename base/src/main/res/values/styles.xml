@@ -69,6 +69,26 @@
         <item name="android:textSize">@dimen/text_min_body_size</item>
     </style>
 
+    <style name="Base.Text.Button.Dialog.Bottom" parent="Base.Text">
+        <item name="android:background">@drawable/bg_button_dialog_one</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/text_subhead_size</item>
+        <item name="android:textColor">@drawable/bg_button_text_color</item>
+    </style>
+
+    <style name="Base.Text.Button.Dialog.Bottom.One" parent="Base.Text.Button.Dialog.Bottom">
+        <item name="android:background">@drawable/bg_button_dialog_one</item>
+    </style>
+
+    <style name="Base.Text.Button.Dialog.Bottom.Two.Left" parent="Base.Text.Button.Dialog.Bottom">
+        <item name="android:background">@drawable/bg_button_dialog_two_left</item>
+    </style>
+
+    <style name="Base.Text.Button.Dialog.Bottom.Two.Right" parent="Base.Text.Button.Dialog.Bottom">
+        <item name="android:background">@drawable/bg_button_dialog_two_right</item>
+    </style>
+
     <style name="Base.EditText" parent="Widget.AppCompat.EditText">
         <item name="android:textSize">@dimen/text_body_size</item>
         <item name="android:textColor">@color/textColor</item>
@@ -81,7 +101,6 @@
     </style>
 
     <style name="Base.ImageView">
-        <item name="android:tint">@color/card_inverse_color</item>
         <item name="android:scaleType">centerCrop</item>
         <item name="android:contentDescription">@string/base_image</item>
     </style>
@@ -102,8 +121,8 @@
         <item name="android:padding">@dimen/image_icon_min_padding_size</item>
     </style>
 
-    <style name="Base.Button" parent="Widget.AppCompat.Button">
-<!--        <item name="android:background">@drawable/bg_button_white</item>-->
+    <style name="Base.Button" parent="TextAppearance.AppCompat.Widget.Button">
+        <!--        <item name="android:background">@drawable/bg_button_white</item>-->
         <item name="android:textSize">@dimen/text_body_size</item>
         <item name="android:text">@string/base_button</item>
         <item name="android:gravity">center</item>
@@ -111,15 +130,19 @@
     </style>
 
     <style name="Base.Button.Dialog" parent="Base.Button">
-<!--        <item name="android:background">@drawable/bg_dialog_btn_fill</item>-->
+        <!--        <item name="android:background">@drawable/bg_dialog_btn_fill</item>-->
         <item name="android:textColor">@color/textInverseColor70</item>
         <item name="android:textSize">@dimen/text_body_size</item>
         <item name="android:text">@string/base_button</item>
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="Base.Button.Dialog.Bottom" parent="Base.Dialog">
+        <item name="android:background">@drawable/bg_button_dialog_one</item>
+    </style>
+
     <style name="Base.ImageButton">
-<!--        <item name="android:background">@drawable/bg_button_white</item>-->
+        <!--        <item name="android:background">@drawable/bg_button_white</item>-->
         <item name="android:tint">@color/card_inverse_color</item>
         <item name="android:scaleType">centerCrop</item>
         <item name="android:contentDescription">@string/base_image</item>
@@ -141,8 +164,45 @@
     </style>
 
     <style name="Base.Layout">
-        <item name="android:layout_height">@dimen/touch_target_height</item>
         <item name="android:paddingStart">@dimen/border_lr_dimen</item>
         <item name="android:paddingEnd">@dimen/border_lr_dimen</item>
+    </style>
+
+    <style name="Base.Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="Base.Dialog.Center" parent="Base.Dialog">
+        <item name="android:gravity">center</item>
+        <item name="android:windowAnimationStyle">@style/Base.Animation.Alpha</item>
+    </style>
+
+    <style name="Base.Dialog.Bottom" parent="Base.Dialog">
+        <item name="android:windowAnimationStyle">@style/Base.Animation.BtoT</item>
+    </style>
+
+    <style name="Base.Animation" />
+
+    <style name="Base.Animation.BtoT" parent="Base.Animation">
+        <item name="android:windowEnterAnimation">@anim/base_bottom_to_top_100</item>
+        <item name="android:windowExitAnimation">@anim/base_top_to_bottom_100</item>
+    </style>
+
+    <style name="Base.Animation.Alpha" parent="Base.Animation">
+        <item name="android:windowEnterAnimation">@anim/base_alpha_0_to_100</item>
+        <item name="android:windowExitAnimation">@anim/base_alpha_100_to_0</item>
+    </style>
+
+    <style name="Base.ProgressBar.Horizontal" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:indeterminateDrawable">
+            @android:drawable/progress_indeterminate_horizontal
+        </item>
+        <item name="android:progressDrawable">@drawable/bg_progress_hor</item>
     </style>
 </resources>

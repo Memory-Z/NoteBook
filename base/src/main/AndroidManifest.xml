@@ -3,8 +3,55 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
-    <application></application>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+    <permission
+        android:name="com.inz.z.base.permission.VERSION_UPDATE"
+        android:label="@string/version_update_service" />
+
+    <uses-permission android:name="com.inz.z.base.permission.VERSION_UPDATE" />
+
+    <application>
+        <!-- 文件选择界面 -->
+        <activity android:name=".view.activity.ChooseFileActivity">
+
+        </activity>
+
+        <receiver
+            android:name=".broadcast.VersionUpdateBroadcast"
+            android:permission="com.inz.z.base.permission.VERSION_UPDATE">
+            <meta-data
+                android:name="applicationId"
+                android:value="${applicationId}" />
+            <intent-filter>
+                <action android:name="${applicationId}.action.VERSION_UPDATE_ACTION" />
+                <action android:name="${applicationId}.action.VERSION_UPDATE_DOWNLOAD_ACTION" />
+                <action android:name="${applicationId}.action.VERSION_UPDATE_INSTALL_ACTION" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".service.UpdateVersionService">
+            <meta-data
+                android:name="applicationId"
+                android:value="${applicationId}" />
+        </service>
+
+        <provider
+            android:name=".BaseFileProvider"
+            android:authorities="${applicationId}.baseFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/base_file_provider" />
+        </provider>
+        <uses-library android:name="android.test.runner" />
+    </application>
+    <instrumentation
+        android:name="androidx.test.platform.app.InstrumentationRegistry"
+        android:targetPackage="com.inz.z.base"></instrumentation>
 </manifest>

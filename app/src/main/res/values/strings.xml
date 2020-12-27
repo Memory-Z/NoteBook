@@ -72,4 +72,27 @@
     <string name="_canceled">已取消</string>
     <string name="_timed_out">已超时</string>
 
+    <string name="choose_image">选择图片</string>
+    <string name="take_photo">拍照</string>
+    <string name="choose_from_album">相册中选取</string>
+
+    <string name="_record">记录</string>
+    <string name="_record_title">记录标题</string>
+    <string name="_record_describe">记录描述</string>
+    <string name="_save_record_success">记录保存成功</string>
+    <string name="_save_record_failure">记录保存失败</string>
+    <string name="please_input_record_title">请输入记录标题</string>
+    <string name="record_info_have_change_do_exit">记录信息有变化，是否退出？</string>
+
+    <string name="search_record_content">查询记录</string>
+    <string name="please_input_record_title_time">请输入记录标题、时间</string>
+
+    <string name="show_float_window_about_countdown">是否显示倒计时浮窗？</string>
+    <string name="_show">显示</string>
+    <string name="_message">消息</string>
+
+    <string name="_log">日志</string>
+    <string name="operation_log">操作日志</string>
+    <string name="system_log">系统日志</string>
+
 </resources>

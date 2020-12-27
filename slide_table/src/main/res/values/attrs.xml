@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 滑动 Table -->
+    <declare-styleable name="SlideTableView">
+        <!-- 是否有行标题 【暂未实现，强制拥有】 -->
+        <attr name="slide_table_have_row_title" format="boolean" />
+        <!-- 行标题宽度  -->
+        <attr name="slide_table_row_title_width" format="dimension" />
+        <!-- 是否可以刷新 , 默认可刷新 -->
+        <attr name="slide_table_can_refresh" format="boolean" />
+        <!-- 表格名称 -->
+        <attr name="slide_table_name" format="string" />
+    </declare-styleable>
+
+    <!-- 滑动行布局 -->
+    <declare-styleable name="SlideRowItemView">
+        <attr name="slide_item_width" format="dimension" />
+        <attr name="slide_item_margin_left" format="dimension" />
+    </declare-styleable>
+</resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.inz.z.note_book.view.widget.TreeLineView
+        android:id="@+id/item_note_rc_tree_tlv"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/touch_target_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tree_line_have_next="true"
+        app:tree_line_have_parent="true"
+        app:tree_line_level="1" />
+
+    <RelativeLayout
+        android:id="@+id/item_note_rc_content_rl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/touch_target_height"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/item_note_rc_tree_tlv"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            style="@style/Base.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@color/textInverseColor70"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingStart="@dimen/margin_layout"
+            android:paddingTop="@dimen/margin_text"
+            android:paddingEnd="@dimen/margin_layout"
+            android:paddingBottom="@dimen/margin_text">
+
+            <TextView
+                android:id="@+id/item_note_rc_time_tv"
+                style="@style/Base.Text.Hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true" />
+
+            <TextView
+                android:id="@+id/item_note_rc_title_tv"
+                style="@style/Base.Text.Second"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/margin_text_layout"
+                android:layout_toEndOf="@id/item_note_rc_time_tv"
+                android:ellipsize="end"
+                android:lines="1" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

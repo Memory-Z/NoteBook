@@ -166,11 +166,12 @@
         android:layout_height="56dp"
         android:layout_marginEnd="@dimen/border_lr_dimen"
         android:layout_marginBottom="@dimen/border_lr_dimen"
-        app:backgroundTint="@color/colorPrimary"
+        android:fitsSystemWindows="true"
         android:scaleType="centerInside"
         android:src="@drawable/ic_add_black_24dp"
         android:textAlignment="center"
         android:tint="@color/textInverseColor"
+        app:backgroundTint="@color/colorPrimary"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

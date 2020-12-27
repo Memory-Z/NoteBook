@@ -31,6 +31,9 @@ class NoteBookApplication : Application() {
         CrashHandler.instance(applicationContext, CrashHandlerListenerImpl())
         GreenDaoHelper.getInstance().initGreenDaoHelper(applicationContext)
         SPHelper.init(applicationContext)
+        SPHelper.instance?.saveUpdateVersionUrl(BuildConfig.UPDATE_VERSION_URL)
+        SPHelper.instance?.saveCurrentVersionCode(BuildConfig.VERSION_CODE)
+        SPHelper.instance?.saveLaterUpdateVersion(false)
 
         // 设置生命周期监督
         setActivityLifeCallback()
@@ -68,11 +71,14 @@ class NoteBookApplication : Application() {
         }
 
         override fun showErrorTintOnUI() {
-            Toast.makeText(
-                applicationContext,
-                applicationContext.getString(R.string._sorry_application_have_error_will_exit),
-                Toast.LENGTH_SHORT
-            ).show()
+            applicationContext?.apply {
+                Toast.makeText(
+                    this,
+                    this.getString(R.string._sorry_application_have_error_will_exit),
+                    Toast.LENGTH_SHORT
+                ).show()
+
+            }
         }
     }
 }

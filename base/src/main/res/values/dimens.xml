@@ -11,6 +11,8 @@
     <dimen name="border_lr_dimen">16dp</dimen>
     <!-- 列表项 72dp -->
     <dimen name="list_nav_height">72dp</dimen>
+    <!-- max tool bar height -->
+    <dimen name="max_tool_bar_height">80dp</dimen>
     <!-- 标题和列表项 -->
     <dimen name="list_item_normal_height">48dp</dimen>
     <!-- 带有图标或头像的内容有 72dp 左边距 -->
@@ -37,11 +39,18 @@
     <dimen name="text_body_size">16sp</dimen>
     <dimen name="text_min_body_size">12sp</dimen>
 
+    <dimen name="margin_text">@dimen/dp04</dimen>
+    <dimen name="margin_text_layout">@dimen/dp08</dimen>
+    <dimen name="margin_layout">@dimen/dp16</dimen>
+
     <dimen name="image_icon_size">@dimen/dp36</dimen>
     <dimen name="image_icon_padding_size">@dimen/dp04</dimen>
     <dimen name="image_icon_min_size">@dimen/dp24</dimen>
     <dimen name="image_icon_min_padding_size">@dimen/dp02</dimen>
 
+    <dimen name="dialog_radius">@dimen/dp04</dimen>
+    <dimen name="card_radius">@dimen/dp02</dimen>
+    <dimen name="card_border">@dimen/dp01</dimen>
 
 
     <!-- Base Dimens -->

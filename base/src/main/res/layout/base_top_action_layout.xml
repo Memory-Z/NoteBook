@@ -8,15 +8,19 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/base_top_action_toolbar"
         android:layout_width="match_parent"
-        app:contentInsetStart="0dp"
-        app:contentInsetLeft="0dp"
-        android:layout_height="?android:attr/actionBarSize">
+        android:layout_height="?android:attr/actionBarSize"
+        android:gravity="center_vertical"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:navigationIcon="@drawable/ic_chevron_left_white_24dp"
+        app:popupTheme="@style/Theme.AppCompat.DayNight"
+        app:title="@string/base_image">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/base_top_action_center_cl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="0dp">
+            android:layout_marginStart="0dp"
+            android:visibility="visible">
 
             <!-- 左侧栏 -->
             <RelativeLayout
@@ -47,15 +51,6 @@
                 app:layout_constraintEnd_toStartOf="@id/base_top_action_right_rl"
                 app:layout_constraintStart_toEndOf="@id/base_top_action_left_rl"
                 app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/base_top_action_center_title_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:text="@string/app_name"
-                    android:textSize="18sp" />
 
             </RelativeLayout>
 

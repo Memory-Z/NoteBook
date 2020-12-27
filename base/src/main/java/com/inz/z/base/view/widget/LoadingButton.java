@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.TintTypedArray;
 
 import com.inz.z.base.R;
@@ -21,7 +22,7 @@ import com.inz.z.base.R;
  * @version 1.0.0
  * Create by inz in 2020/07/08 15:59.
  */
-public class LoadingButton extends View {
+public class LoadingButton extends AppCompatButton {
     private static final String TAG = "LoadingButton";
 
     private Context mContext;
@@ -56,10 +57,16 @@ public class LoadingButton extends View {
     }
 
     private void initView() {
-        if (mView == null) {
-            mView = LayoutInflater.from(mContext).inflate(R.layout.base_loading_button, null, true);
+//        if (mView == null) {
+//            mView = LayoutInflater.from(mContext).inflate(R.layout.base_loading_button, null, true);
+//
+//
+//        }
+    }
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
 
-        }
     }
 }

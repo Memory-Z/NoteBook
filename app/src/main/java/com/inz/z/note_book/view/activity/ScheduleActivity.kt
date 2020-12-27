@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.PopupMenu
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haibin.calendarview.CalendarView
 import com.inz.z.base.util.L
@@ -17,8 +18,10 @@ import com.inz.z.note_book.database.controller.ScheduleController
 import com.inz.z.note_book.database.controller.TaskScheduleController
 import com.inz.z.note_book.util.ClockAlarmManager
 import com.inz.z.note_book.util.Constants
+import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.adapter.ScheduleRvAdapter
 import com.inz.z.note_book.view.fragment.ScheduleAddDialogFragment
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -34,7 +37,7 @@ import java.util.*
  * @version 1.0.0
  * Create by inz in 2019/11/14 10:30.
  */
-class ScheduleActivity : AbsBaseActivity() {
+class ScheduleActivity : BaseNoteActivity() {
     companion object {
         private const val TAG = "ScheduleActivity"
     }
@@ -54,6 +57,8 @@ class ScheduleActivity : AbsBaseActivity() {
     }
 
     override fun initView() {
+        QMUIStatusBarHelper.setStatusBarLightMode(this)
+        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
         schedule_top_back_iv?.setOnClickListener {
             this@ScheduleActivity.finish()
         }
@@ -121,7 +126,6 @@ class ScheduleActivity : AbsBaseActivity() {
 
     override fun initData() {
         checkedCalendar = Calendar.getInstance(Locale.getDefault())
-        changeCheckCalendar(checkedCalendar!!.time)
 
         schedule_top_calendar_date_year_tv?.text = checkedCalendar!!.get(Calendar.YEAR).toString()
         schedule_top_calendar_date_tv?.text = getString(R.string._date_time_format_M_d).format(
@@ -130,6 +134,14 @@ class ScheduleActivity : AbsBaseActivity() {
         )
         schedule_top_calendar_date_lunar_tv?.text =
             schedule_content_calendar_view?.selectedCalendar?.lunar
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (checkedCalendar == null) {
+            checkedCalendar = Calendar.getInstance(Locale.getDefault())
+        }
+        changeCheckCalendar(checkedCalendar!!.time)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

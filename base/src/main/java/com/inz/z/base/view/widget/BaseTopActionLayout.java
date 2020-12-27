@@ -5,17 +5,16 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import com.google.android.material.appbar.AppBarLayout;
-import androidx.appcompat.widget.TintTypedArray;
-import androidx.appcompat.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+
+import androidx.appcompat.widget.TintTypedArray;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.inz.z.base.R;
 import com.inz.z.base.util.ImageUtils;
@@ -25,20 +24,22 @@ import com.inz.z.base.util.ImageUtils;
  * @version 1.0.0
  * Create by inz in 2019/06/12 16:59.
  */
-public class BaseTopActionLayout extends AppBarLayout {
+public class BaseTopActionLayout extends LinearLayout {
     private static final String TAG = "BaseTopActionLayout";
     private Context mContext;
     private View mView;
     private RelativeLayout leftRl, rightRl, centerRl;
     private ConstraintLayout centerCl;
-    private TextView titleTv;
     private Toolbar toolbar;
 
     private View userLeftView, userCenterView, userRightView;
     private int userLeftLayoutId, userCenterLayoutId, userRightLayoutId;
     private String titleStr;
-    private int textGravity;
     private int statusBarHeight = 0;
+    /**
+     * 显示自定义布局
+     */
+    private boolean showCustomView = false;
 
     public enum TitleGravity {
         START(Gravity.START),
@@ -73,15 +74,14 @@ public class BaseTopActionLayout extends AppBarLayout {
     @SuppressLint("InflateParams")
     private void initView() {
         if (mView == null) {
-            mView = LayoutInflater.from(mContext).inflate(R.layout.base_top_action_layout, null, false);
+            mView = LayoutInflater.from(mContext).inflate(R.layout.base_top_action_layout, this, true);
             leftRl = mView.findViewById(R.id.base_top_action_left_rl);
             centerRl = mView.findViewById(R.id.base_top_action_center_rl);
             rightRl = mView.findViewById(R.id.base_top_action_right_rl);
-            titleTv = mView.findViewById(R.id.base_top_action_center_title_tv);
             centerCl = mView.findViewById(R.id.base_top_action_center_cl);
             toolbar = mView.findViewById(R.id.base_top_action_toolbar);
-            LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            addView(mView, layoutParams);
+//            LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//            addView(mView, layoutParams);
         }
     }
 
@@ -92,7 +92,9 @@ public class BaseTopActionLayout extends AppBarLayout {
         userCenterLayoutId = array.getResourceId(R.styleable.BaseTopActionLayout_base_top_center_layout, R.id.base_top_action_center_rl);
         userRightLayoutId = array.getResourceId(R.styleable.BaseTopActionLayout_base_top_right_layout, R.id.base_top_action_right_rl);
         titleStr = array.getString(R.styleable.BaseTopActionLayout_base_top_title);
-        textGravity = array.getInt(R.styleable.BaseTopActionLayout_base_top_title_gravity, TitleGravity.CENTER.value);
+        showCustomView = array.getBoolean(R.styleable.BaseTopActionLayout_base_show_custom_view, false);
+        centerCl.setVisibility(showCustomView ? VISIBLE : GONE);
+        array.recycle();
     }
 
 
@@ -118,10 +120,6 @@ public class BaseTopActionLayout extends AppBarLayout {
      */
     public void setTopActionTitle(String title) {
         titleStr = title;
-    }
-
-    public void setTopActionTitleGravity(TitleGravity gravity) {
-        textGravity = gravity.value;
     }
 
     public Toolbar getToolbar() {
@@ -199,9 +197,8 @@ public class BaseTopActionLayout extends AppBarLayout {
      * 设置标题
      */
     private void setTitleTv() {
-        if (titleTv != null) {
-            titleTv.setText(titleStr);
-            titleTv.setGravity(textGravity);
+        if (toolbar != null) {
+            toolbar.setTitle(titleStr);
         }
     }
 

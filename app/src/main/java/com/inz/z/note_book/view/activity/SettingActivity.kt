@@ -3,13 +3,15 @@ package com.inz.z.note_book.view.activity
 import android.os.Handler
 import android.os.Message
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.inz.z.base.util.FileUtils
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.BuildConfig
 import com.inz.z.note_book.R
+import com.inz.z.note_book.view.BaseNoteActivity
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import kotlinx.android.synthetic.main.setting_layout.*
-import java.io.File
 
 /**
  * 设置界面
@@ -17,7 +19,7 @@ import java.io.File
  * @version 1.0.0
  * Create by inz in 2020/01/17 09:35.
  */
-class SettingActivity : AbsBaseActivity() {
+class SettingActivity : BaseNoteActivity() {
     companion object {
         const val TAG = "SettingActivity"
 
@@ -36,6 +38,8 @@ class SettingActivity : AbsBaseActivity() {
     }
 
     override fun initView() {
+        QMUIStatusBarHelper.setStatusBarLightMode(this)
+        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
         setting_info_nav_left_rl.setOnClickListener {
             this@SettingActivity.finish()
         }
@@ -49,6 +53,8 @@ class SettingActivity : AbsBaseActivity() {
         }
         setting_info_version_name_tv.text = BuildConfig.VERSION_NAME
         setting_info_version_bnl.setOnClickListener {
+            // get last version and update.
+            getLastVersion()
             Toast.makeText(
                 mContext,
                 getString(R.string.check_app_version_update),
@@ -60,6 +66,17 @@ class SettingActivity : AbsBaseActivity() {
 
     override fun initData() {
         getCacheSize()
+    }
+
+    override fun showLastVersionToast() {
+        super.showLastVersionToast()
+        if (mContext != null) {
+            Toast.makeText(
+                mContext,
+                mContext.getString(com.inz.z.base.R.string.current_version_is_laseted),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun getCacheSize() {

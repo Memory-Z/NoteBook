@@ -36,6 +36,12 @@
             android:gravity="center_vertical"
             android:maxLines="1"
             android:text="@string/_tips" />
+
+        <TextView
+            android:id="@+id/base_dialog_second_title_tv"
+            style="@style/NoteBookAppTheme.Text.Second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout

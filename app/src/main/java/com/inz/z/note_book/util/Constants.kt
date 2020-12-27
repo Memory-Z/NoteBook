@@ -1,5 +1,6 @@
 package com.inz.z.note_book.util
 
+import com.inz.z.base.entity.Constants
 import com.inz.z.note_book.BuildConfig
 
 /**
@@ -16,6 +17,8 @@ object Constants {
      * 时钟开始提醒
      */
     const val CLOCK_ALARM_START_ACTION = "${APPLICATION_ID}.action.CLOCK_ALARM_START_ACTION"
+
+    const val BASE_URL = "http://www.baidu.com/"
 
     /**
      * 时钟广播
@@ -114,6 +117,15 @@ object Constants {
          * 任务计划 标签
          */
         const val TASK_SCHEDULED_TAG = "taskScheduledTag"
+    }
+
+    /**
+     * Http 请求参数
+     */
+    object HttpRequestParams {
+        const val TIME_STAMP = "timeStamp"
+        const val VERSION_CODE = "versionCode"
+        const val VERSION_NAME = "versionName"
     }
 
 }

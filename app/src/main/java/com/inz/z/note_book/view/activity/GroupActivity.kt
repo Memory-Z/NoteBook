@@ -22,8 +22,10 @@ import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteController
 import com.inz.z.note_book.database.controller.NoteGroupService
 import com.inz.z.note_book.databinding.GroupLayoutBinding
+import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.adapter.NoteInfoRecyclerAdapter
 import com.inz.z.note_book.view.fragment.NewGroupDialogFragment
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import kotlinx.android.synthetic.main.group_layout.*
 import kotlinx.android.synthetic.main.note_info_add_sample_layout.*
 import java.util.*
@@ -34,7 +36,7 @@ import java.util.*
  * @version 1.0.0
  * Create by inz in 2019/10/29 11:15.
  */
-class GroupActivity : AbsBaseActivity() {
+class GroupActivity : BaseNoteActivity() {
     companion object {
         private const val TAG = "GroupActivity"
     }
@@ -65,11 +67,17 @@ class GroupActivity : AbsBaseActivity() {
     override fun initWindow() {
     }
 
+    override fun setNavigationBar() {
+
+    }
+
     override fun getLayoutId(): Int {
         return R.layout.group_layout
     }
 
     override fun initView() {
+        QMUIStatusBarHelper.setStatusBarLightMode(this)
+        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
         group_content_note_info_rv.layoutManager = LinearLayoutManager(mContext)
         mNoteInfoRecyclerAdapter = NoteInfoRecyclerAdapter(mContext)
         mNoteInfoRecyclerAdapter?.setNoteInfoRvAdapterListener(
@@ -112,9 +120,7 @@ class GroupActivity : AbsBaseActivity() {
         }
         if (isAddNewGroup || currentGroupId.isEmpty()) {
             mGroupLayoutBinding?.groupName = getString(R.string.no_title_group).format("")
-            // 显示新建弹窗
             L.i(TAG, "get Intent data is Null , $isAddNewGroup and $currentGroupId")
-            showNewGroupDialog()
         } else {
             noteGroup = NoteGroupService.findNoteGroupById(currentGroupId)
             mGroupLayoutBinding?.groupName =
@@ -146,9 +152,18 @@ class GroupActivity : AbsBaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (!isAddNewGroup && currentGroupId.isNotEmpty()) {
+        if (isAddNewGroup || currentGroupId.isEmpty()) {
+            // 显示新建弹窗
+            showNewGroupDialog()
+        } else if (!isAddNewGroup && currentGroupId.isNotEmpty()) {
             setNoteInfoListData()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mNoteInfoRecyclerAdapter?.setNoteInfoRvAdapterListener(null)
+        mNoteInfoRecyclerAdapter = null
     }
 
     /**

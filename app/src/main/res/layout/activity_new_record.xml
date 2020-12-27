@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/new_record_app_bar_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/new_record_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            app:navigationIcon="@drawable/ic_chevron_left_white_24dp"
+            app:popupTheme="@style/Theme.AppCompat.Light.NoActionBar"
+            app:title="@string/_record"
+            app:titleTextColor="@color/white" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <RelativeLayout
+        android:id="@+id/new_record_content_rl"
+        style="@style/Base.Layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/new_record_bottom_rl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/new_record_app_bar_layout">
+
+        <RelativeLayout
+            android:id="@+id/new_record_time_content_title_rl"
+            style="@style/Base.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/touch_target_height">
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/margin_text_layout"
+                android:layout_toStartOf="@id/new_record_time_content_title_tv"
+                android:background="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/new_record_time_content_title_tv"
+                style="@style/Base.Text.Hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/margin_text_layout"
+                android:layout_toEndOf="@id/new_record_time_content_title_tv"
+                android:background="@color/colorPrimary" />
+
+        </RelativeLayout>
+
+        <EditText
+            android:id="@+id/new_record_content_title_et"
+            style="@style/Base.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/touch_target_height"
+            android:layout_below="@id/new_record_time_content_title_rl"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:hint="@string/_record_title"
+            android:imeOptions="actionNext"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:maxLength="16"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="@color/gray_50_color"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:ignore="LabelFor" />
+
+        <EditText
+            android:id="@+id/new_record_content_et"
+            style="@style/Base.EditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/new_record_content_title_et"
+            android:layout_marginTop="@dimen/margin_text_layout"
+            android:layout_marginBottom="@dimen/margin_text_layout"
+            android:background="@null"
+            android:gravity="start|top"
+            android:hint="@string/_record_describe"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:theme="@style/Base.ScrollbarVertical"
+            tools:ignore="LabelFor" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/new_record_bottom_rl"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </RelativeLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/new_record_done_fab"
+        style="@style/Widget.Design.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_layout"
+        android:layout_marginBottom="@dimen/margin_layout"
+        android:src="@drawable/ic_baseline_done_24"
+        android:tint="@color/textInverseColor"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

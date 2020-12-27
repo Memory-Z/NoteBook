@@ -1,5 +1,7 @@
 package com.inz.z.note_book.database.bean;
 
+import com.inz.z.note_book.annotation.ExcelAnnotation;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
@@ -22,26 +24,33 @@ public class OperationLogInfo {
      */
     @Id
     @Index(unique = true)
+    @ExcelAnnotation()
     private String operationLogId = "";
 
     /**
      * 表明
      */
+    @ExcelAnnotation()
     private String tableName = "";
     /**
      * 操作类型
      */
+    @ExcelAnnotation()
     private String operationType = "";
     /**
      * 操作描述
      */
+    @ExcelAnnotation()
     private String operationDescribe = "";
     /**
      * 操作数据
      */
+    @ExcelAnnotation()
     private String operationData = "";
 
+    @ExcelAnnotation()
     private Date createTime;
+    @ExcelAnnotation()
     private Date updateTime;
 
     @Generated(hash = 759335891)

@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true">
 
     <com.inz.z.base.view.widget.BaseNavLayout
         android:id="@+id/note_info_add_top_bnl"
         style="@style/NoteBookAppTheme.Layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/min_title_height"
+        android:layout_height="@dimen/tool_bar_height"
+        android:background="@color/card_second_color"
         app:base_center_layout="@id/note_info_add_top_title_tv"
         app:base_left_layout="@id/note_info_add_top_back_iv"
         app:base_right_layout="@id/note_info_add_top_finish_tv">
@@ -62,7 +63,7 @@
         <androidx.core.widget.NestedScrollView
             android:id="@+id/note_info_add_content_content_nsv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:id="@+id/note_info_add_content_content_ll"
@@ -176,6 +177,7 @@
             android:weightSum="4">
 
             <LinearLayout
+                android:id="@+id/note_iab_image_ll"
                 android:layout_width="@dimen/touch_target_size"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

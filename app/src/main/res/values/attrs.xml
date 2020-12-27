@@ -17,4 +17,46 @@
         <attr name="niv_border_width_size" format="dimension" />
         <attr name="niv_border_visibility" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="CountdownRingView">
+        <attr name="countdown_background_color" format="color" />
+        <attr name="countdown_progress_color" format="color" />
+        <attr name="countdown_progress_width" format="dimension" />
+        <attr name="countdown_text_color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="CountDownTextView">
+        <attr name="cdt_color" format="color" />
+        <attr name="cdt_background_color" format="color" />
+        <attr name="cdt_text_size" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="TreeLineView">
+        <attr name="tree_line_level" format="integer" />
+        <attr name="tree_line_have_child" format="boolean" />
+        <attr name="tree_line_have_parent" format="boolean" />
+        <attr name="tree_line_have_next" format="boolean" />
+        <attr name="tree_line_unit_width" format="dimension" />
+        <attr name="tree_line_color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="FloatMessageMinView">
+
+    </declare-styleable>
+
+    <declare-styleable name="FloatMessageBaseView">
+
+    </declare-styleable>
+
+    <!-- 编辑光标 -->
+    <declare-styleable name="EditCursorView">
+        <attr name="ecursor_delay" format="float" />
+        <attr name="ecursor_width" format="dimension" />
+        <attr name="ecursor_color" format="color" />
+    </declare-styleable>
+
+    <!-- 编辑内容布局 -->
+    <declare-styleable name="EditContentView">
+
+    </declare-styleable>
 </resources>

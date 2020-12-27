@@ -20,5 +20,50 @@
     <string name="base_format_time_12">%1$tI:%1$tM:%1$tS %1$Tp</string>
     <string name="_sorry_application_have_error_will_exit">很抱歉，程序出现异常，即将退出</string>
     <string name="base_button">按钮</string>
+    <string name="_cancel">Cancel</string>
+    <string name="_done">Done</string>
+    <string name="_update_background">Background Update</string>
     <string name="base_text_format">文本</string>
+    <string name="version_update_service">版本更新服务</string>
+    <string name="version_update">版本更新</string>
+    <string name="_update">更新</string>
+    <string name="_later_notification">稍后提醒</string>
+    <string name="_download">下载</string>
+    <string name="_now_install">立即安装</string>
+    <string name="_install">安装</string>
+    <string name="have_new_version_usable">有新版本可用</string>
+    <string name="new_version_name_format">新版本：%s </string>
+    <string name="_retry">重试</string>
+    <string name="ignore_current_version">不再提示</string>
+    <string name="you_can_check_new_version_in_setting">可以在“设置-检查更新”进行更新版本</string>
+    <string name="current_version_is_laseted">当前版本已是最新的</string>
+    <string name="have_not_new_version_to_update">无可用版本</string>
+
+    <string name="list_mode">列表模式</string>
+    <string name="table_mode">表格模式</string>
+    <string name="choose_file">文件选择</string>
+    <string name="_audio">音频</string>
+    <string name="_video">视频</string>
+    <string name="_image">图片</string>
+    <string name="_file">文件</string>
+    <string name="_all">全部</string>
+    <string-array name="_file_type">
+        <item>@string/_all</item>
+        <item>@string/_image</item>
+        <item>@string/_audio</item>
+        <item>@string/_video</item>
+        <item>@string/_file</item>
+    </string-array>
+    <string name="_left_arrow">&lt;</string>
+    <string name="_right_arrow">&gt;</string>
+    <string name="root_directory">根目录</string>
+    <string name="file_size_k_format">%s Kb</string>
+    <string name="file_size_m_format">%s Mb</string>
+    <string name="_preview">预览</string>
+    <string name="preview_format">预览(%s)</string>
+    <string name="not_choose_file_to_preview">未选中预览文件</string>
+    <string name="_submit">提交</string>
+    <string name="_submit_format">提交(%s)</string>
+    <string name="cancel_checked">取消选择</string>
+    <string name="selected_file_max">已到最大选择文件数量</string>
 </resources>
