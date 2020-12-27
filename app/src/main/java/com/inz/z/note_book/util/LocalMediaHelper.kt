@@ -58,7 +58,7 @@ object LocalMediaHelper {
                 // get image size
                 val size = it.getLong(it.getColumnIndex(IMAGE_TYPE_LIST[4]))
 //                val album = it.getString(it.getColumnIndex(IMAGE_TYPE_LIST[5]))
-                val contentType = it.getString(it.getColumnIndex(IMAGE_TYPE_LIST[6]))
+//                val contentType = it.getString(it.getColumnIndex(IMAGE_TYPE_LIST[6]))
                 val mimeType = it.getString(it.getColumnIndex(IMAGE_TYPE_LIST[7]))
                 val imageInfo = LocalImageInfo()
                     .apply {
@@ -72,7 +72,7 @@ object LocalMediaHelper {
 
                 Log.i(
                     TAG,
-                    "getLocalPicture: ---->  ${imageInfo.localImagePath} +CONTENT: $contentType +MIME:  $mimeType"
+                    "getLocalPicture: ---->  ${imageInfo.localImagePath} +MIME:  $mimeType"
                 )
                 imageInfoList.add(imageInfo)
             }
