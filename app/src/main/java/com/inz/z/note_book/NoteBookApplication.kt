@@ -10,6 +10,7 @@ import com.inz.z.base.util.L
 import com.inz.z.note_book.base.ActivityLifeCallbackImpl
 import com.inz.z.note_book.database.util.GreenDaoHelper
 import com.inz.z.note_book.util.Constants
+import com.inz.z.note_book.util.LocalMediaHelper
 import com.inz.z.note_book.util.SPHelper
 
 /**
@@ -37,6 +38,11 @@ class NoteBookApplication : Application() {
 
         // 设置生命周期监督
         setActivityLifeCallback()
+
+        LocalMediaHelper.getLocalPicture(this, 0)
+        LocalMediaHelper.getLocalPicture(this, 1)
+        LocalMediaHelper.getLocalPicture(this, 2)
+        LocalMediaHelper.getLocalPicture(this, 3)
     }
 
     /**
