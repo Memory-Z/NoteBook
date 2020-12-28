@@ -1,6 +1,7 @@
 package com.inz.z.note_book.view.fragment
 
 import com.inz.z.base.view.AbsBaseFragment
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  *
@@ -11,13 +12,22 @@ import com.inz.z.base.view.AbsBaseFragment
  */
 abstract class BaseSysFileFragment : AbsBaseFragment() {
 
+    protected val showList = AtomicBoolean(true)
+
     abstract fun getInstance(): BaseSysFileFragment
 
-    protected fun loadStart() {
+    protected open fun loadStart() {
 
     }
 
-    protected fun loadFinish() {
+    protected open fun loadFinish() {
 
+    }
+
+    /**
+     * 切换显示模式
+     */
+    open fun targetShowMode(showList: Boolean) {
+        this.showList.set(showList)
     }
 }

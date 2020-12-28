@@ -1,6 +1,7 @@
 package com.inz.z.note_book.view.fragment
 
-import android.view.View
+import android.view.*
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.util.L
@@ -16,6 +17,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DefaultObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_sys_file_image.*
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -28,9 +30,19 @@ import java.util.concurrent.atomic.AtomicInteger
 class SysFileImageFragment : BaseSysFileFragment() {
     companion object {
         private const val TAG = "SysFileImageFragment"
+
+        /**
+         * 列表 列数： 默认:3
+         */
+        private const val GRID_SPAN_COUNT = 4
     }
 
+    /**
+     * 当前页数
+     */
     private val currentPage = AtomicInteger(0)
+
+    private var layoutManager: GridLayoutManager? = null
 
     override fun getInstance(): BaseSysFileFragment {
         val fragment = SysFileImageFragment()
@@ -52,9 +64,25 @@ class SysFileImageFragment : BaseSysFileFragment() {
             .apply {
                 this.listener = SysFileImageRvAdapterListenerImpl()
             }
+        layoutManager = GridLayoutManager(mContext, GRID_SPAN_COUNT)
+            .apply {
+                this.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        if (!showList.get()) {
+                            val item = imageAdapter?.getItemByPosition(position)
+                            item?.let {
+                                return 1
+                            }
+                        }
+                        return this@SysFileImageFragment.layoutManager?.spanCount ?: 1
+                    }
+                }
+            }
+
         fm_sys_file_image_rv?.apply {
             this.adapter = imageAdapter
-            this.layoutManager = LinearLayoutManager(mContext)
+            this.layoutManager = this@SysFileImageFragment.layoutManager
+
         }
         fm_sys_file_image_srl?.setOnRefreshListener {
             fm_sys_file_image_srl?.isRefreshing = false
@@ -65,6 +93,13 @@ class SysFileImageFragment : BaseSysFileFragment() {
 
     override fun initData() {
         loadImageList(currentPage.get())
+    }
+
+    override fun targetShowMode(showList: Boolean) {
+        super.targetShowMode(showList)
+        L.i(TAG, "targetShowMode: ---- $showList")
+        layoutManager?.spanCount = if (showList) 1 else GRID_SPAN_COUNT
+        imageAdapter?.targetViewShowType(showList)
     }
 
     private fun loadImageList(page: Int) {

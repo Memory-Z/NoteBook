@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/margin_text"
     android:background="@drawable/bg_card_item">
@@ -18,10 +18,11 @@
 
     <LinearLayout
         android:id="@+id/item_image_base_content_ll"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
+        android:visibility="gone"
         android:layout_marginStart="@dimen/margin_layout"
         android:layout_toEndOf="@id/item_image_base_short_iv"
         android:gravity="center_vertical"
@@ -32,8 +33,8 @@
             style="@style/Base.Text.Second"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:lines="1" />
+            android:ellipsize="start"
+            android:singleLine="true" />
 
         <TextView
             android:id="@+id/item_image_base_content_date_tv"

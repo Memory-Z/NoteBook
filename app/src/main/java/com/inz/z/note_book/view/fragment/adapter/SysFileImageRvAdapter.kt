@@ -25,6 +25,9 @@ class SysFileImageRvAdapter(mContext: Context?) :
     companion object {
         private const val VIEW_TYPE_ITEM = 0x01A0
         private const val VIEW_TYPE_MORE = 0x01A1
+
+        private const val VIEW_SHOW_TYPE_LIST = 0x01B0
+        private const val VIEW_SHOW_TYPE_GROUP = 0x01B1
     }
 
     private val requestOption = RequestOptions()
@@ -36,6 +39,8 @@ class SysFileImageRvAdapter(mContext: Context?) :
     var listener: SysFileImageRvAdapterListener? = null
 
     var isMoreData: Boolean = true
+
+    private var showList = true
 
     override fun getItemCount(): Int {
         return if (list.size == 0) {
@@ -75,6 +80,7 @@ class SysFileImageRvAdapter(mContext: Context?) :
         when (holder) {
             is SysFileImageItemRvViewHolder -> {
                 holder.nameTv.text = info?.localImageName
+                holder.contentLl.visibility = if (this.showList) View.VISIBLE else View.GONE
                 Glide.with(mContext).load(info?.localImagePath).apply(requestOption)
                     .into(holder.shortIv)
                 holder.dateTv.text = info?.localImageDate
@@ -95,6 +101,7 @@ class SysFileImageRvAdapter(mContext: Context?) :
         val nameTv = itemView.item_image_base_content_title_tv
         val dateTv = itemView.item_image_base_content_date_tv
         val shortIv = itemView.item_image_base_short_iv
+        val contentLl = itemView.item_image_base_content_ll
     }
 
     /**
@@ -135,5 +142,14 @@ class SysFileImageRvAdapter(mContext: Context?) :
      */
     interface SysFileImageRvAdapterListener {
         fun onLoadMore(v: View?, position: Int)
+    }
+
+    /**
+     * 切换显示模式类型
+     * @param listShow 是否为列表
+     */
+    fun targetViewShowType(listShow: Boolean) {
+        this.showList = listShow
+        notifyDataSetChanged()
     }
 }

@@ -1,12 +1,17 @@
 package com.inz.z.note_book.view.activity
 
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.fragment.BaseSysFileFragment
 import com.inz.z.note_book.view.fragment.SysFileAudioFragment
 import com.inz.z.note_book.view.fragment.SysFileImageFragment
+import kotlinx.android.synthetic.main.activity_system_file.*
 import java.lang.Exception
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  *
@@ -36,6 +41,11 @@ class SystemFileActivity : BaseNoteActivity() {
      */
     private var currentFragment: BaseSysFileFragment? = null
 
+    /**
+     * 显示模式
+     */
+    private var showList = AtomicBoolean(true)
+
     @Target(AnnotationTarget.PROPERTY, AnnotationTarget.VALUE_PARAMETER)
     @Retention(AnnotationRetention.SOURCE)
     private annotation class ContentType
@@ -48,6 +58,7 @@ class SystemFileActivity : BaseNoteActivity() {
     }
 
     override fun initView() {
+        setSupportActionBar(sys_file_top_btal.toolbar)
 
     }
 
@@ -96,6 +107,24 @@ class SystemFileActivity : BaseNoteActivity() {
         } catch (ignore: Exception) {
             L.e(TAG, "targetContentFragment: ", ignore)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_target_view, menu)
+        val item = menu?.findItem(R.id.menu_target_view_mode_item)
+        item?.isChecked = showList.get()
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_target_view_mode_item) {
+            val state = showList.get()
+            item.isChecked = !state
+            showList.set(!state)
+            currentFragment?.targetShowMode(!state)
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }
