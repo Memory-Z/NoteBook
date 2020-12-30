@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_target_view_mode_item"
-        android:icon="@drawable/dr_icon_show_mode"
+        android:checkable="true"
+        android:checked="true"
+        android:icon="@drawable/ic_baseline_view_list_24"
         android:title="@string/list_mode"
         app:showAsAction="always" />
 </menu>

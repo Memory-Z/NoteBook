@@ -10,6 +10,7 @@ import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.local.LocalImageInfo
+import com.inz.z.note_book.view.widget.layout.LoadMoreLayout
 import kotlinx.android.synthetic.main.item_image_base.view.*
 import kotlinx.android.synthetic.main.item_load_more.view.*
 
@@ -41,6 +42,7 @@ class SysFileImageRvAdapter(mContext: Context?) :
     var isMoreData: Boolean = true
 
     private var showList = true
+    private var loadMoreLayout: LoadMoreLayout? = null
 
     override fun getItemCount(): Int {
         return if (list.size == 0) {
@@ -69,8 +71,14 @@ class SysFileImageRvAdapter(mContext: Context?) :
                 return SysFileImageItemRvViewHolder(view)
             }
             else -> {
-                val view = mLayoutInflater.inflate(R.layout.item_load_more, parent, false)
-                return SysFileImageMoreRvViewHolder(view, listener)
+                loadMoreLayout = LoadMoreLayout(mContext)
+//                    .apply {
+//                        this.layoutParams = ViewGroup.LayoutParams(
+//                            ViewGroup.LayoutParams.MATCH_PARENT,
+//                            ViewGroup.LayoutParams.WRAP_CONTENT
+//                        )
+//                    }
+                return SysFileImageMoreRvViewHolder(loadMoreLayout!!, listener)
             }
         }
     }
@@ -108,30 +116,36 @@ class SysFileImageRvAdapter(mContext: Context?) :
      * 加载更多
      */
     class SysFileImageMoreRvViewHolder(
-        itemView: View,
+        itemView: LoadMoreLayout,
         var listener: SysFileImageRvAdapterListener?
-    ) : SysFileImageBaseRvViewHolder(itemView),
-        View.OnClickListener {
-
-        val loadMoreTv = itemView.item_load_more_hint_tv
+    ) : SysFileImageBaseRvViewHolder(itemView) {
 
         init {
-            loadMoreTv.setOnClickListener(this)
-        }
-
-        override fun onClick(v: View?) {
-            val position = adapterPosition
-            if (position != RecyclerView.NO_POSITION) {
-                listener?.onLoadMore(v, position)
+            itemView.let {
+                it.canLoadMore = true
+                it.hintStr = itemView.context.getString(R.string.load_more)
+                it.loadMoreListener = object : LoadMoreLayout.LoadMoreLayoutListener {
+                    override fun loadMore(v: View?) {
+                        val position = adapterPosition
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener?.onLoadMore(v, position)
+                        }
+                    }
+                }
             }
         }
 
     }
 
-    override fun loadMoreData(list: MutableList<LocalImageInfo>?) {
-        super.loadMoreData(list)
+    override fun loadMoreData(list: MutableList<LocalImageInfo>?, haveMore: Boolean) {
+        loadMoreLayout?.stopLoad(haveMore)
+        super.loadMoreData(list, haveMore)
     }
 
+    override fun refreshData(list: MutableList<LocalImageInfo>?) {
+        loadMoreLayout?.stopLoad(true)
+        super.refreshData(list)
+    }
 
     ///////////////////////////////////////////////////////////////////////////
     // OPEN

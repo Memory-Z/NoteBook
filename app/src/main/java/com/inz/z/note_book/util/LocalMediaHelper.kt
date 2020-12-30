@@ -28,7 +28,7 @@ object LocalMediaHelper {
         MediaStore.Images.Media.SIZE,
         MediaStore.Images.Media.MIME_TYPE
     )
-    private const val LOCAL_LIST_PAGE_SIZE = 20
+    const val LOCAL_LIST_PAGE_SIZE = 20
 
     /**
      * 获取本地图片列表

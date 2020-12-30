@@ -126,7 +126,7 @@ class NewDynamicActivity : BaseNoteActivity() {
      * 添加更多文件项
      */
     private fun addDynamicImageList(list: List<BaseChooseFileBean>) {
-        dynamicRvAdapter?.loadMoreData(list)
+        dynamicRvAdapter?.loadMoreData(list, true)
     }
 
     /**

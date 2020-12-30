@@ -117,9 +117,9 @@ class SysFileImageFragment : BaseSysFileFragment() {
                     L.i(TAG, "loadImageList: ----${Thread.currentThread().name}")
                     val p = currentPage.addAndGet(1)
                     if (p > 1) {
-                        imageAdapter?.loadMoreData(t.toMutableList())
+                        imageAdapter?.loadMoreData(t.toMutableList(), t.size == LocalMediaHelper.LOCAL_LIST_PAGE_SIZE)
                     } else {
-                        imageAdapter?.refreshData(t)
+                        imageAdapter?.refreshData(t.toMutableList())
                     }
                 }
 

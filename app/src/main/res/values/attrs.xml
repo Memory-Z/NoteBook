@@ -59,4 +59,10 @@
     <declare-styleable name="EditContentView">
 
     </declare-styleable>
+
+    <!-- 加载更多 -->
+    <declare-styleable name="LoadMoreLayout">
+        <!-- 是否可点击 -->
+        <attr name="load_more_can_click" format="boolean" />
+    </declare-styleable>
 </resources>

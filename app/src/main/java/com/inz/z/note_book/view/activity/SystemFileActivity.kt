@@ -3,6 +3,7 @@ package com.inz.z.note_book.view.activity
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.core.content.ContextCompat
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.view.BaseNoteActivity
@@ -111,9 +112,24 @@ class SystemFileActivity : BaseNoteActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_target_view, menu)
-        val item = menu?.findItem(R.id.menu_target_view_mode_item)
-        item?.isChecked = showList.get()
         return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        val item = menu?.findItem(R.id.menu_target_view_mode_item)
+        item?.let {
+            val isList = showList.get()
+            it.isChecked = isList
+            it.icon = ContextCompat.getDrawable(
+                mContext,
+                if (isList)
+                    R.drawable.ic_baseline_view_list_24
+                else
+                    R.drawable.ic_baseline_view_module_24
+            )
+
+        }
+        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -122,6 +138,7 @@ class SystemFileActivity : BaseNoteActivity() {
             item.isChecked = !state
             showList.set(!state)
             currentFragment?.targetShowMode(!state)
+            invalidateOptionsMenu()
             return true
         }
         return super.onOptionsItemSelected(item)

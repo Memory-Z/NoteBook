@@ -76,7 +76,7 @@ public abstract class AbsBaseRvAdapter<T, VH extends RecyclerView.ViewHolder> ex
      *
      * @param list 数据列表
      */
-    public void loadMoreData(List<T> list) {
+    public void loadMoreData(List<T> list, boolean haveMore) {
         this.list.addAll(list);
         notifyDataSetChanged();
     }
