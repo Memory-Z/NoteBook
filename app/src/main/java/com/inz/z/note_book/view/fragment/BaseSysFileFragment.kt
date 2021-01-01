@@ -25,6 +25,13 @@ abstract class BaseSysFileFragment : AbsBaseFragment() {
     }
 
     /**
+     * 刷新界面
+     */
+    fun refreshView() {
+
+    }
+
+    /**
      * 切换显示模式
      */
     open fun targetShowMode(showList: Boolean) {

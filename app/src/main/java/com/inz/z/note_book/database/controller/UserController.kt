@@ -50,6 +50,10 @@ object UserController {
         val oldStr = ""
         val newStr = ""
         for (method in methods) {
+            Log.i(TAG, "updateUserLogInfo: $method")
+            if (method == null) {
+                continue
+            }
             val oldValue = method.invoke(oldUser, "") as String?
             val newValue = method.invoke(newUser, "") as String?
             if (oldValue != newValue) {
@@ -58,6 +62,22 @@ object UserController {
             }
         }
         Log.i(TAG, "updateUserLogInfo: $oldStr --- $newStr")
+    }
+
+    /**
+     * 获取当前用户信息
+     */
+    fun getCurrentUser(): UserInfo? {
+        getUserDao()?.let {
+            val query = it.queryBuilder()
+            val list = query
+                .where(UserInfoDao.Properties.Enable.eq(1))
+                .list()
+            if (list.isNotEmpty()) {
+                return list[0]
+            }
+        }
+        return null
 
     }
 }

@@ -99,5 +99,6 @@
 
     <string name="sys_file_list">系统文件</string>
     <string name="favorite">特别喜爱</string>
+    <string name="user_info_service">用户信息服务</string>
 
 </resources>

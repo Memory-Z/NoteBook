@@ -1,6 +1,7 @@
 package com.inz.z.note_book
 
 import android.app.Application
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
@@ -8,7 +9,9 @@ import com.inz.z.base.R
 import com.inz.z.base.util.CrashHandler
 import com.inz.z.base.util.L
 import com.inz.z.note_book.base.ActivityLifeCallbackImpl
+import com.inz.z.note_book.database.bean.UserInfo
 import com.inz.z.note_book.database.util.GreenDaoHelper
+import com.inz.z.note_book.service.UserInfoService
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.util.LocalMediaHelper
 import com.inz.z.note_book.util.SPHelper
@@ -24,10 +27,21 @@ class NoteBookApplication : Application() {
 
     companion object {
         private const val TAG = "NoteBookApplication"
+        lateinit var mInstance: NoteBookApplication
     }
+
+
+    var mContext: Context? = null
+
+    /**
+     * 当前用户信息
+     */
+    var currentUserInfo: UserInfo? = null
 
     override fun onCreate() {
         super.onCreate()
+        mInstance = this
+        mContext = this
         L.initL(applicationContext)
         CrashHandler.instance(applicationContext, CrashHandlerListenerImpl())
         GreenDaoHelper.getInstance().initGreenDaoHelper(applicationContext)
@@ -39,14 +53,17 @@ class NoteBookApplication : Application() {
         // 设置生命周期监督
         setActivityLifeCallback()
 
-        LocalMediaHelper.getLocalPicture(this, 0)
-        LocalMediaHelper.getLocalPicture(this, 1)
-        LocalMediaHelper.getLocalPicture(this, 2)
-        LocalMediaHelper.getLocalPicture(this, 3)
+        // 初始化服务
+        initService()
 
-        LocalMediaHelper.getLocalAudioList(this, 0)
-        LocalMediaHelper.getLocalAudioList(this, 1)
-        LocalMediaHelper.getLocalAudioList(this, 2)
+    }
+
+    private fun initService() {
+        val intent = Intent(mContext, UserInfoService::class.java)
+            .apply {
+                this.putExtra(UserInfoService.TAG_FLAG_INIT_USER, UserInfoService.FLAG_INIT_USER)
+            }
+        startService(intent)
     }
 
     /**

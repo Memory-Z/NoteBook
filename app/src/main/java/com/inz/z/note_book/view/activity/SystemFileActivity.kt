@@ -1,5 +1,7 @@
 package com.inz.z.note_book.view.activity
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -9,6 +11,7 @@ import androidx.transition.*
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.local.LocalImageInfo
+import com.inz.z.note_book.util.PermissionUtil
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.fragment.BaseSysFileFragment
 import com.inz.z.note_book.view.fragment.ImageDetailFragment
@@ -31,6 +34,7 @@ class SystemFileActivity : BaseNoteActivity() {
         private const val CONTENT_TYPE_AUDIO = 0x0102
         private const val CONTENT_TYPE_MOVIE = 0x0103
 
+        private const val REQUEST_CODE = 0x0A01
 
         private val contentFragmentMap: Map<Int, String> =
             mapOf(
@@ -38,6 +42,10 @@ class SystemFileActivity : BaseNoteActivity() {
                 CONTENT_TYPE_AUDIO to "SYS_FILE_AUDIO_FRAGMENT"
             )
     }
+
+    private val requestPermissionsArray = arrayOf(
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    )
 
 
     /**
@@ -68,6 +76,20 @@ class SystemFileActivity : BaseNoteActivity() {
 
     override fun initData() {
         targetContentFragment(CONTENT_TYPE_IMAGE)
+        PermissionUtil.requestPermission(this, requestPermissionsArray, REQUEST_CODE)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // TODO: 2021/1/1 获取权限成功，刷新界面
+            }
+        }
     }
 
     /**

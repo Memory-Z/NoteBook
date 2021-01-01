@@ -143,6 +143,13 @@
             android:name=".service.ScheduleService"
             android:label="@string/schedule" />
 
+        <!-- 用户信息  -->
+        <service
+            android:name=".service.UserInfoService"
+            android:label="@string/user_info_service">
+
+        </service>
+
         <!-- 闹钟 广播 -->
         <receiver
             android:name=".broadcast.ClockAlarmBroadcast"
