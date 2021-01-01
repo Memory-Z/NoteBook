@@ -3,6 +3,7 @@ package com.inz.z.note_book.view.fragment.adapter
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -12,7 +13,6 @@ import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.local.LocalImageInfo
 import com.inz.z.note_book.view.widget.layout.LoadMoreLayout
 import kotlinx.android.synthetic.main.item_image_base.view.*
-import kotlinx.android.synthetic.main.item_load_more.view.*
 
 /**
  * 系统文件 适配器
@@ -68,7 +68,7 @@ class SysFileImageRvAdapter(mContext: Context?) :
         when (viewType) {
             VIEW_TYPE_ITEM -> {
                 val view = mLayoutInflater.inflate(R.layout.item_image_base, parent, false)
-                return SysFileImageItemRvViewHolder(view)
+                return SysFileImageItemRvViewHolder(view, listener)
             }
             else -> {
                 loadMoreLayout = LoadMoreLayout(mContext)
@@ -85,16 +85,20 @@ class SysFileImageRvAdapter(mContext: Context?) :
 
     override fun onBindVH(holder: SysFileImageBaseRvViewHolder, position: Int) {
         val info = getItemByPosition(position)
+        holder.listener = listener
         when (holder) {
             is SysFileImageItemRvViewHolder -> {
                 holder.nameTv.text = info?.localImageName
                 holder.contentLl.visibility = if (this.showList) View.VISIBLE else View.GONE
                 Glide.with(mContext).load(info?.localImagePath).apply(requestOption)
                     .into(holder.shortIv)
-                holder.dateTv.text = info?.localImageDate
+                ViewCompat.setTransitionName(
+                    holder.shortIv,
+                    holder.itemView.context.getString(R.string.base_image) + "_item_" + position
+                )
+                holder.dateTv.text = info?.imageModifiedDateStr
             }
             is SysFileImageMoreRvViewHolder -> {
-                holder.listener = listener
             }
             else -> {
 
@@ -102,14 +106,32 @@ class SysFileImageRvAdapter(mContext: Context?) :
         }
     }
 
-    open class SysFileImageBaseRvViewHolder(itemView: View) : AbsBaseRvViewHolder(itemView) {}
+    open class SysFileImageBaseRvViewHolder(
+        itemView: View,
+        var listener: SysFileImageRvAdapterListener?
+    ) : AbsBaseRvViewHolder(itemView) {}
 
-    class SysFileImageItemRvViewHolder(itemView: View) : SysFileImageBaseRvViewHolder(itemView) {
+    class SysFileImageItemRvViewHolder(
+        itemView: View,
+        listener: SysFileImageRvAdapterListener?
+    ) :
+        SysFileImageBaseRvViewHolder(itemView, listener), View.OnClickListener {
 
         val nameTv = itemView.item_image_base_content_title_tv
         val dateTv = itemView.item_image_base_content_date_tv
         val shortIv = itemView.item_image_base_short_iv
         val contentLl = itemView.item_image_base_content_ll
+
+        init {
+            shortIv.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                listener?.onItemClick(v, position)
+            }
+        }
     }
 
     /**
@@ -117,8 +139,8 @@ class SysFileImageRvAdapter(mContext: Context?) :
      */
     class SysFileImageMoreRvViewHolder(
         itemView: LoadMoreLayout,
-        var listener: SysFileImageRvAdapterListener?
-    ) : SysFileImageBaseRvViewHolder(itemView) {
+        listener: SysFileImageRvAdapterListener?
+    ) : SysFileImageBaseRvViewHolder(itemView, listener) {
 
         init {
             itemView.let {
@@ -155,6 +177,18 @@ class SysFileImageRvAdapter(mContext: Context?) :
      * 适配器监听
      */
     interface SysFileImageRvAdapterListener {
+        /**
+         * 项点击
+         * @param v View
+         * @param position position
+         */
+        fun onItemClick(v: View?, position: Int)
+
+        /**
+         * 加载更多
+         * @param v View
+         * @param position position
+         */
         fun onLoadMore(v: View?, position: Int)
     }
 

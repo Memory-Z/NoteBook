@@ -2,10 +2,14 @@ package com.inz.z.note_book.database.bean.local;
 
 import androidx.annotation.NonNull;
 
+import com.inz.z.base.util.BaseTools;
+import com.inz.z.calendar_view.Tools;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.greenrobot.greendao.annotation.Generated;
@@ -61,8 +65,8 @@ public class LocalImageInfo {
 
     @Generated(hash = 875972229)
     public LocalImageInfo(Long id, String localImageId, String localImageName,
-            String localImagePath, Long localImageSize, String localImageMimeType,
-            String localImageDate, Date createDate, Date updateDate) {
+                          String localImagePath, Long localImageSize, String localImageMimeType,
+                          String localImageDate, Date createDate, Date updateDate) {
         this.id = id;
         this.localImageId = localImageId;
         this.localImageName = localImageName;
@@ -166,5 +170,20 @@ public class LocalImageInfo {
 
     public void setLocalImageMimeType(String localImageMimeType) {
         this.localImageMimeType = localImageMimeType;
+    }
+
+    /**
+     * 获取图片修改时间
+     *
+     * @return 图片时间
+     */
+    public String getImageModifiedDateStr() {
+        try {
+            long time = Long.parseLong(getLocalImageDate());
+            return BaseTools.getNearDateStr(time);
+        } catch (Exception ignore) {
+
+        }
+        return getLocalImageDate();
     }
 }

@@ -112,7 +112,7 @@ class MainActivity : BaseNoteActivity() {
     }
 
     override fun initData() {
-        showFloatWindowTintDialog()
+//        showFloatWindowTintDialog()
     }
 
     override fun needCheckVersion(): Boolean {

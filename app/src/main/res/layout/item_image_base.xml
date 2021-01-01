@@ -13,8 +13,7 @@
         android:layout_height="@dimen/image_phone_height"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:contentDescription="@string/_image"
-        android:src="@drawable/ic_vd_image" />
+        android:contentDescription="@string/_image" />
 
     <LinearLayout
         android:id="@+id/item_image_base_content_ll"
@@ -22,11 +21,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:visibility="gone"
         android:layout_marginStart="@dimen/margin_layout"
         android:layout_toEndOf="@id/item_image_base_short_iv"
         android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/item_image_base_content_title_tv"

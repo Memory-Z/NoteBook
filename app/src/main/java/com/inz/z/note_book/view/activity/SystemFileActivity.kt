@@ -1,17 +1,20 @@
 package com.inz.z.note_book.view.activity
 
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.ImageView
+import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
+import androidx.transition.*
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
+import com.inz.z.note_book.database.bean.local.LocalImageInfo
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.fragment.BaseSysFileFragment
+import com.inz.z.note_book.view.fragment.ImageDetailFragment
 import com.inz.z.note_book.view.fragment.SysFileAudioFragment
 import com.inz.z.note_book.view.fragment.SysFileImageFragment
 import kotlinx.android.synthetic.main.activity_system_file.*
-import java.lang.Exception
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -71,11 +74,11 @@ class SystemFileActivity : BaseNoteActivity() {
      * 切换显示布局内容
      * @param contentType 内容类型
      */
-    fun targetContentFragment(@ContentType contentType: Int) {
+    private fun targetContentFragment(@ContentType contentType: Int) {
         // 当前界面 TAG
         val currentFragmentTag = currentFragment?.tag ?: ""
         // 新界面 的 TAG
-        val newTag = contentFragmentMap[contentType]
+        val newTag = contentFragmentMap[contentType] ?: "TempBaseSysFragment"
         if (currentFragmentTag.equals(newTag)) {
             // 界面已显示 不用处理
             L.i(TAG, "targetContentFragment: -- $newTag")
@@ -85,6 +88,9 @@ class SystemFileActivity : BaseNoteActivity() {
         when (contentType) {
             CONTENT_TYPE_IMAGE -> {
                 clazz = SysFileImageFragment::class.java
+                val fragment = SysFileImageFragment.getInstance(SysFileImageFragmentListenerImpl())
+                targetBaseSysFileFragment(fragment, newTag)
+                return
             }
             CONTENT_TYPE_AUDIO -> {
                 clazz = SysFileAudioFragment::class.java
@@ -108,6 +114,13 @@ class SystemFileActivity : BaseNoteActivity() {
         } catch (ignore: Exception) {
             L.e(TAG, "targetContentFragment: ", ignore)
         }
+    }
+
+    private fun targetBaseSysFileFragment(fragment: BaseSysFileFragment, newTag: String) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.sys_file_content_fl, fragment, newTag)
+        transaction.commitAllowingStateLoss()
+        currentFragment = fragment
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -142,6 +155,62 @@ class SystemFileActivity : BaseNoteActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private inner class SysFileImageFragmentListenerImpl :
+        SysFileImageFragment.SysFileImageFragmentListener {
+        override fun showImageDetail(imageView: ImageView, imageInfo: LocalImageInfo) {
+            showImageDetailFragment(imageView, imageInfo)
+        }
+    }
+
+
+    /**
+     * 显示 图片详情界面
+     */
+    private fun showImageDetailFragment(@Nullable imageView: ImageView, imageInfo: LocalImageInfo) {
+        if (mContext == null) {
+            return
+        }
+        val manager = supportFragmentManager
+        var imageDetailFragment =
+            manager.findFragmentByTag("ImageDetailFragment") as ImageDetailFragment?
+        if (imageDetailFragment == null) {
+            imageDetailFragment =
+                ImageDetailFragment.getInstance(imageInfo.localImagePath, imageInfo.id)
+                    .apply {
+                        this.sharedElementEnterTransition = object : TransitionSet() {
+                            init {
+                                setDuration(1000)
+                                setOrdering(ORDERING_TOGETHER)
+                                addTransition(ChangeBounds())
+                                addTransition(ChangeTransform())
+                                addTransition(ChangeImageTransform())
+                            }
+                        }
+                        this.sharedElementReturnTransition = object : TransitionSet() {
+                            init {
+                                setDuration(1000)
+                                setOrdering(ORDERING_TOGETHER)
+                                addTransition(ChangeBounds())
+                                addTransition(ChangeTransform())
+                                addTransition(ChangeImageTransform())
+                            }
+                        }
+                        this.exitTransition = Fade()
+                        this.exitTransition = Fade()
+                    }
+        }
+        val tran = manager.beginTransaction()
+        if (!imageDetailFragment.isAdded) {
+            tran.addSharedElement(imageView, mContext.getString(R.string.base_image))
+            tran.add(R.id.sys_file_content_fl, imageDetailFragment, "ImageDetailFragment")
+            tran.addToBackStack(null)
+        }
+//        if (!imageDetailFragment.isVisible) {
+//            tran.show(imageDetailFragment)
+//        }
+        tran.commitAllowingStateLoss()
     }
 
 }

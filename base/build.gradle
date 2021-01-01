@@ -109,6 +109,8 @@ dependencies {
     // debugImplementation because LeakCanary should only run in debug builds.
     debugApi 'com.squareup.leakcanary:leakcanary-android:2.4'
 
+    api 'com.airbnb.android:lottie:3.6.0'
+
 }
 repositories {
     mavenCentral()

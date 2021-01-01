@@ -6,11 +6,13 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.TintTypedArray
-import androidx.core.content.ContextCompat
+import com.airbnb.lottie.Lottie
+import com.airbnb.lottie.LottieConfig
+import com.bumptech.glide.Glide
 import com.inz.z.note_book.R
 import kotlinx.android.synthetic.main.item_load_more.view.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -40,7 +42,7 @@ class LoadMoreLayout : LinearLayout {
     /**
      * 加载进度
      */
-    private var progressBar: ProgressBar? = null
+    private var loadingIv: ImageView? = null
 
     /**
      * 默认提示语
@@ -93,13 +95,16 @@ class LoadMoreLayout : LinearLayout {
             mView = LayoutInflater.from(mContext).inflate(R.layout.item_load_more, this, true)
         }
         mView?.let {
-            progressBar = it.item_load_more_pbar
+            loadingIv = it.item_load_more_loading_iv
             hintTv = it.item_load_more_hint_tv
-            hintTv?.setOnClickListener {
+            it.setOnClickListener {
                 if (!loading.get()) {
                     startLoad()
                 }
             }
+        }
+        loadingIv?.let {
+            Glide.with(it).asGif().load(R.drawable.load_hor_gif).into(it)
         }
         loading.set(false)
         initDate()
@@ -122,7 +127,7 @@ class LoadMoreLayout : LinearLayout {
      * 切换显示状态
      */
     private fun targetLoadState() {
-        progressBar?.visibility = if (loading.get()) VISIBLE else INVISIBLE
+        loadingIv?.visibility = if (loading.get()) VISIBLE else GONE
         // 是否加载 中。
         val str = if (loading.get())
             loadingStr
@@ -130,8 +135,15 @@ class LoadMoreLayout : LinearLayout {
         // 是否可以加载
             if (canLoadMore) hintStr else loadFinish
         hintTv?.text = str
+        hintTv?.visibility = if (loading.get()) GONE else VISIBLE
     }
 
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        loadingIv?.let {
+            Glide.with(it).clear(it)
+        }
+    }
 
     ///////////////////////////////////////////////////////////////////////////
     // OPEN

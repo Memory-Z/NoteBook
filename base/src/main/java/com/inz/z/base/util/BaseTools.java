@@ -102,6 +102,32 @@ public class BaseTools {
     }
 
     /**
+     * 获取最近时间
+     *
+     * @param time 时间
+     * @return 时间串
+     */
+    public static String getNearDateStr(long time) {
+        long currTime = System.currentTimeMillis();
+        int difTime = (int) ((currTime - time) / 1000);
+        Locale locale = Locale.getDefault();
+        if (difTime <= 0) {
+            return "刚刚";
+        } else if (difTime < 60) {
+            // 小于 60"
+            return difTime + "s 前";
+        } else if (difTime < 60 * 60) {
+            // 小于 60'
+            return getDateFormat("MM:ss", locale).format(time);
+        } else if (difTime < 24 * 60 * 60) {
+            // 小于 24h
+            return getDateFormatTime().format(time);
+        } else {
+            return getBaseDateFormat().format(time);
+        }
+    }
+
+    /**
      * 校验 邮箱格式是否正确
      *
      * @param string 邮箱地址
