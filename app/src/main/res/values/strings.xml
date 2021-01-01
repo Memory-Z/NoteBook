@@ -98,5 +98,6 @@
     <string name="system_log">系统日志</string>
 
     <string name="sys_file_list">系统文件</string>
+    <string name="favorite">特别喜爱</string>
 
 </resources>

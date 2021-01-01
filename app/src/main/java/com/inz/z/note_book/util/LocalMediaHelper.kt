@@ -23,7 +23,7 @@ object LocalMediaHelper {
     private val IMAGE_TYPE_LIST = listOf(
         MediaStore.Images.Media._ID,
         MediaStore.Images.Media.DISPLAY_NAME,
-        MediaStore.Images.Media.DATE_MODIFIED,
+        MediaStore.Images.Media.DATE_ADDED,
         MediaStore.Images.Media.DATA,
         MediaStore.Images.Media.SIZE,
         MediaStore.Images.Media.MIME_TYPE
@@ -91,7 +91,7 @@ object LocalMediaHelper {
         MediaStore.Audio.Media._ID,
         MediaStore.Audio.Media.DISPLAY_NAME,
         MediaStore.Audio.Media.DATA,
-        MediaStore.Audio.Media.DATE_MODIFIED,
+        MediaStore.Audio.Media.DATE_ADDED,
         MediaStore.Audio.Media.SIZE,
         MediaStore.Audio.Media.MIME_TYPE
 

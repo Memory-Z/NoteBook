@@ -108,8 +108,10 @@ dependencies {
 
     // debugImplementation because LeakCanary should only run in debug builds.
     debugApi 'com.squareup.leakcanary:leakcanary-android:2.4'
-
+    // 动图加载
     api 'com.airbnb.android:lottie:3.6.0'
+    // 图片缩放
+    api 'com.github.chrisbanes:PhotoView:1.2.5'
 
 }
 repositories {
