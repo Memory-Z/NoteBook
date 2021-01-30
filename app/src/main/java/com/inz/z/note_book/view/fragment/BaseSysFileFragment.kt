@@ -27,7 +27,7 @@ abstract class BaseSysFileFragment : AbsBaseFragment() {
     /**
      * 刷新界面
      */
-    fun refreshView() {
+    open fun refreshView() {
 
     }
 

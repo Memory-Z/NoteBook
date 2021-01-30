@@ -12,7 +12,7 @@ import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.RecordInfo
 import com.inz.z.note_book.database.controller.RecordInfoController
 import com.inz.z.note_book.view.BaseNoteActivity
-import com.inz.z.note_book.view.fragment.BaseDialogFragment
+import com.inz.z.note_book.view.dialog.BaseDialogFragment
 import kotlinx.android.synthetic.main.activity_new_record.*
 import java.util.*
 

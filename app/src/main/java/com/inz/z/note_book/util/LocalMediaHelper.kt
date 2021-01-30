@@ -58,7 +58,7 @@ object LocalMediaHelper {
                 // get image display  name
                 val name = it.getString(it.getColumnIndex(IMAGE_TYPE_LIST[1]))
                 // get image create date
-                val modifiedDate = it.getString(it.getColumnIndex(IMAGE_TYPE_LIST[2]))
+                val modifiedDate = it.getLong(it.getColumnIndex(IMAGE_TYPE_LIST[2])) * 1000
                 // get image path
                 val path = it.getString(it.getColumnIndex(IMAGE_TYPE_LIST[3]))
                 // get image size
@@ -69,7 +69,7 @@ object LocalMediaHelper {
                     .apply {
                         localImageId = id
                         localImageName = name
-                        localImageDate = modifiedDate
+                        localImageDate = modifiedDate.toString()
                         localImagePath = path
                         localImageSize = size
                         createDate = localTime.time
@@ -77,7 +77,7 @@ object LocalMediaHelper {
 
                 Log.i(
                     TAG,
-                    "getLocalPicture: ---->  ${imageInfo.localImagePath} +MIME:  $mimeType"
+                    "getLocalPicture: ---->  ${imageInfo.localImagePath} +MIME: {$modifiedDate} + ${System.currentTimeMillis()}  ---  ${imageInfo.imageModifiedDateStr}"
                 )
                 imageInfoList.add(imageInfo)
             }
@@ -128,7 +128,7 @@ object LocalMediaHelper {
                 // get audio path
                 val path = it.getString(it.getColumnIndex(AUDIO_TYPE_LIST[2]))
                 // get audio modified date
-                val modifiedDate = it.getLong(it.getColumnIndex(AUDIO_TYPE_LIST[3]))
+                val modifiedDate = it.getLong(it.getColumnIndex(AUDIO_TYPE_LIST[3])) * 1000
                 // get audio size
                 val size = it.getLong(it.getColumnIndex(AUDIO_TYPE_LIST[4]))
                 // get audio mime type
@@ -154,6 +154,4 @@ object LocalMediaHelper {
         return audioList
 
     }
-
-
 }

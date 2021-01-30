@@ -1,6 +1,5 @@
 package com.inz.z.note_book.view.dialog
 
-import android.app.Activity
 import android.graphics.Point
 import android.os.Bundle
 import android.view.Gravity
@@ -8,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.inz.z.base.view.AbsBaseDialogFragment
 import com.inz.z.note_book.R
-import com.inz.z.note_book.view.fragment.BaseDialogFragment
 
 /**
  * 锁屏界面

@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
@@ -13,6 +14,7 @@ import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.local.LocalImageInfo
 import com.inz.z.note_book.util.PermissionUtil
 import com.inz.z.note_book.view.BaseNoteActivity
+import com.inz.z.note_book.view.dialog.BaseDialogFragment
 import com.inz.z.note_book.view.fragment.BaseSysFileFragment
 import com.inz.z.note_book.view.fragment.ImageDetailFragment
 import com.inz.z.note_book.view.fragment.SysFileAudioFragment
@@ -75,8 +77,11 @@ class SystemFileActivity : BaseNoteActivity() {
     }
 
     override fun initData() {
+        // 判断是否有存储读取权限
+        if (!PermissionUtil.checkReadStoragePermission(mContext)) {
+            showRequestPermissionDialog()
+        }
         targetContentFragment(CONTENT_TYPE_IMAGE)
-        PermissionUtil.requestPermission(this, requestPermissionsArray, REQUEST_CODE)
     }
 
     override fun onRequestPermissionsResult(
@@ -87,7 +92,7 @@ class SystemFileActivity : BaseNoteActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // TODO: 2021/1/1 获取权限成功，刷新界面
+                currentFragment?.refreshView()
             }
         }
     }
@@ -138,6 +143,9 @@ class SystemFileActivity : BaseNoteActivity() {
         }
     }
 
+    /**
+     * 切换显示 界面
+     */
     private fun targetBaseSysFileFragment(fragment: BaseSysFileFragment, newTag: String) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.sys_file_content_fl, fragment, newTag)
@@ -233,6 +241,59 @@ class SystemFileActivity : BaseNoteActivity() {
 //            tran.show(imageDetailFragment)
 //        }
         tran.commitAllowingStateLoss()
+    }
+
+    /**
+     * 显示权限申请弹窗
+     */
+    private fun showRequestPermissionDialog() {
+        if (mContext == null) {
+            L.i(TAG, "showRequestPermissionDialog: mContext is null. ")
+            return
+        }
+        val manager = supportFragmentManager
+        var dialog = manager.findFragmentByTag("RequestPermissionDialog") as BaseDialogFragment?
+        if (dialog == null) {
+            dialog = BaseDialogFragment.Builder()
+                .setTitle(mContext.getString(R.string._tips))
+                .setCenterMessage(mContext.getString(R.string.request_permission_storage_hint))
+                .setLeftButton(
+                    mContext.getString(R.string.cancel),
+                    View.OnClickListener {
+                        showToast(mContext.getString(R.string.permission_to_open))
+                        hideRequestPermissionDialog()
+                        finish()
+                    }
+                )
+                .setRightButton(
+                    mContext.getString(R.string._position),
+                    View.OnClickListener {
+                        PermissionUtil.requestPermission(
+                            this,
+                            requestPermissionsArray,
+                            REQUEST_CODE
+                        )
+                        hideRequestPermissionDialog()
+                    }
+                )
+                .build()
+        }
+        if (!dialog.isVisible) {
+            dialog.show(manager, "RequestPermissionDialog")
+        }
+    }
+
+    /**
+     * 隐藏权限申请弹窗
+     */
+    private fun hideRequestPermissionDialog() {
+        if (mContext == null) {
+            L.i(TAG, "hideRequestPermissionDialog: mContext is null ")
+            return
+        }
+        val dialog =
+            supportFragmentManager.findFragmentByTag("RequestPermissionDialog") as BaseDialogFragment?
+        dialog?.dismissAllowingStateLoss()
     }
 
 }

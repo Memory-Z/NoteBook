@@ -15,7 +15,7 @@ import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.service.FloatMessageViewService
 import com.inz.z.note_book.view.BaseNoteActivity
-import com.inz.z.note_book.view.fragment.BaseDialogFragment
+import com.inz.z.note_book.view.dialog.BaseDialogFragment
 import com.inz.z.note_book.view.fragment.LauncherApplicationFragment
 import com.inz.z.note_book.view.fragment.LogFragment
 import com.inz.z.note_book.view.fragment.NoteNavFragment

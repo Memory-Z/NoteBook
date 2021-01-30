@@ -114,6 +114,11 @@ class SysFileImageFragment private constructor() : BaseSysFileFragment() {
         imageAdapter?.targetViewShowType(showList)
     }
 
+    override fun refreshView() {
+        super.refreshView()
+        loadImageList(currentPage.get())
+    }
+
     private fun loadImageList(page: Int) {
         Observable.create(
             ObservableOnSubscribe<List<LocalImageInfo>> {

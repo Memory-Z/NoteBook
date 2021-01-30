@@ -1,4 +1,4 @@
-package com.inz.z.note_book.view.fragment
+package com.inz.z.note_book.view.dialog
 
 import android.graphics.Point
 import android.text.SpannableStringBuilder

@@ -1,8 +1,6 @@
 package com.inz.z.note_book.view.fragment
 
 import android.content.pm.PackageInfo
-import android.os.Handler
-import android.os.Message
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.inz.z.base.util.L
@@ -11,6 +9,7 @@ import com.inz.z.base.view.AbsBaseFragment
 import com.inz.z.note_book.R
 import com.inz.z.note_book.view.activity.MainActivityListener
 import com.inz.z.note_book.view.adapter.ApplicationListRvAdapter
+import com.inz.z.note_book.view.dialog.BaseDialogFragment
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
