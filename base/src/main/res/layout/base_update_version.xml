@@ -13,6 +13,7 @@
         android:id="@+id/base_update_version_top_rl"
         android:layout_width="0dp"
         android:layout_height="@dimen/touch_target_height"
+        android:layout_marginTop="@dimen/dialog_radius"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">

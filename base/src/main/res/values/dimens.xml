@@ -52,6 +52,8 @@
     <dimen name="card_radius">@dimen/dp02</dimen>
     <dimen name="card_border">@dimen/dp01</dimen>
 
+    <dimen name="dialog_content_height">@dimen/dp96</dimen>
+
 
     <!-- Base Dimens -->
     <dimen name="dp0">0dp</dimen>

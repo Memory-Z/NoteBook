@@ -2,8 +2,4 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="@color/dialog_color" />
     <corners android:radius="@dimen/dialog_radius" />
-    <padding
-        android:bottom="@dimen/dialog_radius"
-        android:top="@dimen/dialog_radius" />
-
 </shape>
