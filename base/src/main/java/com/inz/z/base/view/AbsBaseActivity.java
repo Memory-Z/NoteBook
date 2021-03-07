@@ -29,6 +29,8 @@ import com.inz.z.base.util.SPHelper;
 import com.inz.z.base.view.dialog.UpdateVersionDialog;
 import com.qmuiteam.qmui.util.QMUINotchHelper;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -239,7 +241,8 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
                     public void subscribe(ObservableEmitter<UpdateVersionBean> emitter) throws Exception {
                         String checkVersionUrl = SPHelper.getInstance().getUpdateVersionUrl();
                         if (TextUtils.isEmpty(checkVersionUrl)) {
-                            emitter.onError(new NullPointerException("check version url is empty. "));
+//                            emitter.onError(new NullPointerException("check version url is empty. "));
+                            return;
                         }
                         BufferedReader reader = null;
                         StringBuilder sb = new StringBuilder();
@@ -279,28 +282,26 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<UpdateVersionBean>() {
                     @Override
-                    public void onNext(UpdateVersionBean versionBean) {
+                    public void onNext(@NotNull UpdateVersionBean versionBean) {
                         Log.i("baseActivity", "onNext: data" + versionBean);
-                        if (versionBean != null) {
-                            int curCode = SPHelper.getInstance().getCurrentVersionCode();
-                            Log.i("baseActivity", "checkVersion: versionCode = " + curCode);
-                            int ignoreV = SPHelper.getInstance().ignoreVersionCode();
-                            if (curCode < versionBean.getVersionCode() && versionBean.getVersionCode() != ignoreV) {
-                                for (int ignoreVersion : versionBean.getIgnoreVersion()) {
-                                    if (ignoreVersion == curCode) {
-                                        showLastVersionToast();
-                                        return;
-                                    }
+                        int curCode = SPHelper.getInstance().getCurrentVersionCode();
+                        Log.i("baseActivity", "checkVersion: versionCode = " + curCode);
+                        int ignoreV = SPHelper.getInstance().ignoreVersionCode();
+                        if (curCode < versionBean.getVersionCode() && versionBean.getVersionCode() != ignoreV) {
+                            for (int ignoreVersion : versionBean.getIgnoreVersion()) {
+                                if (ignoreVersion == curCode) {
+                                    showLastVersionToast();
+                                    return;
                                 }
-                                showVersionUpdateDialog(versionBean);
-                            } else {
-                                showLastVersionToast();
                             }
+                            showVersionUpdateDialog(versionBean);
+                        } else {
+                            showLastVersionToast();
                         }
                     }
 
                     @Override
-                    public void onError(Throwable e) {
+                    public void onError(@NotNull Throwable e) {
                         Log.e("baseActivity", "getLastVersion: onError: ", e);
                     }
 

@@ -49,16 +49,19 @@ object UserController {
         val methods = UserInfo::class.java.methods
         val oldStr = ""
         val newStr = ""
-        for (method in methods) {
-            Log.i(TAG, "updateUserLogInfo: $method")
-            if (method == null) {
-                continue
-            }
-            val oldValue = method.invoke(oldUser, "") as String?
-            val newValue = method.invoke(newUser, "") as String?
-            if (oldValue != newValue) {
-                oldStr.plus("${method.name}=$oldStr; ")
-                newStr.plus("${method.name}=$newStr; ")
+        // 旧用户不为空时，更新状态
+        oldUser?.let { userInfo ->
+            for (method in methods) {
+                Log.i(TAG, "updateUserLogInfo: $method")
+                if (method == null) {
+                    continue
+                }
+                val oldValue = method.invoke(userInfo, "") as String?
+                val newValue = method.invoke(newUser, "") as String?
+                if (oldValue != newValue) {
+                    oldStr.plus("${method.name}=$oldStr; ")
+                    newStr.plus("${method.name}=$newStr; ")
+                }
             }
         }
         Log.i(TAG, "updateUserLogInfo: $oldStr --- $newStr")

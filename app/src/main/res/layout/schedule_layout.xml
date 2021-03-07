@@ -10,6 +10,7 @@
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:text="@string/appwidget_text"
+        android:visibility="gone"
         app:textColor="@color/nearColorRed"
         app:textSize="@dimen/text_title_size" />
 

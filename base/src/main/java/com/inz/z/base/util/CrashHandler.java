@@ -83,7 +83,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      * <p>
      * //     * @return 自定义异常处理
      */
-    @SuppressWarnings("unused")
     public synchronized static void instance(Context context) {
         if (crashHandler == null) {
             crashHandler = new CrashHandler();
@@ -217,7 +216,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, Object> entry : logInfoMap.entrySet()) {
             String key = entry.getKey();
-            String value = (String) entry.getValue();
+            String value = entry.getValue().toString();
             sb.append(key).append(" = ").append(value).append(" ,\r\n");
         }
         if (dateFormat == null) {
