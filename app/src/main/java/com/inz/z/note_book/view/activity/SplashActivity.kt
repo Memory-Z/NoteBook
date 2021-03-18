@@ -82,6 +82,7 @@ class SplashActivity : AbsBaseActivity() {
     override fun onResume() {
         super.onResume()
         isPause = false
+//        gotoMainActivity()
     }
 
     override fun onPause() {
@@ -93,7 +94,7 @@ class SplashActivity : AbsBaseActivity() {
         return false
     }
 
-    private var time = 5
+    private var time = 2
 
     /**
      * 设置右上角倒计时。

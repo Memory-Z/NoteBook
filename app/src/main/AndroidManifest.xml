@@ -36,7 +36,12 @@
         <activity
             android:name=".view.activity.MainActivity"
             android:configChanges="keyboardHidden|screenLayout|screenSize|orientation"
-            android:windowSoftInputMode="adjustNothing" />
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustNothing" >
+            <intent-filter>
+                <category android:name="android.intent.category.APP_CALENDAR" />
+            </intent-filter>
+        </activity>
 
         <!-- 闪屏界面 -->
         <activity

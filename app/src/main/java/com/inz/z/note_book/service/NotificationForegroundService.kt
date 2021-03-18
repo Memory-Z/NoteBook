@@ -4,8 +4,10 @@ import android.app.*
 import android.content.*
 import android.os.Build
 import android.os.IBinder
+import android.text.format.DateUtils
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.broadcast.ClockAlarmBroadcast
@@ -77,14 +79,19 @@ class NotificationForegroundService : Service() {
         val manager: NotificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.createNotificationChannel(channel)
+        val time = BaseTools.getDateFormatTime().format(Calendar.getInstance(Locale.getDefault()).time)
         notification = NotificationCompat
             .Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
             .setContentTitle(applicationContext.getString(R.string.app_name))
-            .setContentText(applicationContext.getString(R.string.base_content))
+            .setContentText(applicationContext.getString(R.string.base_content) + " $time")
             .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setOngoing(true)
             .build()
+            .apply {
+                // 设置默认值
+                this.contentIntent = getNotificationDefPendingIntent()
+            }
         startForeground(NOTIFICATION_CODE, notification)
     }
 
@@ -122,6 +129,25 @@ class NotificationForegroundService : Service() {
             .setSmallIcon(R.mipmap.ic_launcher)
             .setOngoing(true)
             .build()
+    }
+
+    /**
+     * 获取 通知默认 PendingIntent
+     */
+    private fun getNotificationDefPendingIntent(): PendingIntent {
+        val intent = Intent(applicationContext, MainActivity::class.java)
+            .apply {
+                this.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    .or(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                    .or(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP)
+                    .or(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            }
+        return PendingIntent.getActivity(
+            applicationContext,
+            NOTIFICATION_TO_MAIN_REQUEST_CODE,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
     }
 
     /**
@@ -182,12 +208,14 @@ class NotificationForegroundService : Service() {
             val bundle = intent.extras
             when (intent.action) {
                 Constants.LifeAction.LIFE_CHANGE_ACTION -> {
+                    // 判断进程是否显示
                     val visible = checkApplicationIsVisible()
                     if (!visible) {
                         uploadNotification()
                         L.i(TAG, "ActivityLifeBroadcast-onReceive: show notification, ")
                     } else {
-                        hideNotification()
+//                        hideNotification()
+                        uploadNotification()
                         L.i(TAG, "ActivityLifeBroadcast-onReceive: hide notification. ")
                     }
                 }
