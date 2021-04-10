@@ -128,6 +128,39 @@ public class BaseTools {
     }
 
     /**
+     * 获取时间长度.
+     *
+     * @param duration 时间段
+     * @return 时间段字符串
+     */
+    public static String getTimeDurationStr(long duration) {
+        String str = "";
+        if (duration < 1000) {
+            // 毫秒
+            str = duration + "ms";
+        } else if (duration < 60 * 1000) {
+            // 秒
+            int s = (int) (duration / 1000);
+            long ms = (int) (duration % 1000) / 1000L;
+            str = (s + ms) + "s";
+        } else if (duration < 60 * 60 * 1000) {
+            // 分
+            int s = (int) (duration / 1000);
+            int m = s / 60;
+            long sm = s % 60 / 60L;
+            str = (m + sm) + "min";
+        } else {
+            // 时
+            int m = (int) (duration / 60 / 1000);
+            int h = m / 60;
+            long mh = m % 60 / 60L;
+            str = (h + mh) + "h";
+        }
+
+        return str;
+    }
+
+    /**
      * 校验 邮箱格式是否正确
      *
      * @param string 邮箱地址

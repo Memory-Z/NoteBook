@@ -5,15 +5,21 @@ import android.content.*
 import android.os.Build
 import android.os.IBinder
 import android.text.format.DateUtils
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.broadcast.ClockAlarmBroadcast
+import com.inz.z.note_book.database.bean.ScreenInfo
+import com.inz.z.note_book.database.controller.ScreenTimeController
 import com.inz.z.note_book.util.ClockAlarmManager
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.view.activity.MainActivity
+import kotlinx.android.synthetic.main.notification_screen_layout.view.*
 import java.util.*
 
 /**
@@ -47,6 +53,7 @@ class NotificationForegroundService : Service() {
         super.onCreate()
         L.i(TAG, "onCreate: --------------- ")
         registerActivityLifeBroadcast()
+        registerNotificationBroadcast()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             initNotification()
         }
@@ -79,7 +86,8 @@ class NotificationForegroundService : Service() {
         val manager: NotificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.createNotificationChannel(channel)
-        val time = BaseTools.getDateFormatTime().format(Calendar.getInstance(Locale.getDefault()).time)
+        val time =
+            BaseTools.getDateFormatTime().format(Calendar.getInstance(Locale.getDefault()).time)
         notification = NotificationCompat
             .Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
             .setContentTitle(applicationContext.getString(R.string.app_name))
@@ -95,10 +103,13 @@ class NotificationForegroundService : Service() {
         startForeground(NOTIFICATION_CODE, notification)
     }
 
-    private fun uploadNotification() {
+    /**
+     * 是否为屏幕显示
+     */
+    private fun uploadNotification(isScreen: Boolean) {
         L.i(TAG, "uploadNotification： ")
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-        val notification = getBaseNotification()
+        val notification = if (isScreen) getScreenNotification() else getBaseNotification()
         notification.flags = Notification.FLAG_FOREGROUND_SERVICE
         val intent = Intent(applicationContext, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK.or(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
@@ -127,6 +138,20 @@ class NotificationForegroundService : Service() {
             .setContentText(applicationContext.getString(R.string.base_content))
             .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
             .setSmallIcon(R.mipmap.ic_launcher)
+            .setOngoing(true)
+            .build()
+    }
+
+    /**
+     * 获取 屏幕信息 Notification
+     */
+    private fun getScreenNotification(): Notification {
+        return NotificationCompat
+            .Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
+            .setContent(getScreenMinView())
+            .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setCustomBigContentView(getScreenView())
             .setOngoing(true)
             .build()
     }
@@ -211,11 +236,11 @@ class NotificationForegroundService : Service() {
                     // 判断进程是否显示
                     val visible = checkApplicationIsVisible()
                     if (!visible) {
-                        uploadNotification()
+                        uploadNotification(false)
                         L.i(TAG, "ActivityLifeBroadcast-onReceive: show notification, ")
                     } else {
-//                        hideNotification()
-                        uploadNotification()
+                        hideNotification()
+//                        uploadNotification(true)
                         L.i(TAG, "ActivityLifeBroadcast-onReceive: hide notification. ")
                     }
                 }
@@ -234,6 +259,43 @@ class NotificationForegroundService : Service() {
         }
 
     }
+
+    /* ------------------------- Get Notification Screen View -------------------------- */
+
+    /**
+     * 获取使用时间小显示
+     */
+    private fun getScreenMinView(): RemoteViews {
+        val view = RemoteViews(packageName, R.layout.notification_screen_min_layout)
+        val screenInfo = getScreenInfoInLast()
+        screenInfo?.let {
+            val duration = getScreenInfoDuration(it)
+            val durationStr = BaseTools.getTimeDurationStr(duration)
+            view.setTextViewText(R.id.notification_screen_duration_tv, durationStr)
+        }
+        return view
+    }
+
+    /**
+     * 获取显示提示
+     */
+    private fun getScreenView(): RemoteViews {
+        val view = RemoteViews(packageName, R.layout.notification_screen_layout)
+        val screenInfo = getScreenInfoInLast()
+        screenInfo?.let {
+            val duration = getScreenInfoDuration(it)
+            val durationStr = BaseTools.getTimeDurationStr(duration)
+            view.setTextViewText(R.id.notification_screen_duration_tv, durationStr)
+            var timeStr = ""
+            if (it.startTime != null) {
+                timeStr = BaseTools.getBaseDateFormat().format(it.startTime!!)
+            }
+            view.setTextViewText(R.id.notification_screen_time_tv, timeStr)
+        }
+        return view
+    }
+
+    /* ------------------------- Get Notification Screen View -------------------------- */
 
     /* -------------------------------- 绑定计划Service  ---------------------------------------- */
 
@@ -291,5 +353,66 @@ class NotificationForegroundService : Service() {
             set(Calendar.MILLISECOND, 0)
         }
         ClockAlarmManager.setAlarm(applicationContext, calendar.timeInMillis, true)
+    }
+
+    /**
+     * 获取最后一次屏幕显示信息
+     */
+    private fun getScreenInfoInLast(): ScreenInfo? {
+        val screenInfo: ScreenInfo? = ScreenTimeController.findLastScreenInfo()
+        L.i(TAG, "getScreenInfoInLast: ----> $screenInfo")
+        return screenInfo
+    }
+
+    /**
+     * 获取上次显示时间
+     */
+    private fun getScreenInfoDuration(info: ScreenInfo): Long {
+        val startTime: Date? = info.startTime
+        val endTime: Date? = info.endTime
+        return if (startTime != null && endTime != null) {
+            endTime.time - startTime.time
+        } else {
+            0
+        }
+    }
+
+    /**
+     * 注册通知服务广播
+     */
+    private fun registerNotificationBroadcast() {
+        L.i(TAG, "registerNotificationBroadcast: ")
+        val broadcast = NotificationBroadcast()
+        val intentFilter = IntentFilter()
+            .apply {
+                this.addAction(Constants.NotificationServiceParams.NOTIFICATION_SCREEN_ON_ACTION)
+                this.addAction(Constants.NotificationServiceParams.NOTIFICATION_SCREEN_OFF_ACTION)
+                this.addAction(Constants.NotificationServiceParams.NOTIFICATION_UNLOCK_ACTION)
+            }
+        registerReceiver(broadcast, intentFilter)
+    }
+
+    /**
+     * 通知广播
+     */
+    private inner class NotificationBroadcast : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val action = intent?.action ?: ""
+            L.i(TAG, "NotificationBroadcast: onReceive: $action ")
+            when (action) {
+                Constants.NotificationServiceParams.NOTIFICATION_SCREEN_ON_ACTION -> {
+                    uploadNotification(true)
+                }
+                Constants.NotificationServiceParams.NOTIFICATION_SCREEN_OFF_ACTION -> {
+
+                }
+                Constants.NotificationServiceParams.NOTIFICATION_UNLOCK_ACTION -> {
+                    uploadNotification(true)
+                }
+                else -> {
+
+                }
+            }
+        }
     }
 }

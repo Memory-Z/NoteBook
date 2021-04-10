@@ -29,8 +29,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    dataBinding{
-        enabled = true
+//    dataBinding{
+//        enabled = true
+//    }
+    buildFeatures {
+        dataBinding = true
     }
 
 }
@@ -81,7 +84,7 @@ dependencies {
      * Glide 4 图片加载器 加载大型图片
      * */
     implementation 'com.github.bumptech.glide:glide:4.7.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    kapt 'com.github.bumptech.glide:compiler:4.7.1'
 //    // 转换
 //    implementation 'jp.wasabeef:glide-transformations:4.0.0'
 

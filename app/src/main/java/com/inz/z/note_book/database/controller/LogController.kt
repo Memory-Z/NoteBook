@@ -1,6 +1,8 @@
 package com.inz.z.note_book.database.controller
 
+import androidx.annotation.IntDef
 import androidx.annotation.NonNull
+import androidx.annotation.StringDef
 import com.alibaba.fastjson.JSON
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
@@ -17,6 +19,16 @@ import java.util.*
  * Create by inz in 2020/05/13 13:59.
  */
 object LogController {
+
+    const val TYPE_INSERT = "insert"
+    const val TYPE_UPDATE = "update"
+    const val TYPE_UPDATE_LIST = "update_list"
+    const val TYPE_DELETE = "delete"
+
+    @StringDef(TYPE_INSERT, TYPE_DELETE, TYPE_UPDATE, TYPE_UPDATE_LIST)
+    @Target(AnnotationTarget.PROPERTY, AnnotationTarget.VALUE_PARAMETER)
+    annotation class OperationType() {}
+
     private fun getLogDao(): OperationLogInfoDao? {
         return GreenDaoHelper.getInstance().getDaoSession()?.operationLogInfoDao
     }
@@ -26,7 +38,7 @@ object LogController {
      *
      */
     fun log(
-        operationType: String,
+        @OperationType operationType: String,
         data: Any,
         describe: String,
         tableName: String

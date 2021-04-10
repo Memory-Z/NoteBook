@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,11 +23,13 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.nio.channels.FileChannel;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -910,6 +913,104 @@ public class FileUtils {
             least[1] = size;
         }
         return least;
+    }
+
+    /**
+     * 复制文件目录
+     *
+     * @param originalPath 原始文件地址
+     * @param targetPath   目标文件地址
+     * @return 完成文件个数
+     */
+    public static int[] copyFileDir(String originalPath, String targetPath) {
+        int[] result = new int[]{0, 0};
+        File origin = new File(originalPath);
+        if (!origin.exists()) {
+            return result;
+        }
+        File target = new File(targetPath);
+        if (!target.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            target.mkdirs();
+            if (origin.isFile()) {
+                try {
+                    //noinspection ResultOfMethodCallIgnored
+                    target.createNewFile();
+                } catch (IOException ignore) {
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 文件复制
+     *
+     * @param oldFilePath 源文件地址
+     * @param newFilePath 目标地址
+     * @param replace     是否替换
+     * @return 是否复制成功
+     */
+    public static boolean copyFile(String oldFilePath, String newFilePath, boolean replace) {
+        File oldFile = new File(oldFilePath);
+        // 不存在原文件
+        if (!oldFile.exists()) {
+            return false;
+        }
+        File newFile = new File(newFilePath);
+        if (newFile.exists()) {
+            // 是否替换、为文件，默认删除后替换
+            if (replace) {
+                //noinspection ResultOfMethodCallIgnored
+                newFile.delete();
+                try {
+                    //noinspection ResultOfMethodCallIgnored
+                    newFile.createNewFile();
+                } catch (IOException ignore) {
+                    return false;
+                }
+            } else {
+                // 文件已存在，不替换， 直接返回
+                return false;
+
+            }
+        }
+        return copyFile(oldFile, newFile);
+    }
+
+    /**
+     * 文件复制
+     *
+     * @param original 原始文件
+     * @param target   目标文件
+     * @return 是否复制成功
+     */
+    public static boolean copyFile(@NonNull File original, @NonNull File target) {
+        FileChannel originalChannel = null;
+        FileChannel targetChannel = null;
+        try {
+            originalChannel = new FileInputStream(original).getChannel();
+            targetChannel = new FileOutputStream(target).getChannel();
+            targetChannel.transferFrom(originalChannel, 0, originalChannel.size());
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            if (originalChannel != null) {
+                try {
+                    originalChannel.close();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+            if (targetChannel != null) {
+                try {
+                    targetChannel.close();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        }
+        return false;
     }
 
 }

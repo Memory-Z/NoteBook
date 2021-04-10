@@ -1,7 +1,10 @@
 package com.inz.z.note_book.util
 
+import android.content.Context
 import com.inz.z.base.entity.Constants
+import com.inz.z.base.util.FileUtils
 import com.inz.z.note_book.BuildConfig
+import java.io.File
 
 /**
  *
@@ -12,6 +15,27 @@ import com.inz.z.note_book.BuildConfig
 object Constants {
 
     private const val APPLICATION_ID = BuildConfig.APPLICATION_ID
+
+    object Base {
+        /**
+         * 默认数据库备份地址
+         */
+        private const val BASE_BACKUP_DATABASE_PATH = "backup"
+
+        /**
+         * 获取备份地址
+         */
+        fun getBaseBackupPath(context: Context): String {
+            val path =
+                FileUtils.getCacheFilePath(context) + File.separator + BASE_BACKUP_DATABASE_PATH
+
+            val file = File(path)
+            if (!file.exists()) {
+                file.mkdirs()
+            }
+            return file.absolutePath
+        }
+    }
 
     /**
      * 时钟开始提醒
@@ -128,4 +152,24 @@ object Constants {
         const val VERSION_NAME = "versionName"
     }
 
+
+    /**
+     * 通知服务参数
+     */
+    object NotificationServiceParams {
+        /**
+         * 屏幕点亮
+         */
+        const val NOTIFICATION_SCREEN_ON_ACTION = "NotificationScreenOnAction"
+
+        /**
+         * 屏幕熄灭
+         */
+        const val NOTIFICATION_SCREEN_OFF_ACTION = "NotificationScreenOffAction"
+
+        /**
+         * 屏幕解锁
+         */
+        const val NOTIFICATION_UNLOCK_ACTION = "NotificationUnlockAction"
+    }
 }

@@ -13,6 +13,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
+import com.inz.z.note_book.database.util.GreenDaoHelper
 import com.inz.z.note_book.service.FloatMessageViewService
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.dialog.BaseDialogFragment
@@ -183,6 +184,14 @@ class MainActivity : BaseNoteActivity() {
             morePopupMenu = PopupMenu(mContext, top_search_nav_end_rl)
             menuInflater.inflate(R.menu.menu_main_more, morePopupMenu!!.menu)
             morePopupMenu?.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.main_more_backup_item -> {
+                        GreenDaoHelper.getInstance().backupDatabase()
+                    }
+                    else -> {
+
+                    }
+                }
                 return@setOnMenuItemClickListener true
             }
         }

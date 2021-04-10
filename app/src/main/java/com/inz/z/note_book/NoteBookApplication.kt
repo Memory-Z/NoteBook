@@ -1,14 +1,17 @@
 package com.inz.z.note_book
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.util.Log
 import android.widget.Toast
 import com.inz.z.base.R
 import com.inz.z.base.util.CrashHandler
 import com.inz.z.base.util.L
 import com.inz.z.note_book.base.ActivityLifeCallbackImpl
+import com.inz.z.note_book.broadcast.ScreenBroadcast
 import com.inz.z.note_book.database.bean.UserInfo
 import com.inz.z.note_book.database.util.GreenDaoHelper
 import com.inz.z.note_book.service.UserInfoService
@@ -27,6 +30,8 @@ class NoteBookApplication : Application() {
 
     companion object {
         private const val TAG = "NoteBookApplication"
+
+        @SuppressLint("StaticFieldLeak")
         lateinit var mInstance: NoteBookApplication
     }
 
@@ -55,15 +60,31 @@ class NoteBookApplication : Application() {
 
         // 初始化服务
         initService()
-
+        // 初始化广播
+        initBroadcast()
     }
 
     private fun initService() {
+
         val intent = Intent(mContext, UserInfoService::class.java)
             .apply {
                 this.putExtra(UserInfoService.TAG_FLAG_INIT_USER, UserInfoService.FLAG_INIT_USER)
             }
         startService(intent)
+    }
+
+    private fun initBroadcast() {
+        val screenBroadcast = ScreenBroadcast()
+        val intentFilter = IntentFilter()
+            .apply {
+                this.addAction(Intent.ACTION_SCREEN_OFF)
+                this.addAction(Intent.ACTION_SCREEN_ON)
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    this.addAction(Intent.ACTION_USER_UNLOCKED)
+                }
+                this.addAction(Intent.ACTION_USER_PRESENT)
+            }
+        registerReceiver(screenBroadcast, intentFilter)
     }
 
     /**
@@ -75,9 +96,9 @@ class NoteBookApplication : Application() {
             object : ActivityLifeCallbackImpl.ActivityLifeCallbackListener {
                 override fun applicationInBackground(background: Boolean) {
                     L.i(TAG, "applicationInBackground: $background")
-                    val intent = Intent()
-                    intent.action = Constants.LifeAction.LIFE_CHANGE_ACTION
-                    sendBroadcast(intent)
+//                    val intent = Intent()
+//                    intent.action = Constants.LifeAction.LIFE_CHANGE_ACTION
+//                    sendBroadcast(intent)
                 }
             }
         )
@@ -104,7 +125,6 @@ class NoteBookApplication : Application() {
                     this.getString(R.string._sorry_application_have_error_will_exit),
                     Toast.LENGTH_SHORT
                 ).show()
-
             }
         }
     }

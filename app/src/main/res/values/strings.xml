@@ -102,5 +102,10 @@
     <string name="user_info_service">用户信息服务</string>
     <string name="request_permission_storage_hint">读写系统文件需要获取文件存储权限，是否前往？</string>
     <string name="permission_to_open">可前往“设置-应用-权限”手动开启</string>
+    <string name="notification_screen_title">上次使用</string>
+    <string name="notification_screen_1_hint">上次使用时间：</string>
+    <string name="notification_screen_2_hint">使用时长：</string>
+    <string name="notification_screen_min_hint">上次使用时长：</string>
+    <string name="_backup">备份</string>
 
 </resources>

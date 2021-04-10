@@ -7,4 +7,10 @@
         android:icon="@drawable/ic_share_black_24dp"
         android:title="@string/share"
         app:showAsAction="never|withText" />
+    <item
+        android:id="@+id/main_more_backup_item"
+        android:contentDescription="@string/_backup"
+        android:icon="@drawable/ic_baseline_backup_24"
+        android:title="@string/_backup"
+        app:showAsAction="never|withText" />
 </menu>

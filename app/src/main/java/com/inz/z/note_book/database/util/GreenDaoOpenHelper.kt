@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CursorFactory
 import com.inz.z.note_book.database.*
+import org.greenrobot.greendao.AbstractDao
 import org.greenrobot.greendao.database.Database
 
 /**
@@ -31,13 +32,21 @@ class GreenDaoOpenHelper : DaoMaster.OpenHelper {
                 .instance
                 ?.migrate(
                     db,
+                    LocalAudioInfoDao::class.java,
+                    LocalImageInfoDao::class.java,
+                    NoteFileContentDao::class.java,
                     NoteGroupDao::class.java,
                     NoteGroupWithInfoDao::class.java,
                     NoteInfoDao::class.java,
                     OperationLogInfoDao::class.java,
+                    RecordInfoDao::class.java,
+                    RepeatInfoDao::class.java,
+                    ScreenInfoDao::class.java,
+                    SearchContentInfoDao::class.java,
                     TaskInfoDao::class.java,
                     TaskScheduleDao::class.java,
-                    RecordInfoDao::class.java
+                    UserInfoDao::class.java,
+                    UserLogInfoDao::class.java
                 )
         }
     }
