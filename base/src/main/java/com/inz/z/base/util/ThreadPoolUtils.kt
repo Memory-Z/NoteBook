@@ -2,6 +2,9 @@ package com.inz.z.base.util
 
 import android.os.Handler
 import android.os.Looper
+import android.text.TextUtils
+import android.util.Log
+import com.inz.z.base.BuildConfig
 import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -12,12 +15,12 @@ import java.util.concurrent.atomic.AtomicInteger
  * Create by 11654 in 2021/1/1 1:55
  */
 object ThreadPoolUtils {
+    private const val TAG = "ThreadPoolUtils"
 
-    var uiThread: Executor
-    var workerThread: ThreadPoolExecutor
-    var scheduleThread: ScheduledExecutorService
-    var diskThread: ExecutorService
-
+    private var uiThread: MainThreadExecutor
+    private var workerThread: ThreadPoolExecutor
+    private var scheduleThread: ScheduledExecutorService
+    private var singleThread: ExecutorService
 
     init {
         uiThread = MainThreadExecutor()
@@ -33,7 +36,7 @@ object ThreadPoolUtils {
             10,
             ThreadGroupThreadFactory("schedule")
         )
-        diskThread = Executors.newSingleThreadExecutor(
+        singleThread = Executors.newSingleThreadExecutor(
             ThreadGroupThreadFactory("disk")
         )
     }
@@ -74,7 +77,7 @@ object ThreadPoolUtils {
     /**
      * 主线程
      */
-    private class MainThreadExecutor : Executor {
+    class MainThreadExecutor : Executor {
         private val mainHandler = Handler(Looper.getMainLooper())
         override fun execute(command: Runnable?) {
             command?.let {
@@ -93,5 +96,37 @@ object ThreadPoolUtils {
     ///////////////////////////////////////////////////////////////////////////
     // OPEN
     ///////////////////////////////////////////////////////////////////////////
+
+
+    /**
+     * 获取UI线程
+     */
+    fun getUiThread(tag: String): MainThreadExecutor {
+        if (BuildConfig.DEBUG || !TextUtils.isEmpty(tag)) {
+            Log.i(TAG, "getUiThread: $tag")
+        }
+        return uiThread
+    }
+
+    fun getScheduleThread(tag: String): ScheduledExecutorService {
+        if (BuildConfig.DEBUG || !TextUtils.isEmpty(tag)) {
+            Log.i(TAG, "getScheduleThread: $tag")
+        }
+        return scheduleThread
+    }
+
+    fun getSingleThread(tag: String): Executor {
+        if (BuildConfig.DEBUG || !TextUtils.isEmpty(tag)) {
+            Log.i(TAG, "getSingleThread: $tag")
+        }
+        return singleThread
+    }
+
+    fun getWorkThread(tag: String): ThreadPoolExecutor {
+        if (BuildConfig.DEBUG || !TextUtils.isEmpty(tag)) {
+            Log.i(TAG, "getWorkThread: $tag")
+        }
+        return workerThread
+    }
 
 }

@@ -11,9 +11,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:fitsSystemWindows="true"
         android:layout_height="match_parent"
-        android:background="@color/card_main_color">
+        android:background="@color/card_main_color"
+        android:fitsSystemWindows="true">
 
         <ImageView
             android:id="@+id/group_backgroud_iv"
@@ -29,6 +29,7 @@
 
         <!-- 组视图 -->
 
+        <!-- 顶部导航栏 -->
         <com.inz.z.base.view.widget.BaseNavLayout
             android:id="@+id/group_top_bnl"
             android:layout_width="0dp"
@@ -113,6 +114,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/group_top_bnl">
 
+            <!-- 数据内容 -->
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/group_content_srl"
                 android:layout_width="match_parent"
@@ -124,8 +126,19 @@
                     android:layout_height="match_parent" />
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+            <!-- 空数据 -->
+            <com.inz.z.base.view.widget.BaseNoDataView
+                android:id="@+id/group_content_empty_bndv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:base_no_data_button_str="@string/_retry"
+                app:base_no_data_image_src="@drawable/ic_baseline_backup_24"
+                app:base_no_data_message="@string/_nothing"
+                app:base_no_data_show_refresh_btn="true" />
+
         </com.inz.z.base.view.widget.BaseRelativeLayout>
 
+        <!-- 添加数据内容 -->
         <include
             android:id="@+id/group_bottom_add_note_sample_include"
             layout="@layout/note_info_add_sample_layout"
@@ -141,6 +154,7 @@
             android:layout_height="56dp"
             android:layout_marginEnd="@dimen/border_lr_dimen"
             android:layout_marginBottom="@dimen/border_lr_dimen"
+            android:contentDescription="@string/create_group"
             android:scaleType="centerInside"
             android:src="@drawable/ic_add_black_24dp"
             android:tint="@color/white"
@@ -148,8 +162,7 @@
             app:elevation="5dp"
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:contentDescription="@string/create_group" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

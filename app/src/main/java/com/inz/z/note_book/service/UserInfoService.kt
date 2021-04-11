@@ -39,11 +39,13 @@ class UserInfoService : Service() {
     }
 
     private fun initUserInfo() {
-        ThreadPoolUtils.workerThread.execute {
-            // 获取当前用户信息。
-            val userInfo = UserController.getCurrentUser() ?: createDefaultUserInfo()
-            NoteBookApplication.mInstance.currentUserInfo = userInfo
-        }
+        ThreadPoolUtils
+            .getWorkThread(TAG + "_initUserInfo")
+            .execute {
+                // 获取当前用户信息。
+                val userInfo = UserController.getCurrentUser() ?: createDefaultUserInfo()
+                NoteBookApplication.mInstance.currentUserInfo = userInfo
+            }
 
     }
 

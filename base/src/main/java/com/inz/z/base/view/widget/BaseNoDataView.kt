@@ -35,6 +35,7 @@ public open class BaseNoDataView : ConstraintLayout {
     private var mView: View? = null
     private var title: String? = ""
     private var message: String? = ""
+    private var showRefreshBtn: Boolean = false
     private var refreshBtnStr: String? = ""
 
     @DrawableRes
@@ -70,6 +71,7 @@ public open class BaseNoDataView : ConstraintLayout {
             if (imageRes != null) {
                 setHintImage(imageRes!!)
             }
+
             setButtonStr(refreshBtnStr ?: "")
         }
     }
@@ -87,7 +89,8 @@ public open class BaseNoDataView : ConstraintLayout {
             title = ""
         }
         message = array.getString(R.styleable.BaseNoDataView_base_no_data_message)
-
+        showRefreshBtn =
+            array.getBoolean(R.styleable.BaseNoDataView_base_no_data_show_refresh_btn, false)
         refreshBtnStr = array.getString(R.styleable.BaseNoDataView_base_no_data_button_str)
 
         array.recycle()
@@ -111,6 +114,13 @@ public open class BaseNoDataView : ConstraintLayout {
 
     fun setHintImage(@DrawableRes imageRes: Int) {
         mView?.base_no_data_hint_iv?.setImageResource(imageRes)
+    }
+
+    /**
+     * 是否显示刷新按钮
+     */
+    fun showRefreshBtn(show: Boolean) {
+        mView?.base_no_data_btn?.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     fun setButtonStr(buttonStr: String) {

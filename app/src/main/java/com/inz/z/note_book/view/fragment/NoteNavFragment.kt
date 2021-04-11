@@ -19,7 +19,7 @@ import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteGroupService
 import com.inz.z.note_book.database.controller.NoteInfoController
 import com.inz.z.note_book.view.activity.GroupActivity
-import com.inz.z.note_book.view.activity.MainActivityListener
+import com.inz.z.note_book.view.activity.listener.MainActivityListener
 import com.inz.z.note_book.view.adapter.NoteGroupRvAdapter
 import com.inz.z.note_book.view.widget.ItemSampleNoteInfoLayout
 import io.reactivex.Observable

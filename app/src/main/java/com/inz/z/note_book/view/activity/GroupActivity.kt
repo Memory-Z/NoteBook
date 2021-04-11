@@ -3,6 +3,8 @@ package com.inz.z.note_book.view.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
@@ -14,7 +16,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
-import com.inz.z.base.view.AbsBaseActivity
+import com.inz.z.base.util.ThreadPoolUtils
+import com.inz.z.base.view.widget.BaseNoDataView
 import com.inz.z.note_book.R
 import com.inz.z.note_book.bean.NoteInfoStatus
 import com.inz.z.note_book.database.bean.NoteGroup
@@ -39,6 +42,7 @@ import java.util.*
 class GroupActivity : BaseNoteActivity() {
     companion object {
         private const val TAG = "GroupActivity"
+        private const val HANDLER_REFRESH_DATA = 0x00A0
     }
 
     private var mGroupLayoutBinding: GroupLayoutBinding? = null
@@ -63,6 +67,8 @@ class GroupActivity : BaseNoteActivity() {
      * 组内笔记列表
      */
     private var noteInfoList: MutableList<NoteInfo>? = null
+
+    private var groupHandler: Handler? = null
 
     override fun initWindow() {
     }
@@ -97,7 +103,7 @@ class GroupActivity : BaseNoteActivity() {
             finish()
         }
         group_content_srl.setOnRefreshListener {
-            setNoteInfoListData()
+            loadNoteInfoWithDatabase()
             if (group_content_srl.isRefreshing) {
                 Toast.makeText(mContext, getString(R.string.fresh_success), Toast.LENGTH_SHORT)
                     .show()
@@ -109,6 +115,8 @@ class GroupActivity : BaseNoteActivity() {
             note_info_add_sample_title_et.requestFocus()
         }
         initAddNoteView()
+        initNoDataView()
+        groupHandler = Handler(mainLooper, GroupHandlerCallbackImpl())
     }
 
     override fun initData() {
@@ -156,7 +164,7 @@ class GroupActivity : BaseNoteActivity() {
             // 显示新建弹窗
             showNewGroupDialog()
         } else if (!isAddNewGroup && currentGroupId.isNotEmpty()) {
-            setNoteInfoListData()
+            loadNoteInfoWithDatabase()
         }
     }
 
@@ -164,14 +172,64 @@ class GroupActivity : BaseNoteActivity() {
         super.onDestroy()
         mNoteInfoRecyclerAdapter?.setNoteInfoRvAdapterListener(null)
         mNoteInfoRecyclerAdapter = null
+        groupHandler?.removeCallbacksAndMessages(null)
+        groupHandler = null
+    }
+
+    /**
+     * 空数据界面初始化
+     */
+    private fun initNoDataView() {
+        group_content_empty_bndv?.listener = NoDataListenerImpl()
+    }
+
+    /**
+     * 空数据接口实现
+     */
+    private inner class NoDataListenerImpl : BaseNoDataView.BaseNoDataListener {
+        override fun onRefreshButtonClick(view: View?) {
+
+        }
+    }
+
+    /**
+     * 开始加载
+     */
+    private fun startLoad(message: String) {
+        group_content_empty_bndv?.startRefresh(message)
+    }
+
+    /**
+     * 结束加载
+     */
+    private fun stopLoad(message: String, retry: Boolean) {
+        group_content_empty_bndv?.stopRefresh(message, retry)
     }
 
     /**
      * 设置笔记列表数据
      */
-    private fun setNoteInfoListData() {
-        noteInfoList = NoteController.findAllNoteInfoByGroupId(currentGroupId).toMutableList()
-        mNoteInfoRecyclerAdapter?.replaceNoteInfoList(noteInfoList!!)
+    private fun loadNoteInfoWithDatabase() {
+        startLoad(getString(R.string.loading))
+        ThreadPoolUtils
+            .getWorkThread(TAG + "_loadNoteInfo")
+            .execute {
+                // 加载数据
+                noteInfoList =
+                    NoteController.findAllNoteInfoByGroupId(currentGroupId).toMutableList()
+                groupHandler?.sendEmptyMessage(HANDLER_REFRESH_DATA)
+            }
+    }
+
+    /**
+     * 切换显示内容
+     * @param haveData 是否存在数据
+     */
+    private fun targetContentView(haveData: Boolean) {
+        group_content_srl?.visibility =
+            if (haveData) View.VISIBLE else View.GONE
+        group_content_empty_bndv?.visibility =
+            if (haveData) View.GONE else View.VISIBLE
     }
 
     /* ========================================= 分组相关 ===================================== */
@@ -298,7 +356,7 @@ class GroupActivity : BaseNoteActivity() {
                     if (imm.isActive) {
                         imm.hideSoftInputFromWindow(windowToken, 0)
                     }
-                    setNoteInfoListData()
+                    loadNoteInfoWithDatabase()
 
                 }
             }
@@ -358,4 +416,18 @@ class GroupActivity : BaseNoteActivity() {
     }
 
     /* ---------------------------------------- 笔记相关 ------------------------------------- */
+
+    private inner class GroupHandlerCallbackImpl : Handler.Callback {
+        override fun handleMessage(msg: Message): Boolean {
+            when (msg.what) {
+                HANDLER_REFRESH_DATA -> {
+                    // 切换内容
+                    targetContentView(!noteInfoList.isNullOrEmpty())
+                    mNoteInfoRecyclerAdapter?.replaceNoteInfoList(noteInfoList ?: arrayListOf())
+                    stopLoad(getString(R.string.loading_finish), false)
+                }
+            }
+            return true
+        }
+    }
 }

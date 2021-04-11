@@ -54,6 +54,21 @@ import okhttp3.HttpUrl;
  * Create by inz in 2019/05/23 15:36.
  */
 public abstract class AbsBaseActivity extends AppCompatActivity {
+
+    /**
+     * layoutId
+     */
+    public static final int VIEW_TYPE_ID = 0x00F0;
+    /**
+     * ViewBinding
+     */
+    public static final int VIEW_TYPE_VIEW_BINDING = 0x00F1;
+    /**
+     * DataBinding
+     */
+    public static final int VIEW_TYPE_DATA_BINDING = 0x00F2;
+
+
     protected Context mContext;
 
     protected abstract void initWindow();

@@ -170,27 +170,33 @@ class SysFileImageFragment private constructor() : BaseSysFileFragment() {
             L.i(TAG, "onLoadMore:  ---- $page")
             for (index in 0..100) {
                 if (index % 4 == 0) {
-                    ThreadPoolUtils.uiThread.execute {
-                        Log.i(
-                            TAG,
-                            "onLoadMore: TIII ---- $index -- ${Thread.currentThread().name}"
-                        )
-                    }
-                } else
-                    if (index % 2 == 0) {
-                        ThreadPoolUtils.scheduleThread.schedule({
+                    ThreadPoolUtils
+                        .getUiThread(TAG + "_loadMore")
+                        .execute {
                             Log.i(
                                 TAG,
-                                "onLoadMore: scheduleThread ----INDEX: $index --${Thread.currentThread().name}"
-                            )
-                        }, 3000, TimeUnit.MILLISECONDS)
-                    } else if (index % 3 == 0) {
-                        ThreadPoolUtils.workerThread.execute {
-                            Log.i(
-                                TAG,
-                                "onLoadMore: workerThread --- $index --- ${Thread.currentThread().name}"
+                                "onLoadMore: TIII ---- $index -- ${Thread.currentThread().name}"
                             )
                         }
+                } else
+                    if (index % 2 == 0) {
+                        ThreadPoolUtils
+                            .getScheduleThread(TAG + "_loadMore")
+                            .schedule({
+                                Log.i(
+                                    TAG,
+                                    "onLoadMore: scheduleThread ----INDEX: $index --${Thread.currentThread().name}"
+                                )
+                            }, 3000, TimeUnit.MILLISECONDS)
+                    } else if (index % 3 == 0) {
+                        ThreadPoolUtils
+                            .getWorkThread(TAG + "_loadMore ")
+                            .execute {
+                                Log.i(
+                                    TAG,
+                                    "onLoadMore: workerThread --- $index --- ${Thread.currentThread().name}"
+                                )
+                            }
                     }
             }
             loadImageList(page)

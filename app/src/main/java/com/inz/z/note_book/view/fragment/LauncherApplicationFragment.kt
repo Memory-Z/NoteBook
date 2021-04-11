@@ -7,7 +7,7 @@ import com.inz.z.base.util.L
 import com.inz.z.base.util.LauncherHelper
 import com.inz.z.base.view.AbsBaseFragment
 import com.inz.z.note_book.R
-import com.inz.z.note_book.view.activity.MainActivityListener
+import com.inz.z.note_book.view.activity.listener.MainActivityListener
 import com.inz.z.note_book.view.adapter.ApplicationListRvAdapter
 import com.inz.z.note_book.view.dialog.BaseDialogFragment
 import io.reactivex.Observable

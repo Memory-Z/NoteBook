@@ -16,6 +16,7 @@ import com.inz.z.note_book.R
 import com.inz.z.note_book.database.util.GreenDaoHelper
 import com.inz.z.note_book.service.FloatMessageViewService
 import com.inz.z.note_book.view.BaseNoteActivity
+import com.inz.z.note_book.view.activity.listener.MainActivityListener
 import com.inz.z.note_book.view.dialog.BaseDialogFragment
 import com.inz.z.note_book.view.fragment.LauncherApplicationFragment
 import com.inz.z.note_book.view.fragment.LogFragment

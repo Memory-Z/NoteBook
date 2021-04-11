@@ -50,4 +50,12 @@ class GreenDaoOpenHelper : DaoMaster.OpenHelper {
                 )
         }
     }
+
+    private fun getDaoClass() {
+        val currentPackage = this::class.java.`package`?.toString()
+        currentPackage?.let {
+            val lastPackageIndex = it.lastIndexOf(".")
+            val parentPath = it.substring(0, lastPackageIndex)
+        }
+    }
 }

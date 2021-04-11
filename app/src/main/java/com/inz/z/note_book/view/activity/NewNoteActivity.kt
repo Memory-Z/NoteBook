@@ -9,6 +9,7 @@ import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.entity.Constants
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
+import com.inz.z.base.util.ThreadPoolUtils
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteInfoController
@@ -52,11 +53,6 @@ class NewNoteActivity : BaseNoteActivity() {
      * 已保存笔记内容
      */
     private var oldNoteContent = ""
-    private var executorService: ScheduledExecutorService
-
-    init {
-        executorService = Executors.newScheduledThreadPool(3)
-    }
 
     override fun initWindow() {
 
@@ -109,7 +105,9 @@ class NewNoteActivity : BaseNoteActivity() {
             }
         }
         // 每 5 S 检测一次
-        executorService.scheduleAtFixedRate(checkNoteRunnable, 5, 5, TimeUnit.SECONDS)
+        ThreadPoolUtils
+            .getScheduleThread(TAG + "_initData")
+            .scheduleAtFixedRate(checkNoteRunnable, 5, 5, TimeUnit.SECONDS)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {

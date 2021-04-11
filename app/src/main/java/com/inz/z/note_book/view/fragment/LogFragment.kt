@@ -2,11 +2,9 @@ package com.inz.z.note_book.view.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentStatePagerAdapter
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayoutMediator
 import com.inz.z.base.view.AbsBaseFragment
 import com.inz.z.note_book.R
-import com.inz.z.note_book.view.activity.MainActivityListener
+import com.inz.z.note_book.view.activity.listener.MainActivityListener
 import com.inz.z.note_book.view.fragment.adapter.LogFragmentStateAdapter
 import kotlinx.android.synthetic.main.fragment_log_root.*
 
