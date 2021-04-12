@@ -18,7 +18,8 @@ import com.inz.z.note_book.database.bean.NoteGroup
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteGroupService
 import com.inz.z.note_book.database.controller.NoteInfoController
-import com.inz.z.note_book.view.activity.GroupActivity
+import com.inz.z.note_book.view.activity.AddContentActivity
+import com.inz.z.note_book.view.activity.NoteGroupActivity
 import com.inz.z.note_book.view.activity.listener.MainActivityListener
 import com.inz.z.note_book.view.adapter.NoteGroupRvAdapter
 import com.inz.z.note_book.view.widget.ItemSampleNoteInfoLayout
@@ -120,6 +121,10 @@ class NoteNavFragment : AbsBaseFragment() {
                 note_nav_add_fab.hide()
             }
         })
+        note_nav_near_five_nav_right_iv.setOnClickListener {
+            val intent = Intent(mContext, AddContentActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun initData() {
@@ -356,7 +361,7 @@ class NoteNavFragment : AbsBaseFragment() {
      * @param groupId 组ID
      */
     private fun gotoGroupActivity(addNewGroup: Boolean, groupId: String) {
-        val intent = Intent(mContext, GroupActivity::class.java)
+        val intent = Intent(mContext, NoteGroupActivity::class.java)
         val bundle = Bundle()
         bundle.apply {
             putBoolean("addNewGroup", addNewGroup)

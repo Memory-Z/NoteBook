@@ -1,4 +1,6 @@
-include ':picturebrowse'
+//include ':dao_processor'
+//include ':dao_annotation'
+//include ':picturebrowse'
 include ':slide_table'
 rootProject.name='NoteBook'
 include ':app', ':addressbook'

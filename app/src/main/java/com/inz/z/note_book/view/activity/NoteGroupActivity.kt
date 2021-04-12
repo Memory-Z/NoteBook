@@ -24,12 +24,12 @@ import com.inz.z.note_book.database.bean.NoteGroup
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteController
 import com.inz.z.note_book.database.controller.NoteGroupService
-import com.inz.z.note_book.databinding.GroupLayoutBinding
+import com.inz.z.note_book.databinding.ActivityGroupLayoutBinding
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.adapter.NoteInfoRecyclerAdapter
 import com.inz.z.note_book.view.fragment.NewGroupDialogFragment
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
-import kotlinx.android.synthetic.main.group_layout.*
+import kotlinx.android.synthetic.main.activity_group_layout.*
 import kotlinx.android.synthetic.main.note_info_add_sample_layout.*
 import java.util.*
 
@@ -39,13 +39,13 @@ import java.util.*
  * @version 1.0.0
  * Create by inz in 2019/10/29 11:15.
  */
-class GroupActivity : BaseNoteActivity() {
+class NoteGroupActivity : BaseNoteActivity() {
     companion object {
         private const val TAG = "GroupActivity"
         private const val HANDLER_REFRESH_DATA = 0x00A0
     }
 
-    private var mGroupLayoutBinding: GroupLayoutBinding? = null
+    private var mGroupLayoutBinding: ActivityGroupLayoutBinding? = null
     private var mNoteInfoRecyclerAdapter: NoteInfoRecyclerAdapter? = null
 
     /**
@@ -78,7 +78,7 @@ class GroupActivity : BaseNoteActivity() {
     }
 
     override fun getLayoutId(): Int {
-        return R.layout.group_layout
+        return R.layout.activity_group_layout
     }
 
     override fun initView() {
@@ -144,7 +144,7 @@ class GroupActivity : BaseNoteActivity() {
 
     override fun setDataBindingView() {
         super.setDataBindingView()
-        mGroupLayoutBinding = DataBindingUtil.setContentView(this, R.layout.group_layout)
+        mGroupLayoutBinding = DataBindingUtil.setContentView(this, R.layout.activity_group_layout)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -262,15 +262,15 @@ class GroupActivity : BaseNoteActivity() {
     inner class NewGroupDialogFragmentListenerImpl :
         NewGroupDialogFragment.NewGroupDialogFragmentListener {
         override fun cancelCreate() {
-            this@GroupActivity.finish()
+            this@NoteGroupActivity.finish()
         }
 
         override fun createNewGroup(groupName: String) {
             L.i(TAG, "createNoteGroup name is $groupName !")
             val noteGroup = NoteGroup()
             val noteGroupOrder = NoteGroupService.getLastNoteGroupOrder()
-            this@GroupActivity.titleNumber = 0
-            val title = getGroupTitle(groupName, this@GroupActivity.titleNumber)
+            this@NoteGroupActivity.titleNumber = 0
+            val title = getGroupTitle(groupName, this@NoteGroupActivity.titleNumber)
             val currentDate = Date(System.currentTimeMillis())
             noteGroup.apply {
                 noteGroupId = UUID.randomUUID().toString()
@@ -285,7 +285,7 @@ class GroupActivity : BaseNoteActivity() {
             hideNewGroupDialog()
             // 同步数据
             currentGroupId = noteGroup.noteGroupId
-            this@GroupActivity.noteGroup = noteGroup
+            this@NoteGroupActivity.noteGroup = noteGroup
 
             mGroupLayoutBinding?.groupName = title
             mGroupLayoutBinding?.notifyChange()

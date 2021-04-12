@@ -7,6 +7,7 @@
         <attr name="base_top_right_layout" format="reference" />
         <attr name="base_top_title" format="string" />
         <attr name="base_show_custom_view" format="boolean" />
+        <attr name="base_show_background_in_status" format="boolean" />
     </declare-styleable>
 
     <!-- 内部导航栏 -->

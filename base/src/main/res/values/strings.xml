@@ -67,4 +67,5 @@
     <string name="_submit_format">提交(%s)</string>
     <string name="cancel_checked">取消选择</string>
     <string name="selected_file_max">已到最大选择文件数量</string>
+    <string name="_background_image">背景图</string>
 </resources>

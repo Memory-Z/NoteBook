@@ -66,11 +66,11 @@ class NoteBookApplication : Application() {
 
     private fun initService() {
 
-        val intent = Intent(mContext, UserInfoService::class.java)
-            .apply {
-                this.putExtra(UserInfoService.TAG_FLAG_INIT_USER, UserInfoService.FLAG_INIT_USER)
-            }
-        startService(intent)
+//        val intent = Intent(mContext, UserInfoService::class.java)
+//            .apply {
+//                this.putExtra(UserInfoService.TAG_FLAG_INIT_USER, UserInfoService.FLAG_INIT_USER)
+//            }
+//        startService(intent)
     }
 
     private fun initBroadcast() {
@@ -114,7 +114,7 @@ class NoteBookApplication : Application() {
 
         override fun uploadLogToServer(filePath: String?, content: String?) {
             if (BuildConfig.DEBUG) {
-                Log.i(TAG, "uploadLogToServer: ----> $content")
+                Log.i(TAG, "uploadLogToServer: ----> \n $content")
             }
         }
 

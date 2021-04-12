@@ -3,12 +3,14 @@ package com.inz.z.base.view.widget;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -32,6 +34,11 @@ public class BaseTopActionLayout extends LinearLayout {
     private ConstraintLayout centerCl;
     private Toolbar toolbar;
 
+    /**
+     * 背景
+     */
+    private LinearLayout backgroundLl;
+
     private View userLeftView, userCenterView, userRightView;
     private int userLeftLayoutId, userCenterLayoutId, userRightLayoutId;
     private String titleStr;
@@ -40,6 +47,11 @@ public class BaseTopActionLayout extends LinearLayout {
      * 显示自定义布局
      */
     private boolean showCustomView = false;
+    /**
+     * 状态栏显示背景图
+     */
+    private boolean showBackgroundWithStatusBar = false;
+
 
     public enum TitleGravity {
         START(Gravity.START),
@@ -60,8 +72,8 @@ public class BaseTopActionLayout extends LinearLayout {
     public BaseTopActionLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
-        initView();
         initStyle(attrs);
+        initView();
     }
 
 //    public BaseTopActionLayout(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -73,15 +85,29 @@ public class BaseTopActionLayout extends LinearLayout {
 
     @SuppressLint("InflateParams")
     private void initView() {
+        initStatusBarHeight();
         if (mView == null) {
             mView = LayoutInflater.from(mContext).inflate(R.layout.base_top_action_layout, this, true);
             leftRl = mView.findViewById(R.id.base_top_action_left_rl);
             centerRl = mView.findViewById(R.id.base_top_action_center_rl);
             rightRl = mView.findViewById(R.id.base_top_action_right_rl);
             centerCl = mView.findViewById(R.id.base_top_action_center_cl);
+            centerCl.setVisibility(showCustomView ? VISIBLE : GONE);
             toolbar = mView.findViewById(R.id.base_top_action_toolbar);
 //            LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 //            addView(mView, layoutParams);
+            backgroundLl = mView.findViewById(R.id.base_top_action_background_ll);
+            targetBackgroundShow(showBackgroundWithStatusBar);
+        }
+    }
+
+    /**
+     * 初始化状态栏高度
+     */
+    private void initStatusBarHeight() {
+        int resourcesId = mContext.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourcesId > 0) {
+            statusBarHeight = mContext.getResources().getDimensionPixelSize(resourcesId);
         }
     }
 
@@ -93,23 +119,37 @@ public class BaseTopActionLayout extends LinearLayout {
         userRightLayoutId = array.getResourceId(R.styleable.BaseTopActionLayout_base_top_right_layout, R.id.base_top_action_right_rl);
         titleStr = array.getString(R.styleable.BaseTopActionLayout_base_top_title);
         showCustomView = array.getBoolean(R.styleable.BaseTopActionLayout_base_show_custom_view, false);
-        centerCl.setVisibility(showCustomView ? VISIBLE : GONE);
+        showBackgroundWithStatusBar = array.getBoolean(R.styleable.BaseTopActionLayout_base_show_background_in_status, false);
         array.recycle();
     }
 
 
     @Override
     public void setBackgroundColor(int color) {
-        super.setBackgroundColor(color);
+        if (showBackgroundWithStatusBar) {
+            backgroundLl.setBackgroundColor(color);
+            super.setBackgroundColor(Color.TRANSPARENT);
+        } else {
+            super.setBackgroundColor(color);
+        }
     }
 
     @Override
     public void setBackgroundResource(int resid) {
-        super.setBackgroundResource(resid);
+        if (showBackgroundWithStatusBar) {
+            backgroundLl.setBackgroundResource(resid);
+            super.setBackgroundResource(android.R.color.transparent);
+        } else {
+            super.setBackgroundResource(resid);
+        }
     }
 
     @Override
     public void setBackground(Drawable background) {
+        if (showBackgroundWithStatusBar) {
+            backgroundLl.setBackground(background);
+            background.setAlpha(0);
+        }
         super.setBackground(background);
     }
 
@@ -219,6 +259,41 @@ public class BaseTopActionLayout extends LinearLayout {
             }
         }
     }
+
+    /**
+     * 切换顶部背景是否显示
+     *
+     * @param show 是否显示
+     */
+    private void targetBackgroundShow(Boolean show) {
+        if (mView != null) {
+            mView.setFitsSystemWindows(!show);
+        }
+        if (backgroundLl != null) {
+            backgroundLl.setVisibility(show ? VISIBLE : GONE);
+        }
+        if (toolbar != null) {
+            toolbar.setFitsSystemWindows(!show);
+            ViewGroup.LayoutParams layoutParams = toolbar.getLayoutParams();
+            int height = layoutParams.height;
+            int paddingTop = toolbar.getPaddingTop();
+            if (show) {
+                height += statusBarHeight;
+                paddingTop += statusBarHeight;
+            } else {
+//                height -= statusBarHeight;
+//                paddingTop -= statusBarHeight;
+            }
+            layoutParams.height = height;
+//            toolbar.setPadding(
+//                    toolbar.getPaddingLeft(),
+//                    paddingTop,
+//                    toolbar.getPaddingRight(),
+//                    toolbar.getPaddingBottom()
+//            );
+        }
+    }
+
 
     /**
      * 获取 Toolbar 背景

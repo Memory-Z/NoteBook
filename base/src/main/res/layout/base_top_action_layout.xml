@@ -2,60 +2,81 @@
 <com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:fitsSystemWindows="true">
+    android:layout_height="wrap_content">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/base_top_action_toolbar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:gravity="center_vertical"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:navigationIcon="@drawable/ic_chevron_left_white_24dp"
-        app:popupTheme="@style/Theme.AppCompat.DayNight"
-        app:title="@string/base_image">
+        android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/base_top_action_center_cl"
+        <LinearLayout
+            android:id="@+id/base_top_action_background_ll"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="0dp"
-            android:visibility="visible">
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/base_top_action_toolbar"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-            <!-- 左侧栏 -->
-            <RelativeLayout
-                android:id="@+id/base_top_action_left_rl"
-                android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/base_top_action_background_iv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/_update_background" />
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/base_top_action_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            android:gravity="center_vertical"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:navigationIcon="@drawable/ic_chevron_left_white_24dp"
+            app:popupTheme="@style/Theme.AppCompat.DayNight"
+            app:title="@string/base_image">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/base_top_action_center_cl"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_marginStart="0dp"
+                android:visibility="visible">
 
-            </RelativeLayout>
+                <!-- 左侧栏 -->
+                <RelativeLayout
+                    android:id="@+id/base_top_action_left_rl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            <!-- 右侧栏 -->
-            <RelativeLayout
-                android:id="@+id/base_top_action_right_rl"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                </RelativeLayout>
 
-            </RelativeLayout>
+                <!-- 右侧栏 -->
+                <RelativeLayout
+                    android:id="@+id/base_top_action_right_rl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            <!-- 中间栏 -->
-            <RelativeLayout
-                android:id="@+id/base_top_action_center_rl"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                app:layout_constraintEnd_toStartOf="@id/base_top_action_right_rl"
-                app:layout_constraintStart_toEndOf="@id/base_top_action_left_rl"
-                app:layout_constraintTop_toTopOf="parent">
+                </RelativeLayout>
 
-            </RelativeLayout>
+                <!-- 中间栏 -->
+                <RelativeLayout
+                    android:id="@+id/base_top_action_center_rl"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toStartOf="@id/base_top_action_right_rl"
+                    app:layout_constraintStart_toEndOf="@id/base_top_action_left_rl"
+                    app:layout_constraintTop_toTopOf="parent">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.appcompat.widget.Toolbar>
+                </RelativeLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </RelativeLayout>
 
 
 </com.google.android.material.appbar.AppBarLayout>

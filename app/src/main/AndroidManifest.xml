@@ -37,7 +37,7 @@
             android:name=".view.activity.MainActivity"
             android:configChanges="keyboardHidden|screenLayout|screenSize|orientation"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustNothing" >
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <category android:name="android.intent.category.APP_CALENDAR" />
             </intent-filter>
@@ -57,7 +57,7 @@
 
         <!-- 组 -->
         <activity
-            android:name=".view.activity.GroupActivity"
+            android:name=".view.activity.NoteGroupActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
@@ -132,6 +132,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoteBookAppTheme.Transparent"
             android:windowSoftInputMode="adjustPan|stateHidden" />
+
+        <!-- 添加内容 界面  -->
+        <activity
+            android:name=".view.activity.AddContentActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoteBookAppTheme.Transparent" />
 
         <!-- 通知服务 -->
         <service
