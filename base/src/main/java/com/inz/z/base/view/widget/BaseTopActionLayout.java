@@ -18,6 +18,7 @@ import androidx.appcompat.widget.TintTypedArray;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.inz.z.base.R;
 import com.inz.z.base.util.ImageUtils;
 
@@ -34,10 +35,11 @@ public class BaseTopActionLayout extends LinearLayout {
     private ConstraintLayout centerCl;
     private Toolbar toolbar;
 
-    /**
-     * 背景
-     */
-    private LinearLayout backgroundLl;
+//    /**
+//     * 背景
+//     */
+//    private LinearLayout backgroundLl;
+    private AppBarLayout appBarLayout;
 
     private View userLeftView, userCenterView, userRightView;
     private int userLeftLayoutId, userCenterLayoutId, userRightLayoutId;
@@ -96,8 +98,9 @@ public class BaseTopActionLayout extends LinearLayout {
             toolbar = mView.findViewById(R.id.base_top_action_toolbar);
 //            LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 //            addView(mView, layoutParams);
-            backgroundLl = mView.findViewById(R.id.base_top_action_background_ll);
-            targetBackgroundShow(showBackgroundWithStatusBar);
+//            backgroundLl = mView.findViewById(R.id.base_top_action_background_ll);
+            appBarLayout = mView.findViewById(R.id.base_top_action_root_abl);
+//            targetBackgroundShow(showBackgroundWithStatusBar);
         }
     }
 
@@ -124,34 +127,34 @@ public class BaseTopActionLayout extends LinearLayout {
     }
 
 
-    @Override
-    public void setBackgroundColor(int color) {
-        if (showBackgroundWithStatusBar) {
-            backgroundLl.setBackgroundColor(color);
-            super.setBackgroundColor(Color.TRANSPARENT);
-        } else {
-            super.setBackgroundColor(color);
-        }
-    }
-
-    @Override
-    public void setBackgroundResource(int resid) {
-        if (showBackgroundWithStatusBar) {
-            backgroundLl.setBackgroundResource(resid);
-            super.setBackgroundResource(android.R.color.transparent);
-        } else {
-            super.setBackgroundResource(resid);
-        }
-    }
-
-    @Override
-    public void setBackground(Drawable background) {
-        if (showBackgroundWithStatusBar) {
-            backgroundLl.setBackground(background);
-            background.setAlpha(0);
-        }
-        super.setBackground(background);
-    }
+//    @Override
+//    public void setBackgroundColor(int color) {
+//        if (showBackgroundWithStatusBar) {
+////            backgroundLl.setBackgroundColor(color);
+//            super.setBackgroundColor(Color.TRANSPARENT);
+//        } else {
+//            super.setBackgroundColor(color);
+//        }
+//    }
+//
+//    @Override
+//    public void setBackgroundResource(int resid) {
+//        if (showBackgroundWithStatusBar) {
+////            backgroundLl.setBackgroundResource(resid);
+//            super.setBackgroundResource(android.R.color.transparent);
+//        } else {
+//            super.setBackgroundResource(resid);
+//        }
+//    }
+//
+//    @Override
+//    public void setBackground(Drawable background) {
+//        if (showBackgroundWithStatusBar) {
+////            backgroundLl.setBackground(background);
+//            background.setAlpha(0);
+//        }
+//        super.setBackground(background);
+//    }
 
     /**
      * 设置标题
@@ -266,14 +269,14 @@ public class BaseTopActionLayout extends LinearLayout {
      * @param show 是否显示
      */
     private void targetBackgroundShow(Boolean show) {
-        if (mView != null) {
-            mView.setFitsSystemWindows(!show);
-        }
-        if (backgroundLl != null) {
-            backgroundLl.setVisibility(show ? VISIBLE : GONE);
-        }
+//        if (appBarLayout != null) {
+//            appBarLayout.setFitsSystemWindows(!show);
+//        }
+//        if (backgroundLl != null) {
+//            backgroundLl.setVisibility(show ? VISIBLE : GONE);
+//        }
         if (toolbar != null) {
-            toolbar.setFitsSystemWindows(!show);
+//            toolbar.setFitsSystemWindows(!show);
             ViewGroup.LayoutParams layoutParams = toolbar.getLayoutParams();
             int height = layoutParams.height;
             int paddingTop = toolbar.getPaddingTop();

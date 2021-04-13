@@ -3,7 +3,6 @@ package com.inz.z.note_book.database.bean.local;
 import androidx.annotation.NonNull;
 
 import com.inz.z.base.util.BaseTools;
-import com.inz.z.calendar_view.Tools;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;

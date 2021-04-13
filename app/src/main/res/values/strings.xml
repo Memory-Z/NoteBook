@@ -107,5 +107,6 @@
     <string name="notification_screen_2_hint">使用时长：</string>
     <string name="notification_screen_min_hint">上次使用时长：</string>
     <string name="_backup">备份</string>
+    <string name="_add_content">添加</string>
 
 </resources>

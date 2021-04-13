@@ -70,7 +70,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     implementation project(':base')
-    implementation project(':calendar_view')
+//    implementation project(':calendar_view')
 
     implementation project(':slide_table')
 

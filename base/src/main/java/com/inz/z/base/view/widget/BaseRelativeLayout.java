@@ -126,7 +126,9 @@ public class BaseRelativeLayout extends RelativeLayout {
                 if (footerView != null && v == footerView) {
                     break;
                 }
-                addContent(v);
+                if (v != null) {
+                    addContent(v);
+                }
             }
         }
     }
