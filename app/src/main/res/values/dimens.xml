@@ -76,4 +76,9 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <!-- 主页-左侧栏顶部高度 -->
     <dimen name="nav_left_top_height">90dp</dimen>
 
+    <!-- 内容左侧宽度 -->
+    <dimen name="content_left_width">@dimen/dp160</dimen>
+    <!-- 提示文字高度 -->
+    <dimen name="min_text_hint_height">@dimen/dp24</dimen>
+
 </resources>

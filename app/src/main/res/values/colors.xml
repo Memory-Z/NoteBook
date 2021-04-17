@@ -16,6 +16,7 @@
     <color name="nearColorRed">#FF0048</color>
 
     <color name="lineColor">@color/textColor50</color>
+    <color name="lineWhiteColor">@color/textColor10</color>
 
     <color name="card_main_color">@color/cardColor</color>
     <color name="card_second_color">@color/textInverseColor70</color>
