@@ -35,7 +35,7 @@ public class BaseTopActionLayout extends LinearLayout {
     private ConstraintLayout centerCl;
     private Toolbar toolbar;
 
-//    /**
+    //    /**
 //     * 背景
 //     */
 //    private LinearLayout backgroundLl;
@@ -312,8 +312,8 @@ public class BaseTopActionLayout extends LinearLayout {
             int lW = getMeasuredWidth();
             int lH = getMeasuredHeight();
             int tH = toolbar.getMeasuredHeight();
-            float needH = (float) bH / lH * tH + .5F;
-            float startY = (float) bH / lH * statusBarHeight + .5F;
+            float needH = (float) bH / lH * tH;
+            float startY = (float) bH / lH * statusBarHeight;
             return Bitmap.createBitmap(backBitmap, 0, (int) startY, bW, (int) needH);
         }
         return null;
