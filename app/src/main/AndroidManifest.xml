@@ -72,7 +72,7 @@
             android:name=".view.activity.NewNoteActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:screenOrientation="fullSensor"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustResize|stateVisible" />
 
 
         <!-- 透明层 -->

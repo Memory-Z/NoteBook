@@ -11,6 +11,7 @@ import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
 import com.inz.z.base.util.ThreadPoolUtils
 import com.inz.z.note_book.R
+import com.inz.z.note_book.base.NoteStatus
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteInfoController
 import com.inz.z.note_book.view.BaseNoteActivity
@@ -112,11 +113,11 @@ class NewNoteActivity : BaseNoteActivity() {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) {
-            val nslHeight = note_info_add_content_content_nsv.height
-            val topHeight = note_info_add_content_top_time_tv.height
-            note_info_add_content_schedule_layout.minimumHeight = nslHeight - topHeight
-        }
+//        if (hasFocus) {
+//            val nslHeight = note_info_add_content_content_nsv.height
+//            val topHeight = note_info_add_content_top_time_tv.height
+//            note_info_add_content_schedule_layout.minimumHeight = nslHeight - topHeight * 2
+//        }
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
@@ -172,6 +173,7 @@ class NewNoteActivity : BaseNoteActivity() {
                 noteInfo!!.apply {
                     noteContent = newContent
                     updateDate = Date()
+                    status = NoteStatus.FINISHED
                 }
                 NoteInfoController.updateNoteInfo(noteInfo!!)
                 if (mContext != null) {

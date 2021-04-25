@@ -15,7 +15,7 @@ import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseDialogFragment
 import com.inz.z.note_book.R
-import com.inz.z.note_book.bean.NoteInfoStatus
+import com.inz.z.note_book.base.NoteStatus
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteController
 import java.util.*
@@ -54,10 +54,12 @@ class NoteInfoAddDialogFragment : AbsBaseDialogFragment() {
      */
     private var commitLl: LinearLayout? = null
     private var commitAddNoteIv: ImageView? = null
+
     /**
      * 笔记标题编辑内容
      */
     private var noteTitleEt: EditText? = null
+
     /**
      * 当前组ID
      */
@@ -172,7 +174,7 @@ class NoteInfoAddDialogFragment : AbsBaseDialogFragment() {
                 noteInfoId = BaseTools.getUUID()
                 setNoteTitle(noteTitle)
                 noteContent = ""
-                noteStatus = NoteInfoStatus.UNFINISHED
+                status = NoteStatus.UNFINISHED
                 createDate = Date()
                 updateDate = Date()
             }

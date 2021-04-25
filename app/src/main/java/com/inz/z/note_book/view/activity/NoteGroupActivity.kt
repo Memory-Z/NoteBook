@@ -19,7 +19,7 @@ import com.inz.z.base.util.L
 import com.inz.z.base.util.ThreadPoolUtils
 import com.inz.z.base.view.widget.BaseNoDataView
 import com.inz.z.note_book.R
-import com.inz.z.note_book.bean.NoteInfoStatus
+import com.inz.z.note_book.base.NoteStatus
 import com.inz.z.note_book.database.bean.NoteGroup
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteController
@@ -103,6 +103,7 @@ class NoteGroupActivity : BaseNoteActivity() {
             finish()
         }
         group_content_srl.setOnRefreshListener {
+            // 刷新笔记数据
             loadNoteInfoWithDatabase()
             if (group_content_srl.isRefreshing) {
                 Toast.makeText(mContext, getString(R.string.fresh_success), Toast.LENGTH_SHORT)
@@ -120,7 +121,7 @@ class NoteGroupActivity : BaseNoteActivity() {
     }
 
     override fun initData() {
-        val intent = getIntent()
+        // 通过 Intent 获取传递 的数据信息
         val bundle = intent?.extras
         if (bundle != null) {
             isAddNewGroup = bundle.getBoolean("addNewGroup", false)
@@ -180,7 +181,13 @@ class NoteGroupActivity : BaseNoteActivity() {
      * 空数据界面初始化
      */
     private fun initNoDataView() {
-        group_content_empty_bndv?.listener = NoDataListenerImpl()
+        group_content_empty_bndv?.let {
+            it.listener = NoDataListenerImpl()
+            val noDataStr = getString(R.string.no_title_group).format("")
+            // 设置提示内容为无
+            it.stopRefresh(noDataStr, false)
+        }
+
     }
 
     /**
@@ -408,7 +415,7 @@ class NoteGroupActivity : BaseNoteActivity() {
                 noteInfoId = BaseTools.getUUID()
                 setNoteTitle(noteTitle)
                 noteContent = ""
-                noteStatus = NoteInfoStatus.UNFINISHED
+                status = NoteStatus.UNFINISHED
                 createDate = Date()
                 updateDate = Date()
             }

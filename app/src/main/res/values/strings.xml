@@ -69,6 +69,7 @@
     <string name="_clock">闹钟</string>
     <string name="note_content_is_saved">内容已保存</string>
     <string name="note_content_have_change_is_saveable">内容有更改是否保存？</string>
+    <string name="_finish">完成</string>
     <string name="_unfinished">未完成</string>
     <string name="_finished">已完成</string>
     <string name="_canceled">已取消</string>
@@ -108,5 +109,7 @@
     <string name="notification_screen_min_hint">上次使用时长：</string>
     <string name="_backup">备份</string>
     <string name="_add_content">添加</string>
+    <string name="_add_record">添加记录</string>
+    <string name="note_group_menu">笔记目录</string>
 
 </resources>

@@ -95,6 +95,7 @@
                     android:background="@color/textColor30"
                     android:visibility="visible" />
 
+                <!-- 笔记组 -->
                 <LinearLayout
                     android:id="@+id/note_nav_group_ll"
                     android:layout_width="match_parent"
@@ -109,8 +110,24 @@
                         android:paddingStart="@dimen/border_lr_dimen"
                         android:paddingEnd="@dimen/border_lr_dimen"
                         app:base_bottom_line_visible="false"
+                        app:base_center_layout="@id/note_nav_group_center_ll"
                         app:base_right_layout="@id/note_nav_group_right_ll"
                         app:base_top_line_visible="false">
+
+                        <LinearLayout
+                            android:id="@+id/note_nav_group_center_ll"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/touch_target_height"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical">
+                            <!-- 目录栏 名称  -->
+                            <TextView
+                                style="@style/Base.Text.Second"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/note_group_menu"
+                                android:textColor="@color/colorPrimary" />
+                        </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/note_nav_group_right_ll"

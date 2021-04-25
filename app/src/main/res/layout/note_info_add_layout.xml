@@ -57,39 +57,46 @@
         android:layout_height="match_parent"
         android:layout_above="@id/note_info_add_content_bottom_ll"
         android:layout_below="@id/note_info_add_top_bnl"
-        app:base_relative_layout_content_view="@id/note_info_add_content_content_nsv">
+        app:base_relative_layout_content_view="@id/note_info_add_content_center_ll">
 
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/note_info_add_content_content_nsv"
+        <LinearLayout
+            android:id="@+id/note_info_add_content_center_ll"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/note_info_add_content_content_ll"
+            <TextView
+                android:id="@+id/note_info_add_content_top_time_tv"
+                style="@style/NoteBookAppTheme.Text.Hint"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingStart="@dimen/border_lr_dimen"
-                android:paddingEnd="@dimen/border_lr_dimen">
+                android:layout_height="@dimen/button_normal_height"
+                android:gravity="center"
+                android:text="@string/base_time"
+                android:textColor="@color/textGray" />
 
-                <TextView
-                    android:id="@+id/note_info_add_content_top_time_tv"
-                    style="@style/NoteBookAppTheme.Text.Hint"
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/note_info_add_content_content_nsv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/note_info_add_content_content_ll"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/button_normal_height"
-                    android:gravity="center"
-                    android:text="@string/base_time"
-                    android:textColor="@color/textGray" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingStart="@dimen/border_lr_dimen"
+                    android:paddingEnd="@dimen/border_lr_dimen">
 
-                <com.inz.z.note_book.view.widget.ScheduleLayout
-                    android:id="@+id/note_info_add_content_schedule_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:have_schedule_check_box="false" />
 
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+                    <com.inz.z.note_book.view.widget.ScheduleLayout
+                        android:id="@+id/note_info_add_content_schedule_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:have_schedule_check_box="false" />
+
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
 
 
     </com.inz.z.base.view.widget.BaseRelativeLayout>

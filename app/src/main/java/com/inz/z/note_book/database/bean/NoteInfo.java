@@ -1,6 +1,6 @@
 package com.inz.z.note_book.database.bean;
 
-import com.inz.z.note_book.bean.NoteInfoStatus;
+import com.inz.z.note_book.base.NoteStatus;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -9,7 +9,9 @@ import org.greenrobot.greendao.annotation.ToMany;
 
 import java.util.Date;
 import java.util.List;
+
 import org.greenrobot.greendao.DaoException;
+
 import com.inz.z.note_book.database.DaoSession;
 import com.inz.z.note_book.database.NoteFileContentDao;
 import com.inz.z.note_book.database.NoteInfoDao;
@@ -46,16 +48,21 @@ public class NoteInfo {
     /**
      * 状态
      *
-     * @see NoteInfoStatus 日记状态
+     * @see NoteStatus 日记状态
      */
+    @NoteStatus.NoteInfoStatus
     private int status = 0;
 
     @ToMany(referencedJoinProperty = "noteId")
     private List<NoteFileContent> noteFileContentList;
-    /** Used to resolve relations */
+    /**
+     * Used to resolve relations
+     */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
-    /** Used for active entity operations. */
+    /**
+     * Used for active entity operations.
+     */
     @Generated(hash = 845113378)
     private transient NoteInfoDao myDao;
 
@@ -72,21 +79,6 @@ public class NoteInfo {
 
     @Generated(hash = 1097220926)
     public NoteInfo() {
-    }
-
-    /**
-     * 设置状态
-     */
-    public void setNoteStatus(NoteInfoStatus status) {
-        this.status = status.getValue();
-    }
-
-    /**
-     * 获取状态
-     */
-    public NoteInfoStatus getNoteStatus() {
-        NoteInfoStatus status = NoteInfoStatus.UNFINISHED;
-        return status.getStatus(this.status);
     }
 
     public String getNoteInfoId() {
@@ -164,7 +156,9 @@ public class NoteInfo {
         return noteFileContentList;
     }
 
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    /**
+     * Resets a to-many relationship, making the next get call to query for a fresh result.
+     */
     @Generated(hash = 909027651)
     public synchronized void resetNoteFileContentList() {
         noteFileContentList = null;
@@ -206,7 +200,9 @@ public class NoteInfo {
         myDao.update(this);
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 889194310)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
