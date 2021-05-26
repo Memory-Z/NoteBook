@@ -111,5 +111,11 @@
     <string name="_add_content">添加</string>
     <string name="_add_record">添加记录</string>
     <string name="note_group_menu">笔记目录</string>
+    <string name="_unknown">未知</string>
+
+    <string name="_play_music">播放</string>
+    <string name="_previous_music">上一曲</string>
+    <string name="_next_music">下一曲</string>
+    <string name="_base_duration_time">00:00</string>
 
 </resources>
