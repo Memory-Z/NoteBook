@@ -77,6 +77,10 @@ class ChooseFileViewModel : ViewModel() {
                     when (showType) {
                         Constants.ChooseFileConstants.SHOW_TYPE_DIR -> {
                             list = ProviderUtil.queryFileListByDir(filePath)
+                            // 更新文件类型。
+                            if (context != null) {
+                                list = resetImageFileType(context, list.toList()).toMutableList()
+                            }
                         }
                         Constants.ChooseFileConstants.SHOW_TYPE_IMAGE -> {
                             if (context != null) {
@@ -95,9 +99,7 @@ class ChooseFileViewModel : ViewModel() {
                         }
                     }
                     list = resetChooseFileList(list.toList(), chooseFileList?.value).toMutableList()
-                    if (context != null) {
-                        list = resetImageFileType(context, list.toList()).toMutableList()
-                    }
+
                     it.onNext(list)
                 }
             )

@@ -68,6 +68,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="@dimen/margin_text_layout"
             android:layout_marginEnd="@dimen/margin_text_layout"
+            android:checked="@{chooseFile.checked, default=false}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

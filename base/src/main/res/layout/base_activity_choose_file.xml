@@ -92,6 +92,7 @@
         android:id="@+id/base_choose_file_content_rv"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:scrollbarStyle="outsideOverlay"
         android:theme="@style/Base.ScrollbarVertical"
         app:layout_constraintBottom_toTopOf="@id/base_choose_file_bottom_bnl"
         app:layout_constraintEnd_toEndOf="parent"

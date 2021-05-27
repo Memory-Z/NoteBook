@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +62,14 @@ public abstract class AbsBaseRvAdapter<T, VH extends RecyclerView.ViewHolder> ex
         return list.size();
     }
 
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull @NotNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        mContext = null;
+        this.list.clear();
+        this.list = null;
+    }
+
     /**
      * 刷新数据
      *
@@ -82,6 +92,38 @@ public abstract class AbsBaseRvAdapter<T, VH extends RecyclerView.ViewHolder> ex
     }
 
     /**
+     * 添加数据项
+     *
+     * @param data Data
+     */
+    public void addItemData(T data) {
+        this.list.add(data);
+        notifyItemInserted(this.list.size() - 1);
+    }
+
+    /**
+     * 移除数据项
+     *
+     * @param position position
+     */
+    public void removeItemData(int position) {
+        if (isUsablePosition(position)) {
+            this.list.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    /**
+     * 判断 Position 是否有效
+     *
+     * @param position position
+     * @return 是否有效
+     */
+    public boolean isUsablePosition(int position) {
+        return position >= 0 && position < this.list.size();
+    }
+
+    /**
      * 获取项
      *
      * @param position 位置
@@ -89,10 +131,10 @@ public abstract class AbsBaseRvAdapter<T, VH extends RecyclerView.ViewHolder> ex
      */
     @Nullable
     public T getItemByPosition(int position) {
-        if (position < 0 || position >= list.size()) {
-            return null;
+        if (isUsablePosition(position)) {
+            return this.list.get(position);
         }
-        return list.get(position);
+        return null;
     }
 
     /**

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.view.Menu
 import android.view.MenuItem
@@ -15,8 +16,10 @@ import androidx.annotation.IntDef
 import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.R
 import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.entity.BaseChooseFileNavBean
@@ -29,6 +32,7 @@ import com.inz.z.base.util.ProviderUtil
 import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.base.view.activity.adapter.ChooseFileNavRvAdapter
 import com.inz.z.base.view.activity.adapter.ChooseFileRvAdapter
+import com.inz.z.base.view.activity.viewmodel.ChooseFileViewModel
 import com.inz.z.base.view.dialog.PreviewImageFragmentDialog
 import com.qmuiteam.qmui.util.QMUIDisplayHelper
 import io.reactivex.Observable
@@ -40,8 +44,10 @@ import kotlinx.android.synthetic.main.base_activity_choose_file.*
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.min
 
 /**
+ * 图片文件选择 Activity .
  *
  * @author Zhenglj
  * @version 1.0.0
@@ -50,13 +56,25 @@ import kotlin.collections.ArrayList
 class ChooseFileActivity : AbsBaseActivity() {
 
     companion object {
+        private const val TAG = "ChooseFileActivity"
+
+        /**
+         * 显示列表布局
+         */
         const val MODE_LIST = 0x000901
+
+        /**
+         * 显示表格布局
+         */
         const val MODE_TABLE = 0x000902
 
         private const val DEFAULT_MAX_CHOOSE_FILE_COUNT = 10
-        private const val DEFAULT_TABLE_COLUMNS = 2
+        private const val DEFAULT_TABLE_COLUMNS = 4
 
-        const val TAG = "ChooseFileActivity"
+        /**
+         * 默认每次加载数量.
+         */
+        private const val DEFAULT_PER_LOAD_SIZE = 10
 
         private const val HANDLER_ADD_CHOOSE_FILE = 0x00FF01
         private const val HANDLER_REMOVE_CHOOSE_FILE = 0x00FF02
@@ -135,6 +153,9 @@ class ChooseFileActivity : AbsBaseActivity() {
     @Retention(AnnotationRetention.SOURCE)
     annotation class ShowMode
 
+    /**
+     * 权限列表。
+     */
     private val permissionArray = arrayListOf(
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -142,8 +163,14 @@ class ChooseFileActivity : AbsBaseActivity() {
 
     private val requestPermissionCode = 0x0002
 
+    /**
+     * 文件列表适配器
+     */
     private var chooseFileListRvAdapter: ChooseFileRvAdapter? = null
 
+    /**
+     * 文件选择顶部导航栏适配器
+     */
     private var chooseFileNavRvAdapter: ChooseFileNavRvAdapter? = null
 
     /**
@@ -159,6 +186,9 @@ class ChooseFileActivity : AbsBaseActivity() {
     @ChooseFileShowType
     private var showType = Constants.ChooseFileConstants.SHOW_TYPE_DIR
 
+    /**
+     * 显示模式，默认：列表
+     */
     @ShowMode
     private var showMode = MODE_LIST
 
@@ -166,6 +196,18 @@ class ChooseFileActivity : AbsBaseActivity() {
      * 表单 模式下 显示列数
      */
     private var showTableModeColumn = DEFAULT_TABLE_COLUMNS
+
+    /**
+     * 当前选中路径文件列表
+     */
+    private var currentPathFileList: MutableList<BaseChooseFileBean> = mutableListOf()
+
+    /**
+     * 当前显示文件位置.
+     */
+    private var currentFileIndex = 0
+
+    private var loadSizePer = DEFAULT_PER_LOAD_SIZE
 
     /**
      * 选中的文件列表
@@ -186,6 +228,11 @@ class ChooseFileActivity : AbsBaseActivity() {
      * 按钮默认颜色
      */
     private var buttonDefaultScl: ColorStateList? = null
+
+    /**
+     * ChooseFileViewModel.
+     */
+    private var chooseFileViewModel: ChooseFileViewModel? = null
 
 
     override fun initWindow() {
@@ -208,6 +255,7 @@ class ChooseFileActivity : AbsBaseActivity() {
 
         navLayoutManager = LinearLayoutManager(mContext)
         navLayoutManager?.orientation = LinearLayoutManager.HORIZONTAL
+        // 顶部导航栏。
         chooseFileNavRvAdapter = ChooseFileNavRvAdapter(mContext)
         chooseFileNavRvAdapter?.listener = ChooseFileNavRvAdapterListenerImpl()
         base_choose_file_nav_rv?.apply {
@@ -232,7 +280,7 @@ class ChooseFileActivity : AbsBaseActivity() {
     }
 
     override fun initData() {
-        chooseFileHandler = Handler(ChooseFileHandlerCallback())
+        chooseFileHandler = Handler(Looper.getMainLooper(), ChooseFileHandlerCallback())
 
         val bundle = intent?.extras
         bundle?.let {
@@ -240,6 +288,7 @@ class ChooseFileActivity : AbsBaseActivity() {
             showMode = it.getInt("showMode", MODE_LIST)
             showTableModeColumn = it.getInt("tableColumn", DEFAULT_TABLE_COLUMNS)
             maxChooseFileCount = it.getInt("maxChooseFile", DEFAULT_MAX_CHOOSE_FILE_COUNT)
+            loadSizePer = it.getInt("loadSizePer", DEFAULT_PER_LOAD_SIZE)
         }
 
         initContentRv()
@@ -248,6 +297,7 @@ class ChooseFileActivity : AbsBaseActivity() {
 
         mRootPath = FileUtils.getSDPath()
         addNavBody(mRootPath, getString(R.string.root_directory))
+        // 延迟查询文件。
         base_choose_file_content_rv.postDelayed(
             {
                 if (checkHavePermission()) {
@@ -256,6 +306,8 @@ class ChooseFileActivity : AbsBaseActivity() {
             },
             100
         )
+        // 默认为 选择模式。
+        chooseFileListRvAdapter?.targetShowSelectView(true)
 
     }
 
@@ -263,25 +315,57 @@ class ChooseFileActivity : AbsBaseActivity() {
         super.onDestroy()
         chooseFileHandler?.removeCallbacksAndMessages(null)
         chooseFileHandler = null
+        chooseFileViewModel = null
+        buttonClickScl = null
+        buttonDefaultScl = null
     }
 
     /**
      * 初始化颜色
      */
     private fun initColorStateList() {
-        buttonClickScl =
-            ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.colorAccent))
-        buttonDefaultScl =
-            ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.text_black_50_color))
+        buttonClickScl = mContext.getColorStateList(R.color.colorAccent)
+        buttonDefaultScl = mContext.getColorStateList(R.color.text_black_50_color)
     }
 
+    /**
+     * 初始化 ChooseFileViewModel.
+     */
+    private fun initViewModel() {
+        chooseFileViewModel =
+            ViewModelProvider.NewInstanceFactory().create(ChooseFileViewModel::class.java)
+        chooseFileViewModel?.let {
+            it.getFileList()
+                .observe(this, androidx.lifecycle.Observer {
+                    L.i(TAG, "initViewModel: -->> fileList ${it} ")
+                })
+        }
+    }
+
+    /**
+     * 初始化内容
+     */
     private fun initContentRv() {
         mLayoutManager = GridLayoutManager(mContext, 1)
+        // 内容列表。
         chooseFileListRvAdapter = ChooseFileRvAdapter(mContext, showMode)
         chooseFileListRvAdapter?.listener = ChooseFileRvAdapterListenerImpl()
         base_choose_file_content_rv?.apply {
             layoutManager = mLayoutManager
             adapter = chooseFileListRvAdapter
+            this.addOnScrollListener(
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        mLayoutManager?.let {
+                            val lastPosition = it.findLastCompletelyVisibleItemPosition()
+                            if (lastPosition >= it.itemCount - it.spanCount) {
+                                showCurrentFileList(false)
+                            }
+                        }
+                    }
+                }
+            )
         }
         val isDirContent = showType == Constants.ChooseFileConstants.SHOW_TYPE_DIR
         base_choose_file_nav_rv?.visibility = if (isDirContent) {
@@ -302,7 +386,7 @@ class ChooseFileActivity : AbsBaseActivity() {
                 showTableModeColumn
             }
             else -> {
-                1
+                DEFAULT_TABLE_COLUMNS
             }
         }
     }
@@ -314,6 +398,7 @@ class ChooseFileActivity : AbsBaseActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == requestPermissionCode) {
+            // 权限获取成功，查询列表。
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 checkQueryType(mRootPath)
             }
@@ -393,33 +478,33 @@ class ChooseFileActivity : AbsBaseActivity() {
     private inner class ChooseFileRvAdapterListenerImpl :
         ChooseFileRvAdapter.ChooseFileRvAdapterListener {
         override fun addChoseFile(position: Int, view: View) {
-            L.i(TAG, "addChoseFile: $position")
+            L.i(TAG, "addChoseFile: $position --- ${chooseFileList.size}")
             if (maxChooseFileCount > 0 && chooseFileList.size >= maxChooseFileCount) {
                 showToast(mContext.getString(R.string.selected_file_max))
                 return
             }
-            val bean = chooseFileListRvAdapter?.getItemByPosition(position)
-            chooseFileHandler?.let {
-                val message = Message.obtain()
-                val bundle = Bundle()
-                bundle.putSerializable(HANDLER_TAG_CHOOSE_FILE, bean)
-                message.what = HANDLER_ADD_CHOOSE_FILE
-                message.data = bundle
-                it.sendMessageDelayed(message, 100)
-            }
+//            val bean = chooseFileListRvAdapter?.getItemByPosition(position)
+//            chooseFileHandler?.let {
+//                val message = Message.obtain()
+//                val bundle = Bundle()
+//                bundle.putSerializable(HANDLER_TAG_CHOOSE_FILE, bean)
+//                message.what = HANDLER_ADD_CHOOSE_FILE
+//                message.data = bundle
+//                it.sendMessageDelayed(message, 100)
+//            }
         }
 
         override fun removeChoseFile(position: Int, view: View) {
             L.i(TAG, "removeChoseFile: $position")
-            val bean = chooseFileListRvAdapter?.getItemByPosition(position)
-            chooseFileHandler?.let {
-                val message = Message.obtain()
-                val bundle = Bundle()
-                bundle.putSerializable(HANDLER_TAG_CHOOSE_FILE, bean)
-                message.what = HANDLER_REMOVE_CHOOSE_FILE
-                message.data = bundle
-                it.sendMessageDelayed(message, 100)
-            }
+//            val bean = chooseFileListRvAdapter?.getItemByPosition(position)
+//            chooseFileHandler?.let {
+//                val message = Message.obtain()
+//                val bundle = Bundle()
+//                bundle.putSerializable(HANDLER_TAG_CHOOSE_FILE, bean)
+//                message.what = HANDLER_REMOVE_CHOOSE_FILE
+//                message.data = bundle
+//                it.sendMessageDelayed(message, 100)
+//            }
         }
 
         override fun showFullImage(position: Int, view: View) {
@@ -437,6 +522,11 @@ class ChooseFileActivity : AbsBaseActivity() {
                 addNavBody(it.filePath, it.fileName)
                 checkQueryType(it.filePath)
             }
+        }
+
+        override fun chooseFileList(list: List<BaseChooseFileBean>, fileSize: Long) {
+            L.i(TAG, "chooseFileList: --> ${list.size} >> $fileSize")
+            chooseFileList = list as ArrayList<BaseChooseFileBean>
         }
     }
 
@@ -463,6 +553,9 @@ class ChooseFileActivity : AbsBaseActivity() {
         }
     }
 
+    /**
+     * 查询文件列表。
+     */
     @RequiresPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
     private fun queryFileList(filePath: String?, @ChooseFileShowType showType: Int) {
         L.i(TAG, "queryFileList---------- $showType")
@@ -473,6 +566,18 @@ class ChooseFileActivity : AbsBaseActivity() {
                     when (showType) {
                         Constants.ChooseFileConstants.SHOW_TYPE_DIR -> {
                             list = ProviderUtil.queryFileListByDir(filePath)
+                            // only type dir to set fileType.
+                            val fileTypeHelper = FileTypeHelper(mContext)
+                            list.forEach { fileItem ->
+                                if (!fileItem.fileIsDirectory) {
+                                    val file = File(fileItem.filePath)
+                                    // TODO: 2021/4/25 TOO Many Open Files .
+                                    val isImage = fileTypeHelper.isImageWithFile(file)
+                                    if (isImage) {
+                                        fileItem.fileType = Constants.FileType.FILE_TYPE_IMAGE
+                                    }
+                                }
+                            }
                         }
                         Constants.ChooseFileConstants.SHOW_TYPE_AUDIO -> {
                             list = ProviderUtil.queryFileAudioWithContentProvider(mContext)
@@ -499,16 +604,7 @@ class ChooseFileActivity : AbsBaseActivity() {
                             }
                         }
                     }
-                    val fileTypeHelper = FileTypeHelper(mContext)
-                    list.forEach { fileItem ->
-                        if (!fileItem.fileIsDirectory) {
-                            val file = File(fileItem.filePath)
-                            val isImage = fileTypeHelper.isImageWithFile(file)
-                            if (isImage) {
-                                fileItem.fileType = Constants.FileType.FILE_TYPE_IMAGE
-                            }
-                        }
-                    }
+
                     emitter.onNext(list)
                 }
             )
@@ -518,7 +614,12 @@ class ChooseFileActivity : AbsBaseActivity() {
                 object : DefaultObserver<MutableList<BaseChooseFileBean>>() {
                     override fun onNext(t: MutableList<BaseChooseFileBean>) {
                         L.i(TAG, "queryFileList ${Thread.currentThread().name} -- ${t.size} -- $t")
-                        chooseFileListRvAdapter?.refreshData(t)
+                        // 重置显示文件序号，
+                        currentFileIndex = 0
+                        currentPathFileList.clear()
+                        currentPathFileList = t
+                        // 刷新 数据列表
+                        showCurrentFileList(true)
                     }
 
                     override fun onError(e: Throwable) {
@@ -529,6 +630,47 @@ class ChooseFileActivity : AbsBaseActivity() {
                     }
                 }
             )
+
+    }
+
+    /**
+     * 显示当前路径文件
+     * @param refresh 是否刷新
+     */
+    private fun showCurrentFileList(refresh: Boolean) {
+        L.i(TAG, "showCurrentFileList: $refresh")
+        if (currentPathFileList.isNullOrEmpty()) {
+            L.w(TAG, "showCurrentFileList: list is empty. ")
+            return
+        }
+        val listSize = currentPathFileList.size
+        if (currentFileIndex >= listSize) {
+            L.w(TAG, "showCurrentFileList: file is load over. ")
+            return
+        }
+        val start = currentFileIndex
+        var end = currentFileIndex + loadSizePer
+        end = min(end, listSize - 1)
+        val list = currentPathFileList.subList(start, end)
+        if (refresh) {
+            chooseFileListRvAdapter?.refreshData(list)
+            // 首次加载时，列表数据大于当前最后一个序号，显示加载更多
+            L.i(TAG, "showCurrentFileList: --->> $end + $listSize")
+//            if (listSize - 1 > end) {
+//                showCurrentFileList(false)
+//            }
+        } else {
+            val haveMore = listSize - 1 != end
+            L.i(TAG, "showCurrentFileList: haveMore: $haveMore")
+            chooseFileListRvAdapter?.loadMoreData(list, haveMore)
+        }
+        currentFileIndex = end
+    }
+
+    /**
+     * 加载内容数据，
+     */
+    private fun loadContentData() {
 
     }
 

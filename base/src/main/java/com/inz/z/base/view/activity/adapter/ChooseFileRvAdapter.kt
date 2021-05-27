@@ -5,6 +5,8 @@ import android.content.res.ColorStateList
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.ImageView
+import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.databinding.DataBindingUtil
@@ -17,7 +19,10 @@ import com.inz.z.base.databinding.BaseItemChooseFileListBinding
 import com.inz.z.base.databinding.BaseItemChooseFileTableBinding
 import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.entity.Constants
+import com.inz.z.base.util.L
+import com.inz.z.base.util.ThreadPoolUtils
 import com.inz.z.base.view.activity.ChooseFileActivity
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * 选择图片适配器器
@@ -29,10 +34,34 @@ import com.inz.z.base.view.activity.ChooseFileActivity
 class ChooseFileRvAdapter :
     AbsBaseRvAdapter<BaseChooseFileBean, ChooseFileRvAdapter.ChooseFileRvHolder> {
 
-    @ChooseFileActivity.ShowMode
-    var showMode = ChooseFileActivity.MODE_LIST
+    companion object {
+        private const val TAG = "ChooseFileRvAdapter"
+        private const val DEFAULT_MAX_CHOOSE_FILE_COUNT = 10
+    }
 
+    @ChooseFileActivity.ShowMode
+    private var showMode = ChooseFileActivity.MODE_LIST
+
+    /**
+     * 监听
+     */
     var listener: ChooseFileRvAdapterListener? = null
+
+    /**
+     * 显示选择界面。默认不显示；
+     * 显示后，点击图片进行选中。（无法预览）
+     */
+    private val showSelectView = AtomicBoolean(false)
+
+    /**
+     * 最大文件选择数。
+     */
+    private var maxSelectedCount = DEFAULT_MAX_CHOOSE_FILE_COUNT
+
+    /**
+     * 当前文件选择数
+     */
+    private var currentSelectedCount = 0
 
     constructor(mContext: Context?) : super(mContext)
 
@@ -91,37 +120,24 @@ class ChooseFileRvAdapter :
                             ImageViewCompat.setImageTintList(this, null)
                         }
                         Constants.FileType.FILE_TYPE_AUDIO -> {
-                            Glide.with(mContext).load(R.drawable.ic_file_music).apply(requestOption)
-                                .into(this)
-                            ImageViewCompat.setImageTintList(this, null)
+                            loadImageIcon(this, R.drawable.ic_file_music)
                         }
                         Constants.FileType.FILE_TYPE_VIDEO -> {
-                            Glide.with(mContext).load(R.drawable.ic_file_video)
-                                .apply(requestOption)
-                                .into(this)
-                            ImageViewCompat.setImageTintList(this, null)
+                            loadImageIcon(this, R.drawable.ic_file_video)
                         }
                         Constants.FileType.FILE_TYPE_APPLICATION -> {
-                            Glide.with(mContext).load(R.drawable.ic_file_installation_pa)
-                                .apply(requestOption)
-                                .into(this)
-                            ImageViewCompat.setImageTintList(this, null)
+                            loadImageIcon(this, R.drawable.ic_file_installation_pa)
                         }
                         Constants.FileType.FILE_TYPE_TEXT -> {
-                            Glide.with(mContext).load(R.drawable.ic_file_txt)
-                                .apply(requestOption)
-                                .into(this)
-                            ImageViewCompat.setImageTintList(this, null)
+                            loadImageIcon(this, R.drawable.ic_file_txt)
                         }
                         else -> {
-                            Glide.with(mContext).load(R.drawable.ic_file_unknown)
-                                .apply(requestOption)
-                                .into(this)
-                            ImageViewCompat.setImageTintList(this, null)
+                            loadImageIcon(this, R.drawable.ic_file_unknown)
                         }
                     }
                 }
             }
+            checkBox?.visibility = if (bean.fileIsDirectory) View.GONE else View.VISIBLE
         } else if (holder is ChooseFileTableRvHolder) {
             holder.baseItemChooseFileTableBinding?.chooseFile = bean
             val iv = holder.baseItemChooseFileTableBinding?.baseItemCfTableIv
@@ -149,15 +165,30 @@ class ChooseFileRvAdapter :
                     }
                 }
             }
+            // 仅 文件时显示 checkbox
+            checkBox?.visibility =
+                if (!showSelectView.get()) View.GONE
+                else if (bean.fileIsDirectory) View.GONE
+                else View.VISIBLE
         }
-        checkBox?.visibility = if (bean.fileIsDirectory) View.GONE else View.VISIBLE
         checkBox?.isChecked = bean.checked
+    }
+
+    /**
+     * 加载图标。
+     */
+    private fun loadImageIcon(imageView: ImageView, @DrawableRes resId: Int) {
+        Glide.with(mContext).load(resId).apply(requestOption).into(imageView)
+        ImageViewCompat.setImageTintList(imageView, null)
     }
 
     open class ChooseFileRvHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     }
 
+    /**
+     * 选择文件 list Holder.
+     */
     inner class ChooseFileListRvHolder(itemView: View) : ChooseFileRvHolder(itemView),
         View.OnClickListener {
         val baseItemChooseFileListBinding: BaseItemChooseFileListBinding? =
@@ -198,6 +229,9 @@ class ChooseFileRvAdapter :
         }
     }
 
+    /**
+     * 选择文件Table ViewHolder
+     */
     inner class ChooseFileTableRvHolder(itemView: View) : ChooseFileRvHolder(itemView),
         View.OnClickListener {
         val baseItemChooseFileTableBinding: BaseItemChooseFileTableBinding? =
@@ -214,18 +248,15 @@ class ChooseFileRvAdapter :
                 val bean = list[adapterPosition]
                 when (v?.id) {
                     R.id.base_item_cf_table_cbox -> {
-                        val checked =
-                            baseItemChooseFileTableBinding?.baseItemCfTableCbox?.isChecked ?: false
-
-                        bean.checked = checked
-                        if (!checked) {
-                            listener?.removeChoseFile(adapterPosition, v)
-                        } else {
-                            listener?.addChoseFile(adapterPosition, v)
-                        }
+                        targetCheckStatus(bean, v, adapterPosition)
                     }
                     R.id.base_item_cf_table_iv -> {
-                        listener?.showFullImage(adapterPosition, v)
+                        // 显示选中界面时，切换checkbox 状态，否则进行预览
+                        if (showSelectView.get()) {
+                            targetCheckStatus(bean, v, adapterPosition)
+                        } else {
+                            listener?.showFullImage(adapterPosition, v)
+                        }
                     }
                     else -> {
                         if (bean.fileIsDirectory && v != null) {
@@ -236,6 +267,63 @@ class ChooseFileRvAdapter :
                     }
                 }
             }
+        }
+
+        /**
+         * 切换选中状态。
+         * @param bean 数据项
+         * @param v View.
+         */
+        private fun targetCheckStatus(bean: BaseChooseFileBean, v: View, position: Int) {
+            val checked = !bean.checked
+            bean.checked = checked
+            notifyItemChanged(position)
+            if (checked) {
+                // 超出选中 回退。
+                if (currentSelectedCount >= maxSelectedCount) {
+                    bean.checked = false
+                    notifyItemChanged(position)
+                } else {
+                    currentSelectedCount += 1
+                }
+                listener?.addChoseFile(adapterPosition, v)
+            } else {
+                currentSelectedCount -= 1
+                listener?.removeChoseFile(adapterPosition, v)
+            }
+            // 处理文件。
+            dealChooseFile()
+        }
+    }
+
+    /**
+     * 加载更多 ViewHolder
+     */
+    inner class LoadMoreRvHolder(itemView: View) : ChooseFileRvHolder(itemView) {
+
+    }
+
+    /**
+     * 有序处理文件。
+     */
+    private fun dealChooseFile() {
+        L.i(TAG, "dealChooseFile: ")
+        synchronized(this.list) {
+            ThreadPoolUtils
+                .getScheduleThread(TAG + "_deal_choose_file")
+                .execute(DealChooseFileRunnable())
+        }
+    }
+
+    /**
+     * 处理选中 文件线程.
+     */
+    private inner class DealChooseFileRunnable : Runnable {
+        override fun run() {
+            val chooseFileList = getSelectedFileList()
+            val selectedFileSize = getFileSize(chooseFileList)
+            L.i(TAG, "run: ---> selectedFileSize = $selectedFileSize")
+            listener?.chooseFileList(chooseFileList, selectedFileSize)
         }
     }
 
@@ -265,14 +353,34 @@ class ChooseFileRvAdapter :
         /**
          * 进入目录
          */
-        fun openFileDirectory(position: Int, view: View);
+        fun openFileDirectory(position: Int, view: View)
+
+        /**
+         * 获取选中文件。
+         * @param list 文件列表
+         * @param fileSize 文件总大小
+         */
+        fun chooseFileList(list: List<BaseChooseFileBean>, fileSize: Long)
 
     }
 
+    /**
+     * 切换显示内容.
+     */
     fun changeShowMode(@ChooseFileActivity.ShowMode mode: Int) {
         // TODO: 2020/10/22 切换显示内容
         this.showMode = mode
 
+        notifyDataSetChanged()
+    }
+
+    /**
+     * 切换显示选中界面，
+     * <b>仅在 表格模式下 可用，</b>
+     */
+    fun targetShowSelectView(showSelect: Boolean) {
+        L.i(TAG, "targetShowSelectView: > $showSelect")
+        this.showSelectView.set(showSelect)
         notifyDataSetChanged()
     }
 
@@ -286,11 +394,12 @@ class ChooseFileRvAdapter :
     }
 
     /**
-     * 获取选中文件大小
+     * 获取文件大小
+     * @param list 文件列表
      */
-    fun getSelectedFileTotalSize(): Long {
-        var totalSize = 0L;
-        getSelectedFileList().forEach {
+    fun getFileSize(list: List<BaseChooseFileBean>): Long {
+        var totalSize = 0L
+        list.forEach {
             totalSize += it.fileLength
         }
         return totalSize
@@ -313,7 +422,7 @@ class ChooseFileRvAdapter :
     fun notifyChooseItemList(chooseList: List<BaseChooseFileBean>) {
         this.list.forEachIndexed { index, baseChooseFileBean ->
             chooseList.forEach {
-                if (baseChooseFileBean.filePath.equals(it.filePath)) {
+                if (baseChooseFileBean.filePath == it.filePath) {
                     baseChooseFileBean.checked = it.checked
                     return@forEach
                 }
@@ -321,5 +430,6 @@ class ChooseFileRvAdapter :
         }
         notifyDataSetChanged()
     }
+
 
 }

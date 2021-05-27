@@ -84,12 +84,12 @@ object ProviderUtil {
         )
         val fileList = mutableListOf<BaseChooseFileBean>()
         cursor?.let {
-            while (cursor.moveToNext()) {
-                val id = cursor.getLong(cursor.getColumnIndex(paramArray[0]))
-                val name = cursor.getString(cursor.getColumnIndex(paramArray[1]))
-                val modifiedDate = cursor.getLong(cursor.getColumnIndex(paramArray[2]))
-                val size = cursor.getLong(cursor.getColumnIndex(paramArray[3]))
-                val path = cursor.getString(cursor.getColumnIndex(paramArray[4]))
+            while (it.moveToNext()) {
+                val id = it.getLong(it.getColumnIndex(paramArray[0]))
+                val name = it.getString(it.getColumnIndex(paramArray[1]))
+                val modifiedDate = it.getLong(it.getColumnIndex(paramArray[2]))
+                val size = it.getLong(it.getColumnIndex(paramArray[3]))
+                val path = it.getString(it.getColumnIndex(paramArray[4]))
                 val bean = BaseChooseFileBean()
                 bean.fileFromDatabase = true
                 bean.fileDatabaseTable = MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString()
@@ -188,7 +188,7 @@ object ProviderUtil {
         if (simpleDateFormat == null) {
             simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         }
-        return simpleDateFormat!!.format(time)
+        return simpleDateFormat!!.format(time * 1000L)
     }
 
     /**

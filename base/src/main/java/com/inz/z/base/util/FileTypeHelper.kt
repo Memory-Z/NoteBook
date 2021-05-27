@@ -91,19 +91,24 @@ class FileTypeHelper(val mContext: Context) {
 
     /**
      * 文件 是否为图片类型
+     * 仅根据 文件后缀判定.
+     * @param file 文件
      */
     fun isImageWithFile(file: File): Boolean {
         if (!file.exists() || file.isDirectory) {
             return false
         }
-        val fileTypeByHeader = getFileTypeByHeader(file)
+//        val fileTypeByHeader = getFileTypeByHeader(file)
+//        val fileTypeByName = getFileTypeByName(file)
+//        if (!TextUtils.isEmpty(fileTypeByHeader)) {
+//            val headerStr = fileTypeByHeader.toUpperCase(Locale.getDefault())
+//            val nameStr = fileTypeByName.toUpperCase(Locale.getDefault())
+//            return IMAGE_HEADER_TYPE.contains(headerStr) || IMAGE_HEADER_TYPE.contains(nameStr)
+//        }
+//        return false
         val fileTypeByName = getFileTypeByName(file)
-        if (!TextUtils.isEmpty(fileTypeByHeader)) {
-            val headerStr = fileTypeByHeader.toUpperCase(Locale.getDefault())
-            val nameStr = fileTypeByName.toUpperCase(Locale.getDefault())
-            return IMAGE_HEADER_TYPE.contains(headerStr) || IMAGE_HEADER_TYPE.contains(nameStr)
-        }
-        return false
+        val nameStr = fileTypeByName.toUpperCase(Locale.getDefault())
+        return IMAGE_HEADER_TYPE.contains(nameStr)
 
     }
 
