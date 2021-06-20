@@ -47,6 +47,8 @@
     <color name="negative_color_white">#EA6464</color>
     <color name="danger_color">@color/red</color>
 
+    <color name="line_color">@color/gray_50_color</color>
+
 
     <color name="base_image_background_color">#EFEFEF</color>
     <!-- Base Color  -->

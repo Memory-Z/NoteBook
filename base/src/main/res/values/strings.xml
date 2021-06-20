@@ -22,6 +22,7 @@
     <string name="base_button">按钮</string>
     <string name="_cancel">Cancel</string>
     <string name="_done">Done</string>
+    <string name="_close">Close</string>
     <string name="_update_background">Background Update</string>
     <string name="base_text_format">文本</string>
     <string name="version_update_service">版本更新服务</string>
@@ -68,4 +69,5 @@
     <string name="cancel_checked">取消选择</string>
     <string name="selected_file_max">已到最大选择文件数量</string>
     <string name="_background_image">背景图</string>
+    <string name="_tag">标签</string>
 </resources>

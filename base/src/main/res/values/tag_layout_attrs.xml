@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="tag_close_id" type="id" />
+
+    <declare-styleable name="TagLayout">
+        <!-- 标签内容 -->
+        <attr name="tag_str" format="string" />
+        <attr name="tag_color" format="color" />
+        <!-- 标签颜色 -->
+        <attr name="tag_text_color" format="color" />
+        <attr name="tag_text_size" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="TagBoxLayout">
+
+    </declare-styleable>
+</resources>

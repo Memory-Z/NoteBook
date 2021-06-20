@@ -318,6 +318,9 @@ class ChooseFileActivity : AbsBaseActivity() {
         chooseFileViewModel = null
         buttonClickScl = null
         buttonDefaultScl = null
+        chooseFileListRvAdapter = null
+        chooseFileNavRvAdapter = null
+        chooseFileList.clear()
     }
 
     /**
@@ -668,13 +671,6 @@ class ChooseFileActivity : AbsBaseActivity() {
     }
 
     /**
-     * 加载内容数据，
-     */
-    private fun loadContentData() {
-
-    }
-
-    /**
      * 检测是否拥有权限
      */
     private fun checkHavePermission(): Boolean {
@@ -932,8 +928,9 @@ class ChooseFileActivity : AbsBaseActivity() {
 
                 }
             }
+            // 更新文件预览状态.
             updateFilePreviewCountOnView(chooseFileList.size)
-            updateChooseFileSize()
+//            updateChooseFileSize()
             return true
         }
     }

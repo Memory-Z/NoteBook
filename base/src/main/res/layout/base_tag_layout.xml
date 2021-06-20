@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/base_tag_layout_root_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/button_normal_height"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/bg_tag_layout_editview"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/base_tag_layout_et"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp08"
+            android:layout_marginEnd="@dimen/dp08"
+            android:background="@null"
+            android:ellipsize="end"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:hint="@string/_tag"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:lines="1"
+            android:minWidth="@dimen/dp08"
+            android:singleLine="true"
+            tools:ignore="LabelFor" />
+
+        <!-- 尾部按钮。 -->
+        <LinearLayout
+            android:id="@+id/base_tag_layout_end_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/margin_text"
+            android:layout_marginEnd="@dimen/margin_text_layout"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <View
+                android:id="@+id/base_tag_layout_line_v"
+                android:layout_width="@dimen/line_width"
+                android:layout_height="match_parent"
+                android:background="@color/line_color" />
+
+            <!-- 关闭 -->
+            <ImageView
+                android:id="@+id/base_tag_layout_close_iv"
+                style="@style/Base.ImageView.Icon.Min"
+                android:layout_width="@dimen/image_icon_min_size"
+                android:layout_height="@dimen/image_icon_min_size"
+                android:layout_marginStart="@dimen/margin_text"
+                android:contentDescription="@string/_close"
+                android:src="@drawable/ic_close_black_24dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- 蒙版：点击 -->
+    <View
+        android:id="@+id/base_tag_layout_mask_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/base_tag_layout_root_ll"
+        android:layout_alignTop="@id/base_tag_layout_root_ll"
+        android:layout_alignEnd="@id/base_tag_layout_root_ll"
+        android:layout_alignBottom="@id/base_tag_layout_root_ll"
+        android:visibility="gone" />
+</RelativeLayout>

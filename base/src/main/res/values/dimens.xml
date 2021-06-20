@@ -54,6 +54,8 @@
 
     <dimen name="dialog_content_height">@dimen/dp96</dimen>
 
+    <dimen name="line_width">@dimen/dp02</dimen>
+
 
     <!-- Base Dimens -->
     <dimen name="dp0">0dp</dimen>
