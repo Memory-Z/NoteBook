@@ -8,6 +8,7 @@ import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
 import com.inz.z.base.util.BaseTools
 import com.inz.z.note_book.R
+import com.inz.z.note_book.base.NoteStatus
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.databinding.ItemNoteLayoutBinding
 
@@ -38,7 +39,9 @@ class NoteInfoRecyclerAdapter(mContext: Context?) :
         holder.mItemNoteLayoutBinding?.noteInfo = noteInfo
         holder.mItemNoteLayoutBinding?.noteInfoUpdateDateStr =
             BaseTools.getBaseDateFormat().format(noteInfo.updateDate)
-        holder.mItemNoteLayoutBinding?.noteStatusStr = noteInfo.noteStatus.getStatusStr(mContext)
+        // 获取笔记状态描述.
+        val statusStr = NoteStatus.getStatusStr(noteInfo.status, mContext)
+        holder.mItemNoteLayoutBinding?.noteStatusStr = statusStr
     }
 
     class NoteInfoRecyclerViewHolder(itemView: View) : AbsBaseRvViewHolder(itemView) {

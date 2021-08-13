@@ -141,6 +141,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoteBookAppTheme.Transparent" />
 
+        <!-- 纪念日 界面 -->
+        <activity
+            android:name=".view.activity.MarkDayActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoteBookAppTheme.Transparent" />
+
+
         <!-- 通知服务 -->
         <service
             android:name=".service.NotificationForegroundService"

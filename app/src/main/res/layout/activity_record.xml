@@ -9,6 +9,10 @@
         android:id="@+id/record_top_action_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        style="@style/Base.Layout"
+        android:fitsSystemWindows="true"
+        app:base_show_background_in_status="false"
+        android:background="@color/colorPrimary"
         app:base_top_title="@string/_record"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,9 +37,9 @@
             android:gravity="center"
             android:importantForAutofill="no"
             android:text="@string/search_record_content"
-            tools:ignore="LabelFor"
             app:drawableStartCompat="@drawable/ic_baseline_search_24"
-            app:drawableTint="@color/textColor30" />
+            app:drawableTint="@color/textColor30"
+            tools:ignore="LabelFor" />
 
     </RelativeLayout>
 
@@ -66,6 +70,7 @@
         android:tint="@color/textInverseColor"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/_add_content" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

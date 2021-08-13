@@ -9,7 +9,6 @@
         style="@style/Base.ImageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:tint="@null"
         android:contentDescription="@string/image"
         app:layout_constraintBottom_toBottomOf="@id/test_view_top_ll"
         app:layout_constraintEnd_toEndOf="@id/test_view_top_ll"
@@ -49,4 +48,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/test_view_btn" />
 
+
+    <com.inz.z.note_book.view.widget.layout.MusicPlayerLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

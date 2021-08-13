@@ -7,6 +7,7 @@ import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseActivity
+import com.inz.z.base.view.activity.ChooseFileActivity
 import com.inz.z.note_book.BuildConfig
 import com.inz.z.note_book.R
 import com.inz.z.note_book.databinding.SplashLayoutBinding
@@ -121,9 +122,22 @@ class SplashActivity : AbsBaseActivity() {
             this@SplashActivity.finish()
             return
         }
+
+        // TODO: 2021/4/25 调试文件选择界面，快速打开选择界面
         val intent = Intent(mContext, MainActivity::class.java)
         startActivity(intent)
         finish()
+
+//        ChooseFileActivity.gotoChooseFileActivity(
+//            this,
+//            4,
+//            ChooseFileActivity.MODE_TABLE,
+//            com.inz.z.base.entity.Constants.ChooseFileConstants.SHOW_TYPE_IMAGE,
+//            2
+//        )
+////        val intent = Intent(mContext, TestViewActivity::class.java)
+////        startActivity(intent)
+//        finish()
     }
 
 

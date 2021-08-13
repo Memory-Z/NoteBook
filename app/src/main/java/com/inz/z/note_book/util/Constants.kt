@@ -171,5 +171,12 @@ object Constants {
          * 屏幕解锁
          */
         const val NOTIFICATION_UNLOCK_ACTION = "NotificationUnlockAction"
+
+        /**
+         * 未知状态
+         */
+        const val NOTIFICATION_UNKNOWN = "NotificationUnknown"
     }
+
+
 }

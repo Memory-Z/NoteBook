@@ -128,6 +128,7 @@ class TagLayout : RelativeLayout, View.OnFocusChangeListener, TextView.OnEditorA
     override fun onFocusChange(v: View?, hasFocus: Boolean) {
         L.i(TAG, "onFocusChange: hasFocus = $hasFocus")
         targetBackground(hasFocus)
+        tagLayoutListener?.haveFocus(v, hasFocus)
     }
 
     override fun onClick(v: View?) {
@@ -296,6 +297,12 @@ class TagLayout : RelativeLayout, View.OnFocusChangeListener, TextView.OnEditorA
          * 点击关闭。
          */
         fun onClickClose(v: TagLayout?)
+
+        /**
+         * 是否拥有焦点，
+         * @param hasFocus 是否有焦点。
+         */
+        fun haveFocus(view: View?, hasFocus: Boolean)
     }
 
     /**

@@ -74,14 +74,13 @@ class NoteBookApplication : Application() {
     }
 
     private fun initBroadcast() {
+        L.i(TAG, "initBroadcast: ")
         val screenBroadcast = ScreenBroadcast()
         val intentFilter = IntentFilter()
             .apply {
                 this.addAction(Intent.ACTION_SCREEN_OFF)
                 this.addAction(Intent.ACTION_SCREEN_ON)
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    this.addAction(Intent.ACTION_USER_UNLOCKED)
-                }
+                this.addAction(Intent.ACTION_USER_UNLOCKED)
                 this.addAction(Intent.ACTION_USER_PRESENT)
             }
         registerReceiver(screenBroadcast, intentFilter)

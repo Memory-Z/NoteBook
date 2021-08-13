@@ -19,6 +19,7 @@ import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteGroupService
 import com.inz.z.note_book.database.controller.NoteInfoController
 import com.inz.z.note_book.view.activity.AddContentActivity
+import com.inz.z.note_book.view.activity.MarkDayActivity
 import com.inz.z.note_book.view.activity.NoteGroupActivity
 import com.inz.z.note_book.view.activity.listener.MainActivityListener
 import com.inz.z.note_book.view.adapter.NoteGroupRvAdapter
@@ -36,11 +37,12 @@ import java.util.concurrent.ScheduledExecutorService
 
 /**
  * 首页导航页
+ * @see R.layout.note_nav_layout
  * @author Zhenglj
  * @version 1.0.0
  * Create by inz in 2019/10/25 11:48.
  */
-class NoteNavFragment : AbsBaseFragment() {
+class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
 
     companion object {
         private const val TAG = "NoteNavFragment"
@@ -76,9 +78,9 @@ class NoteNavFragment : AbsBaseFragment() {
     private var noteGroupList: MutableList<NoteGroup>? = null
 
     /**
-     * 线程调度池
+     * 屏幕中间提示。
      */
-    private var executorSchedule: ScheduledExecutorService? = null
+    private var hintNovDateLl: LinearLayout? = null
 
     val mainListener = MainListenerImpl()
 
@@ -91,6 +93,10 @@ class NoteNavFragment : AbsBaseFragment() {
     }
 
     override fun initView() {
+        hintNovDateLl = note_nav_hint_data_center_ll
+        hintNovDateLl?.apply {
+            this.setOnClickListener(this@NoteNavFragment)
+        }
         mNoteGroupRvAdapter = NoteGroupRvAdapter(mContext)
             .apply {
                 setAdapterListener(object : NoteGroupRvAdapter.NoteGroupItemListener {
@@ -123,14 +129,13 @@ class NoteNavFragment : AbsBaseFragment() {
         })
         note_nav_near_five_nav_right_iv.setOnClickListener {
             val intent = Intent(mContext, AddContentActivity::class.java)
+            intent.putExtras(AddContentActivity.getInstanceBundle(AddContentActivity.CONTENT_TYPE_NOTE_TAG))
             startActivity(intent)
         }
     }
 
     override fun initData() {
         mNoteNavHandler = Handler(NoteNavHandlerCallback())
-
-        executorSchedule = Executors.newScheduledThreadPool(2)
 
         val date = Calendar.getInstance(Locale.getDefault()).time
         setDateText(date)
@@ -187,6 +192,18 @@ class NoteNavFragment : AbsBaseFragment() {
             checkDataRunnable = null
         }
         mNoteNavHandler.removeCallbacksAndMessages(null)
+    }
+
+    override fun onClick(v: View?) {
+        val vId = v?.id
+        if (vId == hintNovDateLl?.id) {
+            //  点击 时间。
+            val intent = Intent(v?.context, MarkDayActivity::class.java)
+            startActivity(intent)
+        } else if (vId == note_nav_group_right_iv.id) {
+            L.i(TAG, "note_nav_group_right_iv  is Click ! ")
+            gotoGroupActivity(true, "")
+        }
     }
 
     /**

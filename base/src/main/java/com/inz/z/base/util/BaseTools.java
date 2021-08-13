@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -99,6 +100,15 @@ public class BaseTools {
     @Contract("_, _ -> new")
     public static DateFormat getDateFormat(String dateFormat, Locale locale) {
         return new SimpleDateFormat(dateFormat, locale);
+    }
+
+    /**
+     * 获取当前时间字符串
+     *
+     * @return 时间串  yyyy-MM-dd HH:mm:ss
+     */
+    public static String getCurrentTimeStr() {
+        return getDateFormatTime().format(Calendar.getInstance(Locale.getDefault()));
     }
 
     /**

@@ -10,33 +10,14 @@
         style="@style/Base.Layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         android:background="@drawable/bg_text_mulite"
+        android:fitsSystemWindows="true"
         app:base_show_background_in_status="false"
         app:base_show_custom_view="false"
-        app:base_top_left_layout="@id/base_add_content_bta_left_ll"
-        app:base_top_right_layout="@id/base_add_content_bta_right_ll"
         app:base_top_title="@string/favorite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:id="@+id/base_add_content_bta_left_ll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/base_add_content_bta_right_ll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-        </LinearLayout>
-    </com.inz.z.base.view.widget.BaseTopActionLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/base_add_content_bat_content_ll"

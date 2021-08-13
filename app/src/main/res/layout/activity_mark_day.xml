@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.inz.z.base.view.widget.BaseTopActionLayout
+        android:id="@+id/mark_day_top_action_btal"
+        style="@style/Base.Layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_card_gray"
+        android:fitsSystemWindows="true"
+        app:base_top_title="@string/_mark_day"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </com.inz.z.base.view.widget.BaseTopActionLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mark_day_top_action_btal">
+
+        <com.haibin.calendarview.CalendarLayout
+            android:id="@+id/mark_day_content_calender_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:calendar_content_view_id="@id/mark_day_content_calender_rv"
+            app:calendar_show_mode="both_month_week_view"
+            app:default_status="expand"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.haibin.calendarview.CalendarView
+                android:id="@+id/mark_day_content_calender_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mark_day_content_calender_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </com.haibin.calendarview.CalendarLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

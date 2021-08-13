@@ -43,6 +43,9 @@ class NotificationForegroundService : Service() {
     private var notification: Notification? = null
     private var activityLifeBroadcast: ActivityLifeBroadcast? = null
 
+    /**
+     * 时钟广播监听。
+     */
     private var receiveListener: ClockAlarmBroadcastReceiveListenerImpl? = null
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -401,16 +404,24 @@ class NotificationForegroundService : Service() {
             L.i(TAG, "NotificationBroadcast: onReceive: $action ")
             when (action) {
                 Constants.NotificationServiceParams.NOTIFICATION_SCREEN_ON_ACTION -> {
+                    // 屏幕点亮。
+                    L.i(TAG, "onReceive: NOTIFICATION_SCREEN_ON_ACTION ")
                     uploadNotification(true)
+                    // TODO: 2021/7/5 用户开始时间手机，计时开始
                 }
                 Constants.NotificationServiceParams.NOTIFICATION_SCREEN_OFF_ACTION -> {
-
+                    // 屏幕关闭
+                    L.i(TAG, "onReceive: NOTIFICATION_SCREEN_OFF_ACTION ")
+                    // TODO: 2021/7/5 用户熄屏，手机使用结束，
                 }
                 Constants.NotificationServiceParams.NOTIFICATION_UNLOCK_ACTION -> {
+                    // 解锁
+                    L.i(TAG, "onReceive: NOTIFICATION_UNLOCK_ACTION ")
                     uploadNotification(true)
+                    // TODO: 2021/7/5 解锁， used.
                 }
                 else -> {
-
+                    L.i(TAG, "onReceive: OTHER.  ")
                 }
             }
         }

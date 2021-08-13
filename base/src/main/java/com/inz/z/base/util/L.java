@@ -79,6 +79,13 @@ public class L {
         }
     }
 
+    public static void e(String tag, String message) {
+        Logger.t(tag).e(message);
+        if (BuildConfig.DEBUG) {
+            Log.e(tag, message);
+        }
+    }
+
     public static void e(String tag, String message, Throwable e) {
         Logger.t(tag).e(e, message);
         if (BuildConfig.DEBUG) {
