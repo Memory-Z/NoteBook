@@ -169,8 +169,8 @@ class NoteGroupActivity : BaseNoteActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyData() {
+        super.onDestroyData()
         mNoteInfoRecyclerAdapter?.setNoteInfoRvAdapterListener(null)
         mNoteInfoRecyclerAdapter = null
         groupHandler?.removeCallbacksAndMessages(null)

@@ -311,8 +311,8 @@ class ChooseFileActivity : AbsBaseActivity() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyData() {
+        super.onDestroyData()
         chooseFileHandler?.removeCallbacksAndMessages(null)
         chooseFileHandler = null
         chooseFileViewModel = null

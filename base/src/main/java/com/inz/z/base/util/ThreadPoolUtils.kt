@@ -16,6 +16,9 @@ import java.util.concurrent.atomic.AtomicInteger
  */
 object ThreadPoolUtils {
     private const val TAG = "ThreadPoolUtils"
+    private const val CORE_POOL_SIZE = 20
+    private const val MAX_POOL_SIZE = 40
+    private const val KEEP_ALIVE_TIME = 5L
 
     private var uiThread: MainThreadExecutor
     private var workerThread: ThreadPoolExecutor
@@ -25,19 +28,19 @@ object ThreadPoolUtils {
     init {
         uiThread = MainThreadExecutor()
         workerThread = ThreadPoolExecutor(
-            10,
-            20,
-            5,
+            CORE_POOL_SIZE,
+            MAX_POOL_SIZE,
+            KEEP_ALIVE_TIME,
             TimeUnit.MINUTES,
             LinkedBlockingDeque<Runnable>(),
-            ThreadGroupThreadFactory("worker")
+            ThreadGroupThreadFactory("WORKER")
         )
         scheduleThread = Executors.newScheduledThreadPool(
-            10,
-            ThreadGroupThreadFactory("schedule")
+            CORE_POOL_SIZE,
+            ThreadGroupThreadFactory("SCHEDULE")
         )
         singleThread = Executors.newSingleThreadExecutor(
-            ThreadGroupThreadFactory("disk")
+            ThreadGroupThreadFactory("SINGLE")
         )
     }
 
@@ -56,7 +59,7 @@ object ThreadPoolUtils {
         init {
             val manager = System.getSecurityManager()
             threadGroup = manager?.threadGroup ?: Thread.currentThread().threadGroup!!
-            namePrefix = "$prefix-${groupNumber.getAndIncrement()}-thread-"
+            namePrefix = "$prefix-${groupNumber.getAndIncrement()}-THREAD-"
         }
 
         override fun newThread(r: Runnable?): Thread {

@@ -23,9 +23,10 @@ import androidx.fragment.app.FragmentManager;
 
 import com.alibaba.fastjson.JSONObject;
 import com.inz.z.base.BuildConfig;
-import com.inz.z.base.R;
 import com.inz.z.base.entity.UpdateVersionBean;
+import com.inz.z.base.util.L;
 import com.inz.z.base.util.SPHelper;
+import com.inz.z.base.util.ThreadPoolUtils;
 import com.inz.z.base.view.dialog.UpdateVersionDialog;
 import com.qmuiteam.qmui.util.QMUINotchHelper;
 
@@ -35,10 +36,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -46,7 +48,6 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DefaultObserver;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.HttpUrl;
 
 /**
  * @author Zhenglj
@@ -67,7 +68,26 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
      * DataBinding
      */
     public static final int VIEW_TYPE_DATA_BINDING = 0x00F2;
-
+    /**
+     * 是否显示线程日志。
+     */
+    public static final boolean SHOW_THREAD_LOG = BuildConfig.DEBUG;
+    /**
+     * ScheduledExecutorService
+     */
+    private ScheduledExecutorService scheduledExecutorService;
+    /**
+     * Executor  主线程。
+     */
+    private ThreadPoolUtils.MainThreadExecutor uiThread;
+    /**
+     * Executor 单线程
+     */
+    private Executor singleThread;
+    /**
+     * ThreadPoolExecutor 线程池
+     */
+    private ThreadPoolExecutor workThread;
 
     protected Context mContext;
 
@@ -121,7 +141,15 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
         if (rootView != null) {
             isNotchSupport(rootView);
         }
+        onCreateTask();
+        onCreateData();
+    }
+
+    protected void onCreateTask() {
         initView();
+    }
+
+    protected void onCreateData() {
         initData();
     }
 
@@ -145,9 +173,26 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected final void onDestroy() {
         super.onDestroy();
+        onDestroyTask();
+        onDestroyData();
+    }
+
+    /**
+     * 销毁任务
+     */
+    protected void onDestroyTask() {
+        // 清除 线程。
+        clearThreadPool();
         mContext = null;
+    }
+
+    /**
+     * 销毁数据
+     */
+    protected void onDestroyData() {
+
     }
 
     /* ======================= 判断是否为刘海屏 ======================= */
@@ -421,4 +466,110 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
         return activity.getResources().getDimensionPixelSize(resId);
     }
     /* -------------------- 底部状态栏 ------------------------ */
+
+    /* - ---------------------------------- 获取线程池 ----------------------------- - */
+
+    @Nullable
+    protected ScheduledExecutorService getScheduleThread(@Nullable String tag) {
+        if (isDestroyed()) {
+            return null;
+        }
+        if (scheduledExecutorService == null) {
+            if (tag == null) {
+                tag = getPackageName();
+            }
+            scheduledExecutorService = ThreadPoolUtils.INSTANCE.getScheduleThread(tag);
+        }
+        if (SHOW_THREAD_LOG) {
+            L.d("BASE_THREAD", "getScheduleThread: tag = " + tag);
+        }
+        return scheduledExecutorService;
+    }
+
+    @Nullable
+    protected ThreadPoolUtils.MainThreadExecutor getUiThread(@Nullable String tag) {
+        if (isDestroyed()) {
+            return null;
+        }
+        if (uiThread == null) {
+            if (tag == null) {
+                tag = getPackageName();
+                uiThread = ThreadPoolUtils.INSTANCE.getUiThread(tag);
+            }
+        }
+        if (SHOW_THREAD_LOG) {
+            L.d("BASE_THREAD", "getUiThread: TAG = " + tag);
+        }
+        return uiThread;
+    }
+
+    @Nullable
+    protected Executor getSingleThread(@Nullable String tag) {
+        if (isDestroyed()) {
+            return null;
+        }
+        if (singleThread == null) {
+            if (tag == null) {
+                tag = getPackageName();
+            }
+            singleThread = ThreadPoolUtils.INSTANCE.getSingleThread(tag);
+        }
+        if (SHOW_THREAD_LOG) {
+            L.d("BASE_THREAD", "getSingleThread: TAG = " + tag);
+        }
+        return singleThread;
+    }
+
+    @Nullable
+    protected ThreadPoolExecutor getWorkThread(@Nullable String tag) {
+        if (isDestroyed()) {
+            return null;
+        }
+        if (workThread == null) {
+            if (tag == null) {
+                tag = getPackageName();
+            }
+            workThread = ThreadPoolUtils.INSTANCE.getWorkThread(tag);
+        }
+        if (SHOW_THREAD_LOG) {
+            L.d("BASE_THREAD", "getWorkThread: TAG = " + tag);
+        }
+        return workThread;
+    }
+
+    /**
+     * 清除 线程 工具。
+     */
+    protected void clearThreadPool() {
+        if (SHOW_THREAD_LOG) {
+            L.d("BASE_THREAD", "clearThreadPool: CLEAR_THREAD_POOL  start . ");
+        }
+        if (scheduledExecutorService != null) {
+            try {
+                scheduledExecutorService.shutdown();
+            } finally {
+                scheduledExecutorService = null;
+            }
+        }
+        if (uiThread != null) {
+            uiThread = null;
+        }
+        if (singleThread != null) {
+            singleThread = null;
+        }
+        if (workThread != null) {
+            try {
+                workThread.shutdown();
+            } finally {
+                workThread = null;
+            }
+        }
+        if (SHOW_THREAD_LOG) {
+            L.d("BASE_THREAD", "clearThreadPool: CLEAR_THREAD_POOL  end . ");
+        }
+    }
+
+    /* - ---------------------------------- 获取线程池 ----------------------------- - */
+
+
 }

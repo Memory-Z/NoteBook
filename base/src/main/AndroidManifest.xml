@@ -18,7 +18,9 @@
 
     <application>
         <!-- 文件选择界面 -->
-        <activity android:name=".view.activity.ChooseFileActivity">
+        <activity android:name=".view.activity.ChooseFileActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden"
+            android:screenOrientation="portrait">
 
         </activity>
 

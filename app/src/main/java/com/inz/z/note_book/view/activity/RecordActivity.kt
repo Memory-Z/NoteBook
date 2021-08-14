@@ -79,8 +79,8 @@ class RecordActivity : BaseNoteActivity() {
         recordViewModel?.refreshRecordList()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyData() {
+        super.onDestroyData()
         recordViewModel = null
     }
 

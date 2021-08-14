@@ -314,6 +314,9 @@ public class BaseTopActionLayout extends LinearLayout {
             int tH = toolbar.getMeasuredHeight();
             float needH = (float) bH / lH * tH;
             float startY = (float) bH / lH * statusBarHeight;
+            if (needH > bH - startY ) {
+                needH = bH - startY;
+            }
             return Bitmap.createBitmap(backBitmap, 0, (int) startY, bW, (int) needH);
         }
         return null;

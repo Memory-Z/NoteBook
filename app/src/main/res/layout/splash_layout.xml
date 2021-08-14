@@ -16,7 +16,8 @@
     <com.inz.z.base.view.widget.BaseRelativeLayout
         android:id="@+id/splash_root_brl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
         <RelativeLayout
             android:id="@+id/splash_content_rl"

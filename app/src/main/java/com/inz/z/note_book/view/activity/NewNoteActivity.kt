@@ -9,20 +9,17 @@ import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.entity.Constants
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
-import com.inz.z.base.util.ThreadPoolUtils
 import com.inz.z.note_book.R
 import com.inz.z.note_book.base.NoteStatus
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteInfoController
 import com.inz.z.note_book.view.BaseNoteActivity
-import com.inz.z.note_book.view.dialog.ChooseImageDialog
 import com.inz.z.note_book.view.dialog.BaseDialogFragment
+import com.inz.z.note_book.view.dialog.ChooseImageDialog
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import kotlinx.android.synthetic.main.note_info_add_layout.*
 import java.io.File
 import java.util.*
-import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 
 /**
@@ -55,6 +52,11 @@ class NewNoteActivity : BaseNoteActivity() {
      */
     private var oldNoteContent = ""
 
+    /**
+     * 检测笔记线程
+     */
+    private var checkNoteRunnable: Runnable? = null
+
     override fun initWindow() {
 
     }
@@ -75,7 +77,7 @@ class NewNoteActivity : BaseNoteActivity() {
         }
         note_info_add_content_brl?.setOnClickListener {
             note_info_add_content_content_ll?.let {
-                val count = it.childCount;
+                val count = it.childCount
                 val lastView = it.getChildAt(count - 1)
                 lastView.performClick()
             }
@@ -105,10 +107,12 @@ class NewNoteActivity : BaseNoteActivity() {
                 oldNoteContent = noteContent
             }
         }
+        if (checkNoteRunnable == null) {
+            checkNoteRunnable = CheckNoteInfoRunnable(noteInfoId)
+        }
         // 每 5 S 检测一次
-        ThreadPoolUtils
-            .getScheduleThread(TAG + "_initData")
-            .scheduleAtFixedRate(checkNoteRunnable, 5, 5, TimeUnit.SECONDS)
+        getScheduleThread(TAG + "_initData")
+            ?.scheduleAtFixedRate(checkNoteRunnable, 5, 5, TimeUnit.SECONDS)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -149,13 +153,21 @@ class NewNoteActivity : BaseNoteActivity() {
         }
     }
 
+    override fun onDestroyTask() {
+        super.onDestroyTask()
+        checkNoteRunnable?.let {
+            getScheduleThread("${TAG}_onDestroy")?.shutdown()
+        }
+        checkNoteRunnable = null
+    }
+
     /**
      * 检测是否有内容更改
      */
     private fun checkHaveChange(): Boolean {
         val newContent = note_info_add_content_schedule_layout.getContent()
         noteInfo?.let {
-            if (!newContent.equals(noteInfo?.noteContent)) {
+            if (newContent != it.noteContent) {
                 showExitHintDialog()
                 return true
             }
@@ -168,7 +180,7 @@ class NewNoteActivity : BaseNoteActivity() {
      */
     private fun saveNoteInfo() {
         val newContent = note_info_add_content_schedule_layout.getContent()
-        if (!oldNoteContent.equals(newContent)) {
+        if (oldNoteContent != newContent) {
             if (noteInfo != null) {
                 noteInfo!!.apply {
                     noteContent = newContent
@@ -187,15 +199,13 @@ class NewNoteActivity : BaseNoteActivity() {
     }
 
     /**
-     * 检测笔记线程
+     * 查询笔记信息线程。
      */
-    private var checkNoteRunnable = object : Runnable {
+    private inner class CheckNoteInfoRunnable(val noteInfoId: String) : Runnable {
+
         override fun run() {
             val noteInfo = NoteInfoController.findById(noteInfoId)
-//            L.i(
-//                TAG,
-//                "noteInfo ${System.currentTimeMillis()} -- ${noteInfo?.noteContent} + {${Thread.currentThread().name}}"
-//            )
+            L.i(TAG, "run: noteInfo = $noteInfo")
         }
     }
 
