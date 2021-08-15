@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">base_module</string>
-    <string name="base_iamge_holder">图片占位</string>
+    <string name="base_image_holder">图片占位</string>
     <string name="base_image_loading">图片加载中&#8230;</string>
-    <string name="base_iamge_error">图片出错</string>
+    <string name="base_image_error">图片出错</string>
     <string name="base_title">标题</string>
     <string name="base_content">内容</string>
     <string name="base_image">图片</string>

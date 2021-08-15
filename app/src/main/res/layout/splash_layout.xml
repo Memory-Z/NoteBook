@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@id/splash_bottom_ll"
-                android:contentDescription="@string/base_iamge_holder"
+                android:contentDescription="@string/base_image_holder"
                 android:scaleType="centerCrop"
                 android:src="@drawable/image_load_error" />
 
