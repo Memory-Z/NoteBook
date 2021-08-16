@@ -2,6 +2,7 @@ package com.inz.z.base.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
@@ -53,12 +54,10 @@ public class SPHelper {
     }
 
     public void initSharedPreferences(Context context, @Nullable String fileName) {
-        if (fileName == null) {
-            fileName = "";
-        }
-        if (fileName.isEmpty()) {
+        if (TextUtils.isEmpty(fileName)) {
             fileName = FILE_NAME;
         }
+        this.fileName = fileName;
         sharedPreferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE);
     }
 
@@ -88,6 +87,19 @@ public class SPHelper {
             editor.apply();
         } catch (Exception e) {
             delShare(key);
+        }
+    }
+
+    /**
+     * 清空数据，
+     */
+    public void clear() {
+        try {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+        } catch (Exception e) {
+            L.e("SPHelper", "clear: Failure. ", e);
         }
     }
 

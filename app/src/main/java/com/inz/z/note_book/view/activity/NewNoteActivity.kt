@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.entity.Constants
 import com.inz.z.base.util.BaseTools
+import com.inz.z.base.util.KeyBoardUtils
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.base.NoteStatus
@@ -16,6 +17,7 @@ import com.inz.z.note_book.database.controller.NoteInfoController
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.dialog.BaseDialogFragment
 import com.inz.z.note_book.view.dialog.ChooseImageDialog
+import com.inz.z.note_book.view.widget.ScheduleLayout
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import kotlinx.android.synthetic.main.note_info_add_layout.*
 import java.io.File
@@ -36,6 +38,11 @@ class NewNoteActivity : BaseNoteActivity() {
         // Reqeust code 0~65535
         private const val IMAGE_REQUEST_CODE = 0x0FE0
     }
+
+    /**
+     * 修改内容框，
+     */
+    private var noteInfoScheduleLayout: ScheduleLayout? = null
 
     /**
      * 笔记ID
@@ -72,6 +79,7 @@ class NewNoteActivity : BaseNoteActivity() {
     override fun initView() {
         QMUIStatusBarHelper.setStatusBarLightMode(this)
         window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
+        noteInfoScheduleLayout = findViewById(R.id.note_info_add_content_schedule_layout)
         note_info_add_top_finish_tv.setOnClickListener {
             saveNoteInfo()
         }
@@ -83,6 +91,7 @@ class NewNoteActivity : BaseNoteActivity() {
             }
         }
         note_info_add_top_back_iv?.setOnClickListener {
+            // 点击顶部返回按钮。 如果不存在修改内容，关闭界面
             if (!checkHaveChange()) {
                 this@NewNoteActivity.finish()
             }
@@ -153,6 +162,16 @@ class NewNoteActivity : BaseNoteActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        // 隐藏键盘
+        noteInfoScheduleLayout?.getEditTextView()?.let {
+            it.clearFocus()
+            KeyBoardUtils.hidKeyBoard(it)
+        }
+
+    }
+
     override fun onDestroyTask() {
         super.onDestroyTask()
         checkNoteRunnable?.let {
@@ -167,7 +186,9 @@ class NewNoteActivity : BaseNoteActivity() {
     private fun checkHaveChange(): Boolean {
         val newContent = note_info_add_content_schedule_layout.getContent()
         noteInfo?.let {
+            // 判断内容是否存在修改，有修改显示提示框。
             if (newContent != it.noteContent) {
+                // 显示退出提示
                 showExitHintDialog()
                 return true
             }

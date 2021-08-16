@@ -206,14 +206,31 @@
             <!-- 自定义 过滤 -->
             <intent-filter>
                 <!-- 单项点击事项.  -->
-                <action android:name="com.inz.z.note_book.action.NOTE_INFO_ITEM_CLICK" />
+                <action android:name="${applicationId}.action.NOTE_INFO_ITEM_CLICK" />
                 <!-- 切换选中的组 -->
-                <action android:name="com.inz.z.note_book.action.NOTE_INFO_CHANGE_NOTE_GROUP" />
+                <action android:name="${applicationId}.action.NOTE_INFO_CHANGE_NOTE_GROUP" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/note_info_app_widget_info" />
+        </receiver>
+
+        <!-- 应用状态广播 -->
+        <receiver
+            android:name=".broadcast.ApplicationStatusBroadcast"
+            android:exported="true"
+            android:permission="application">
+            <!-- 应用状态 -->
+            <intent-filter>
+                <action android:name="com.inz.z.note_book.action.APPLICATION_CREATE_ACTION" />
+                <action android:name="com.inz.z.note_book.action.APPLICATION_PAUSE_ACTION" />
+            </intent-filter>
+            <!-- 备份服务状态 -->
+            <intent-filter>
+                <action android:name="${applicationId}.action.BACKUP_SERVICE_CREATE_ACTION" />
+                <action android:name="${applicationId}.action.BACKUP_SERVICE_DESTROY_ACTION" />
+            </intent-filter>
         </receiver>
         <!-- 桌面插件 笔记列表更新服务 -->
         <service
@@ -225,6 +242,16 @@
 
         <!-- 浮动消息弹窗  -->
         <service android:name=".service.FloatMessageViewService" />
+        <!-- 备份服务 -->
+        <service
+            android:name=".service.BackupService"
+            android:exported="true"
+            android:permission="backup"
+            android:process=":backup">
+            <intent-filter>
+                <action android:name="${applicationId}.action.NOTE_INFO_BACKUP" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

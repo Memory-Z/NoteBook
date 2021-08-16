@@ -125,4 +125,8 @@ class ScheduleLayout : LinearLayout {
         mEditText?.layoutParams = lp
     }
 
+    fun getEditTextView(): EditText? {
+        return mEditText
+    }
+
 }

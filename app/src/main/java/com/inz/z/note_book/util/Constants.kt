@@ -178,5 +178,32 @@ object Constants {
         const val NOTIFICATION_UNKNOWN = "NotificationUnknown"
     }
 
+    /**
+     * 基础广播参数
+     */
+    object BaseBroadcastParams {
+        /**
+         * 应用启动
+         */
+        const val APPLICATION_CREATE_ACTION = "${APPLICATION_ID}.action.APPLICATION_CREATE_ACTION"
+
+        /**
+         * 应用暂停
+         */
+        const val APPLICATION_PAUSE_ACTION = "${APPLICATION_ID}.action.APPLICATION_PAUSE_ACTION"
+
+        /**
+         * 备份 服务启动
+         */
+        const val BACKUP_SERVICE_CREATE_ACTION =
+            "${APPLICATION_ID}.action.BACKUP_SERVICE_CREATE_ACTION"
+
+        /**
+         * 备份服务销毁
+         */
+        const val BACKUP_SERVICE_DESTROY_ACTION =
+            "${APPLICATION_ID}.action.BACKUP_SERVICE_DESTROY_ACTION"
+    }
+
 
 }

@@ -545,11 +545,7 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
             L.d("BASE_THREAD", "clearThreadPool: CLEAR_THREAD_POOL  start . ");
         }
         if (scheduledExecutorService != null) {
-            try {
-                scheduledExecutorService.shutdown();
-            } finally {
-                scheduledExecutorService = null;
-            }
+            scheduledExecutorService = null;
         }
         if (uiThread != null) {
             uiThread = null;
@@ -558,11 +554,7 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
             singleThread = null;
         }
         if (workThread != null) {
-            try {
-                workThread.shutdown();
-            } finally {
-                workThread = null;
-            }
+            workThread = null;
         }
         if (SHOW_THREAD_LOG) {
             L.d("BASE_THREAD", "clearThreadPool: CLEAR_THREAD_POOL  end . ");

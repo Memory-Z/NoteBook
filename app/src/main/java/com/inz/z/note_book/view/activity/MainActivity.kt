@@ -187,6 +187,7 @@ class MainActivity : BaseNoteActivity() {
             morePopupMenu?.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.main_more_backup_item -> {
+                        // 手动备份。
                         GreenDaoHelper.getInstance().backupDatabase()
                     }
                     else -> {

@@ -1,5 +1,7 @@
 package com.inz.z.note_book.database.bean;
 
+import androidx.annotation.NonNull;
+
 import com.inz.z.note_book.base.NoteStatus;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -207,5 +209,21 @@ public class NoteInfo {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getNoteInfoDao() : null;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "NoteInfo{" +
+                "noteInfoId='" + noteInfoId + '\'' +
+                ", noteTitle='" + noteTitle + '\'' +
+                ", noteContent='" + noteContent + '\'' +
+                ", createDate=" + createDate +
+                ", updateDate=" + updateDate +
+                ", status=" + status +
+                ", noteFileContentList=" + noteFileContentList +
+                ", daoSession=" + daoSession +
+                ", myDao=" + myDao +
+                '}';
     }
 }

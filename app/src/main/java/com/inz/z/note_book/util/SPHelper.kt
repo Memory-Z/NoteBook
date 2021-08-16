@@ -11,6 +11,7 @@ import com.inz.z.base.util.SPHelper
  */
 object SPHelper {
     var instance: SPHelper? = null
+
     /**
      * 初始化
      */
