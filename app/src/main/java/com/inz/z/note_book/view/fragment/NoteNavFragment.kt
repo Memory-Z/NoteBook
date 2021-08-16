@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.widget.NestedScrollView
@@ -18,6 +19,7 @@ import com.inz.z.note_book.database.bean.NoteGroup
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteGroupService
 import com.inz.z.note_book.database.controller.NoteInfoController
+import com.inz.z.note_book.util.ClickUtil
 import com.inz.z.note_book.view.activity.AddContentActivity
 import com.inz.z.note_book.view.activity.MarkDayActivity
 import com.inz.z.note_book.view.activity.NoteGroupActivity
@@ -103,6 +105,7 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
                     override fun onItemClick(v: View, position: Int) {
                         val noteGroup = noteGroupList?.get(position)
                         L.i(TAG, "noteGroupRvAdapter $position is Click , noteGroup = $noteGroup")
+                        // 跳转至 Note 组界面
                         if (noteGroup != null) {
                             gotoGroupActivity(false, noteGroup.noteGroupId)
                         }
@@ -127,11 +130,10 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
                 note_nav_add_fab.hide()
             }
         })
-        note_nav_near_five_nav_right_iv.setOnClickListener {
-            val intent = Intent(mContext, AddContentActivity::class.java)
-            intent.putExtras(AddContentActivity.getInstanceBundle(AddContentActivity.CONTENT_TYPE_NOTE_TAG))
-            startActivity(intent)
-        }
+        // 最近 五条 记录 右侧按钮 点击，
+        note_nav_near_five_nav_right_iv.setOnClickListener(this)
+        // 设置笔记导航栏组 右侧 箭头 点击
+        note_nav_group_right_iv.setOnClickListener(this)
     }
 
     override fun initData() {
@@ -165,11 +167,6 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
 //
 //        }
 
-        note_nav_group_right_iv.setOnClickListener {
-            L.i(TAG, "note_nav_group_right_iv  is Click ! ")
-            gotoGroupActivity(true, "")
-        }
-
     }
 
     override fun onResume() {
@@ -195,14 +192,30 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        val vId = v?.id
-        if (vId == hintNovDateLl?.id) {
-            //  点击 时间。
-            val intent = Intent(v?.context, MarkDayActivity::class.java)
-            startActivity(intent)
-        } else if (vId == note_nav_group_right_iv.id) {
-            L.i(TAG, "note_nav_group_right_iv  is Click ! ")
-            gotoGroupActivity(true, "")
+        if (ClickUtil.isFastClick(v)) {
+            L.w(TAG, "onClick: this is fast click. ignore !  ")
+            return
+        }
+        when (v?.id) {
+            hintNovDateLl?.id -> {
+                //  点击 时间。跳转至纪念日界面，
+                val intent = Intent(v?.context, MarkDayActivity::class.java)
+                startActivity(intent)
+            }
+            note_nav_group_right_iv.id -> {
+                // 点击 nav 右侧按钮，跳转至组
+                L.i(TAG, "note_nav_group_right_iv  is Click ! ")
+                gotoGroupActivity(true, "")
+            }
+            note_nav_near_five_nav_right_iv.id -> {
+                // 最近五条记录 右侧按钮点击 ，跳转至添加
+                val intent = Intent(mContext, AddContentActivity::class.java)
+                intent.putExtras(AddContentActivity.getInstanceBundle(AddContentActivity.CONTENT_TYPE_NOTE_TAG))
+                startActivity(intent)
+            }
+            else -> {
+
+            }
         }
     }
 

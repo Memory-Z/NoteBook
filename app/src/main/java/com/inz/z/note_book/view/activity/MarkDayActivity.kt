@@ -1,6 +1,9 @@
 package com.inz.z.note_book.view.activity
 
+import android.view.View
+import com.inz.z.base.util.L
 import com.inz.z.note_book.R
+import com.inz.z.note_book.util.ClickUtil
 import com.inz.z.note_book.view.BaseNoteActivity
 import kotlinx.android.synthetic.main.activity_mark_day.*
 
@@ -10,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_mark_day.*
  * ====================================================
  * Create by 11654 in 2021/6/20 16:12
  */
-class MarkDayActivity: BaseNoteActivity() {
+class MarkDayActivity : BaseNoteActivity(), View.OnClickListener {
 
     override fun initWindow() {
 
@@ -21,10 +24,18 @@ class MarkDayActivity: BaseNoteActivity() {
     }
 
     override fun initView() {
-        setSupportActionBar(mark_day_top_action_btal.toolbar)
+        setSupportActionBar(mark_day_toolbar)
     }
 
     override fun initData() {
+
+    }
+
+    override fun onClick(v: View?) {
+        if (ClickUtil.isFastClick(v)) {
+            L.w(TAG, "onClick: this is fast click, ignore ! ")
+            return
+        }
 
     }
 }

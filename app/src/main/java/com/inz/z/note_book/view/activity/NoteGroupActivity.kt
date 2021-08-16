@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.inz.z.base.util.BaseTools
+import com.inz.z.base.util.KeyBoardUtils
 import com.inz.z.base.util.L
 import com.inz.z.base.util.ThreadPoolUtils
 import com.inz.z.base.view.widget.BaseNoDataView
@@ -25,6 +26,7 @@ import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteController
 import com.inz.z.note_book.database.controller.NoteGroupService
 import com.inz.z.note_book.databinding.ActivityGroupLayoutBinding
+import com.inz.z.note_book.util.ClickUtil
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.adapter.NoteInfoRecyclerAdapter
 import com.inz.z.note_book.view.fragment.NewGroupDialogFragment
@@ -39,7 +41,7 @@ import java.util.*
  * @version 1.0.0
  * Create by inz in 2019/10/29 11:15.
  */
-class NoteGroupActivity : BaseNoteActivity() {
+class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
     companion object {
         private const val TAG = "GroupActivity"
         private const val HANDLER_REFRESH_DATA = 0x00A0
@@ -99,9 +101,7 @@ class NoteGroupActivity : BaseNoteActivity() {
             }
         )
         group_content_note_info_rv.adapter = mNoteInfoRecyclerAdapter
-        group_top_back_rl.setOnClickListener {
-            finish()
-        }
+        group_top_back_rl.setOnClickListener(this)
         group_content_srl.setOnRefreshListener {
             // 刷新笔记数据
             loadNoteInfoWithDatabase()
@@ -111,10 +111,7 @@ class NoteGroupActivity : BaseNoteActivity() {
                 group_content_srl.isRefreshing = false
             }
         }
-        group_add_note_info_fab.setOnClickListener {
-            targetFabView(false)
-            note_info_add_sample_title_et.requestFocus()
-        }
+        group_add_note_info_fab.setOnClickListener(this)
         initAddNoteView()
         initNoDataView()
         groupHandler = Handler(mainLooper, GroupHandlerCallbackImpl())
@@ -177,6 +174,44 @@ class NoteGroupActivity : BaseNoteActivity() {
         groupHandler = null
     }
 
+    override fun onClick(v: View?) {
+        if (ClickUtil.isFastClick(v)) {
+            L.w(TAG, "onClick: this is fast click, ignore ! ")
+            return
+        }
+        when (v?.id) {
+            group_top_back_rl.id -> {
+                // 顶部返回按钮
+                finish()
+            }
+            group_add_note_info_fab.id -> {
+                // 浮动按钮 添加笔记
+                targetFabView(false)
+                note_info_add_sample_title_et.requestFocus()
+            }
+            note_info_add_sample_add_iv.id -> {
+                // 笔记添加按钮
+                val str = note_info_add_sample_title_et.text.toString()
+                if (str.isBlank()) {
+                    return
+                }
+                val added = addNoteInfo(currentGroupId, str)
+                if (added) {
+                    // 添加数据成功
+                    targetAddView(false)
+                    targetFabView(true)
+                    // 隐藏键盘
+                    KeyBoardUtils.hideKeyBoardByWindowToken(v.context, v.windowToken)
+                    loadNoteInfoWithDatabase()
+
+                }
+            }
+            else -> {
+
+            }
+        }
+    }
+
     /**
      * 空数据界面初始化
      */
@@ -218,9 +253,8 @@ class NoteGroupActivity : BaseNoteActivity() {
      */
     private fun loadNoteInfoWithDatabase() {
         startLoad(getString(R.string.loading))
-        ThreadPoolUtils
-            .getWorkThread(TAG + "_loadNoteInfo")
-            .execute {
+        getWorkThread(TAG + "_loadNoteInfo")
+            ?.execute {
                 // 加载数据
                 noteInfoList =
                     NoteController.findAllNoteInfoByGroupId(currentGroupId).toMutableList()
@@ -349,24 +383,7 @@ class NoteGroupActivity : BaseNoteActivity() {
          */
         note_info_add_sample_add_iv.apply {
             isClickable = false
-            setOnClickListener {
-                val str = note_info_add_sample_title_et.text.toString()
-                if (str.isBlank()) {
-                    return@setOnClickListener
-                }
-                val added = addNoteInfo(currentGroupId, str)
-                if (added) {
-                    // 添加数据成功
-                    targetAddView(false)
-                    targetFabView(true)
-                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    if (imm.isActive) {
-                        imm.hideSoftInputFromWindow(windowToken, 0)
-                    }
-                    loadNoteInfoWithDatabase()
-
-                }
-            }
+            setOnClickListener(this@NoteGroupActivity)
         }
 
     }

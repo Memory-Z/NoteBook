@@ -3,6 +3,7 @@ package com.inz.z.base.util
 import android.app.Activity
 import android.content.Context
 import android.inputmethodservice.InputMethodService
+import android.os.IBinder
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 
@@ -26,7 +27,13 @@ object KeyBoardUtils {
     }
 
     fun hidKeyBoard(editText: EditText) {
-        val manager = getInputMethodManager(editText.context)
-        manager?.hideSoftInputFromWindow(editText.windowToken, 0)
+        hideKeyBoardByWindowToken(editText.context, editText.windowToken)
+    }
+
+    fun hideKeyBoardByWindowToken(context: Context, windowToken: IBinder) {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if (imm.isActive) {
+            imm.hideSoftInputFromWindow(windowToken, 0)
+        }
     }
 }

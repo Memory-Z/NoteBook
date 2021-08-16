@@ -14,6 +14,7 @@ import com.inz.z.note_book.R
 import com.inz.z.note_book.base.NoteStatus
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteInfoController
+import com.inz.z.note_book.util.ClickUtil
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.dialog.BaseDialogFragment
 import com.inz.z.note_book.view.dialog.ChooseImageDialog
@@ -30,7 +31,7 @@ import java.util.concurrent.TimeUnit
  * @version 1.0.0
  * Create by inz in 2019/10/25 16:36.
  */
-class NewNoteActivity : BaseNoteActivity() {
+class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
 
     companion object {
         const val TAG = "NewNoteActivity"
@@ -80,25 +81,10 @@ class NewNoteActivity : BaseNoteActivity() {
         QMUIStatusBarHelper.setStatusBarLightMode(this)
         window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
         noteInfoScheduleLayout = findViewById(R.id.note_info_add_content_schedule_layout)
-        note_info_add_top_finish_tv.setOnClickListener {
-            saveNoteInfo()
-        }
-        note_info_add_content_brl?.setOnClickListener {
-            note_info_add_content_content_ll?.let {
-                val count = it.childCount
-                val lastView = it.getChildAt(count - 1)
-                lastView.performClick()
-            }
-        }
-        note_info_add_top_back_iv?.setOnClickListener {
-            // 点击顶部返回按钮。 如果不存在修改内容，关闭界面
-            if (!checkHaveChange()) {
-                this@NewNoteActivity.finish()
-            }
-        }
-        note_iab_image_ll?.setOnClickListener {
-            showChooseImageDialog()
-        }
+        note_info_add_top_finish_tv.setOnClickListener(this)
+        note_info_add_content_brl?.setOnClickListener(this)
+        note_info_add_top_back_iv?.setOnClickListener(this)
+        note_iab_image_ll?.setOnClickListener(this)
     }
 
     override fun initData() {
@@ -178,6 +164,41 @@ class NewNoteActivity : BaseNoteActivity() {
             getScheduleThread("${TAG}_onDestroy")?.shutdown()
         }
         checkNoteRunnable = null
+    }
+
+    override fun onClick(v: View?) {
+        if (ClickUtil.isFastClick(v)) {
+            L.w(TAG, "onClick: this is fast click, ignore ! ")
+            return
+        }
+        when (v?.id) {
+            note_info_add_top_finish_tv.id -> {
+                // 底部完成按钮
+                saveNoteInfo()
+            }
+            note_info_add_content_brl.id -> {
+                // 笔记内容点击
+                note_info_add_content_content_ll?.let {
+                    val count = it.childCount
+                    val lastView = it.getChildAt(count - 1)
+                    lastView.performClick()
+                }
+            }
+            note_info_add_top_back_iv.id -> {
+                // 点击顶部返回按钮。 如果不存在修改内容，关闭界面
+                if (!checkHaveChange()) {
+                    this@NewNoteActivity.finish()
+                }
+            }
+            note_iab_image_ll.id -> {
+                // 选择图片弹窗
+                showChooseImageDialog()
+            }
+            else -> {
+
+            }
+        }
+
     }
 
     /**

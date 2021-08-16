@@ -223,7 +223,7 @@ class MainActivity : BaseNoteActivity() {
     }
 
     /**
-     * 显示中间界面
+     * 显示应用界面
      */
     private fun showApplicationListFragment() {
         L.i(TAG, "showApplicationListFragment: ")
@@ -277,7 +277,7 @@ class MainActivity : BaseNoteActivity() {
     private inner class LeftMenuViewClickListenerImpl : View.OnClickListener {
         override fun onClick(v: View?) {
             if (mContext == null) {
-                L.w(TAG, "LeftMenuViewClickLisntenerImpl: onClick -> mContext is null .  ")
+                L.w(TAG, "LeftMenuViewClickListenerImpl: onClick -> mContext is null .  ")
                 return
             }
             val id = v?.id

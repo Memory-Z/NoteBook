@@ -53,7 +53,7 @@ import kotlin.math.min
  * @version 1.0.0
  * Create by inz in 2020/08/20 11:31.
  */
-class ChooseFileActivity : AbsBaseActivity() {
+class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
 
     companion object {
         private const val TAG = "ChooseFileActivity"
@@ -251,7 +251,7 @@ class ChooseFileActivity : AbsBaseActivity() {
 
         initColorStateList()
 //        base_choose_file_top_r_more_iv?.setOnClickListener { createMorePopupMenu() }
-        setSupportActionBar(base_choose_file_top_btal.toolbar)
+        setSupportActionBar(base_choose_file_top_toolbar)
 
         navLayoutManager = LinearLayoutManager(mContext)
         navLayoutManager?.orientation = LinearLayoutManager.HORIZONTAL
@@ -263,20 +263,9 @@ class ChooseFileActivity : AbsBaseActivity() {
             this.adapter = chooseFileNavRvAdapter
         }
 
-        base_choose_file_bl_preview_tv?.setOnClickListener {
-            if (!chooseFileList.isNullOrEmpty()) {
-                val bean = chooseFileList[0]
-                showPreviewDialog(bean, chooseFileList, false)
-            } else {
-                mContext?.apply {
-                    showToast(mContext.getString(R.string.not_choose_file_to_preview))
-                }
-            }
-        }
+        base_choose_file_bl_preview_tv?.setOnClickListener(this)
 
-        base_choose_file_top_submit_tv?.setOnClickListener {
-            closeChooseFileView()
-        }
+        base_choose_file_top_submit_tv?.setOnClickListener(this)
     }
 
     override fun initData() {
@@ -321,6 +310,29 @@ class ChooseFileActivity : AbsBaseActivity() {
         chooseFileListRvAdapter = null
         chooseFileNavRvAdapter = null
         chooseFileList.clear()
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            base_choose_file_bl_preview_tv.id -> {
+                // 预览
+                if (!chooseFileList.isNullOrEmpty()) {
+                    val bean = chooseFileList[0]
+                    showPreviewDialog(bean, chooseFileList, false)
+                } else {
+                    mContext?.apply {
+                        showToast(mContext.getString(R.string.not_choose_file_to_preview))
+                    }
+                }
+            }
+            base_choose_file_top_submit_tv.id -> {
+                // 提交
+                closeChooseFileView()
+            }
+            else -> {
+
+            }
+        }
     }
 
     /**

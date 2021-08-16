@@ -2,63 +2,86 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
-    <com.inz.z.base.view.widget.BaseTopActionLayout
-        android:id="@+id/base_choose_file_top_btal"
+    <LinearLayout
+        android:id="@+id/base_choose_file_top_ll"
         style="@style/Base.Layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        app:base_show_custom_view="true"
-        app:base_top_center_layout="@id/base_choose_file_top_center_rl"
-        app:base_top_left_layout="@id/base_choose_file_top_left_ll"
-        app:base_top_right_layout="@id/base_choose_file_top_right_ll"
-        app:base_top_title="@string/base_image"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/base_choose_file_top_left_ll"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical">
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/base_choose_file_top_center_rl"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/base_choose_file_top_toolbar"
+            style="@style/ActionBarBase"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-        </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/base_choose_file_top_right_ll"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_height="?android:attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_chevron_left_black_24dp"
+            app:title="@string/choose_file">
 
             <TextView
                 android:id="@+id/base_choose_file_top_submit_tv"
                 style="@style/Base.Text.Second"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/button_normal_height"
+                android:layout_gravity="end"
                 android:background="@drawable/bg_text_submit"
                 android:backgroundTint="@color/text_black_50_color"
                 android:clickable="false"
                 android:gravity="center"
                 android:text="@string/_submit"
                 android:textColor="@color/text_white_base_color" />
+        </androidx.appcompat.widget.Toolbar>
+    </LinearLayout>
 
-        </LinearLayout>
+    <!--    <com.inz.z.base.view.widget.BaseTopActionLayout-->
+    <!--        android:id="@+id/base_choose_file_top_btal"-->
+    <!--        style="@style/Base.Layout"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:background="@color/colorPrimary"-->
+    <!--        app:base_show_custom_view="true"-->
+    <!--        app:base_top_center_layout="@id/base_choose_file_top_center_rl"-->
+    <!--        app:base_top_left_layout="@id/base_choose_file_top_left_ll"-->
+    <!--        app:base_top_right_layout="@id/base_choose_file_top_right_ll"-->
+    <!--        app:base_top_title="@string/base_image"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent">-->
 
-    </com.inz.z.base.view.widget.BaseTopActionLayout>
+    <!--        <LinearLayout-->
+    <!--            android:id="@+id/base_choose_file_top_left_ll"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:gravity="center"-->
+    <!--            android:orientation="vertical">-->
+
+    <!--        </LinearLayout>-->
+
+    <!--        <RelativeLayout-->
+    <!--            android:id="@+id/base_choose_file_top_center_rl"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:orientation="vertical">-->
+
+    <!--        </RelativeLayout>-->
+
+    <!--        <LinearLayout-->
+    <!--            android:id="@+id/base_choose_file_top_right_ll"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:gravity="center"-->
+    <!--            android:orientation="vertical">-->
+
+
+    <!--        </LinearLayout>-->
+
+    <!--    </com.inz.z.base.view.widget.BaseTopActionLayout>-->
 
     <!--    <HorizontalScrollView-->
     <!--        android:id="@+id/base_choose_file_nav_hsv"-->
@@ -84,7 +107,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/base_choose_file_top_btal" />
+        app:layout_constraintTop_toBottomOf="@id/base_choose_file_top_ll" />
     <!--        </LinearLayout>-->
 
     <!--    </HorizontalScrollView>-->
