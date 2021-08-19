@@ -84,16 +84,16 @@ class ChooseFileRvAdapter :
     }
 
     override fun onCreateVH(parent: ViewGroup, viewType: Int): ChooseFileRvHolder {
-        when (viewType) {
+        return when (viewType) {
             ChooseFileActivity.MODE_TABLE -> {
                 val view =
                     mLayoutInflater.inflate(R.layout.base_item_choose_file_table, parent, false)
-                return ChooseFileTableRvHolder(view)
+                ChooseFileTableRvHolder(view)
             }
             else -> {
                 val view =
                     mLayoutInflater.inflate(R.layout.base_item_choose_file_list, parent, false)
-                return ChooseFileListRvHolder(view)
+                ChooseFileListRvHolder(view)
             }
         }
     }

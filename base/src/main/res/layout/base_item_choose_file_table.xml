@@ -36,6 +36,7 @@
             android:orientation="vertical"
             android:paddingTop="@dimen/margin_text"
             android:paddingBottom="@dimen/margin_text"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -62,12 +63,12 @@
         <CheckBox
             android:id="@+id/base_item_cf_table_cbox"
             style="@style/Base.CheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/image_icon_min_size"
+            android:layout_height="@dimen/image_icon_min_size"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="@dimen/margin_text_layout"
-            android:layout_marginEnd="@dimen/margin_text_layout"
+            android:layout_marginTop="@dimen/margin_text"
+            android:layout_marginEnd="@dimen/margin_text"
             android:checked="@{chooseFile.checked, default=false}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

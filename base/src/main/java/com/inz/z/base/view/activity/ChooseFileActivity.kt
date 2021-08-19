@@ -262,9 +262,9 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
             this.layoutManager = navLayoutManager
             this.adapter = chooseFileNavRvAdapter
         }
-
+        // 文件选择 左下角 预览按钮
         base_choose_file_bl_preview_tv?.setOnClickListener(this)
-
+        // 文件选择 右上角 提交按钮
         base_choose_file_top_submit_tv?.setOnClickListener(this)
     }
 
@@ -279,11 +279,11 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
             maxChooseFileCount = it.getInt("maxChooseFile", DEFAULT_MAX_CHOOSE_FILE_COUNT)
             loadSizePer = it.getInt("loadSizePer", DEFAULT_PER_LOAD_SIZE)
         }
-
+        // 初始化 内容列表 。
         initContentRv()
-
+        // 更新文件 显示数量。
         updateFileSizeOnView(0L)
-
+        // 获取系统根目录。
         mRootPath = FileUtils.getSDPath()
         addNavBody(mRootPath, getString(R.string.root_directory))
         // 延迟查询文件。
@@ -339,7 +339,9 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
      * 初始化颜色
      */
     private fun initColorStateList() {
+        // 按钮可点击颜色
         buttonClickScl = mContext.getColorStateList(R.color.colorAccent)
+        // 按钮默认颜色
         buttonDefaultScl = mContext.getColorStateList(R.color.text_black_50_color)
     }
 
@@ -373,7 +375,9 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         super.onScrolled(recyclerView, dx, dy)
                         mLayoutManager?.let {
+                            // 根据滑动 获取最后一个数据
                             val lastPosition = it.findLastCompletelyVisibleItemPosition()
+                            // 判断 但当前是否为最后一个数据项，如果是，显示更对数据项，不刷新
                             if (lastPosition >= it.itemCount - it.spanCount) {
                                 showCurrentFileList(false)
                             }
@@ -382,12 +386,15 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
                 }
             )
         }
+        // 当前是否为显示文件夹
         val isDirContent = showType == Constants.ChooseFileConstants.SHOW_TYPE_DIR
+        // 如果需要显示文件夹，将导航栏显示出。
         base_choose_file_nav_rv?.visibility = if (isDirContent) {
             View.VISIBLE
         } else {
             View.GONE
         }
+        // 同步内容 类型
         targetContentType()
     }
 
@@ -395,10 +402,17 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
      * 切换中间内容显示类型
      */
     private fun targetContentType() {
+        // 切换显示模式 。
         chooseFileListRvAdapter?.changeShowMode(showMode)
+        // 设置显示列数
         mLayoutManager?.spanCount = when (showMode) {
             MODE_TABLE -> {
+                // 表格模式。显示设置值
                 showTableModeColumn
+            }
+            MODE_LIST -> {
+                // 列表模式显示 1
+                1
             }
             else -> {
                 DEFAULT_TABLE_COLUMNS
@@ -421,6 +435,7 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // ActionBar 菜单 按钮
         menuInflater.inflate(R.menu.menu_choose_file, menu)
 
         return super.onCreateOptionsMenu(menu)
@@ -432,13 +447,14 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
         if (showMode == MODE_LIST) {
             modeShowName = mContext.getString(R.string.table_mode)
         }
-        menuItem.setTitle(modeShowName)
+        menuItem.title = modeShowName
         return super.onMenuOpened(featureId, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_choose_file_mode_item -> {
+                // 菜单模式切换。
                 showMode = if (showMode == MODE_LIST) MODE_TABLE else MODE_LIST
                 targetContentType()
             }
