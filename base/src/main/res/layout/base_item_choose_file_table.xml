@@ -6,6 +6,8 @@
         <variable
             name="chooseFile"
             type="com.inz.z.base.entity.BaseChooseFileBean" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -60,11 +62,24 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/base_item_cf_overly_iv"
+            style="@style/Base.ImageView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/choose_file"
+            android:src="@drawable/ic_choose_overly"
+            android:visibility="@{chooseFile.checked ? View.VISIBLE : View.GONE, default=gone}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <CheckBox
             android:id="@+id/base_item_cf_table_cbox"
-            style="@style/Base.CheckBox"
-            android:layout_width="@dimen/image_icon_min_size"
-            android:layout_height="@dimen/image_icon_min_size"
+            style="@style/Base.CheckBox.Min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="@dimen/margin_text"

@@ -163,6 +163,10 @@
         <item name="android:button">@null</item>
     </style>
 
+    <style name="Base.CheckBox.Min" parent="Base.CheckBox">
+        <item name="android:drawableStart">@drawable/bg_check_box_selector_16</item>
+    </style>
+
     <style name="Base.Layout">
         <item name="android:paddingStart">@dimen/border_lr_dimen</item>
         <item name="android:paddingEnd">@dimen/border_lr_dimen</item>

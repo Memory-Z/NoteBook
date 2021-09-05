@@ -13,7 +13,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.annotation.IntDef
-import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -25,7 +24,6 @@ import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.entity.BaseChooseFileNavBean
 import com.inz.z.base.entity.ChooseFileShowType
 import com.inz.z.base.entity.Constants
-import com.inz.z.base.util.FileTypeHelper
 import com.inz.z.base.util.FileUtils
 import com.inz.z.base.util.L
 import com.inz.z.base.util.ProviderUtil
@@ -43,8 +41,8 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.base_activity_choose_file.*
 import java.io.File
 import java.util.*
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.collections.ArrayList
-import kotlin.math.min
 
 /**
  * 图片文件选择 Activity .
@@ -79,8 +77,11 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
         private const val HANDLER_ADD_CHOOSE_FILE = 0x00FF01
         private const val HANDLER_REMOVE_CHOOSE_FILE = 0x00FF02
         private const val HANDLER_REMOVE_CHOOSE_FILE_LIST = 0x00FF03
+        private const val HANDLER_CHANGE_FILE_LIST = 0x00FF04
+        private const val HANDLER_CHANGE_FILE_SIZE = 0x00FF05
         private const val HANDLER_TAG_CHOOSE_FILE = "chooseFile"
         private const val HANDLER_TAG_CHOOSE_FILE_LIST = "chooseFileList"
+        private const val HANDLER_TAG_CHOOSE_FILE_SIZE = "chooseFileSize"
 
         /**
          * 跳转至选择文件界面
@@ -207,6 +208,16 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
      */
     private var currentFileIndex = 0
 
+    /**
+     * 当前查询文件位置
+     */
+    private var currentFilePath = ""
+
+    /**
+     * 当前是否在查询中。
+     */
+    private var isQueryFile = AtomicBoolean(false)
+
     private var loadSizePer = DEFAULT_PER_LOAD_SIZE
 
     /**
@@ -300,6 +311,12 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        // 计算每页需要加载的数量。
+        measureMaxLoadSizeByPage()
+    }
+
     override fun onDestroyData() {
         super.onDestroyData()
         chooseFileHandler?.removeCallbacksAndMessages(null)
@@ -375,11 +392,19 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         super.onScrolled(recyclerView, dx, dy)
                         mLayoutManager?.let {
-                            // 根据滑动 获取最后一个数据
+                            // 根据滑动 获取最后一个数据（最后一个可见数据）
                             val lastPosition = it.findLastCompletelyVisibleItemPosition()
-                            // 判断 但当前是否为最后一个数据项，如果是，显示更对数据项，不刷新
-                            if (lastPosition >= it.itemCount - it.spanCount) {
-                                showCurrentFileList(false)
+                            // 判断 但当前是否为最后一个数据项，如果是，显示更对数据项，不刷新 removed.
+                            // 判断当前是否为倒数第二行数据，如果是，加载更多数据。
+                            if (lastPosition >= it.itemCount - it.spanCount * 2) {
+//                                showCurrentFileList(false)
+                                // 分页查询
+                                queryFileListByPage(
+                                    currentFilePath,
+                                    showType,
+                                    currentFileIndex,
+                                    loadSizePer
+                                )
                             }
                         }
                     }
@@ -556,8 +581,21 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
         }
 
         override fun chooseFileList(list: List<BaseChooseFileBean>, fileSize: Long) {
+            // 选中文件列表
             L.i(TAG, "chooseFileList: --> ${list.size} >> $fileSize")
             chooseFileList = list as ArrayList<BaseChooseFileBean>
+            chooseFileHandler?.let {
+                // 更新选中列表
+                it.sendEmptyMessage(HANDLER_CHANGE_FILE_LIST)
+                // 更新选中大小
+                val message = Message.obtain()
+                val bundle = Bundle()
+                bundle.putLong(HANDLER_TAG_CHOOSE_FILE_SIZE, fileSize)
+                message.what = HANDLER_CHANGE_FILE_SIZE
+                message.data = bundle
+                it.sendMessage(message)
+            }
+
         }
     }
 
@@ -580,122 +618,233 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
                 Manifest.permission.READ_EXTERNAL_STORAGE
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            queryFileList(filePath, showType)
+//            queryFileList(filePath, showType)
+            currentFileIndex = 0
+            currentFilePath = filePath
+            // 分页加载
+            queryFileListByPage(currentFilePath, showType, currentFileIndex, loadSizePer * 3)
         }
     }
 
+//    /**
+//     * 查询文件列表。
+//     */
+//    @RequiresPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+//    private fun queryFileList(filePath: String?, @ChooseFileShowType showType: Int) {
+//        L.i(TAG, "queryFileList---------- $showType")
+//        Observable
+//            .create(
+//                ObservableOnSubscribe<MutableList<BaseChooseFileBean>> { emitter ->
+//                    var list: MutableList<BaseChooseFileBean> = mutableListOf()
+//                    when (showType) {
+//                        Constants.ChooseFileConstants.SHOW_TYPE_DIR -> {
+//                            list = ProviderUtil.queryFileListByDir(filePath)
+//                            // only type dir to set fileType.
+//                            val fileTypeHelper = FileTypeHelper(mContext)
+//                            list.forEach { fileItem ->
+//                                if (!fileItem.fileIsDirectory) {
+//                                    val file = File(fileItem.filePath)
+//                                    // TODO: 2021/4/25 TOO Many Open Files .
+//                                    val isImage = fileTypeHelper.isImageWithFile(file)
+//                                    if (isImage) {
+//                                        fileItem.fileType = Constants.FileType.FILE_TYPE_IMAGE
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        Constants.ChooseFileConstants.SHOW_TYPE_AUDIO -> {
+//                            list = ProviderUtil.queryFileAudioWithContentProvider(mContext)
+//                        }
+//                        Constants.ChooseFileConstants.SHOW_TYPE_IMAGE -> {
+//                            list = ProviderUtil.queryFileImageWithContextProvider(mContext)
+//                        }
+//                        Constants.ChooseFileConstants.SHOW_TYPE_VIDEO -> {
+//
+//                        }
+//                        else -> {
+//                            emitter.onError(IllegalArgumentException("no find $showType this's data list"))
+//                            return@ObservableOnSubscribe
+//                        }
+//                    }
+//
+//                    list.forEach { listIt ->
+//                        run checkEach@{
+//                            chooseFileList.forEach { chooseFileListIt ->
+//                                if (listIt.filePath == chooseFileListIt.filePath) {
+//                                    listIt.checked = true
+//                                    return@checkEach
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                    emitter.onNext(list)
+//                }
+//            )
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribeOn(Schedulers.newThread())
+//            .subscribe(
+//                object : DefaultObserver<MutableList<BaseChooseFileBean>>() {
+//                    override fun onNext(t: MutableList<BaseChooseFileBean>) {
+//                        L.i(TAG, "queryFileList ${Thread.currentThread().name} -- ${t.size} -- $t")
+//                        // 重置显示文件序号，
+//                        currentFileIndex = 0
+//                        currentPathFileList.clear()
+//                        currentPathFileList = t
+//                        // 刷新 数据列表
+//                        showCurrentFileList(true)
+//                    }
+//
+//                    override fun onError(e: Throwable) {
+//                        L.e(TAG, "onError: ----> ", e)
+//                    }
+//
+//                    override fun onComplete() {
+//                    }
+//                }
+//            )
+//
+//    }
+//
+//    /**
+//     * 显示当前路径文件
+//     * @param refresh 是否刷新
+//     */
+//    private fun showCurrentFileList(refresh: Boolean) {
+//        L.i(TAG, "showCurrentFileList: $refresh")
+//        if (currentPathFileList.isNullOrEmpty()) {
+//            L.w(TAG, "showCurrentFileList: list is empty. ")
+//            return
+//        }
+//        val listSize = currentPathFileList.size
+//        if (currentFileIndex >= listSize) {
+//            L.w(TAG, "showCurrentFileList: file is load over. ")
+//            return
+//        }
+//        val start = currentFileIndex
+//        var end = currentFileIndex + loadSizePer
+//        end = min(end, listSize - 1)
+//        val list = currentPathFileList.subList(start, end)
+//        if (refresh) {
+//            chooseFileListRvAdapter?.refreshData(list)
+//            // 首次加载时，列表数据大于当前最后一个序号，显示加载更多
+//            L.i(TAG, "showCurrentFileList: --->> $end + $listSize")
+////            if (listSize - 1 > end) {
+////                showCurrentFileList(false)
+////            }
+//        } else {
+//            val haveMore = listSize - 1 != end
+//            L.i(TAG, "showCurrentFileList: haveMore: $haveMore")
+//            chooseFileListRvAdapter?.loadMoreData(list, haveMore)
+//        }
+//        currentFileIndex = end
+//    }
+
     /**
-     * 查询文件列表。
+     * 分页查询文件列表
+     * @param filePath 文件地址
+     * @param showType 显示类型
+     * @param start 开始位置
+     * @param pageSize 每页大小
      */
-    @RequiresPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    private fun queryFileList(filePath: String?, @ChooseFileShowType showType: Int) {
-        L.i(TAG, "queryFileList---------- $showType")
+    private fun queryFileListByPage(
+        filePath: String?,
+        @ChooseFileShowType showType: Int,
+        start: Int,
+        pageSize: Int
+    ) {
+        L.i(TAG, "queryFileListByPage: Start = $start , pageSize = $pageSize ")
+        if (isQueryFile.get()) {
+            L.w(TAG, "queryFileListByPage: Current is querying. ")
+            return
+        }
         Observable
-            .create(
-                ObservableOnSubscribe<MutableList<BaseChooseFileBean>> { emitter ->
-                    var list: MutableList<BaseChooseFileBean> = mutableListOf()
-                    when (showType) {
-                        Constants.ChooseFileConstants.SHOW_TYPE_DIR -> {
-                            list = ProviderUtil.queryFileListByDir(filePath)
-                            // only type dir to set fileType.
-                            val fileTypeHelper = FileTypeHelper(mContext)
-                            list.forEach { fileItem ->
-                                if (!fileItem.fileIsDirectory) {
-                                    val file = File(fileItem.filePath)
-                                    // TODO: 2021/4/25 TOO Many Open Files .
-                                    val isImage = fileTypeHelper.isImageWithFile(file)
-                                    if (isImage) {
-                                        fileItem.fileType = Constants.FileType.FILE_TYPE_IMAGE
-                                    }
-                                }
-                            }
-                        }
-                        Constants.ChooseFileConstants.SHOW_TYPE_AUDIO -> {
-                            list = ProviderUtil.queryFileAudioWithContentProvider(mContext)
-                        }
-                        Constants.ChooseFileConstants.SHOW_TYPE_IMAGE -> {
-                            list = ProviderUtil.queryFileImageWithContextProvider(mContext)
-                        }
-                        Constants.ChooseFileConstants.SHOW_TYPE_VIDEO -> {
+            .create(ObservableOnSubscribe<MutableList<BaseChooseFileBean>> {
+                var fileList = mutableListOf<BaseChooseFileBean>()
+                when (showType) {
+                    // 查询图片
+                    Constants.ChooseFileConstants.SHOW_TYPE_IMAGE -> {
+                        // 分页查询
+                        fileList = ProviderUtil.queryFileImageWithContextProvider(
+                            mContext,
+                            start,
+                            pageSize
+                        )
+                    }
+                    // 查询音频
+                    Constants.ChooseFileConstants.SHOW_TYPE_AUDIO -> {
+                        // 分页查询
 
-                        }
-                        else -> {
-                            emitter.onError(IllegalArgumentException("no find $showType this's data list"))
-                            return@ObservableOnSubscribe
+                    }
+                    // 查询视频
+                    Constants.ChooseFileConstants.SHOW_TYPE_VIDEO -> {
+                        // 分页查询
+                    }
+                    // 根据目录查询
+                    Constants.ChooseFileConstants.SHOW_TYPE_DIR -> {
+                        // 判断是否有权限进行查询
+                        if (checkHavePermission()) {
+                            fileList = ProviderUtil.queryFileListByDir(filePath)
                         }
                     }
+                    else -> {
 
-                    list.forEach { listIt ->
-                        run checkEach@{
-                            chooseFileList.forEach { chooseFileListIt ->
-                                if (listIt.filePath == chooseFileListIt.filePath) {
-                                    listIt.checked = true
-                                    return@checkEach
-                                }
-                            }
-                        }
                     }
-
-                    emitter.onNext(list)
                 }
-            )
+                it.onNext(fileList)
+                it.onComplete()
+            })
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.newThread())
-            .subscribe(
-                object : DefaultObserver<MutableList<BaseChooseFileBean>>() {
-                    override fun onNext(t: MutableList<BaseChooseFileBean>) {
-                        L.i(TAG, "queryFileList ${Thread.currentThread().name} -- ${t.size} -- $t")
-                        // 重置显示文件序号，
-                        currentFileIndex = 0
-                        currentPathFileList.clear()
-                        currentPathFileList = t
-                        // 刷新 数据列表
-                        showCurrentFileList(true)
-                    }
-
-                    override fun onError(e: Throwable) {
-                        L.e(TAG, "onError: ----> ", e)
-                    }
-
-                    override fun onComplete() {
-                    }
+            .subscribeOn(Schedulers.io())
+            .subscribe(object : DefaultObserver<MutableList<BaseChooseFileBean>>() {
+                override fun onStart() {
+                    super.onStart()
+                    isQueryFile.set(true)
                 }
-            )
 
+                override fun onNext(t: MutableList<BaseChooseFileBean>) {
+                    L.i(TAG, "onNext: ---->> ")
+                    // 是否需要刷新
+                    val needRefresh = start == 0
+                    // 是否加载完毕
+                    val haveMore = t.size == pageSize
+                    // 加载数据信息
+                    loadContentData(t, needRefresh, haveMore)
+                }
+
+                override fun onError(e: Throwable) {
+                    L.e(TAG, "onError: loadContentData Failure. ", e)
+                    isQueryFile.set(false)
+                }
+
+                override fun onComplete() {
+                    isQueryFile.set(false)
+                }
+            })
     }
 
     /**
-     * 显示当前路径文件
-     * @param refresh 是否刷新
+     * 加载显示数据，
+     * @param data 数据项。
+     * @param refresh 是否需要刷新
+     * @param haveMore 是否未加载完
      */
-    private fun showCurrentFileList(refresh: Boolean) {
-        L.i(TAG, "showCurrentFileList: $refresh")
-        if (currentPathFileList.isNullOrEmpty()) {
-            L.w(TAG, "showCurrentFileList: list is empty. ")
-            return
-        }
-        val listSize = currentPathFileList.size
-        if (currentFileIndex >= listSize) {
-            L.w(TAG, "showCurrentFileList: file is load over. ")
-            return
-        }
-        val start = currentFileIndex
-        var end = currentFileIndex + loadSizePer
-        end = min(end, listSize - 1)
-        val list = currentPathFileList.subList(start, end)
+    private fun loadContentData(
+        data: MutableList<BaseChooseFileBean>,
+        refresh: Boolean,
+        haveMore: Boolean
+    ) {
+        L.i(TAG, "loadContentData: $refresh -- currentIndex: $currentFileIndex")
+        // 设置当前加载序号。
+        currentFileIndex += data.size
         if (refresh) {
-            chooseFileListRvAdapter?.refreshData(list)
-            // 首次加载时，列表数据大于当前最后一个序号，显示加载更多
-            L.i(TAG, "showCurrentFileList: --->> $end + $listSize")
-//            if (listSize - 1 > end) {
-//                showCurrentFileList(false)
-//            }
+            chooseFileListRvAdapter?.refreshData(data)
         } else {
-            val haveMore = listSize - 1 != end
-            L.i(TAG, "showCurrentFileList: haveMore: $haveMore")
-            chooseFileListRvAdapter?.loadMoreData(list, haveMore)
+            // 查询数据不为空时，添加内容。
+            if (!data.isNullOrEmpty()) {
+                chooseFileListRvAdapter?.loadMoreData(data, haveMore)
+            }
         }
-        currentFileIndex = end
     }
 
     /**
@@ -850,6 +999,26 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
         }
     }
 
+    /**
+     * 计算每页可以加载的数量，每次重新加载的数据量 3/2
+     */
+    private fun measureMaxLoadSizeByPage() {
+        mLayoutManager?.let {
+            val spanCount = it.spanCount
+            // 默认长宽 相同，
+            val height = it.height
+            val width = it.width
+            // 每个item 的宽度
+            val itemWidth = width * 1F / spanCount
+            // 计算一页可以放的数量
+            val canPutSize = height / itemWidth * spanCount;
+            // 设置每页加载量
+            loadSizePer = (canPutSize / 2 * 3).toInt()
+            L.i(TAG, "measureMaxLoadSizeByPage: loadSizePer = $loadSizePer")
+            // 如果加载量为0， 使用默认加载
+            loadSizePer = if (loadSizePer > 0) loadSizePer else DEFAULT_PER_LOAD_SIZE
+        }
+    }
 
     /* ----------------------- 显示图片预览 -------------------------- */
 
@@ -952,12 +1121,21 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
                         }
                     }
                 }
+                HANDLER_CHANGE_FILE_LIST -> {
+                    // 更新文件预览状态.
+                    updateFilePreviewCountOnView(chooseFileList.size)
+                }
+                HANDLER_CHANGE_FILE_SIZE -> {
+                    val chooseFileSize = bundle.getLong(HANDLER_TAG_CHOOSE_FILE_SIZE)
+                    // 更新文件选中大小
+                    updateFileSizeOnView(chooseFileSize)
+                }
                 else -> {
 
                 }
             }
-            // 更新文件预览状态.
-            updateFilePreviewCountOnView(chooseFileList.size)
+//            // 更新文件预览状态.
+//            updateFilePreviewCountOnView(chooseFileList.size)
 //            updateChooseFileSize()
             return true
         }

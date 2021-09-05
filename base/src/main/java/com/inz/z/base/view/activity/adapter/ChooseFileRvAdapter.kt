@@ -40,7 +40,7 @@ class ChooseFileRvAdapter :
     }
 
     @ChooseFileActivity.ShowMode
-    private var showMode = ChooseFileActivity.MODE_LIST
+    private var showMode = ChooseFileActivity.MODE_TABLE
 
     /**
      * 监听
@@ -63,7 +63,7 @@ class ChooseFileRvAdapter :
      */
     private var currentSelectedCount = 0
 
-    constructor(mContext: Context?) : super(mContext)
+    constructor(mContext: Context?) : this(mContext, ChooseFileActivity.MODE_TABLE)
 
     constructor(mContext: Context?, showMode: Int) : super(mContext) {
         this.showMode = showMode
@@ -182,9 +182,10 @@ class ChooseFileRvAdapter :
         ImageViewCompat.setImageTintList(imageView, null)
     }
 
-    open class ChooseFileRvHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    }
+    /**
+     * 文件选择 Holder.
+     */
+    abstract class ChooseFileRvHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     /**
      * 选择文件 list Holder.
@@ -248,6 +249,7 @@ class ChooseFileRvAdapter :
                 val bean = list[adapterPosition]
                 when (v?.id) {
                     R.id.base_item_cf_table_cbox -> {
+                        // 切换选中状态。
                         targetCheckStatus(bean, v, adapterPosition)
                     }
                     R.id.base_item_cf_table_iv -> {
@@ -277,7 +279,6 @@ class ChooseFileRvAdapter :
         private fun targetCheckStatus(bean: BaseChooseFileBean, v: View, position: Int) {
             val checked = !bean.checked
             bean.checked = checked
-            notifyItemChanged(position)
             if (checked) {
                 // 超出选中 回退。
                 if (currentSelectedCount >= maxSelectedCount) {
@@ -291,6 +292,7 @@ class ChooseFileRvAdapter :
                 currentSelectedCount -= 1
                 listener?.removeChoseFile(adapterPosition, v)
             }
+            notifyItemChanged(position)
             // 处理文件。
             dealChooseFile()
         }

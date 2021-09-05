@@ -3,6 +3,7 @@ package com.inz.z.base.util
 import android.Manifest
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -65,31 +66,32 @@ object ProviderUtil {
         return fileList
     }
 
+    private val imageParamArray = arrayListOf(
+        MediaStore.Images.Media._ID,
+        MediaStore.Images.Media.DISPLAY_NAME,
+        MediaStore.Images.Media.DATE_MODIFIED,
+        MediaStore.Images.Media.SIZE,
+        MediaStore.Images.Media.DATA
+    )
+
     /**
      * 查询 Media.Image.Media. 文件信息
      */
     @NonNull
     fun queryFileImageWithContextProvider(context: Context): MutableList<BaseChooseFileBean> {
-        val paramArray = arrayListOf(
-            MediaStore.Images.Media._ID,
-            MediaStore.Images.Media.DISPLAY_NAME,
-            MediaStore.Images.Media.DATE_MODIFIED,
-            MediaStore.Images.Media.SIZE,
-            MediaStore.Images.Media.DATA
-        )
         val cursor = context.contentResolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            paramArray.toTypedArray(), null, null,
+            imageParamArray.toTypedArray(), null, null,
             MediaStore.Images.Media.DEFAULT_SORT_ORDER
         )
         val fileList = mutableListOf<BaseChooseFileBean>()
         cursor?.let {
             while (it.moveToNext()) {
-                val id = it.getLong(it.getColumnIndex(paramArray[0]))
-                val name = it.getString(it.getColumnIndex(paramArray[1]))
-                val modifiedDate = it.getLong(it.getColumnIndex(paramArray[2]))
-                val size = it.getLong(it.getColumnIndex(paramArray[3]))
-                val path = it.getString(it.getColumnIndex(paramArray[4]))
+                val id = it.getLong(it.getColumnIndex(imageParamArray[0]))
+                val name = it.getString(it.getColumnIndex(imageParamArray[1]))
+                val modifiedDate = it.getLong(it.getColumnIndex(imageParamArray[2]))
+                val size = it.getLong(it.getColumnIndex(imageParamArray[3]))
+                val path = it.getString(it.getColumnIndex(imageParamArray[4]))
                 val bean = BaseChooseFileBean()
                 bean.fileFromDatabase = true
                 bean.fileDatabaseTable = MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString()
@@ -104,6 +106,54 @@ object ProviderUtil {
             }
         }
         cursor?.close()
+        fileList.sortedWith(FileListComparator())
+        return fileList
+    }
+
+    @NonNull
+    fun queryFileImageWithContextProvider(
+        context: Context,
+        start: Int,
+        size: Int
+    ): MutableList<BaseChooseFileBean> {
+        var fileList = mutableListOf<BaseChooseFileBean>()
+        val cursor = context.contentResolver.query(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            imageParamArray.toTypedArray(),
+            null,
+            null,
+            MediaStore.Images.Media.DEFAULT_SORT_ORDER + " desc limit $size  offset $start"
+        )
+
+        cursor?.let {
+            fileList = queryFileImage(it)
+        }
+        cursor?.close()
+        return fileList
+    }
+
+    private fun queryFileImage(cursor: Cursor): MutableList<BaseChooseFileBean> {
+        val fileList = mutableListOf<BaseChooseFileBean>()
+        while (cursor.moveToNext()) {
+            val id = cursor.getLong(cursor.getColumnIndex(imageParamArray[0]))
+            val name = cursor.getString(cursor.getColumnIndex(imageParamArray[1]))
+            val modifiedDate = cursor.getLong(cursor.getColumnIndex(imageParamArray[2]))
+            val size = cursor.getLong(cursor.getColumnIndex(imageParamArray[3]))
+            val path = cursor.getString(cursor.getColumnIndex(imageParamArray[4]))
+            val bean = BaseChooseFileBean()
+            bean.fileFromDatabase = true
+            bean.fileDatabaseTable = MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString()
+            bean.fileName = name
+            bean.filePath = path
+            bean.fileChangeDate = formatDatetime(modifiedDate)
+            bean.fileDatabaseId = id.toString()
+            bean.fileIsDirectory = false
+            bean.fileLength = size
+            bean.fileType = Constants.FileType.FILE_TYPE_IMAGE
+            fileList.add(bean)
+        }
+        cursor.close()
+        // 排序
         fileList.sortedWith(FileListComparator())
         return fileList
     }

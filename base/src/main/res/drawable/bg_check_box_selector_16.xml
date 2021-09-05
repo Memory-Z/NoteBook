@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:drawable="@drawable/ic_vd_checked_20" android:state_checked="true" />
+
+    <item android:drawable="@drawable/ic_vd_check_20" />
+</selector>
