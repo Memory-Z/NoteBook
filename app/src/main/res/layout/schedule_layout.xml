@@ -8,70 +8,92 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:text="@string/appwidget_text"
-        android:visibility="gone"
         app:textColor="@color/nearColorRed"
         app:textSize="@dimen/text_title_size" />
 
-    <com.inz.z.base.view.widget.BaseNavLayout
-        android:id="@+id/schedule_top_bnl"
+    <LinearLayout
+        android:id="@+id/schedule_top_head_ll"
         style="@style/NoteBookAppTheme.TopAction"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/tool_bar_height"
-        android:layout_marginTop="@dimen/status_bar_height"
-        app:base_center_layout="@id/schedule_top_center_ll"
-        app:base_left_layout="@id/schedule_top_left_ll"
-        app:base_right_layout="@id/schedule_top_right_ll"
+        android:layout_width="0dp"
+        android:fitsSystemWindows="true"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/schedule_top_left_ll"
-            android:layout_width="@dimen/touch_target_size"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/schedule_top_back_iv"
-                style="@style/NoteBookAppTheme.ImageView.Icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/image"
-                android:src="@drawable/ic_chevron_left_black_24dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/schedule_top_center_ll"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/schedule_top_tool_bar"
+            style="@style/ActionBarBase"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/border_lr_dimen"
-            android:layout_marginEnd="@dimen/border_lr_dimen"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="?android:actionBarSize"
+            app:navigationIcon="@drawable/ic_chevron_left_black_24dp"
+            app:title="@string/_schedule">
 
-            <TextView
-                style="@style/NoteBookAppTheme.Text.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/_schedule" />
-        </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/schedule_top_right_ll"
-            android:layout_width="@dimen/touch_target_height"
-            android:layout_height="match_parent"
-            android:gravity="center">
+    <!--    <com.inz.z.base.view.widget.BaseNavLayout-->
+    <!--        android:id="@+id/schedule_top_bnl"-->
+    <!--        style="@style/NoteBookAppTheme.TopAction"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="@dimen/tool_bar_height"-->
+    <!--        android:layout_marginTop="@dimen/status_bar_height"-->
+    <!--        app:base_center_layout="@id/schedule_top_center_ll"-->
+    <!--        app:base_left_layout="@id/schedule_top_left_ll"-->
+    <!--        app:base_right_layout="@id/schedule_top_right_ll"-->
+    <!--        app:layout_constraintTop_toTopOf="parent">-->
 
-            <ImageView
-                android:id="@+id/schedule_top_right_add_iv"
-                style="@style/NoteBookAppTheme.ImageView.Icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/image"
-                android:src="@drawable/ic_add_black_24dp" />
-        </LinearLayout>
-    </com.inz.z.base.view.widget.BaseNavLayout>
+    <!--        <LinearLayout-->
+    <!--            android:id="@+id/schedule_top_left_ll"-->
+    <!--            android:layout_width="@dimen/touch_target_size"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:gravity="center"-->
+    <!--            android:orientation="horizontal">-->
+
+    <!--            <ImageView-->
+    <!--                android:id="@+id/schedule_top_back_iv"-->
+    <!--                style="@style/NoteBookAppTheme.ImageView.Icon"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:contentDescription="@string/image"-->
+    <!--                android:src="@drawable/ic_chevron_left_black_24dp" />-->
+    <!--        </LinearLayout>-->
+
+    <!--        <LinearLayout-->
+    <!--            android:id="@+id/schedule_top_center_ll"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_marginStart="@dimen/border_lr_dimen"-->
+    <!--            android:layout_marginEnd="@dimen/border_lr_dimen"-->
+    <!--            android:gravity="center_vertical"-->
+    <!--            android:orientation="horizontal">-->
+
+    <!--            <TextView-->
+    <!--                style="@style/NoteBookAppTheme.Text.Title"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:text="@string/_schedule" />-->
+    <!--        </LinearLayout>-->
+
+    <!--        <LinearLayout-->
+    <!--            android:id="@+id/schedule_top_right_ll"-->
+    <!--            android:layout_width="@dimen/touch_target_height"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:gravity="center">-->
+
+    <!--            <ImageView-->
+    <!--                android:id="@+id/schedule_top_right_add_iv"-->
+    <!--                style="@style/NoteBookAppTheme.ImageView.Icon"-->
+    <!--                android:layout_width="wrap_content"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:contentDescription="@string/image"-->
+    <!--                android:src="@drawable/ic_add_black_24dp" />-->
+    <!--        </LinearLayout>-->
+    <!--    </com.inz.z.base.view.widget.BaseNavLayout>-->
 
 
     <RelativeLayout
@@ -81,7 +103,7 @@
         android:layout_height="@dimen/touch_target_height"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/schedule_top_bnl">
+        app:layout_constraintTop_toBottomOf="@id/schedule_top_head_ll">
 
         <TextView
             android:id="@+id/schedule_top_calendar_date_tv"

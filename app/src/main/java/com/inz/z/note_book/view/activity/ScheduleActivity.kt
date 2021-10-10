@@ -3,6 +3,8 @@ package com.inz.z.note_book.view.activity
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.PopupMenu
@@ -59,17 +61,9 @@ class ScheduleActivity : BaseNoteActivity() {
     override fun initView() {
         QMUIStatusBarHelper.setStatusBarLightMode(this)
         window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
-        schedule_top_back_iv?.setOnClickListener {
-            this@ScheduleActivity.finish()
-        }
-        schedule_top_right_add_iv?.setOnClickListener {
-//            showAddPopupMenu()
-            val calendar = Calendar.getInstance(Locale.getDefault())
-            calendar.timeInMillis = schedule_content_calendar_view?.selectedCalendar?.timeInMillis
-                ?: calendar.timeInMillis
 
-            showScheduleAddDialog("", calendar.time)
-        }
+        // 设置 Toolbar 状态栏
+        setSupportActionBar(schedule_top_tool_bar)
 
         schedule_content_calendar_view?.setOnYearChangeListener {
             schedule_top_calendar_date_year_tv?.text = it.toString()
@@ -163,6 +157,37 @@ class ScheduleActivity : BaseNoteActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_schedule_add, menu)
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            // 返回按钮
+            android.R.id.home -> {
+                this@ScheduleActivity.finish()
+            }
+            // 点击添加按钮
+            R.id.menu_sc_add_item -> {
+                // 获取当前时间
+                val calendar = Calendar.getInstance(Locale.getDefault())
+                calendar.timeInMillis =
+                    schedule_content_calendar_view?.selectedCalendar?.timeInMillis
+                        ?: calendar.timeInMillis
+                // 显示 添加计划弹窗
+                showScheduleAddDialog("", calendar.time)
+            }
+            // 点击 帮助按钮
+            R.id.menu_sc_add_help_item -> {
+                // TODO: 2021/10/10 get help
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
     /**
      * 切换选中日期
      */
@@ -214,30 +239,6 @@ class ScheduleActivity : BaseNoteActivity() {
 
         }
     }
-
-    /**
-     * 显示添加弹窗
-     */
-    private fun showAddPopupMenu() {
-        val popupMenu = PopupMenu(mContext, schedule_top_right_ll)
-        popupMenu.menuInflater.inflate(R.menu.menu_schedule_add, popupMenu.menu)
-        popupMenu.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.menu_sc_add_launcher -> {
-//                    showScheduleAddDialog()
-                }
-                R.id.menu_sc_add_help -> {
-
-                }
-                else -> {
-
-                }
-            }
-            return@setOnMenuItemClickListener true
-        }
-        popupMenu.show()
-    }
-
 
     /**
      * 显示添加弹窗
