@@ -37,8 +37,9 @@
         <activity
             android:name=".view.activity.MainActivity"
             android:configChanges="keyboardHidden|screenLayout|screenSize|orientation"
-            android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustNothing">
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <category android:name="android.intent.category.APP_CALENDAR" />
             </intent-filter>
@@ -47,7 +48,8 @@
         <!-- 闪屏界面 -->
         <activity
             android:name=".view.activity.SplashActivity"
-            android:configChanges="screenSize|screenLayout|keyboardHidden|orientation">
+            android:configChanges="screenSize|screenLayout|keyboardHidden|orientation"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
