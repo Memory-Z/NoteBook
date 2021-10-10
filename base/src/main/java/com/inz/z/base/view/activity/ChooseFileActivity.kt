@@ -393,7 +393,7 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
                         super.onScrolled(recyclerView, dx, dy)
                         mLayoutManager?.let {
                             // 根据滑动 获取最后一个数据（最后一个可见数据）
-                            val lastPosition = it.findLastCompletelyVisibleItemPosition()
+                            val lastPosition = it.findLastVisibleItemPosition()
                             // 判断 但当前是否为最后一个数据项，如果是，显示更对数据项，不刷新 removed.
                             // 判断当前是否为倒数第二行数据，如果是，加载更多数据。
                             if (lastPosition >= it.itemCount - it.spanCount * 2) {
