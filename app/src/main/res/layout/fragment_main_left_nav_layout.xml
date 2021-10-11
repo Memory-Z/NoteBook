@@ -79,43 +79,14 @@
                 android:layout_height="1px"
                 android:background="@color/lineColor" />
 
-            <com.inz.z.base.view.widget.BaseNavLayout
+            <com.inz.z.note_book.view.widget.layout.MainLeftNavItemLayout
                 android:id="@+id/mln_0_bnl"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/touch_target_height"
-                android:background="@color/card_second_color"
-                android:paddingStart="@dimen/border_lr_dimen"
-                android:paddingEnd="@dimen/border_lr_dimen"
-                app:base_center_layout="@id/mln_0_tv"
-                app:base_left_layout="@id/mln_0_iv"
-                app:base_right_layout="@id/mln_0_right_ll">
+                android:layout_height="@dimen/list_item_normal_height"
+                app:icon="@drawable/ic_home_black_24dp"
+                app:title="@string/_main_page">
 
-                <ImageView
-                    android:id="@+id/mln_0_iv"
-                    style="@style/NoteBookAppTheme.ImageView.Icon.Min"
-                    android:layout_width="@dimen/image_icon_min_size"
-                    android:layout_height="@dimen/image_icon_min_size"
-                    android:contentDescription="@string/image"
-                    android:src="@drawable/ic_home_black_24dp" />
-
-                <TextView
-                    android:id="@+id/mln_0_tv"
-                    style="@style/NoteBookAppTheme.Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/content_space_between_dimen"
-                    android:text="@string/_main_page"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:id="@+id/mln_0_right_ll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                </LinearLayout>
-
-            </com.inz.z.base.view.widget.BaseNavLayout>
+            </com.inz.z.note_book.view.widget.layout.MainLeftNavItemLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -123,43 +94,14 @@
                 android:layout_marginStart="@dimen/border_lr_dimen"
                 android:backgroundTint="@color/lineColor" />
 
-            <com.inz.z.base.view.widget.BaseNavLayout
+            <com.inz.z.note_book.view.widget.layout.MainLeftNavItemLayout
                 android:id="@+id/mln_1_bnl"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/touch_target_height"
-                android:background="@color/card_second_color"
-                android:paddingStart="@dimen/border_lr_dimen"
-                android:paddingEnd="@dimen/border_lr_dimen"
-                app:base_center_layout="@id/mln_1_tv"
-                app:base_left_layout="@id/mln_1_iv"
-                app:base_right_layout="@id/mln_1_right_ll">
+                android:layout_height="@dimen/list_item_normal_height"
+                app:icon="@drawable/ic_alarm_add_black_24dp"
+                app:title="@string/_schedule">
 
-                <ImageView
-                    android:id="@+id/mln_1_iv"
-                    style="@style/NoteBookAppTheme.ImageView.Icon.Min"
-                    android:layout_width="@dimen/image_icon_min_size"
-                    android:layout_height="@dimen/image_icon_min_size"
-                    android:contentDescription="@string/image"
-                    android:src="@drawable/ic_alarm_add_black_24dp" />
-
-                <TextView
-                    android:id="@+id/mln_1_tv"
-                    style="@style/NoteBookAppTheme.Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/content_space_between_dimen"
-                    android:text="@string/_schedule"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:id="@+id/mln_1_right_ll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                </LinearLayout>
-
-            </com.inz.z.base.view.widget.BaseNavLayout>
+            </com.inz.z.note_book.view.widget.layout.MainLeftNavItemLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -167,43 +109,14 @@
                 android:layout_marginStart="@dimen/border_lr_dimen"
                 android:backgroundTint="@color/lineColor" />
 
-            <com.inz.z.base.view.widget.BaseNavLayout
+            <com.inz.z.note_book.view.widget.layout.MainLeftNavItemLayout
                 android:id="@+id/mln_2_bnl"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/touch_target_height"
-                android:background="@color/card_second_color"
-                android:paddingStart="@dimen/border_lr_dimen"
-                android:paddingEnd="@dimen/border_lr_dimen"
-                app:base_center_layout="@id/mln_2_tv"
-                app:base_left_layout="@id/mln_2_iv"
-                app:base_right_layout="@id/mln_2_right_ll">
+                android:layout_height="@dimen/list_item_normal_height"
+                app:icon="@drawable/ic_android_black_24dp"
+                app:title="@string/_application">
 
-                <ImageView
-                    android:id="@+id/mln_2_iv"
-                    style="@style/NoteBookAppTheme.ImageView.Icon.Min"
-                    android:layout_width="@dimen/image_icon_min_size"
-                    android:layout_height="@dimen/image_icon_min_size"
-                    android:contentDescription="@string/image"
-                    android:src="@drawable/ic_android_black_24dp" />
-
-                <TextView
-                    android:id="@+id/mln_2_tv"
-                    style="@style/NoteBookAppTheme.Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/content_space_between_dimen"
-                    android:text="@string/_application"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:id="@+id/mln_2_right_ll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                </LinearLayout>
-
-            </com.inz.z.base.view.widget.BaseNavLayout>
+            </com.inz.z.note_book.view.widget.layout.MainLeftNavItemLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -211,43 +124,14 @@
                 android:layout_marginStart="@dimen/border_lr_dimen"
                 android:backgroundTint="@color/lineColor" />
 
-            <com.inz.z.base.view.widget.BaseNavLayout
+            <com.inz.z.note_book.view.widget.layout.MainLeftNavItemLayout
                 android:id="@+id/mln_3_bnl"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/touch_target_height"
-                android:background="@color/card_second_color"
-                android:paddingStart="@dimen/border_lr_dimen"
-                android:paddingEnd="@dimen/border_lr_dimen"
-                app:base_center_layout="@id/mln_3_tv"
-                app:base_left_layout="@id/mln_3_iv"
-                app:base_right_layout="@id/mln_3_right_ll">
+                android:layout_height="@dimen/list_item_normal_height"
+                app:icon="@drawable/ic_baseline_event_note_24"
+                app:title="@string/_record">
 
-                <ImageView
-                    android:id="@+id/mln_3_iv"
-                    style="@style/NoteBookAppTheme.ImageView.Icon.Min"
-                    android:layout_width="@dimen/image_icon_min_size"
-                    android:layout_height="@dimen/image_icon_min_size"
-                    android:contentDescription="@string/image"
-                    android:src="@drawable/ic_baseline_event_note_24" />
-
-                <TextView
-                    android:id="@+id/mln_3_tv"
-                    style="@style/NoteBookAppTheme.Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/content_space_between_dimen"
-                    android:text="@string/_record"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:id="@+id/mln_3_right_ll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                </LinearLayout>
-
-            </com.inz.z.base.view.widget.BaseNavLayout>
+            </com.inz.z.note_book.view.widget.layout.MainLeftNavItemLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -255,43 +139,14 @@
                 android:layout_marginStart="@dimen/border_lr_dimen"
                 android:backgroundTint="@color/lineColor" />
 
-            <com.inz.z.base.view.widget.BaseNavLayout
+            <com.inz.z.note_book.view.widget.layout.MainLeftNavItemLayout
                 android:id="@+id/mln_4_bnl"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/touch_target_height"
-                android:background="@color/card_second_color"
-                android:paddingStart="@dimen/border_lr_dimen"
-                android:paddingEnd="@dimen/border_lr_dimen"
-                app:base_center_layout="@id/mln_4_tv"
-                app:base_left_layout="@id/mln_4_iv"
-                app:base_right_layout="@id/mln_4_right_ll">
+                android:layout_height="@dimen/list_item_normal_height"
+                app:icon="@drawable/ic_baseline_message_24"
+                app:title="@string/_message">
 
-                <ImageView
-                    android:id="@+id/mln_4_iv"
-                    style="@style/NoteBookAppTheme.ImageView.Icon.Min"
-                    android:layout_width="@dimen/image_icon_min_size"
-                    android:layout_height="@dimen/image_icon_min_size"
-                    android:contentDescription="@string/image"
-                    android:src="@drawable/ic_baseline_message_24" />
-
-                <TextView
-                    android:id="@+id/mln_4_tv"
-                    style="@style/NoteBookAppTheme.Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/content_space_between_dimen"
-                    android:text="@string/_message"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:id="@+id/mln_4_right_ll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                </LinearLayout>
-
-            </com.inz.z.base.view.widget.BaseNavLayout>
+            </com.inz.z.note_book.view.widget.layout.MainLeftNavItemLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -299,43 +154,14 @@
                 android:layout_marginStart="@dimen/border_lr_dimen"
                 android:backgroundTint="@color/lineColor" />
 
-            <com.inz.z.base.view.widget.BaseNavLayout
+            <com.inz.z.note_book.view.widget.layout.MainLeftNavItemLayout
                 android:id="@+id/mln_5_bnl"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/touch_target_height"
-                android:background="@color/card_second_color"
-                android:paddingStart="@dimen/border_lr_dimen"
-                android:paddingEnd="@dimen/border_lr_dimen"
-                app:base_center_layout="@id/mln_5_tv"
-                app:base_left_layout="@id/mln_5_iv"
-                app:base_right_layout="@id/mln_5_right_ll">
+                android:layout_height="@dimen/list_item_normal_height"
+                app:icon="@drawable/ic_baseline_bug_report_24"
+                app:title="@string/_log">
 
-                <ImageView
-                    android:id="@+id/mln_5_iv"
-                    style="@style/NoteBookAppTheme.ImageView.Icon.Min"
-                    android:layout_width="@dimen/image_icon_min_size"
-                    android:layout_height="@dimen/image_icon_min_size"
-                    android:contentDescription="@string/image"
-                    android:src="@drawable/ic_baseline_bug_report_24" />
-
-                <TextView
-                    android:id="@+id/mln_5_tv"
-                    style="@style/NoteBookAppTheme.Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/content_space_between_dimen"
-                    android:text="@string/_log"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:id="@+id/mln_5_right_ll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                </LinearLayout>
-
-            </com.inz.z.base.view.widget.BaseNavLayout>
+            </com.inz.z.note_book.view.widget.layout.MainLeftNavItemLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -343,43 +169,14 @@
                 android:layout_marginStart="@dimen/border_lr_dimen"
                 android:backgroundTint="@color/lineColor" />
 
-            <com.inz.z.base.view.widget.BaseNavLayout
+            <com.inz.z.note_book.view.widget.layout.MainLeftNavItemLayout
                 android:id="@+id/mln_6_bnl"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/touch_target_height"
-                android:background="@color/card_second_color"
-                android:paddingStart="@dimen/border_lr_dimen"
-                android:paddingEnd="@dimen/border_lr_dimen"
-                app:base_center_layout="@id/mln_6_tv"
-                app:base_left_layout="@id/mln_6_iv"
-                app:base_right_layout="@id/mln_6_right_ll">
+                android:layout_height="@dimen/list_item_normal_height"
+                app:icon="@drawable/ic_baseline_equalizer_24"
+                app:title="@string/sys_file_list">
 
-                <ImageView
-                    android:id="@+id/mln_6_iv"
-                    style="@style/NoteBookAppTheme.ImageView.Icon.Min"
-                    android:layout_width="@dimen/image_icon_min_size"
-                    android:layout_height="@dimen/image_icon_min_size"
-                    android:contentDescription="@string/image"
-                    android:src="@drawable/ic_baseline_equalizer_24" />
-
-                <TextView
-                    android:id="@+id/mln_6_tv"
-                    style="@style/NoteBookAppTheme.Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/content_space_between_dimen"
-                    android:text="@string/sys_file_list"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:id="@+id/mln_6_right_ll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                </LinearLayout>
-
-            </com.inz.z.base.view.widget.BaseNavLayout>
+            </com.inz.z.note_book.view.widget.layout.MainLeftNavItemLayout>
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

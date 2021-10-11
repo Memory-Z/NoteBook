@@ -65,4 +65,11 @@
         <!-- 是否可点击 -->
         <attr name="load_more_can_click" format="boolean" />
     </declare-styleable>
+
+    <!-- 主页 左侧导航栏 项  -->
+    <declare-styleable name="MainLeftNavItemLayout">
+        <attr name="icon" format="reference" />
+        <attr name="title" format="string" />
+        <attr name="right_layout_id" format="reference" />
+    </declare-styleable>
 </resources>

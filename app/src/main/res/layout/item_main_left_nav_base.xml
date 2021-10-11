@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 主页左侧 菜单栏模板 -->
+<com.inz.z.base.view.widget.BaseNavLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_main_left_nav_base_bnl"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/touch_target_height"
+    android:background="@color/card_second_color"
+    android:paddingStart="@dimen/border_lr_dimen"
+    android:paddingEnd="@dimen/border_lr_dimen"
+    app:base_center_layout="@id/item_main_left_nav_base_content_tv"
+    app:base_left_layout="@id/item_main_left_nav_base_left_iv"
+    app:base_right_layout="@id/item_main_left_nav_base_right_ll">
+
+    <ImageView
+        android:id="@+id/item_main_left_nav_base_left_iv"
+        style="@style/NoteBookAppTheme.ImageView.Icon.Min"
+        android:layout_width="@dimen/image_icon_min_size"
+        android:layout_height="@dimen/image_icon_min_size"
+        android:contentDescription="@string/image"
+        android:src="@drawable/ic_home_black_24dp" />
+
+    <TextView
+        android:id="@+id/item_main_left_nav_base_content_tv"
+        style="@style/NoteBookAppTheme.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/content_space_between_dimen"
+        android:text="@string/_main_page"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/item_main_left_nav_base_right_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+</com.inz.z.base.view.widget.BaseNavLayout>
