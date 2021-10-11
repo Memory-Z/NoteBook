@@ -12,6 +12,8 @@
     <!-- 反色 -->
     <color name="accessoryColor">#FFB700</color>
 
+    <color name="transparent">#00FFFFFF</color>
+
     <color name="nearColorBlue">#0048FF</color>
     <color name="nearColorRed">#FF0048</color>
 

@@ -137,7 +137,7 @@ class MainLeftNavItemLayout : LinearLayout {
         val childSize = rootBaseNavLayout?.childCount ?: 0
         if (childSize > lastShowViewOrder) {
             // 移除不需要显示的布局内容
-            rootBaseNavLayout?.removeViews(lastShowViewOrder + 1, childSize - lastShowViewOrder - 1)
+            rootBaseNavLayout?.removeViews(lastShowViewOrder + 1, childSize - lastShowViewOrder)
         }
     }
 }

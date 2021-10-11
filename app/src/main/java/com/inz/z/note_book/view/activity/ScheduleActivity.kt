@@ -7,12 +7,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
-import android.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haibin.calendarview.CalendarView
 import com.inz.z.base.util.L
-import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.TaskInfo
 import com.inz.z.note_book.database.bean.TaskSchedule
@@ -29,7 +27,7 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DefaultObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.schedule_layout.*
+import kotlinx.android.synthetic.main.activity_schedule_layout.*
 import java.util.*
 
 /**
@@ -55,7 +53,7 @@ class ScheduleActivity : BaseNoteActivity() {
     }
 
     override fun getLayoutId(): Int {
-        return R.layout.schedule_layout
+        return R.layout.activity_schedule_layout
     }
 
     override fun initView() {
