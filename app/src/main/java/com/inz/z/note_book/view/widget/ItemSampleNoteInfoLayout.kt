@@ -5,10 +5,8 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import androidx.databinding.DataBindingUtil
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
-import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.databinding.WidgetItemNoteSampleLayoutBinding
 
@@ -20,7 +18,7 @@ import com.inz.z.note_book.databinding.WidgetItemNoteSampleLayoutBinding
  */
 class ItemSampleNoteInfoLayout : LinearLayout {
     private var mView: View? = null
-    private var mItemSampleNoteInfoLayoutBinding: WidgetItemNoteSampleLayoutBinding? = null
+    private lateinit var mItemSampleNoteInfoLayoutBinding: WidgetItemNoteSampleLayoutBinding
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -38,13 +36,10 @@ class ItemSampleNoteInfoLayout : LinearLayout {
 
     private fun initView(context: Context) {
         if (mView == null) {
-            mItemSampleNoteInfoLayoutBinding = DataBindingUtil.inflate(
-                LayoutInflater.from(context),
-                R.layout.widget_item_note_sample_layout,
-                this,
-                true
+            mItemSampleNoteInfoLayoutBinding = WidgetItemNoteSampleLayoutBinding.inflate(
+                LayoutInflater.from(context), this, true
             )
-            mView = mItemSampleNoteInfoLayoutBinding?.root
+            mView = mItemSampleNoteInfoLayoutBinding.root
 //            if (mView != null) {
 //                val lp = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
 //                addView(mView, lp)
@@ -57,12 +52,9 @@ class ItemSampleNoteInfoLayout : LinearLayout {
      * @param noteInfo 笔记
      */
     fun setSampleNoteInfo(noteInfo: NoteInfo) {
-        if (mItemSampleNoteInfoLayoutBinding != null) {
-            mItemSampleNoteInfoLayoutBinding!!.noteInfo = noteInfo
-            val updateDateStr = BaseTools.getBaseDateFormat().format(noteInfo.updateDate)
-            mItemSampleNoteInfoLayoutBinding!!.noteInfoUpdateDateStr = updateDateStr
-            mItemSampleNoteInfoLayoutBinding!!.notifyChange()
-        }
+        mItemSampleNoteInfoLayoutBinding.itemNoteSampleTitleTv.text = noteInfo.noteTitle
+        val updateDateStr = BaseTools.getBaseDateFormat().format(noteInfo.updateDate)
+        mItemSampleNoteInfoLayoutBinding.itemNoteSampleUpdateDateTv.text = updateDateStr
     }
 
     /**

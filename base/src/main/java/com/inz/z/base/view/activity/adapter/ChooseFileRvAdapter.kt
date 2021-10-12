@@ -9,7 +9,6 @@ import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -86,14 +85,16 @@ class ChooseFileRvAdapter :
     override fun onCreateVH(parent: ViewGroup, viewType: Int): ChooseFileRvHolder {
         return when (viewType) {
             ChooseFileActivity.MODE_TABLE -> {
-                val view =
-                    mLayoutInflater.inflate(R.layout.base_item_choose_file_table, parent, false)
-                ChooseFileTableRvHolder(view)
+//                val view =
+//                    mLayoutInflater.inflate(R.layout.base_item_choose_file_table, parent, false)
+                val binding = BaseItemChooseFileTableBinding.inflate(mLayoutInflater, parent, false)
+                ChooseFileTableRvHolder(binding)
             }
             else -> {
-                val view =
-                    mLayoutInflater.inflate(R.layout.base_item_choose_file_list, parent, false)
-                ChooseFileListRvHolder(view)
+//                val view =
+//                    mLayoutInflater.inflate(R.layout.base_item_choose_file_list, parent, false)
+                val binding = BaseItemChooseFileListBinding.inflate(mLayoutInflater, parent, false)
+                ChooseFileListRvHolder(binding)
             }
         }
     }
@@ -102,17 +103,18 @@ class ChooseFileRvAdapter :
         val bean = list[position]
         var checkBox: CheckBox? = null
         if (holder is ChooseFileListRvHolder) {
-            holder.baseItemChooseFileListBinding?.chooseFile = bean
-            val iv = holder.baseItemChooseFileListBinding?.baseItemCfListIv
-            checkBox = holder.baseItemChooseFileListBinding?.baseItemCfListCbox
+            val iv = holder.baseItemChooseFileListBinding.baseItemCfListIv
+            checkBox = holder.baseItemChooseFileListBinding.baseItemCfListCbox
+            holder.baseItemChooseFileListBinding.baseItemCfListContentTv.text = bean.fileChangeDate
+            holder.baseItemChooseFileListBinding.baseItemCfListTitleTv.text = bean.fileName
             if (bean.fileIsDirectory) {
-                iv?.apply {
+                iv.apply {
                     Glide.with(mContext).load(R.drawable.ic_baseline_folder_24).apply(requestOption)
                         .into(this)
                     ImageViewCompat.setImageTintList(this, colorPrimaryCsl)
                 }
             } else {
-                iv?.apply {
+                iv.apply {
                     when (bean.fileType) {
                         Constants.FileType.FILE_TYPE_IMAGE -> {
                             Glide.with(mContext).load(bean.filePath).apply(requestOption)
@@ -137,19 +139,27 @@ class ChooseFileRvAdapter :
                     }
                 }
             }
-            checkBox?.visibility = if (bean.fileIsDirectory) View.GONE else View.VISIBLE
+            checkBox.visibility = if (bean.fileIsDirectory) View.GONE else View.VISIBLE
+            // 设置 CheckBox 是否 可以点击
+            checkBox.let {
+                setCanClickable(it)
+            }
         } else if (holder is ChooseFileTableRvHolder) {
-            holder.baseItemChooseFileTableBinding?.chooseFile = bean
-            val iv = holder.baseItemChooseFileTableBinding?.baseItemCfTableIv
-            checkBox = holder.baseItemChooseFileTableBinding?.baseItemCfTableCbox
+            val iv = holder.baseItemChooseFileTableBinding.baseItemCfTableIv
+            checkBox = holder.baseItemChooseFileTableBinding.baseItemCfTableCbox
+            holder.baseItemChooseFileTableBinding.baseItemCfOverlyIv.visibility =
+                if (bean.checked) View.VISIBLE else View.GONE
+            holder.baseItemChooseFileTableBinding.baseItemCfTableContentTv.text =
+                bean.fileChangeDate
+            holder.baseItemChooseFileTableBinding.baseItemCfTableTitleTv.text = bean.fileName
             if (bean.fileIsDirectory) {
-                iv?.apply {
+                iv.apply {
                     Glide.with(mContext).load(R.drawable.ic_baseline_folder_24).apply(requestOption)
                         .into(this)
                     ImageViewCompat.setImageTintList(this, colorPrimaryCsl)
                 }
             } else {
-                iv?.apply {
+                iv.apply {
                     when (bean.fileType) {
                         Constants.FileType.FILE_TYPE_IMAGE -> {
                             Glide.with(mContext).load(bean.filePath).apply(requestOption)
@@ -166,7 +176,7 @@ class ChooseFileRvAdapter :
                 }
             }
             // 仅 文件时显示 checkbox
-            checkBox?.visibility =
+            checkBox.visibility =
                 if (!showSelectView.get()) View.GONE
                 else if (bean.fileIsDirectory) View.GONE
                 else View.VISIBLE
@@ -190,14 +200,13 @@ class ChooseFileRvAdapter :
     /**
      * 选择文件 list Holder.
      */
-    inner class ChooseFileListRvHolder(itemView: View) : ChooseFileRvHolder(itemView),
+    inner class ChooseFileListRvHolder(val baseItemChooseFileListBinding: BaseItemChooseFileListBinding) :
+        ChooseFileRvHolder(baseItemChooseFileListBinding.root),
         View.OnClickListener {
-        val baseItemChooseFileListBinding: BaseItemChooseFileListBinding? =
-            DataBindingUtil.bind(itemView)
 
         init {
-            baseItemChooseFileListBinding?.baseItemCfListCbox?.setOnClickListener(this)
-            baseItemChooseFileListBinding?.baseItemCfListIv?.setOnClickListener(this)
+            baseItemChooseFileListBinding.baseItemCfListCbox.setOnClickListener(this)
+            baseItemChooseFileListBinding.baseItemCfListIv.setOnClickListener(this)
             itemView.setOnClickListener(this)
         }
 
@@ -207,13 +216,15 @@ class ChooseFileRvAdapter :
                 when (v?.id) {
                     R.id.base_item_cf_list_cbox -> {
                         val checked =
-                            baseItemChooseFileListBinding?.baseItemCfListCbox?.isChecked ?: false
+                            baseItemChooseFileListBinding.baseItemCfListCbox.isChecked ?: false
                         bean.checked = checked
                         if (!checked) {
                             listener?.removeChoseFile(adapterPosition, v)
                         } else {
                             listener?.addChoseFile(adapterPosition, v)
                         }
+                        // 更新 Check 点击状态
+                        dealCanClickable()
                     }
                     R.id.base_item_cf_list_iv -> {
                         listener?.showFullImage(adapterPosition, v)
@@ -222,7 +233,7 @@ class ChooseFileRvAdapter :
                         if (bean.fileIsDirectory && v != null) {
                             listener?.openFileDirectory(adapterPosition, v)
                         } else {
-                            baseItemChooseFileListBinding?.baseItemCfListCbox?.performClick()
+                            baseItemChooseFileListBinding.baseItemCfListCbox.performClick()
                         }
                     }
                 }
@@ -233,14 +244,13 @@ class ChooseFileRvAdapter :
     /**
      * 选择文件Table ViewHolder
      */
-    inner class ChooseFileTableRvHolder(itemView: View) : ChooseFileRvHolder(itemView),
+    inner class ChooseFileTableRvHolder(val baseItemChooseFileTableBinding: BaseItemChooseFileTableBinding) :
+        ChooseFileRvHolder(baseItemChooseFileTableBinding.root),
         View.OnClickListener {
-        val baseItemChooseFileTableBinding: BaseItemChooseFileTableBinding? =
-            DataBindingUtil.bind(itemView)
 
         init {
-            baseItemChooseFileTableBinding?.baseItemCfTableCbox?.setOnClickListener(this)
-            baseItemChooseFileTableBinding?.baseItemCfTableIv?.setOnClickListener(this)
+            baseItemChooseFileTableBinding.baseItemCfTableCbox.setOnClickListener(this)
+            baseItemChooseFileTableBinding.baseItemCfTableIv.setOnClickListener(this)
             itemView.setOnClickListener(this)
         }
 
@@ -264,7 +274,7 @@ class ChooseFileRvAdapter :
                         if (bean.fileIsDirectory && v != null) {
                             listener?.openFileDirectory(adapterPosition, v)
                         } else {
-                            baseItemChooseFileTableBinding?.baseItemCfTableCbox?.performClick()
+                            baseItemChooseFileTableBinding.baseItemCfTableCbox.performClick()
                         }
                     }
                 }
@@ -316,6 +326,40 @@ class ChooseFileRvAdapter :
                 .execute(DealChooseFileRunnable())
         }
     }
+
+    /**
+     * 处理是否可 点击 状态 。
+     */
+    private fun dealCanClickable() {
+//        for ()
+    }
+
+    /**
+     * 设置 View 是否可以进行点击
+     * @param view 按钮
+     */
+    private fun setCanClickable(view: CheckBox) {
+        // 当前是否 选择达最大值。
+        val isSelectedMax = maxSelectedCount == currentSelectedCount
+        L.i(TAG, "setCanClickable: --->> $view ---> isMax = $isSelectedMax")
+        // 判断当前是否 达最大选择
+        if (isSelectedMax) {
+            // 根据当前是否 选中 设置 view 是否可以 进行点击
+            view.isClickable = view.isChecked
+            view.isFocusable = view.isChecked
+            view.isEnabled = view.isChecked
+        } else {
+            // 未到 最大选择， 可以进行点击操作
+            view.isClickable = true
+            view.isFocusable = true
+            view.isEnabled = true
+        }
+    }
+
+    /**
+     * 是否 达到最大选择量
+     */
+    private fun isMaxSelected() = maxSelectedCount == currentSelectedCount
 
     /**
      * 处理选中 文件线程.

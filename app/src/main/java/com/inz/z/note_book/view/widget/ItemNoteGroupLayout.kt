@@ -6,8 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import androidx.databinding.DataBindingUtil
-import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.NoteGroup
 import com.inz.z.note_book.database.controller.NoteGroupWithInfoService
 import com.inz.z.note_book.databinding.ItemNoteGroupLayoutBinding
@@ -20,7 +18,7 @@ import com.inz.z.note_book.databinding.ItemNoteGroupLayoutBinding
  */
 class ItemNoteGroupLayout : LinearLayout {
     private var mView: View? = null
-    private var itemNoteGroupBinding: ItemNoteGroupLayoutBinding? = null
+    private lateinit var itemNoteGroupLayoutBinding: ItemNoteGroupLayoutBinding
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -43,13 +41,9 @@ class ItemNoteGroupLayout : LinearLayout {
         if (mView == null) {
 //            LayoutInflater.from(context).inflate(R.layout.item_note_group_layout, this, true)
 //            mView = findViewById(R.id.item_note_group_bnl)
-            itemNoteGroupBinding = DataBindingUtil.inflate(
-                LayoutInflater.from(context),
-                R.layout.item_note_group_layout,
-                this,
-                true
-            )
-            mView = itemNoteGroupBinding?.root
+            itemNoteGroupLayoutBinding =
+                ItemNoteGroupLayoutBinding.inflate(LayoutInflater.from(context), this, true)
+            mView = itemNoteGroupLayoutBinding.root
 //            if (mView != null) {
 //                itemNoteGroupBinding = DataBindingUtil.bind(mView!!)
 //            }
@@ -70,13 +64,10 @@ class ItemNoteGroupLayout : LinearLayout {
      * @param noteGroup 组
      */
     fun setGroupData(noteGroup: NoteGroup) {
-        if (itemNoteGroupBinding != null) {
-            itemNoteGroupBinding!!.noteGroup = noteGroup
-            val noteGroupNumber =
-                NoteGroupWithInfoService.getGroupChildCountByGroupId(noteGroup.noteGroupId)
-            itemNoteGroupBinding!!.noteGroupSize =
-                if (noteGroupNumber == 0L) "" else noteGroupNumber.toString()
-            itemNoteGroupBinding!!.notifyChange()
-        }
+        itemNoteGroupLayoutBinding.itemNoteGroupTitleTv.text = noteGroup.groupName
+        val noteGroupNumber =
+            NoteGroupWithInfoService.getGroupChildCountByGroupId(noteGroup.noteGroupId)
+        itemNoteGroupLayoutBinding.itemNoteGroupChildNumberTv.text  =
+            if (noteGroupNumber == 0L) "" else noteGroupNumber.toString()
     }
 }

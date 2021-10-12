@@ -1,6 +1,5 @@
 package com.inz.z.note_book.view.activity
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -9,15 +8,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.KeyBoardUtils
 import com.inz.z.base.util.L
-import com.inz.z.base.util.ThreadPoolUtils
 import com.inz.z.base.view.widget.BaseNoDataView
 import com.inz.z.note_book.R
 import com.inz.z.note_book.base.NoteStatus
@@ -47,7 +43,7 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
         private const val HANDLER_REFRESH_DATA = 0x00A0
     }
 
-    private var mGroupLayoutBinding: ActivityGroupLayoutBinding? = null
+    private lateinit var mGroupLayoutBinding: ActivityGroupLayoutBinding
     private var mNoteInfoRecyclerAdapter: NoteInfoRecyclerAdapter? = null
 
     /**
@@ -124,15 +120,19 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
             isAddNewGroup = bundle.getBoolean("addNewGroup", false)
             currentGroupId = bundle.getString("groupId", "")
         }
+        // 組名
+        var groupName: String
         if (isAddNewGroup || currentGroupId.isEmpty()) {
-            mGroupLayoutBinding?.groupName = getString(R.string.no_title_group).format("")
+            groupName = getString(R.string.no_title_group).format("")
             L.i(TAG, "get Intent data is Null , $isAddNewGroup and $currentGroupId")
         } else {
             noteGroup = NoteGroupService.findNoteGroupById(currentGroupId)
-            mGroupLayoutBinding?.groupName =
+            groupName =
                 noteGroup?.groupName ?: getString(R.string.no_title_group).format("")
 //            setNoteInfoListData()
         }
+
+        mGroupLayoutBinding.groupTopTitleTv.text = groupName
 
     }
 
@@ -142,7 +142,10 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
 
     override fun setDataBindingView() {
         super.setDataBindingView()
-        mGroupLayoutBinding = DataBindingUtil.setContentView(this, R.layout.activity_group_layout)
+        mGroupLayoutBinding = ActivityGroupLayoutBinding.inflate(layoutInflater)
+            .apply {
+                setContentView(this.root)
+            }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -328,8 +331,7 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
             currentGroupId = noteGroup.noteGroupId
             this@NoteGroupActivity.noteGroup = noteGroup
 
-            mGroupLayoutBinding?.groupName = title
-            mGroupLayoutBinding?.notifyChange()
+            mGroupLayoutBinding.groupTopTitleTv.text = title
         }
     }
 

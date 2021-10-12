@@ -3,7 +3,6 @@ package com.inz.z.note_book.view.adapter
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
 import com.inz.z.note_book.R
@@ -30,26 +29,25 @@ class NoteGroupRvAdapter(mContext: Context?) :
     }
 
     override fun onCreateVH(parent: ViewGroup, viewType: Int): NoteGroupRvHolder {
-        val view = mLayoutInflater.inflate(R.layout.item_note_group_layout, parent, false)
-        return NoteGroupRvHolder(view)
+//        val view = mLayoutInflater.inflate(R.layout.item_note_group_layout, parent, false)
+        val binding = ItemNoteGroupLayoutBinding.inflate(mLayoutInflater, parent, false)
+        return NoteGroupRvHolder(binding)
     }
 
     override fun onBindVH(holder: NoteGroupRvHolder, position: Int) {
         val noteGroup = list[position]
-        holder.mItemNoteGroupLayoutBinding?.noteGroup = noteGroup
+        holder.mItemNoteGroupLayoutBinding.itemNoteGroupTitleTv.text = noteGroup.groupName
         val groupSize = NoteGroupWithInfoService.getGroupChildCountByGroupId(noteGroup.noteGroupId)
-        holder.mItemNoteGroupLayoutBinding?.noteGroupSize =
+        holder.mItemNoteGroupLayoutBinding.itemNoteGroupChildNumberTv.text =
             if (groupSize == 0L) "" else groupSize.toString()
 
     }
 
 
-    class NoteGroupRvHolder(itemView: View) : AbsBaseRvViewHolder(itemView) {
-
-        var mItemNoteGroupLayoutBinding: ItemNoteGroupLayoutBinding? = null
+    class NoteGroupRvHolder(val mItemNoteGroupLayoutBinding: ItemNoteGroupLayoutBinding) :
+        AbsBaseRvViewHolder(mItemNoteGroupLayoutBinding.root) {
 
         init {
-            mItemNoteGroupLayoutBinding = DataBindingUtil.bind(itemView)
             itemView.setOnClickListener {
                 noteGroupItemListener?.onItemClick(it, adapterPosition)
             }
@@ -69,7 +67,7 @@ class NoteGroupRvAdapter(mContext: Context?) :
      */
     fun addNoteGroup(noteGroup: NoteGroup) {
         list.add(noteGroup)
-        notifyDataSetChanged()
+        notifyItemInserted(list.size - 1)
     }
 
     /**

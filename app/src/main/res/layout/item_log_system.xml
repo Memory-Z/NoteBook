@@ -1,60 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <data>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Base.Layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_card_white"
+    android:paddingTop="@dimen/margin_text_layout"
+    android:paddingBottom="@dimen/margin_text_layout">
 
-        <variable
-            name="logSystemInfo"
-            type="com.inz.z.note_book.view.fragment.bean.LogSystemInfo" />
-
-    </data>
-
-    <RelativeLayout
-        style="@style/Base.Layout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_card_white"
-        android:paddingTop="@dimen/margin_text_layout"
-        android:paddingBottom="@dimen/margin_text_layout">
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/margin_layout"
+        android:layout_toStartOf="@id/item_log_right_iv"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/item_log_system_title_tv"
+            style="@style/Base.Text.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/margin_layout"
-            android:layout_toStartOf="@id/item_log_right_iv"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@string/base_title" />
 
-            <TextView
-                style="@style/Base.Text.Title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="@{logSystemInfo.fileName}" />
+        <TextView
+            android:id="@+id/item_log_system_content_tv"
+            style="@style/Base.Text.Hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_text"
+            android:text="@string/base_content"
+            android:textColor="@color/gray_50_color"
+            android:textSize="@dimen/sp12" />
 
-            <TextView
-                style="@style/Base.Text.Hint"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_text"
-                android:text="@{logSystemInfo.fileSize}"
-                android:textColor="@color/gray_50_color"
-                android:textSize="@dimen/sp12" />
+    </LinearLayout>
 
-        </LinearLayout>
+    <ImageView
+        android:id="@+id/item_log_right_iv"
+        style="@style/Base.ImageView"
+        android:layout_width="@dimen/image_icon_min_size"
+        android:layout_height="@dimen/image_icon_min_size"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/image"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_more_vert_black_24dp" />
 
-        <ImageView
-            android:id="@+id/item_log_right_iv"
-            style="@style/Base.ImageView"
-            android:layout_width="@dimen/image_icon_min_size"
-            android:layout_height="@dimen/image_icon_min_size"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:contentDescription="@string/image"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_more_vert_black_24dp" />
-
-    </RelativeLayout>
-</layout>
+</RelativeLayout>

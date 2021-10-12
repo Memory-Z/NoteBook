@@ -3,15 +3,11 @@ package com.inz.z.note_book.view.fragment.adapter
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
-import com.inz.z.base.util.FileUtils
-import com.inz.z.note_book.R
 import com.inz.z.note_book.databinding.ItemLogSystemBinding
 import com.inz.z.note_book.view.fragment.bean.LogSystemInfo
-import java.io.File
 
 /**
  * 系统日志适配器
@@ -30,15 +26,19 @@ class LogSystemRvAdapter(mContext: Context) :
 
 
     override fun onCreateVH(parent: ViewGroup, viewType: Int): BaseLogSystemRvViewHolder {
-        val view = mLayoutInflater.inflate(R.layout.item_log_system, parent, false)
-        return ItemLogSystemRvViewHolder(view)
+//        val view = mLayoutInflater.inflate(R.layout.item_log_system, parent, false)
+        val binding = ItemLogSystemBinding.inflate(mLayoutInflater, parent, false)
+        return ItemLogSystemRvViewHolder(binding)
     }
 
     override fun onBindVH(holder: BaseLogSystemRvViewHolder, position: Int) {
         when (holder) {
             is ItemLogSystemRvViewHolder -> {
                 val logSystemInfo = getItemByPosition(position)
-                holder.itemLogSystemBinding?.logSystemInfo = logSystemInfo
+                logSystemInfo?.let {
+                    holder.itemLogSystemBinding.itemLogSystemTitleTv.text = it.fileName
+                    holder.itemLogSystemBinding.itemLogSystemContentTv.text = it.getFileSize()
+                }
 
             }
         }
@@ -46,13 +46,12 @@ class LogSystemRvAdapter(mContext: Context) :
 
     open inner class BaseLogSystemRvViewHolder(itemView: View) : AbsBaseRvViewHolder(itemView)
 
-    inner class ItemLogSystemRvViewHolder(itemView: View) :
-        BaseLogSystemRvViewHolder(itemView),
+    inner class ItemLogSystemRvViewHolder(val itemLogSystemBinding: ItemLogSystemBinding) :
+        BaseLogSystemRvViewHolder(itemLogSystemBinding.root),
         View.OnClickListener {
-        val itemLogSystemBinding: ItemLogSystemBinding? = DataBindingUtil.bind(itemView)
 
         init {
-            itemLogSystemBinding?.itemLogRightIv?.setOnClickListener(this)
+            itemLogSystemBinding.itemLogRightIv.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {

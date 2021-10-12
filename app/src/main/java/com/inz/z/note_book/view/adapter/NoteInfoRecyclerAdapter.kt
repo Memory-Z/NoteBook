@@ -3,11 +3,9 @@ package com.inz.z.note_book.view.adapter
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
 import com.inz.z.base.util.BaseTools
-import com.inz.z.note_book.R
 import com.inz.z.note_book.base.NoteStatus
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.databinding.ItemNoteLayoutBinding
@@ -30,26 +28,26 @@ class NoteInfoRecyclerAdapter(mContext: Context?) :
     }
 
     override fun onCreateVH(parent: ViewGroup, viewType: Int): NoteInfoRecyclerViewHolder {
-        val mView = mLayoutInflater.inflate(R.layout.item_note_layout, parent, false)
-        return NoteInfoRecyclerViewHolder(mView)
+//        val mView = mLayoutInflater.inflate(R.layout.item_note_layout, parent, false)
+        val binding = ItemNoteLayoutBinding.inflate(mLayoutInflater, parent, false)
+        return NoteInfoRecyclerViewHolder(binding)
     }
 
     override fun onBindVH(holder: NoteInfoRecyclerViewHolder, position: Int) {
         val noteInfo = list[position]
-        holder.mItemNoteLayoutBinding?.noteInfo = noteInfo
-        holder.mItemNoteLayoutBinding?.noteInfoUpdateDateStr =
-            BaseTools.getBaseDateFormat().format(noteInfo.updateDate)
+        holder.mItemNoteLayoutBinding.itemNoteContentTitleTv.text = noteInfo.noteTitle
+        holder.mItemNoteLayoutBinding.itemNoteContentCenterDetailTv.text = noteInfo.noteContent
         // 获取笔记状态描述.
         val statusStr = NoteStatus.getStatusStr(noteInfo.status, mContext)
-        holder.mItemNoteLayoutBinding?.noteStatusStr = statusStr
+        holder.mItemNoteLayoutBinding.itemNoteContentBottomStartTv.text = statusStr
+        holder.mItemNoteLayoutBinding.itemNoteContentBottomEndTv.text =
+            BaseTools.getBaseDateFormat().format(noteInfo.updateDate)
     }
 
-    class NoteInfoRecyclerViewHolder(itemView: View) : AbsBaseRvViewHolder(itemView) {
-
-        var mItemNoteLayoutBinding: ItemNoteLayoutBinding? = null
+    class NoteInfoRecyclerViewHolder(val mItemNoteLayoutBinding: ItemNoteLayoutBinding) :
+        AbsBaseRvViewHolder(mItemNoteLayoutBinding.root) {
 
         init {
-            mItemNoteLayoutBinding = DataBindingUtil.bind(itemView)
             itemView.setOnClickListener {
                 noteInfoRvAdapterListener?.onItemClickListener(it, adapterPosition)
             }

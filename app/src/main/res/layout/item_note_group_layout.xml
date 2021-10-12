@@ -1,82 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <data>
-
-        <variable
-            name="noteGroup"
-            type="com.inz.z.note_book.database.bean.NoteGroup" />
-
-        <variable
-            name="noteGroupSize"
-            type="String" />
-    </data>
 
 
-    <com.inz.z.base.view.widget.BaseNavLayout
-        android:id="@+id/item_note_group_bnl"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/list_item_normal_height"
-        android:background="@drawable/bg_item_selector"
-        android:paddingStart="@dimen/border_lr_dimen"
-        android:paddingEnd="@dimen/border_lr_dimen"
-        app:base_center_layout="@id/item_note_group_center_ll"
-        app:base_left_layout="@id/item_note_group_ll"
-        app:base_right_layout="@id/item_note_group_right_ll">
+<com.inz.z.base.view.widget.BaseNavLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_note_group_bnl"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_item_normal_height"
+    android:background="@drawable/bg_item_selector"
+    android:paddingStart="@dimen/border_lr_dimen"
+    android:paddingEnd="@dimen/border_lr_dimen"
+    app:base_center_layout="@id/item_note_group_center_ll"
+    app:base_left_layout="@id/item_note_group_ll"
+    app:base_right_layout="@id/item_note_group_right_ll">
 
-        <LinearLayout
-            android:id="@+id/item_note_group_ll"
-            android:layout_width="@dimen/touch_target_height"
-            android:layout_height="match_parent"
-            android:gravity="center">
+    <LinearLayout
+        android:id="@+id/item_note_group_ll"
+        android:layout_width="@dimen/touch_target_height"
+        android:layout_height="match_parent"
+        android:gravity="center">
 
-            <ImageView
-                android:id="@+id/item_note_group_iv"
-                style="@style/NoteBookAppTheme.ImageView.Icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/base_image"
-                android:src="@drawable/ic_menu_black_24dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/item_note_group_center_ll"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/content_space_between_dimen"
-            android:layout_marginEnd="@dimen/content_space_between_dimen"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/item_note_group_title_tv"
-                style="@style/NoteBookAppTheme.Text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:lines="1"
-                android:text="@{noteGroup.groupName, default = @string/base_title}" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/item_note_group_right_ll"
+        <ImageView
+            android:id="@+id/item_note_group_iv"
+            style="@style/NoteBookAppTheme.ImageView.Icon"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/base_image"
+            android:src="@drawable/ic_menu_black_24dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item_note_group_center_ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/content_space_between_dimen"
+        android:layout_marginEnd="@dimen/content_space_between_dimen"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_note_group_title_tv"
+            style="@style/NoteBookAppTheme.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:text="@string/base_title" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item_note_group_right_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:minWidth="@dimen/touch_target_height"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/item_note_group_child_number_tv"
+            style="@style/NoteBookAppTheme.Text.Hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:minWidth="@dimen/touch_target_height"
-            android:orientation="horizontal">
+            android:text="@string/base_number" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/item_note_group_child_number_tv"
-                style="@style/NoteBookAppTheme.Text.Hint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@{noteGroupSize, default = @string/base_number}" />
-        </LinearLayout>
-
-    </com.inz.z.base.view.widget.BaseNavLayout>
-
-</layout>
+</com.inz.z.base.view.widget.BaseNavLayout>

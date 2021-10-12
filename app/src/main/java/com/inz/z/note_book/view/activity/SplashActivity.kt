@@ -4,10 +4,8 @@ import android.content.Intent
 import android.os.Build
 import android.view.View
 import android.view.WindowManager
-import androidx.databinding.DataBindingUtil
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseActivity
-import com.inz.z.base.view.activity.ChooseFileActivity
 import com.inz.z.note_book.BuildConfig
 import com.inz.z.note_book.R
 import com.inz.z.note_book.databinding.SplashLayoutBinding
@@ -57,8 +55,10 @@ class SplashActivity : AbsBaseActivity() {
 
     override fun setDataBindingView() {
         super.setDataBindingView()
-        splashLayoutBinding =
-            DataBindingUtil.setContentView(this@SplashActivity, R.layout.splash_layout)
+        splashLayoutBinding = SplashLayoutBinding.inflate(layoutInflater)
+            .apply {
+                setContentView(this.root)
+            }
     }
 
     override fun getRootContentView(): View? {
@@ -66,8 +66,8 @@ class SplashActivity : AbsBaseActivity() {
     }
 
     override fun initView() {
-        splashLayoutBinding.version = BuildConfig.VERSION_NAME
-        splashLayoutBinding.timeNumber = time.toString()
+        splashLayoutBinding.splashVersionTv.text = BuildConfig.VERSION_NAME
+        splashLayoutBinding.splashTopEndNumTv.text = time.toString()
     }
 
     override fun initData() {
@@ -107,7 +107,7 @@ class SplashActivity : AbsBaseActivity() {
             } else {
                 setRightTopTimer()
                 time -= 1
-                splashLayoutBinding.timeNumber = time.toString()
+                splashLayoutBinding.splashTopEndNumTv.text = time.toString()
             }
         }, 1000)
     }

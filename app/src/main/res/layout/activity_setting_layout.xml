@@ -5,66 +5,81 @@
     android:layout_height="match_parent"
     android:background="@color/card_main_color">
 
-    <com.inz.z.base.view.widget.BaseNavLayout
-        android:id="@+id/setting_info_nav_bnl"
-        style="@style/NoteBookAppTheme.TopAction.NoAction"
+    <LinearLayout
+        android:id="@+id/setting_info_top_head_ll"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/tool_bar_height"
-        android:layout_alignParentTop="true"
-        app:base_center_layout="@id/setting_info_nav_center_rl"
-        app:base_left_layout="@id/setting_info_nav_left_rl"
-        app:base_right_layout="@id/setting_info_nav_right_rl">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:id="@+id/setting_info_nav_left_rl"
-            android:layout_width="@dimen/touch_target_size"
-            android:layout_height="match_parent">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/setting_info_top_tool_bar"
+            app:popupTheme="@style/NoteBookAppTheme.Menu.Overflow"
+            style="@style/NoteBookAppTheme.TopAction"
+            app:navigationIcon="@drawable/ic_chevron_left_black_24dp"
+            app:title="@string/setting"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize" />
+    </LinearLayout>
 
-            <ImageView
-                style="@style/NoteBookAppTheme.ImageView.Icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:contentDescription="@string/base_image"
-                android:src="@drawable/ic_chevron_left_black_24dp" />
+<!--    <com.inz.z.base.view.widget.BaseNavLayout-->
+<!--        android:id="@+id/setting_info_nav_bnl"-->
+<!--        style="@style/NoteBookAppTheme.TopAction.NoAction"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="@dimen/tool_bar_height"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        app:base_center_layout="@id/setting_info_nav_center_rl"-->
+<!--        app:base_left_layout="@id/setting_info_nav_left_rl"-->
+<!--        app:base_right_layout="@id/setting_info_nav_right_rl">-->
 
-        </RelativeLayout>
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/setting_info_nav_left_rl"-->
+<!--            android:layout_width="@dimen/touch_target_size"-->
+<!--            android:layout_height="match_parent">-->
 
-        <RelativeLayout
-            android:id="@+id/setting_info_nav_center_rl"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+<!--            <ImageView-->
+<!--                style="@style/NoteBookAppTheme.ImageView.Icon"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:contentDescription="@string/base_image"-->
+<!--                android:src="@drawable/ic_chevron_left_black_24dp" />-->
 
-            <TextView
-                style="@style/NoteBookAppTheme.Text.Title"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:gravity="center_vertical"
-                android:text="@string/setting" />
-        </RelativeLayout>
+<!--        </RelativeLayout>-->
 
-        <RelativeLayout
-            android:id="@+id/setting_info_nav_right_rl"
-            android:layout_width="@dimen/touch_target_size"
-            android:layout_height="match_parent">
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/setting_info_nav_center_rl"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent">-->
 
-            <ImageView
-                style="@style/NoteBookAppTheme.ImageView.Icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:contentDescription="@string/base_image"
-                android:src="@drawable/ic_more_vert_black_24dp" />
-        </RelativeLayout>
+<!--            <TextView-->
+<!--                style="@style/NoteBookAppTheme.Text.Title"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:text="@string/setting" />-->
+<!--        </RelativeLayout>-->
 
-    </com.inz.z.base.view.widget.BaseNavLayout>
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/setting_info_nav_right_rl"-->
+<!--            android:layout_width="@dimen/touch_target_size"-->
+<!--            android:layout_height="match_parent">-->
+
+<!--            <ImageView-->
+<!--                style="@style/NoteBookAppTheme.ImageView.Icon"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:contentDescription="@string/base_image"-->
+<!--                android:src="@drawable/ic_more_vert_black_24dp" />-->
+<!--        </RelativeLayout>-->
+
+<!--    </com.inz.z.base.view.widget.BaseNavLayout>-->
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/setting_info_content_nsv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/setting_info_nav_bnl"
+        android:layout_below="@id/setting_info_top_head_ll"
         android:overScrollMode="ifContentScrolls">
 
         <LinearLayout
@@ -126,7 +141,7 @@
                         style="@style/NoteBookAppTheme.Text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/clear_cache"/>
+                        android:text="@string/clear_cache" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -185,7 +200,7 @@
                         style="@style/NoteBookAppTheme.Text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/check_app_version_update"/>
+                        android:text="@string/check_app_version_update" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -219,7 +234,7 @@
         android:id="@+id/setting_user_info_rl"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_height"
-        android:layout_below="@id/setting_info_nav_bnl">
+        android:layout_below="@id/setting_info_top_head_ll">
 
     </RelativeLayout>
 

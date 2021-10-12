@@ -1,17 +1,18 @@
 package com.inz.z.note_book.view.activity
 
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.inz.z.base.util.FileUtils
 import com.inz.z.base.util.L
-import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.BuildConfig
 import com.inz.z.note_book.R
+import com.inz.z.note_book.databinding.ActivitySettingLayoutBinding
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
-import kotlinx.android.synthetic.main.setting_layout.*
 
 /**
  * 设置界面
@@ -27,23 +28,37 @@ class SettingActivity : BaseNoteActivity() {
         private const val HANDLER_STYLE = 0x000A02
     }
 
-    private val settingHandler = SettingHandler()
+    private val settingHandler = Handler(Looper.getMainLooper(), SettingHandlerCallback())
+
+    private lateinit var activitySettingLayoutBinding: ActivitySettingLayoutBinding
 
     override fun initWindow() {
 
     }
 
     override fun getLayoutId(): Int {
-        return R.layout.setting_layout
+        return R.layout.activity_setting_layout
+    }
+
+    override fun useDataBinding(): Boolean {
+        return true
+    }
+
+    override fun setDataBindingView() {
+        super.setDataBindingView()
+        activitySettingLayoutBinding = ActivitySettingLayoutBinding.inflate(layoutInflater)
+            .apply {
+                setContentView(this.root)
+            }
     }
 
     override fun initView() {
         QMUIStatusBarHelper.setStatusBarLightMode(this)
         window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
-        setting_info_nav_left_rl.setOnClickListener {
-            this@SettingActivity.finish()
-        }
-        setting_info_cache_clear_bnl.setOnClickListener {
+
+        setSupportActionBar(activitySettingLayoutBinding.settingInfoTopToolBar)
+
+        activitySettingLayoutBinding.settingInfoCacheClearBnl.setOnClickListener {
             mContext?.let {
                 FileUtils.clearCacheData(mContext)
                 getCacheSize()
@@ -51,8 +66,8 @@ class SettingActivity : BaseNoteActivity() {
                     .show()
             }
         }
-        setting_info_version_name_tv.text = BuildConfig.VERSION_NAME
-        setting_info_version_bnl.setOnClickListener {
+        activitySettingLayoutBinding.settingInfoVersionNameTv.text = BuildConfig.VERSION_NAME
+        activitySettingLayoutBinding.settingInfoVersionBnl.setOnClickListener {
             // get last version and update.
             getLastVersion()
             Toast.makeText(
@@ -79,6 +94,18 @@ class SettingActivity : BaseNoteActivity() {
         }
     }
 
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            // 返回
+            android.R.id.home -> {
+                this@SettingActivity.finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
     private fun getCacheSize() {
         val cachePath = FileUtils.getCachePath(mContext)
         val fileSize = FileUtils.getFileSize(cachePath)
@@ -89,7 +116,7 @@ class SettingActivity : BaseNoteActivity() {
             fileSizeStr = getString(R.string.file_size_fromat_k).format(fileSize.div(1024F))
         }
         L.i(TAG, "getCacheSize: fileSize = $fileSize. $fileSizeStr")
-        setting_info_cache_clear_size_tv?.text = fileSizeStr
+        activitySettingLayoutBinding.settingInfoCacheClearSizeTv.text = fileSizeStr
     }
 
     private fun changeStyle() {
@@ -99,9 +126,9 @@ class SettingActivity : BaseNoteActivity() {
     /**
      * 设置 Handler
      */
-    private inner class SettingHandler : Handler() {
-        override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
+    private inner class SettingHandlerCallback : Handler.Callback {
+
+        override fun handleMessage(msg: Message): Boolean {
             val bundle = msg.data
             when (msg.what) {
                 HANDLER_CACHE_SIZE -> {
@@ -112,6 +139,7 @@ class SettingActivity : BaseNoteActivity() {
 
                 }
             }
+            return true
         }
     }
 }

@@ -1,63 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <data>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/textGrayLight">
 
-        <variable
-            name="noteInfo"
-            type="com.inz.z.note_book.database.bean.NoteInfo" />
+    <LinearLayout
+        android:id="@+id/item_note_sample_left_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/content_space_between_dimen"
+        android:layout_marginEnd="@dimen/content_space_between_dimen"
+        android:orientation="horizontal">
 
-        <variable
-            name="noteInfoUpdateDateStr"
-            type="String" />
-    </data>
+    </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/item_note_sample_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/textGrayLight">
+        android:layout_centerInParent="true"
+        android:layout_toEndOf="@id/item_note_sample_left_ll"
+        android:orientation="vertical"
+        android:padding="@dimen/content_space_between_dimen">
 
-        <LinearLayout
-            android:id="@+id/item_note_sample_left_ll"
+        <TextView
+            android:id="@+id/item_note_sample_title_tv"
+            style="@style/NoteBookAppTheme.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/content_space_between_dimen"
-            android:layout_marginEnd="@dimen/content_space_between_dimen"
-            android:orientation="horizontal">
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="@string/base_title"
+            android:textSize="@dimen/body_text_size" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/item_note_sample_ll"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/item_note_sample_update_date_tv"
+            style="@style/NoteBookAppTheme.Text.Second"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_toEndOf="@id/item_note_sample_left_ll"
-            android:orientation="vertical"
-            android:padding="@dimen/content_space_between_dimen">
+            android:layout_marginTop="@dimen/content_space_between_dimen"
+            android:text="@string/base_content"
+            android:textSize="@dimen/caption_text_size" />
 
-            <TextView
-                android:id="@+id/item_note_sample_title_tv"
-                style="@style/NoteBookAppTheme.Text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:lines="1"
-                android:text="@{noteInfo.noteTitle, default=@string/base_title}"
-                android:textSize="@dimen/body_text_size" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/item_note_sample_update_date_tv"
-                style="@style/NoteBookAppTheme.Text.Second"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/content_space_between_dimen"
-                android:text="@{noteInfoUpdateDateStr, default=@string/base_content}"
-                android:textSize="@dimen/caption_text_size" />
-
-        </LinearLayout>
-
-    </RelativeLayout>
-</layout>
+</RelativeLayout>
