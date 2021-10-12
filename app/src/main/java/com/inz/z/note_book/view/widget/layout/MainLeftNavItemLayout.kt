@@ -133,11 +133,10 @@ class MainLeftNavItemLayout : LinearLayout {
      * 移除 多余 布局内容
      */
     private fun removeOtherView() {
-        // 获取 当前 View 子View 个数， 如果大于需要显示的 个数，移除其他内容，
-        val childSize = rootBaseNavLayout?.childCount ?: 0
-        if (childSize > lastShowViewOrder) {
-            // 移除不需要显示的布局内容
-//            rootBaseNavLayout?.removeViews(lastShowViewOrder + 1, childSize - lastShowViewOrder)
+        // 默认 只有一个子View， 删除多余View
+        val count = this.childCount
+        if (count > 1) {
+            this.removeViews(1, count - 1)
         }
     }
 }
