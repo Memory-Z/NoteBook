@@ -16,6 +16,8 @@ import com.inz.z.note_book.database.bean.TaskInfo
 import com.inz.z.note_book.database.bean.TaskSchedule
 import com.inz.z.note_book.database.controller.ScheduleController
 import com.inz.z.note_book.database.controller.TaskScheduleController
+import com.inz.z.note_book.databinding.ActivityScheduleLayoutBinding
+import com.inz.z.note_book.util.ClickUtil
 import com.inz.z.note_book.util.ClockAlarmManager
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.view.BaseNoteActivity
@@ -37,15 +39,23 @@ import java.util.*
  * @version 1.0.0
  * Create by inz in 2019/11/14 10:30.
  */
-class ScheduleActivity : BaseNoteActivity() {
+class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
     companion object {
         private const val TAG = "ScheduleActivity"
     }
 
+    private var activityScheduleLayoutBinding: ActivityScheduleLayoutBinding? = null
+
+    /**
+     * 添加计划弹窗
+     */
     private var scheduleAddDialogFragment: ScheduleAddDialogFragment? = null
 
     private var scheduleRvAdapter: ScheduleRvAdapter? = null
 
+    /**
+     * 选中日期： 默认设置当前日期为选中日期
+     */
     private var checkedCalendar: Calendar? = null
 
     override fun initWindow() {
@@ -56,37 +66,56 @@ class ScheduleActivity : BaseNoteActivity() {
         return R.layout.activity_schedule_layout
     }
 
+    override fun useViewBinding(): Boolean {
+        return true
+    }
+
+    override fun setViewBinding() {
+        super.setViewBinding()
+        activityScheduleLayoutBinding = ActivityScheduleLayoutBinding.inflate(layoutInflater)
+        setContentView(activityScheduleLayoutBinding?.root)
+    }
+
     override fun initView() {
+        // 设置状态栏 为 百日模式
         QMUIStatusBarHelper.setStatusBarLightMode(this)
+        // 设置状态栏 颜色
         window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
 
         // 设置 Toolbar 状态栏
         setSupportActionBar(schedule_top_tool_bar)
-
-        schedule_content_calendar_view?.setOnYearChangeListener {
-            schedule_top_calendar_date_year_tv?.text = it.toString()
+        // 年份切换 监听
+        activityScheduleLayoutBinding?.scheduleContentCalendarView?.setOnYearChangeListener {
+            activityScheduleLayoutBinding?.scheduleTopCalendarDateYearTv?.text = it.toString()
         }
-        schedule_content_calendar_view?.setOnCalendarSelectListener(
+        // 日期 选中监听
+        activityScheduleLayoutBinding?.scheduleContentCalendarView?.setOnCalendarSelectListener(
             object : CalendarView.OnCalendarSelectListener {
                 override fun onCalendarSelect(
                     calendar: com.haibin.calendarview.Calendar?,
                     isClick: Boolean
                 ) {
                     calendar?.let {
-                        schedule_top_calendar_date_year_tv?.text = calendar.year.toString()
-                        schedule_top_calendar_date_tv?.text =
-                            getString(R.string._date_time_format_M_d).format(
+                        // 设置顶部显示 年份
+                        activityScheduleLayoutBinding?.scheduleTopCalendarDateYearTv?.text =
+                            calendar.year.toString()
+                        // 设置顶部显示 日期
+                        activityScheduleLayoutBinding?.scheduleTopCalendarDateTv?.text =
+                            getDateStr(
                                 calendar.month.toString(),
                                 calendar.day.toString()
                             )
-                        schedule_top_calendar_date_lunar_tv?.text = calendar.lunar
+                        // 设置顶部显示 农历
+                        activityScheduleLayoutBinding?.scheduleTopCalendarDateLunarTv?.text =
+                            calendar.lunar
 
+                        // 记录 当前选中日期
                         val currentCalendar = Calendar.getInstance(Locale.getDefault())
                         currentCalendar.set(Calendar.YEAR, calendar.year)
                         currentCalendar.set(Calendar.MONTH, calendar.month - 1)
                         currentCalendar.set(Calendar.DAY_OF_MONTH, calendar.day)
                         checkedCalendar = currentCalendar
-                        changeCheckCalendar(currentCalendar.time)
+                        updateScheduleWhenChangeCheckCalendar(currentCalendar.time)
                     }
                 }
 
@@ -95,20 +124,16 @@ class ScheduleActivity : BaseNoteActivity() {
                 }
             }
         )
-        schedule_top_calendar_date_iv?.setOnClickListener {
-            if (schedule_content_calendar_view?.isYearSelectLayoutVisible ?: false) {
-                schedule_content_calendar_view?.closeYearSelectLayout()
-            } else {
-                schedule_content_calendar_view?.showYearSelectLayout(
-                    schedule_content_calendar_view?.curYear ?: checkedCalendar?.get(Calendar.YEAR)
-                    ?: 1970
-                )
-            }
-        }
+        // 日期按钮 点击
+        activityScheduleLayoutBinding?.scheduleTopCalendarDateIv?.setOnClickListener(this)
+        // 设置底部显示内容
         scheduleRvAdapter = ScheduleRvAdapter(mContext)
-        scheduleRvAdapter!!.listener = ScheduleRvAdapterListenerImpl()
+            .apply {
+                // 监听实现
+                listener = ScheduleRvAdapterListenerImpl()
+            }
 
-        schedule_content_rv?.apply {
+        activityScheduleLayoutBinding?.scheduleContentRv?.apply {
             layoutManager = LinearLayoutManager(mContext)
             adapter = scheduleRvAdapter
         }
@@ -117,23 +142,32 @@ class ScheduleActivity : BaseNoteActivity() {
     }
 
     override fun initData() {
+        // 默认设置当前日期为选中日期
         checkedCalendar = Calendar.getInstance(Locale.getDefault())
 
-        schedule_top_calendar_date_year_tv?.text = checkedCalendar!!.get(Calendar.YEAR).toString()
-        schedule_top_calendar_date_tv?.text = getString(R.string._date_time_format_M_d).format(
-            (checkedCalendar!!.get(Calendar.MONTH) + 1).toString(),
-            checkedCalendar!!.get(Calendar.DATE).toString()
-        )
+        // 设置默认显示内容
+        activityScheduleLayoutBinding?.let { binding ->
+            // 显示年份
+            binding.scheduleTopCalendarDateYearTv.text =
+                checkedCalendar!!.get(Calendar.YEAR).toString()
+            // 显示 日期
+            binding.scheduleTopCalendarDateTv.text = getCurrentShowDateStr()
+            // 显示农历时间
+            binding.scheduleTopCalendarDateLunarTv.text =
+                binding.scheduleContentCalendarView.selectedCalendar.lunar
+        }
         schedule_top_calendar_date_lunar_tv?.text =
             schedule_content_calendar_view?.selectedCalendar?.lunar
     }
 
     override fun onResume() {
         super.onResume()
+        // 如果 当前无 选中 日期，按现在日期作为 选中日期
         if (checkedCalendar == null) {
             checkedCalendar = Calendar.getInstance(Locale.getDefault())
         }
-        changeCheckCalendar(checkedCalendar!!.time)
+        // 更新 schedule 数据
+        updateScheduleWhenChangeCheckCalendar(checkedCalendar!!.time)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -185,11 +219,55 @@ class ScheduleActivity : BaseNoteActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onClick(v: View?) {
+        if (ClickUtil.isFastClick(v)) return
+        activityScheduleLayoutBinding?.let { binding ->
+            when (v?.id) {
+                // 顶部切换年份/月份按钮 点击
+                binding.scheduleTopCalendarDateIv.id -> {
+                    // 年份选择是否开启并显示
+                    val isYearShow =
+                        binding.scheduleContentCalendarView.isYearSelectLayoutVisible
+                    // 如果 以显示 年份选择，关闭；否则开启
+                    if (isYearShow) {
+                        binding.scheduleContentCalendarView.closeYearSelectLayout()
+                    } else {
+                        // 设置当前选中年份
+                        binding.scheduleContentCalendarView.showYearSelectLayout(
+                            binding.scheduleContentCalendarView.curYear
+                        )
+                    }
+                }
+                else -> {
+
+                }
+            }
+        }
+    }
 
     /**
-     * 切换选中日期
+     * 获取当前 需要显示的时间
+     * @return String
      */
-    private fun changeCheckCalendar(date: Date) {
+    private fun getCurrentShowDateStr() =
+        getDateStr(
+            (checkedCalendar!!.get(Calendar.MONTH) + 1).toString(),
+            checkedCalendar!!.get(Calendar.DATE).toString()
+        )
+
+    /**
+     * 获取显示时间串
+     * @param monthStr 月份
+     * @param dayStr 日期
+     */
+    private fun getDateStr(monthStr: String, dayStr: String): String =
+        getString(R.string._date_time_format_M_d).format(monthStr, dayStr)
+
+    /**
+     * 切换选中日期，并更具新 日期信息获取对应的计划内容
+     * @param date 日期
+     */
+    private fun updateScheduleWhenChangeCheckCalendar(date: Date) {
         Observable
             .create(ObservableOnSubscribe<MutableList<TaskSchedule>> {
                 val data = TaskScheduleController.findTaskScheduleByDate(date)
@@ -286,7 +364,7 @@ class ScheduleActivity : BaseNoteActivity() {
             }
             // 更新广播
             ClockAlarmManager.setAlarm(mContext, System.currentTimeMillis())
-            changeCheckCalendar(
+            updateScheduleWhenChangeCheckCalendar(
                 checkedCalendar?.time ?: Calendar.getInstance(Locale.getDefault()).time
             )
         }

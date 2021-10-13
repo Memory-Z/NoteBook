@@ -27,7 +27,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/schedule_top_tool_bar"
-            style="@style/ActionBarBase"
+            style="@style/NoteBookAppTheme.TopAction"
             android:layout_width="match_parent"
             android:layout_height="?android:actionBarSize"
             app:navigationIcon="@drawable/ic_chevron_left_black_24dp"

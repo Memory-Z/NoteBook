@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.ContentFrameLayout;
 import androidx.fragment.app.FragmentManager;
+import androidx.viewbinding.ViewBinding;
 
 import com.alibaba.fastjson.JSONObject;
 import com.inz.z.base.BuildConfig;
@@ -117,6 +118,23 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
     }
 
     /**
+     * 是否使用 ViewBinding
+     *
+     * @return 是否使用
+     * @see #setViewBinding()
+     */
+    protected boolean useViewBinding() {
+        return false;
+    }
+
+    /**
+     * 使用 ViewBinding
+     */
+    protected void setViewBinding() {
+
+    }
+
+    /**
      * 设置DataBindingView 内容
      */
     protected void setDataBindingView() {
@@ -131,10 +149,13 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
         if (resetBottomNavigationBar()) {
             setNavigationBar();
         }
-        if (!useDataBinding()) {
-            setContentView(getLayoutId());
-        } else {
+        // 判断是否是否 ViewBinding/DataBinding
+        if (useViewBinding()) {
+            setViewBinding();
+        } else if (useDataBinding()) {
             setDataBindingView();
+        } else {
+            setContentView(getLayoutId());
         }
         mContext = this;
         View rootView = getRootContentView();
