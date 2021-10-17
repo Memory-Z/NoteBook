@@ -118,4 +118,8 @@
     <string name="_next_music">下一曲</string>
     <string name="_base_duration_time">00:00</string>
 
+    <string name="schedule_state_doing">进行中</string>
+    <string name="schedule_state_done">完成</string>
+    <string name="schedule_state_undo">未开始</string>
+
 </resources>

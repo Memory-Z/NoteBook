@@ -110,7 +110,7 @@ class ScheduleService : LifecycleService() {
                     firstDayOfWeek = Calendar.MONDAY
                 }
                 // 计划状态
-                val scheduleStatus = taskSchedule.scheduleStatue
+                val scheduleStatus = taskSchedule.scheduleStatus
                 // 是否重复
                 val scheduleRepeat = taskSchedule.scheduleRepeat
                 var needDoing = false

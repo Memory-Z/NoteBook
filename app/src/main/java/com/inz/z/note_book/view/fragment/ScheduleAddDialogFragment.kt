@@ -21,6 +21,8 @@ import com.inz.z.note_book.database.bean.TaskInfo
 import com.inz.z.note_book.database.bean.TaskSchedule
 import com.inz.z.note_book.database.controller.TaskInfoController
 import com.inz.z.note_book.database.controller.TaskScheduleController
+import com.inz.z.note_book.databinding.DialogScheduleAddBinding
+import com.inz.z.note_book.util.ClickUtil
 import kotlinx.android.synthetic.main.content_schedule_add.view.*
 import kotlinx.android.synthetic.main.dialog_schedule_add.*
 import java.util.*
@@ -32,10 +34,17 @@ import java.util.*
  * @version 1.0.0
  * Create by inz in 2020/05/15 11:33.
  */
-class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment() {
+class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
+    View.OnClickListener {
     companion object {
         const val TAG = "ScheduleAddDialogFragment"
 
+        /**
+         * 获取实例
+         * @param taskScheduleId 任务计划ID
+         * @param checkedDate 选中日期
+         * @param listener 监听
+         */
         fun getInstant(
             taskScheduleId: String,
             checkedDate: Date,
@@ -50,6 +59,8 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment() 
             return fragment
         }
     }
+
+    private var dialogScheduleAddBinding: DialogScheduleAddBinding? = null
 
     var listener: ScheduleAddDFListener? = null
     private var checkTimeHour = 0
@@ -70,6 +81,10 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment() 
      * 计划描述
      */
     private var schedule: TaskSchedule? = null
+
+    /**
+     * 任务信息
+     */
     private var taskInfo: TaskInfo? = null
 
     private var scheduleTaskAction: TaskAction = TaskAction.NONE
@@ -86,42 +101,41 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment() 
         return R.layout.dialog_schedule_add
     }
 
+    override fun useViewBinding(): Boolean {
+        return true
+    }
+
+    override fun getViewBindingView(): View? {
+        dialogScheduleAddBinding = DialogScheduleAddBinding.inflate(layoutInflater, null, false)
+        return dialogScheduleAddBinding?.root
+    }
+
     override fun initView() {
-        dialog_schedule_add_top_cancel_tv?.setOnClickListener { view ->
-            this@ScheduleAddDialogFragment.dismissAllowingStateLoss()
-        }
-        dialog_schedule_add_top_save_tv?.setOnClickListener { view ->
-            saveTaskSchedule()
-        }
-        dialog_schedule_add_content_nsv?.content_time_picker?.setIs24HourView(true)
-        dialog_schedule_add_content_nsv?.content_time_picker?.setOnTimeChangedListener(
-            object : TimePicker.OnTimeChangedListener {
-                override fun onTimeChanged(view: TimePicker?, hourOfDay: Int, minute: Int) {
-                    checkTimeHour = hourOfDay
-                    checkTimeMinute = minute
-                    L.i(TAG, "change time  $hourOfDay : $minute ")
-                }
+        // 设置 点击 时间监听
+        dialogScheduleAddBinding?.dialogScheduleAddTopCancelTv?.setOnClickListener(this)
+        dialogScheduleAddBinding?.dialogScheduleAddTopSaveTv?.setOnClickListener(this)
+        dialogScheduleAddBinding?.dialogScheduleAddContentNsv?.content_time_picker?.let {
+            it.setIs24HourView(true)
+            it.setOnTimeChangedListener { _, hourOfDay, minute ->
+                checkTimeHour = hourOfDay
+                checkTimeMinute = minute
+                L.i(TAG, "change time  $hourOfDay : $minute ")
             }
-        )
-        dialog_schedule_add_content_repeat_date_bnl?.setOnClickListener { view ->
-            listener?.setRepeatDate(checkedRepeatDate)
         }
-        dialog_schedule_add_content_action_bnl?.setOnClickListener { view ->
-            listener?.chooseLauncherApplication()
-        }
-        dialog_schedule_add_content_repeat_switch?.setOnCheckedChangeListener { buttonView, isChecked ->
+        dialogScheduleAddBinding?.dialogScheduleAddContentRepeatDateBnl?.setOnClickListener(this)
+        dialogScheduleAddBinding?.dialogScheduleAddContentActionBnl?.setOnClickListener(this)
+        dialogScheduleAddBinding?.dialogScheduleAddContentRepeatSwitch?.setOnCheckedChangeListener { buttonView, isChecked ->
             dialog_schedule_add_content_repeat_date_bnl?.visibility =
                 if (isChecked) View.VISIBLE else View.GONE
         }
 
-        dialog_schedule_add_content_action_type_bnl?.setOnClickListener {
-            showChooseScheduleTypeDialogFragment()
-        }
-
-        dialog_schedule_add_content_repeat_date_bnl?.visibility = View.GONE
+        dialogScheduleAddBinding?.dialogScheduleAddContentActionTypeBnl?.setOnClickListener(this)
+        // 默认 不显示 重复
+        dialogScheduleAddBinding?.dialogScheduleAddContentRepeatDateBnl?.visibility = View.GONE
     }
 
     override fun initData() {
+        // 获取 当前 时间
         val calendar = Calendar.getInstance(Locale.getDefault())
         var checkTimeHour = calendar.get(Calendar.HOUR_OF_DAY)
         var checkTimeMinute = calendar.get(Calendar.MINUTE)
@@ -129,13 +143,16 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment() 
         val bundle = arguments
         bundle?.let {
             taskScheduleId = it.getString("TaskScheduleId", "")
+            // 获取的 任务计划 ID 不为空，表明 非新建 计划， 获取原计划信息
             if (taskScheduleId.isNotEmpty()) {
                 schedule = TaskScheduleController.findTaskScheduleById(taskScheduleId)
                 val taskId = schedule?.taskId ?: ""
+                // 判断 当前计划 关联的 任务 是否为空， 如果不为空，获取 关联的任务信息
                 if (taskId.isNotEmpty()) {
                     taskInfo = TaskInfoController.queryTaskInfoById(taskId)
                 }
             }
+            // 获取 选中时间
             checkedDate = it.getSerializable("checkedDate") as Date?
         }
         schedule?.let {
@@ -144,15 +161,12 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment() 
             checkTimeMinute = minuteStr.toInt()
             val hourStr = BaseTools.getDateFormat("HH", Locale.getDefault()).format(scheduleDate)
             checkTimeHour = hourStr.toInt()
-            dialog_schedule_add_content_nsv?.content_time_picker?.apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    hour = checkTimeHour
-                    minute = checkTimeMinute
-                } else {
-                    currentHour = checkTimeHour
-                    currentMinute = checkTimeMinute
-                }
+            // 设置 timePicker 时间
+            dialogScheduleAddBinding?.dialogScheduleAddContentNsv?.content_time_picker?.apply {
+                hour = checkTimeHour
+                minute = checkTimeMinute
             }
+            // 获取需要重复的 周期
             val repeatDateList = it.scheduleRepeatDateList
             if (repeatDateList.isNotEmpty()) {
                 for (d in repeatDateList) {
@@ -230,6 +244,41 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment() 
 
         }
         isCancelable = true
+    }
+
+    override fun onClick(v: View?) {
+        // 判断是否为 快速点击
+        if (ClickUtil.isFastClick(v)) return
+        dialogScheduleAddBinding?.let { binding ->
+            when (v?.id) {
+                // 弹窗 顶部 取消
+                binding.dialogScheduleAddTopCancelTv.id -> {
+                    // 关闭 弹窗
+                    this@ScheduleAddDialogFragment.dismissAllowingStateLoss()
+                }
+                // 弹窗 顶部 保存
+                binding.dialogScheduleAddTopSaveTv.id -> {
+                    // 保存任务 计划
+                    saveTaskSchedule()
+                }
+                // 弹窗 重复时间  选项
+                binding.dialogScheduleAddContentRepeatDateBnl.id -> {
+                    listener?.setRepeatDate(checkedRepeatDate)
+                }
+                // 弹窗 添加 内容
+                binding.dialogScheduleAddContentActionBnl.id -> {
+                    listener?.chooseLauncherApplication()
+                }
+                // 弹窗 内容类型
+                binding.dialogScheduleAddContentActionTypeBnl.id -> {
+                    showChooseScheduleTypeDialogFragment()
+                }
+
+                else -> {
+
+                }
+            }
+        }
     }
 
     /**

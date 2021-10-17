@@ -1,187 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.inz.z.base.view.widget.BaseSecurityImageView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:text="@string/appwidget_text"
-        app:textColor="@color/nearColorRed"
-        app:textSize="@dimen/text_title_size" />
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/schedule_top_head_ll"
-        style="@style/NoteBookAppTheme.TopAction"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/schedule_top_tool_bar"
-            style="@style/NoteBookAppTheme.TopAction"
+        <com.inz.z.base.view.widget.BaseSecurityImageView
             android:layout_width="match_parent"
-            android:layout_height="?android:actionBarSize"
-            app:navigationIcon="@drawable/ic_chevron_left_black_24dp"
-            app:popupTheme="@style/NoteBookAppTheme.Menu.Overflow"
-            app:title="@string/_schedule">
-
-        </androidx.appcompat.widget.Toolbar>
-    </LinearLayout>
-
-    <!--    <com.inz.z.base.view.widget.BaseNavLayout-->
-    <!--        android:id="@+id/schedule_top_bnl"-->
-    <!--        style="@style/NoteBookAppTheme.TopAction"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="@dimen/tool_bar_height"-->
-    <!--        android:layout_marginTop="@dimen/status_bar_height"-->
-    <!--        app:base_center_layout="@id/schedule_top_center_ll"-->
-    <!--        app:base_left_layout="@id/schedule_top_left_ll"-->
-    <!--        app:base_right_layout="@id/schedule_top_right_ll"-->
-    <!--        app:layout_constraintTop_toTopOf="parent">-->
-
-    <!--        <LinearLayout-->
-    <!--            android:id="@+id/schedule_top_left_ll"-->
-    <!--            android:layout_width="@dimen/touch_target_size"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:gravity="center"-->
-    <!--            android:orientation="horizontal">-->
-
-    <!--            <ImageView-->
-    <!--                android:id="@+id/schedule_top_back_iv"-->
-    <!--                style="@style/NoteBookAppTheme.ImageView.Icon"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:contentDescription="@string/image"-->
-    <!--                android:src="@drawable/ic_chevron_left_black_24dp" />-->
-    <!--        </LinearLayout>-->
-
-    <!--        <LinearLayout-->
-    <!--            android:id="@+id/schedule_top_center_ll"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:layout_marginStart="@dimen/border_lr_dimen"-->
-    <!--            android:layout_marginEnd="@dimen/border_lr_dimen"-->
-    <!--            android:gravity="center_vertical"-->
-    <!--            android:orientation="horizontal">-->
-
-    <!--            <TextView-->
-    <!--                style="@style/NoteBookAppTheme.Text.Title"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:text="@string/_schedule" />-->
-    <!--        </LinearLayout>-->
-
-    <!--        <LinearLayout-->
-    <!--            android:id="@+id/schedule_top_right_ll"-->
-    <!--            android:layout_width="@dimen/touch_target_height"-->
-    <!--            android:layout_height="match_parent"-->
-    <!--            android:gravity="center">-->
-
-    <!--            <ImageView-->
-    <!--                android:id="@+id/schedule_top_right_add_iv"-->
-    <!--                style="@style/NoteBookAppTheme.ImageView.Icon"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:contentDescription="@string/image"-->
-    <!--                android:src="@drawable/ic_add_black_24dp" />-->
-    <!--        </LinearLayout>-->
-    <!--    </com.inz.z.base.view.widget.BaseNavLayout>-->
-
-
-    <RelativeLayout
-        android:id="@+id/schedule_top_calendar_rl"
-        style="@style/NoteBookAppTheme.Layout"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/touch_target_height"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/schedule_top_head_ll">
-
-        <TextView
-            android:id="@+id/schedule_top_calendar_date_tv"
-            style="@style/NoteBookAppTheme.Text.Second"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:textColor="@color/textColor"
-            android:textSize="@dimen/text_max_title_size"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/schedule_top_calendar_date_iv"
-            style="@style/NoteBookAppTheme.ImageView.Icon.Min"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:contentDescription="@string/image"
-            android:src="@drawable/ic_date_range_black_24dp"
-            app:tint="@color/colorPrimary" />
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:text="@string/appwidget_text"
+            app:textColor="@color/nearColorRed"
+            app:textSize="@dimen/text_title_size" />
 
         <LinearLayout
-            android:id="@+id/schedule_top_calendar_date_content_ll"
-            android:layout_width="wrap_content"
+            android:id="@+id/schedule_top_head_ll"
+            style="@style/NoteBookAppTheme.TopAction"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/content_space_between_dimen"
-            android:layout_toStartOf="@id/schedule_top_calendar_date_iv"
-            android:layout_toEndOf="@id/schedule_top_calendar_date_tv"
-            android:orientation="vertical">
+            android:fitsSystemWindows="true"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/schedule_top_tool_bar"
+                style="@style/NoteBookAppTheme.TopAction"
+                android:layout_width="match_parent"
+                android:layout_height="?android:actionBarSize"
+                app:navigationIcon="@drawable/ic_chevron_left_black_24dp"
+                app:popupTheme="@style/NoteBookAppTheme.Menu.Overflow"
+                app:title="@string/_schedule">
+
+            </androidx.appcompat.widget.Toolbar>
+        </LinearLayout>
+
+        <!--    <com.inz.z.base.view.widget.BaseNavLayout-->
+        <!--        android:id="@+id/schedule_top_bnl"-->
+        <!--        style="@style/NoteBookAppTheme.TopAction"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="@dimen/tool_bar_height"-->
+        <!--        android:layout_marginTop="@dimen/status_bar_height"-->
+        <!--        app:base_center_layout="@id/schedule_top_center_ll"-->
+        <!--        app:base_left_layout="@id/schedule_top_left_ll"-->
+        <!--        app:base_right_layout="@id/schedule_top_right_ll"-->
+        <!--        app:layout_constraintTop_toTopOf="parent">-->
+
+        <!--        <LinearLayout-->
+        <!--            android:id="@+id/schedule_top_left_ll"-->
+        <!--            android:layout_width="@dimen/touch_target_size"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:gravity="center"-->
+        <!--            android:orientation="horizontal">-->
+
+        <!--            <ImageView-->
+        <!--                android:id="@+id/schedule_top_back_iv"-->
+        <!--                style="@style/NoteBookAppTheme.ImageView.Icon"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:contentDescription="@string/image"-->
+        <!--                android:src="@drawable/ic_chevron_left_black_24dp" />-->
+        <!--        </LinearLayout>-->
+
+        <!--        <LinearLayout-->
+        <!--            android:id="@+id/schedule_top_center_ll"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:layout_marginStart="@dimen/border_lr_dimen"-->
+        <!--            android:layout_marginEnd="@dimen/border_lr_dimen"-->
+        <!--            android:gravity="center_vertical"-->
+        <!--            android:orientation="horizontal">-->
+
+        <!--            <TextView-->
+        <!--                style="@style/NoteBookAppTheme.Text.Title"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:text="@string/_schedule" />-->
+        <!--        </LinearLayout>-->
+
+        <!--        <LinearLayout-->
+        <!--            android:id="@+id/schedule_top_right_ll"-->
+        <!--            android:layout_width="@dimen/touch_target_height"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:gravity="center">-->
+
+        <!--            <ImageView-->
+        <!--                android:id="@+id/schedule_top_right_add_iv"-->
+        <!--                style="@style/NoteBookAppTheme.ImageView.Icon"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:contentDescription="@string/image"-->
+        <!--                android:src="@drawable/ic_add_black_24dp" />-->
+        <!--        </LinearLayout>-->
+        <!--    </com.inz.z.base.view.widget.BaseNavLayout>-->
+
+
+        <RelativeLayout
+            android:id="@+id/schedule_top_calendar_rl"
+            style="@style/NoteBookAppTheme.Layout"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/touch_target_height"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/schedule_top_head_ll">
 
             <TextView
-                android:id="@+id/schedule_top_calendar_date_year_tv"
+                android:id="@+id/schedule_top_calendar_date_tv"
                 style="@style/NoteBookAppTheme.Text.Second"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/textColor70" />
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/textColor"
+                android:textSize="@dimen/text_max_title_size"
+                android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/schedule_top_calendar_date_lunar_tv"
-                style="@style/NoteBookAppTheme.Text.Hint"
+            <ImageView
+                android:id="@+id/schedule_top_calendar_date_iv"
+                style="@style/NoteBookAppTheme.ImageView.Icon.Min"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/image"
+                android:src="@drawable/ic_date_range_black_24dp"
+                app:tint="@color/colorPrimary" />
 
-        </LinearLayout>
-    </RelativeLayout>
-    <!-- 日历内容 -->
-    <com.haibin.calendarview.CalendarLayout
-        android:id="@+id/schedule_content_calendar_layout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:calendar_content_view_id="@id/schedule_content_rv"
-        app:calendar_show_mode="both_month_week_view"
-        app:default_status="expand"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/schedule_top_calendar_rl">
+            <LinearLayout
+                android:id="@+id/schedule_top_calendar_date_content_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/content_space_between_dimen"
+                android:layout_toStartOf="@id/schedule_top_calendar_date_iv"
+                android:layout_toEndOf="@id/schedule_top_calendar_date_tv"
+                android:orientation="vertical">
 
-        <com.haibin.calendarview.CalendarView
-            android:id="@+id/schedule_content_calendar_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:calendar_match_parent="false"
-            app:day_text_size="@dimen/sp14"
-            app:month_view_scrollable="true"
-            app:selected_lunar_text_color="@color/colorPrimary"
-            app:selected_text_color="@color/colorPrimary"
-            app:week_background="@color/transparent" />
+                <TextView
+                    android:id="@+id/schedule_top_calendar_date_year_tv"
+                    style="@style/NoteBookAppTheme.Text.Second"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor70" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/schedule_content_rv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </com.haibin.calendarview.CalendarLayout>
+                <TextView
+                    android:id="@+id/schedule_top_calendar_date_lunar_tv"
+                    style="@style/NoteBookAppTheme.Text.Hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </RelativeLayout>
+        <!-- 日历内容 -->
+        <com.haibin.calendarview.CalendarLayout
+            android:id="@+id/schedule_content_calendar_layout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:calendar_content_view_id="@id/schedule_content_rv"
+            app:calendar_show_mode="both_month_week_view"
+            app:default_status="expand"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/schedule_top_calendar_rl">
+
+            <com.haibin.calendarview.CalendarView
+                android:id="@+id/schedule_content_calendar_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:calendar_match_parent="false"
+                app:day_text_size="@dimen/sp14"
+                app:month_view_scrollable="true"
+                app:selected_lunar_text_color="@color/colorPrimary"
+                app:selected_text_color="@color/colorPrimary"
+                app:week_background="@color/transparent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/schedule_content_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/base_background_color" />
+        </com.haibin.calendarview.CalendarLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/schedule_add_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/margin_layout"
+        android:layout_marginBottom="@dimen/margin_layout"
+        android:contentDescription="@string/_add_content"
+        android:src="@drawable/ic_add_black_24dp"
+        android:tint="@color/textInverseColor" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

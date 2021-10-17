@@ -55,4 +55,10 @@
 
     <color name="scrollbar_thumb_color">@color/colorPrimary</color>
     <color name="scrollbar_thumb_pass_color">@color/colorPrimaryDark</color>
+
+    <color name="base_background_color">@color/card_main_color</color>
+
+    <color name="schedule_color_doing">@color/colorPrimary</color>
+    <color name="schedule_color_done">@color/nearColorRed</color>
+    <color name="schedule_color_undo">@color/lightGray</color>
 </resources>

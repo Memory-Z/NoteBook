@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.DialogFragment;
+import androidx.viewbinding.ViewBinding;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,25 @@ public abstract class AbsBaseDialogFragment extends DialogFragment {
 
     protected abstract void initData();
 
+    /**
+     * 是否使用 ViewBinding
+     *
+     * @return 是否使用 , 默认不使用
+     */
+    protected boolean useViewBinding() {
+        return false;
+    }
+
+    /**
+     * 设置 ViewBinding
+     *
+     * @return 获取 ViewBinding.root
+     */
+    @Nullable
+    protected View getViewBindingView() {
+        return null;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +61,10 @@ public abstract class AbsBaseDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // 是否使用 ViewBinding
+        if (useViewBinding()) {
+            return getViewBindingView();
+        }
         return inflater.inflate(getLayoutId(), null, false);
     }
 

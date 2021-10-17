@@ -115,6 +115,7 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
                         currentCalendar.set(Calendar.MONTH, calendar.month - 1)
                         currentCalendar.set(Calendar.DAY_OF_MONTH, calendar.day)
                         checkedCalendar = currentCalendar
+                        // 跟新底部显示数据
                         updateScheduleWhenChangeCheckCalendar(currentCalendar.time)
                     }
                 }
@@ -132,7 +133,7 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
                 // 监听实现
                 listener = ScheduleRvAdapterListenerImpl()
             }
-
+        // 设置 RecyclerView 适配器
         activityScheduleLayoutBinding?.scheduleContentRv?.apply {
             layoutManager = LinearLayoutManager(mContext)
             adapter = scheduleRvAdapter
@@ -156,8 +157,6 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
             binding.scheduleTopCalendarDateLunarTv.text =
                 binding.scheduleContentCalendarView.selectedCalendar.lunar
         }
-        schedule_top_calendar_date_lunar_tv?.text =
-            schedule_content_calendar_view?.selectedCalendar?.lunar
     }
 
     override fun onResume() {
@@ -173,13 +172,14 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (resultCode) {
-
+            // 应用列表请求返回
             Constants.APPLICATION_LIST_REQUEST_CODE -> {
                 val packageInfo = data?.extras?.getParcelable("PackageInfo") as PackageInfo?
                 if (packageInfo != null) {
                     this.scheduleAddDialogFragment?.setChockedLauncherApplication(packageInfo)
                 }
             }
+            // 选择时间返回
             Constants.CUSTOM_DATE_REQUEST_CODE -> {
                 val checkedWeek = data?.extras?.getIntArray("CheckWeek")
                 if (checkedWeek != null) {
@@ -206,7 +206,7 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
                 // 获取当前时间
                 val calendar = Calendar.getInstance(Locale.getDefault())
                 calendar.timeInMillis =
-                    schedule_content_calendar_view?.selectedCalendar?.timeInMillis
+                    activityScheduleLayoutBinding?.scheduleContentCalendarView?.selectedCalendar?.timeInMillis
                         ?: calendar.timeInMillis
                 // 显示 添加计划弹窗
                 showScheduleAddDialog("", calendar.time)
@@ -220,6 +220,7 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
+        // 判断 是否为快速 点击
         if (ClickUtil.isFastClick(v)) return
         activityScheduleLayoutBinding?.let { binding ->
             when (v?.id) {
@@ -270,6 +271,7 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
     private fun updateScheduleWhenChangeCheckCalendar(date: Date) {
         Observable
             .create(ObservableOnSubscribe<MutableList<TaskSchedule>> {
+                // 根据 日期 获取对应的数据信息
                 val data = TaskScheduleController.findTaskScheduleByDate(date)
                 it.onNext(data)
             })
@@ -298,8 +300,10 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
     private inner class ScheduleRvAdapterListenerImpl :
         ScheduleRvAdapter.ScheduleRvAdapterListener {
         override fun itemClick(v: View?, position: Int) {
+            // 获取点击项 数据信息
             val taskSchedule = this@ScheduleActivity.scheduleRvAdapter?.list?.get(position)
             if (taskSchedule != null) {
+                // 显示添加 弹窗
                 showScheduleAddDialog(
                     taskSchedule.taskScheduleId,
                     checkedCalendar?.time ?: Calendar.getInstance(Locale.getDefault()).time
@@ -307,13 +311,6 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
             }
         }
 
-        override fun itemCheckedChanged(
-            buttonView: CompoundButton?,
-            isChecked: Boolean,
-            position: Int
-        ) {
-
-        }
     }
 
     /**
@@ -355,7 +352,9 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
                 TAG,
                 "save: taskInfo = ${taskInfo.toString()} , taskSchedule = ${taskSchedule.toString()}"
             )
+            // 判断当前任务是否存在
             if (taskInfo != null) {
+                // 如果任务 计划 不存在 是 插入任务； 否则，插入 任务 及 对应的 计划
                 if (taskSchedule == null) {
                     ScheduleController.insertScheduleTask(taskInfo)
                 } else {
@@ -364,6 +363,7 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
             }
             // 更新广播
             ClockAlarmManager.setAlarm(mContext, System.currentTimeMillis())
+            // 更新计划
             updateScheduleWhenChangeCheckCalendar(
                 checkedCalendar?.time ?: Calendar.getInstance(Locale.getDefault()).time
             )
@@ -394,4 +394,10 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
 
         }
     }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // TEST
+    ///////////////////////////////////////////////////////////////////////////
+
 }

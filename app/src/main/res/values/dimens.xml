@@ -81,4 +81,9 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <!-- 提示文字高度 -->
     <dimen name="min_text_hint_height">@dimen/dp24</dimen>
 
+    <!-- 计划列表 左侧 宽度  -->
+    <dimen name="item_schedule_state_width">@dimen/dp08</dimen>
+    <!-- 卡片圆角  -->
+    <dimen name="card_radius">@dimen/dp04</dimen>
+
 </resources>

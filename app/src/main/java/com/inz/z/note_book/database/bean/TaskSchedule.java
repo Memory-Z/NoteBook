@@ -210,7 +210,7 @@ public class TaskSchedule {
         this.status = status.getValue();
     }
 
-    public ScheduleStatus getScheduleStatue() {
+    public ScheduleStatus getScheduleStatus() {
         ScheduleStatus status = ScheduleStatus.UNABLE;
         return status.getScheduleStatue(this.status);
     }
