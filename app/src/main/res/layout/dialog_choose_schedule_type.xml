@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_card_white_base"
-    android:backgroundTint="@color/textColor30"
+    android:backgroundTint="@color/textColor10"
     android:orientation="vertical">
 
     <!-- 提示 -->

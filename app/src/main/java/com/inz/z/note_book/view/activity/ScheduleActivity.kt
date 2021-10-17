@@ -3,6 +3,7 @@ package com.inz.z.note_book.view.activity
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.CompoundButton
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haibin.calendarview.CalendarView
+import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.TaskInfo
@@ -139,6 +141,9 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
             adapter = scheduleRvAdapter
         }
 
+        // 设置 浮动按钮点击事件
+        activityScheduleLayoutBinding?.scheduleAddFab?.setOnClickListener(this)
+
 //        schedule_content_calendar_view?.setOnTouchListener(CalendarViewOnToucherListenerImpl())
     }
 
@@ -183,7 +188,7 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
             Constants.CUSTOM_DATE_REQUEST_CODE -> {
                 val checkedWeek = data?.extras?.getIntArray("CheckWeek")
                 if (checkedWeek != null) {
-                    this.scheduleAddDialogFragment?.setCustomDate(checkedWeek)
+                    this.scheduleAddDialogFragment?.setRepeatWeekDate(checkedWeek)
                 }
             }
         }
@@ -229,6 +234,7 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
                     // 年份选择是否开启并显示
                     val isYearShow =
                         binding.scheduleContentCalendarView.isYearSelectLayoutVisible
+                    L.d(TAG, "onClick: 【scheduleTopCalendarDateIv】 isYearShow = $isYearShow")
                     // 如果 以显示 年份选择，关闭；否则开启
                     if (isYearShow) {
                         binding.scheduleContentCalendarView.closeYearSelectLayout()
@@ -238,6 +244,20 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
                             binding.scheduleContentCalendarView.curYear
                         )
                     }
+                }
+                // 浮动 按钮 点击 事件
+                binding.scheduleAddFab.id -> {
+                    // 获取当前时间
+                    val calendar = Calendar.getInstance(Locale.getDefault())
+                    calendar.timeInMillis =
+                        activityScheduleLayoutBinding?.scheduleContentCalendarView?.selectedCalendar?.timeInMillis
+                            ?: calendar.timeInMillis
+                    L.d(TAG,
+                        "onClick: 【scheduleAddFab】 calender time = ${
+                            BaseTools.getDateFormatTime().format(calendar.time)
+                        }")
+                    // 显示 添加计划弹窗
+                    showScheduleAddDialog("", calendar.time)
                 }
                 else -> {
 
@@ -263,6 +283,20 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
      */
     private fun getDateStr(monthStr: String, dayStr: String): String =
         getString(R.string._date_time_format_M_d).format(monthStr, dayStr)
+
+    /**
+     * 切换 底部浮动按钮显示状态
+     * @param show 是否显示
+     */
+    private fun targetFloatButton(show: Boolean) {
+        activityScheduleLayoutBinding?.scheduleAddFab?.apply {
+            if (show) {
+                show()
+            } else {
+                hide()
+            }
+        }
+    }
 
     /**
      * 切换选中日期，并更具新 日期信息获取对应的计划内容

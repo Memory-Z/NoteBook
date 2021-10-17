@@ -76,3 +76,73 @@ object NoteStatus {
 
     }
 }
+
+/**
+ * 计划类型 ： 提示，震动， 闹钟， 启动， 无
+ */
+object ScheduleTypeValue {
+    /**
+     * 无
+     */
+    const val NONE = 0x0020
+
+    /**
+     * 提示
+     */
+    const val HINT = 0x0021
+
+    /**
+     * 震动
+     */
+    const val SHOCK = 0x0022
+
+    /**
+     * 闹钟
+     */
+    const val ALARM = 0x0023
+
+    /**
+     * 启动
+     */
+    const val LAUNCHER = 0x0024
+
+    /**
+     * 类型 值
+     */
+    private val TYPE_VALUE_MAP = mutableMapOf<Int, String>()
+        .apply {
+            put(NONE, "none")
+            put(HINT, "hint")
+            put(SHOCK, "shock")
+            put(ALARM, "alarm")
+            put(LAUNCHER, "launcher")
+        }
+
+
+
+
+    @ScheduleType
+    fun getScheduleTypeByContentStr(content: String): Int {
+        var type = NONE
+        TYPE_VALUE_MAP.forEach {
+            if (it.value.equals(content, true)) {
+                type = it.key
+            }
+        }
+        return type
+    }
+
+    fun getContentStrByType(@ScheduleType type: Int): String {
+        return TYPE_VALUE_MAP.getOrDefault(type, "none")
+    }
+}
+@IntDef(ScheduleTypeValue.NONE,
+    ScheduleTypeValue.HINT,
+    ScheduleTypeValue.SHOCK,
+    ScheduleTypeValue.ALARM,
+    ScheduleTypeValue.LAUNCHER)
+@Target(AnnotationTarget.FUNCTION,
+    AnnotationTarget.VALUE_PARAMETER,
+    AnnotationTarget.PROPERTY,
+    AnnotationTarget.TYPE_PARAMETER)
+annotation class ScheduleType
