@@ -3,6 +3,7 @@ package com.inz.z.note_book.base
 import android.content.Context
 import androidx.annotation.IntDef
 import androidx.annotation.NonNull
+import androidx.annotation.StringDef
 import com.inz.z.note_book.R
 
 /**
@@ -119,8 +120,6 @@ object ScheduleTypeValue {
         }
 
 
-
-
     @ScheduleType
     fun getScheduleTypeByContentStr(content: String): Int {
         var type = NONE
@@ -136,6 +135,7 @@ object ScheduleTypeValue {
         return TYPE_VALUE_MAP.getOrDefault(type, "none")
     }
 }
+
 @IntDef(ScheduleTypeValue.NONE,
     ScheduleTypeValue.HINT,
     ScheduleTypeValue.SHOCK,
@@ -146,3 +146,32 @@ object ScheduleTypeValue {
     AnnotationTarget.PROPERTY,
     AnnotationTarget.TYPE_PARAMETER)
 annotation class ScheduleType
+
+/**
+ * 任务动作
+ */
+object TaskActionValue {
+    /**
+     * 计划
+     */
+    const val TASK_ACTION_SCHEDULE = "Schedule"
+
+    /**
+     * 无
+     */
+    const val TASK_ACTION_NONE = "None"
+
+}
+
+@StringDef(
+    TaskActionValue.TASK_ACTION_SCHEDULE,
+    TaskActionValue.TASK_ACTION_NONE
+)
+@Target(
+    AnnotationTarget.TYPE_PARAMETER,
+    AnnotationTarget.PROPERTY,
+    AnnotationTarget.VALUE_PARAMETER,
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.FIELD
+)
+annotation class TaskAction

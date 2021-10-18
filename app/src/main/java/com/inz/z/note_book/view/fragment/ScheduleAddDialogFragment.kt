@@ -227,12 +227,10 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
             scheduleType = getScheduleType(it.taskAction)
             L.d(TAG, "initData: scheduleType = $scheduleType")
         }
-        // 事件类型
-        dialogScheduleAddBinding?.dialogScheduleAddContentActionTypeTv?.text =
-            getScheduleTypeStr(scheduleType)
-        // 是否显示 事件 行， 仅在 事件 为启动某程序 时显示
-        dialogScheduleAddBinding?.dialogScheduleAddContentActionBnl?.visibility =
-            if (ScheduleTypeValue.LAUNCHER == scheduleType) View.VISIBLE else View.GONE
+
+        // 更新 时间类型 UI
+        updateScheduleActionView(scheduleType)
+
         if (checkedPackageName.isNotEmpty()) {
             checkedPackageInfo =
                 LauncherHelper.findApplicationInfoByPackageName(mContext, checkedPackageName)
@@ -329,7 +327,9 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
      * 保存 计划任务
      */
     private fun saveTaskSchedule() {
+        // 获取当前时间
         val calendar = Calendar.getInstance(Locale.getDefault())
+        // 如果 任务信息为 null , 创建 新任务信息， 并关联
         if (taskInfo == null) {
             taskInfo = TaskInfo()
             taskInfo!!.apply {
@@ -343,9 +343,10 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
             // 获取计划 类型
             taskAction = getScheduleTypeStr(scheduleType)
             taskPackageName = checkedPackageName
-            taskRequestCode = SystemClock.uptimeMillis().toInt()
+            taskRequestCode = SystemClock.uptimeMillis()
             updateTime = calendar.time
         }
+        // 如果当前 计划 未创建，创建新任务计划。
         if (schedule == null) {
             schedule = TaskSchedule()
             schedule!!.apply {
@@ -414,10 +415,28 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
     private inner class ChooseScheduleTypeDialogListenerImpl :
         ChooseScheduleTypeDialogFragment.ChooseScheduleTypeDialogListener {
         override fun chooseType(@ScheduleType type: Int) {
-            dialog_schedule_add_content_action_bnl?.visibility =
-                if (ScheduleTypeValue.LAUNCHER == type) View.VISIBLE else View.GONE
-            dialog_schedule_add_content_action_type_tv?.text = getScheduleTypeStr(type)
+            // 更新 计划类型 View
+            updateScheduleActionView(type)
+            // 隐藏 计划类型 选择弹窗。
             hideChooseScheduleTypeDialogFragment()
+        }
+    }
+
+    /**
+     * 更新 计划类型 View
+     * @param type 计划类型
+     */
+    private fun updateScheduleActionView(@ScheduleType type: Int) {
+        dialogScheduleAddBinding?.let {
+            // 是否需要显示
+            val needShow = ScheduleTypeValue.LAUNCHER == type
+            // 设置是否显示
+            it.dialogScheduleAddContentActionBnl.visibility =
+                if (needShow) View.VISIBLE else View.GONE
+            // 仅在 显示 状态下更新内容
+            if (needShow) {
+                it.dialogScheduleAddContentActionTypeTv.text = getScheduleTypeStr(type)
+            }
         }
     }
 
@@ -460,7 +479,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
      * 设置选中的程序信息
      */
     fun setChockedLauncherApplication(packageInfo: PackageInfo) {
-        dialog_schedule_add_content_action_name_tv?.text =
+        dialogScheduleAddBinding?.dialogScheduleAddContentActionNameTv?.text =
             packageInfo.applicationInfo.loadLabel(mContext.packageManager)
         this.checkedPackageInfo = packageInfo
         this.checkedPackageName = packageInfo.packageName
@@ -488,7 +507,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
         } else {
             timeStr = getString(R.string._never)
         }
-        dialog_schedule_add_content_repeat_date_detail_tv?.text = timeStr
+        dialogScheduleAddBinding?.dialogScheduleAddContentRepeatDateDetailTv?.text = timeStr
     }
 
 }

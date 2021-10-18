@@ -370,6 +370,7 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
                 )
             this.scheduleAddDialogFragment = scheduleAddDialogFragment
         }
+        L.i(TAG, "showScheduleAddDialog: ---> ${scheduleAddDialogFragment.isAdded} -- ${scheduleAddDialogFragment.isVisible}")
         if (!scheduleAddDialogFragment.isAdded && !scheduleAddDialogFragment.isVisible) {
             scheduleAddDialogFragment.show(manager, "ScheduleAddDialogFragment")
         }

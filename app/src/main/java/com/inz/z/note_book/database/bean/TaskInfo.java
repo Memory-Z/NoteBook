@@ -2,6 +2,9 @@ package com.inz.z.note_book.database.bean;
 
 import androidx.annotation.NonNull;
 
+import com.inz.z.note_book.base.TaskAction;
+import com.inz.z.note_book.base.TaskActionValue;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
@@ -10,11 +13,13 @@ import org.greenrobot.greendao.annotation.Index;
 import java.util.Date;
 
 /**
- * 任务信息
+ * 任务信息 -- 作用？
  *
  * @author Zhenglj
  * @version 1.0.0
  * Create by inz in 2019/11/14 10:32.
+ * 作用: 作为 计划 附件
+ * Update by lop 3 in 2021/10/18 21:43
  */
 @Entity(nameInDb = "task_info")
 public class TaskInfo {
@@ -43,9 +48,10 @@ public class TaskInfo {
      */
     private String remake = "";
     /**
-     * 任务动作
+     * 任务动作: 描述任务需要执行的类型。如: 计划 - {@link TaskSchedule}
      */
-    private String taskAction = "";
+    @TaskAction
+    private String taskAction = TaskActionValue.TASK_ACTION_NONE;
     /**
      * 任务包名
      */
@@ -54,15 +60,20 @@ public class TaskInfo {
     /**
      * 任务请求码
      */
-    private Integer taskRequestCode = -1;
+    private Long taskRequestCode = -1L;
 
     private Date createTime;
     private Date updateTime;
 
-    @Generated(hash = 122765172)
+
+    @Generated(hash = 2022720704)
+    public TaskInfo() {
+    }
+
+    @Generated(hash = 638954131)
     public TaskInfo(String taskId, int type, String taskDescribe, int haveFile,
                     String remake, String taskAction, String taskPackageName,
-                    Integer taskRequestCode, Date createTime, Date updateTime) {
+                    Long taskRequestCode, Date createTime, Date updateTime) {
         this.taskId = taskId;
         this.type = type;
         this.taskDescribe = taskDescribe;
@@ -73,10 +84,6 @@ public class TaskInfo {
         this.taskRequestCode = taskRequestCode;
         this.createTime = createTime;
         this.updateTime = updateTime;
-    }
-
-    @Generated(hash = 2022720704)
-    public TaskInfo() {
     }
 
     public String getTaskId() {
@@ -135,6 +142,7 @@ public class TaskInfo {
         this.updateTime = updateTime;
     }
 
+    @TaskAction
     public String getTaskAction() {
         return this.taskAction;
     }
@@ -151,11 +159,11 @@ public class TaskInfo {
         this.taskPackageName = taskPackageName;
     }
 
-    public Integer getTaskRequestCode() {
+    public Long getTaskRequestCode() {
         return this.taskRequestCode;
     }
 
-    public void setTaskRequestCode(Integer taskRequestCode) {
+    public void setTaskRequestCode(Long taskRequestCode) {
         this.taskRequestCode = taskRequestCode;
     }
 

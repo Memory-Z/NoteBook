@@ -71,6 +71,7 @@ class ChooseScheduleTypeDialogFragment private constructor() : AbsBaseDialogFrag
         binding?.dialogChooseScheduleTypeCancelTv?.setOnClickListener(this)
         binding?.dialogChooseScheduleTypeClockTv?.setOnClickListener(this)
         binding?.dialogChooseScheduleTypeHintTv?.setOnClickListener(this)
+        binding?.dialogChooseScheduleTypeShockTv?.setOnClickListener(this)
         binding?.dialogChooseScheduleTypeLauncherTv?.setOnClickListener(this)
         binding?.dialogChooseScheduleTypeNoneTv?.setOnClickListener(this)
     }
@@ -103,7 +104,6 @@ class ChooseScheduleTypeDialogFragment private constructor() : AbsBaseDialogFrag
                 binding.dialogChooseScheduleTypeCancelTv.id -> {
                     type = currentType
                 }
-
                 // 弱提示
                 binding.dialogChooseScheduleTypeHintTv.id -> {
                     type = ScheduleTypeValue.HINT
@@ -115,6 +115,10 @@ class ChooseScheduleTypeDialogFragment private constructor() : AbsBaseDialogFrag
                 // 闹钟
                 binding.dialogChooseScheduleTypeClockTv.id -> {
                     type = ScheduleTypeValue.ALARM
+                }
+                // 震动
+                binding.dialogChooseScheduleTypeShockTv.id -> {
+                    type = ScheduleTypeValue.SHOCK
                 }
                 // 无
                 binding.dialogChooseScheduleTypeNoneTv.id -> {

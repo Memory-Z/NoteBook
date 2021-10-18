@@ -2,6 +2,8 @@ package com.inz.z.note_book.util
 
 import android.view.View
 import androidx.annotation.UiThread
+import com.inz.z.base.util.L
+import com.inz.z.note_book.BuildConfig
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.abs
 
@@ -16,6 +18,8 @@ object ClickUtil {
      * 快速点击间隔： .5s
      */
     private const val FAST_CLICK_TIME = 500L
+
+    private const val TAG = "ClickUtil"
 
     private const val MAX_MAP_SIZE = 32
 
@@ -57,7 +61,7 @@ object ClickUtil {
         if (clickViewMap.containsKey(vId)) {
             val lastTime = clickViewMap[vId] ?: 0L
             // 判断两次点击 事件间隔。
-            isFast = abs(currentTime - lastTime) > interval
+            isFast = abs(currentTime - lastTime) < interval
             // 存在点击 ID , 判断 上次执行时间，
             clickViewMap.remove(vId)
         }
@@ -68,6 +72,9 @@ object ClickUtil {
         }
         // 更新 最新时间
         clickViewMap[vId] = currentTime
+        if (BuildConfig.DEBUG) {
+            L.i(TAG, "isFastClick: this is fast click, $view")
+        }
         return isFast
     }
 }

@@ -122,4 +122,6 @@
     <string name="schedule_state_done">完成</string>
     <string name="schedule_state_undo">未开始</string>
 
+    <string name="_shock">震动</string>
+
 </resources>

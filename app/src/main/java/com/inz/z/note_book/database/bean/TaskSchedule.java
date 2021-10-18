@@ -24,11 +24,14 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * 任务计划
+ * 任务计划  ---- 依附 于任务信息
+ * <h1>任务计划</h1>
+ * <br/>
  *
  * @author Zhenglj
  * @version 1.0.0
  * Create by inz in 2019/11/14 10:31.
+ * @see TaskInfo
  */
 @Entity(nameInDb = "task_schedule")
 public class TaskSchedule {

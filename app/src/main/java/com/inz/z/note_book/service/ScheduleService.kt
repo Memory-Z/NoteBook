@@ -275,9 +275,10 @@ class ScheduleService : LifecycleService() {
                 intent.action = Constants.AlarmAction.ALARM_BROADCAST_SCHEDULE_ACTION
             }
         }
+        // TODO: 2021/10/18 code maybe have error 
         return PendingIntent.getBroadcast(
             applicationContext,
-            taskInfo.taskRequestCode,
+            taskInfo.taskRequestCode.toInt(),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )

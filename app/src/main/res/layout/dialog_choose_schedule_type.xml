@@ -18,17 +18,27 @@
         android:paddingEnd="@dimen/border_lr_dimen"
         android:text="@string/_tips" />
 
-    <!-- 启动 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color" />
+
+    <!-- 震动  -->
     <TextView
-        android:id="@+id/dialog_choose_schedule_type_launcher_tv"
+        android:id="@+id/dialog_choose_schedule_type_shock_tv"
         style="@style/NoteBookAppTheme.Text.Title"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/touch_target_height"
+        android:layout_height="@dimen/list_item_normal_height"
         android:background="@drawable/bg_card_white_base"
         android:gravity="center"
         android:paddingStart="@dimen/border_lr_dimen"
         android:paddingEnd="@dimen/border_lr_dimen"
-        android:text="@string/_launcher" />
+        android:text="@string/_shock" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color" />
 
     <!-- 闹钟 -->
     <TextView
@@ -42,6 +52,26 @@
         android:paddingEnd="@dimen/border_lr_dimen"
         android:text="@string/_clock" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color" />
+    <!-- 启动 -->
+    <TextView
+        android:id="@+id/dialog_choose_schedule_type_launcher_tv"
+        style="@style/NoteBookAppTheme.Text.Title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/touch_target_height"
+        android:background="@drawable/bg_card_white_base"
+        android:gravity="center"
+        android:paddingStart="@dimen/border_lr_dimen"
+        android:paddingEnd="@dimen/border_lr_dimen"
+        android:text="@string/_launcher" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color" />
     <!-- 无 -->
     <TextView
         android:id="@+id/dialog_choose_schedule_type_none_tv"
