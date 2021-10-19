@@ -3,7 +3,7 @@ package com.inz.z.note_book.database.bean;
 import androidx.annotation.NonNull;
 
 import com.inz.z.note_book.base.TaskAction;
-import com.inz.z.note_book.base.TaskActionValue;
+import com.inz.z.note_book.base.TaskValue;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -51,7 +51,7 @@ public class TaskInfo {
      * 任务动作: 描述任务需要执行的类型。如: 计划 - {@link TaskSchedule}
      */
     @TaskAction
-    private String taskAction = TaskActionValue.TASK_ACTION_NONE;
+    private String taskAction = TaskValue.TASK_ACTION_NONE;
     /**
      * 任务包名
      */
@@ -147,7 +147,7 @@ public class TaskInfo {
         return this.taskAction;
     }
 
-    public void setTaskAction(String taskAction) {
+    public void setTaskAction(@TaskAction String taskAction) {
         this.taskAction = taskAction;
     }
 

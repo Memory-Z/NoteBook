@@ -2,8 +2,13 @@ package com.inz.z.note_book.database.bean;
 
 import androidx.annotation.NonNull;
 
+import com.inz.z.note_book.base.NoteInfoStatus;
 import com.inz.z.note_book.base.NoteStatus;
+import com.inz.z.note_book.database.DaoSession;
+import com.inz.z.note_book.database.NoteFileContentDao;
+import com.inz.z.note_book.database.NoteInfoDao;
 
+import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
@@ -11,12 +16,6 @@ import org.greenrobot.greendao.annotation.ToMany;
 
 import java.util.Date;
 import java.util.List;
-
-import org.greenrobot.greendao.DaoException;
-
-import com.inz.z.note_book.database.DaoSession;
-import com.inz.z.note_book.database.NoteFileContentDao;
-import com.inz.z.note_book.database.NoteInfoDao;
 
 /**
  * @author Zhenglj
@@ -52,7 +51,7 @@ public class NoteInfo {
      *
      * @see NoteStatus 日记状态
      */
-    @NoteStatus.NoteInfoStatus
+    @NoteInfoStatus
     private int status = 0;
 
     @ToMany(referencedJoinProperty = "noteId")

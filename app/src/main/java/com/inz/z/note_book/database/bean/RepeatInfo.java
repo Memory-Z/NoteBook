@@ -15,6 +15,16 @@ import java.util.Date;
  * @author Zhenglj
  * @version 1.0.0
  * Create by inz in 2020/05/27 11:03.
+ * -----------------------------------------
+ * 更新: laptop 3 ,  2021/10/19 23:18.
+ * 修改重复类型：
+ * <hr/>
+ * 如果 重复日：根据 {@link #duration}
+ * 如果 重复周：根据 {@link #repeatWeek}
+ * 如果 重复月/农历月：根据 {@link #repeatDate}
+ * 如果 重复年/农历年：根据 {@link #repeatMonth} {@link #repeatDate} 或 {@link #repeatYear}
+ * 如果 自定义重复： 根据 {@link #duration} 或  {@link #repeatMonth} {@link #repeatDate}
+ * @see com.inz.z.note_book.base.RepeatType
  */
 @Entity(nameInDb = "repeat_info")
 public class RepeatInfo {
@@ -26,27 +36,40 @@ public class RepeatInfo {
     /**
      * 重复日期ID  ${@link TaskSchedule}
      */
+    @Index
     private String taskScheduleId = "";
     /**
-     * 重复日
+     * 重复分钟 具体分钟 0-59
+     */
+    private int repeatMin = -1;
+    /**
+     * 重复小时 具体 小时 0—23
+     */
+    private int repeatHour = -1;
+    /**
+     * 重复日 具体 日期
      */
     private int repeatDate = -1;
     /**
-     * 重复周
+     * 重复周， 具体 星期
      */
     private int repeatWeek = -1;
     /**
-     * 重复月
+     * 重复月 具体 月份
      */
     private int repeatMonth = -1;
     /**
-     * 重复年
+     * 重复年， 间隔年
      */
     private int repeatYear = -1;
     /**
      * 是否启用 0: 不启用； 1： 启用
      */
     private int enable = 0;
+    /**
+     * 重复间隔 默认 单位: 分钟
+     */
+    private long duration = -1;
 
     /**
      * 创建时间
@@ -57,24 +80,27 @@ public class RepeatInfo {
      */
     private Date updateDate;
 
-
-    @Generated(hash = 1785270682)
-    public RepeatInfo() {
-    }
-
-    @Generated(hash = 716709692)
-    public RepeatInfo(String repeatId, String taskScheduleId, int repeatDate,
-                      int repeatWeek, int repeatMonth, int repeatYear, int enable,
-                      Date createDate, Date updateDate) {
+    @Generated(hash = 881536805)
+    public RepeatInfo(String repeatId, String taskScheduleId, int repeatMin,
+                      int repeatHour, int repeatDate, int repeatWeek, int repeatMonth,
+                      int repeatYear, int enable, long duration, Date createDate,
+                      Date updateDate) {
         this.repeatId = repeatId;
         this.taskScheduleId = taskScheduleId;
+        this.repeatMin = repeatMin;
+        this.repeatHour = repeatHour;
         this.repeatDate = repeatDate;
         this.repeatWeek = repeatWeek;
         this.repeatMonth = repeatMonth;
         this.repeatYear = repeatYear;
         this.enable = enable;
+        this.duration = duration;
         this.createDate = createDate;
         this.updateDate = updateDate;
+    }
+
+    @Generated(hash = 1785270682)
+    public RepeatInfo() {
     }
 
     public String getRepeatId() {
@@ -149,21 +175,47 @@ public class RepeatInfo {
         this.updateDate = updateDate;
     }
 
+    public int getRepeatMin() {
+        return this.repeatMin;
+    }
+
+    public void setRepeatMin(int repeatMin) {
+        this.repeatMin = repeatMin;
+    }
+
+    public int getRepeatHour() {
+        return this.repeatHour;
+    }
+
+    public void setRepeatHour(int repeatHour) {
+        this.repeatHour = repeatHour;
+    }
+
+    public long getDuration() {
+        return this.duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+
     @NonNull
     @Override
     public String toString() {
         return "RepeatInfo{" +
                 "repeatId='" + repeatId + '\'' +
                 ", taskScheduleId='" + taskScheduleId + '\'' +
+                ", repeatMin=" + repeatMin +
+                ", repeatHour=" + repeatHour +
                 ", repeatDate=" + repeatDate +
                 ", repeatWeek=" + repeatWeek +
                 ", repeatMonth=" + repeatMonth +
                 ", repeatYear=" + repeatYear +
                 ", enable=" + enable +
+                ", duration=" + duration +
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +
                 '}';
     }
-
-
 }

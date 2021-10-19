@@ -1,4 +1,4 @@
-package com.inz.z.note_book.view.fragment
+package com.inz.z.note_book.view.dialog
 
 import android.os.Bundle
 import android.view.Gravity
@@ -8,10 +8,9 @@ import androidx.fragment.app.DialogFragment
 import com.inz.z.base.view.AbsBaseDialogFragment
 import com.inz.z.note_book.R
 import com.inz.z.note_book.base.ScheduleType
-import com.inz.z.note_book.base.ScheduleTypeValue
+import com.inz.z.note_book.base.TaskValue
 import com.inz.z.note_book.databinding.DialogChooseScheduleTypeBinding
 import com.inz.z.note_book.util.ClickUtil
-import kotlinx.android.synthetic.main.dialog_choose_schedule_type.*
 
 /**
  * 选择 计划类型弹窗
@@ -47,7 +46,7 @@ class ChooseScheduleTypeDialogFragment private constructor() : AbsBaseDialogFrag
      * 当前 选中 类型, 默认： 无
      */
     @ScheduleType
-    private var currentType: Int = ScheduleTypeValue.NONE
+    private var currentType: Int = TaskValue.SCHEDULE_NONE
 
 
     override fun initWindow() {
@@ -98,7 +97,7 @@ class ChooseScheduleTypeDialogFragment private constructor() : AbsBaseDialogFrag
         binding?.let { binding ->
             // 判断是否为 快速 点击
             if (ClickUtil.isFastClick(v)) return
-            var type = 0
+            val type: Int
             when (v?.id) {
                 // 取消按钮
                 binding.dialogChooseScheduleTypeCancelTv.id -> {
@@ -106,23 +105,23 @@ class ChooseScheduleTypeDialogFragment private constructor() : AbsBaseDialogFrag
                 }
                 // 弱提示
                 binding.dialogChooseScheduleTypeHintTv.id -> {
-                    type = ScheduleTypeValue.HINT
+                    type = TaskValue.SCHEDULE_HINT
                 }
                 // 启动应用
                 binding.dialogChooseScheduleTypeLauncherTv.id -> {
-                    type = ScheduleTypeValue.LAUNCHER
+                    type = TaskValue.SCHEDULE_LAUNCHER
                 }
                 // 闹钟
                 binding.dialogChooseScheduleTypeClockTv.id -> {
-                    type = ScheduleTypeValue.ALARM
+                    type = TaskValue.SCHEDULE_ALARM
                 }
                 // 震动
                 binding.dialogChooseScheduleTypeShockTv.id -> {
-                    type = ScheduleTypeValue.SHOCK
+                    type = TaskValue.SCHEDULE_SHOCK
                 }
                 // 无
                 binding.dialogChooseScheduleTypeNoneTv.id -> {
-                    type = ScheduleTypeValue.NONE
+                    type = TaskValue.SCHEDULE_NONE
                 }
                 else -> {
                     type = currentType

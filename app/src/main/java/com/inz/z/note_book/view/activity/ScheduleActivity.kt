@@ -3,11 +3,9 @@ package com.inz.z.note_book.view.activity
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.os.Bundle
-import android.text.format.DateUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.CompoundButton
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haibin.calendarview.CalendarView
@@ -24,7 +22,7 @@ import com.inz.z.note_book.util.ClockAlarmManager
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.adapter.ScheduleRvAdapter
-import com.inz.z.note_book.view.fragment.ScheduleAddDialogFragment
+import com.inz.z.note_book.view.dialog.ScheduleAddDialogFragment
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe

@@ -1,13 +1,11 @@
-package com.inz.z.note_book.view.fragment
+package com.inz.z.note_book.view.dialog
 
 import android.content.pm.PackageInfo
 import android.graphics.Point
-import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.Gravity
 import android.view.View
-import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
@@ -15,10 +13,9 @@ import com.inz.z.base.util.LauncherHelper
 import com.inz.z.base.view.AbsBaseDialogFragment
 import com.inz.z.note_book.R
 import com.inz.z.note_book.base.ScheduleType
-import com.inz.z.note_book.base.ScheduleTypeValue
+import com.inz.z.note_book.base.TaskValue
 import com.inz.z.note_book.bean.inside.ScheduleStatus
 import com.inz.z.note_book.bean.inside.ScheduleWeekDate
-import com.inz.z.note_book.bean.inside.TaskAction
 import com.inz.z.note_book.database.bean.TaskInfo
 import com.inz.z.note_book.database.bean.TaskSchedule
 import com.inz.z.note_book.database.controller.TaskInfoController
@@ -93,7 +90,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
      * 计划类型
      */
     @ScheduleType
-    private var scheduleType: Int = ScheduleTypeValue.NONE
+    private var scheduleType: Int = TaskValue.SCHEDULE_NONE
 
     private var taskScheduleId = ""
     private var checkedDate: Date? = null
@@ -247,6 +244,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
         super.onStart()
         dialog?.window?.apply {
             val point = Point()
+//            val displayMetrics = context.resources.displayMetrics
             windowManager.defaultDisplay.getRealSize(point)
             val lp = attributes
             lp.height = (point.y * .67F).toInt()
@@ -311,7 +309,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
      */
     @ScheduleType
     private fun getScheduleType(scheduleTypeStr: String): Int {
-        return ScheduleTypeValue.getScheduleTypeByContentStr(scheduleTypeStr)
+        return TaskValue.getScheduleTypeByContentStr(scheduleTypeStr)
     }
 
     /**
@@ -319,7 +317,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
      * @param scheduleType 计划类型
      */
     private fun getScheduleTypeStr(@ScheduleType scheduleType: Int): String {
-        return ScheduleTypeValue.getContentStrByType(scheduleType)
+        return TaskValue.getContentStrByType(scheduleType)
     }
 
     /**
@@ -332,16 +330,17 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
         // 如果 任务信息为 null , 创建 新任务信息， 并关联
         if (taskInfo == null) {
             taskInfo = TaskInfo()
-            taskInfo!!.apply {
-                taskId = BaseTools.getUUID()
-                createTime = calendar.time
-                updateTime = calendar.time
-            }
+                .apply {
+                    taskId = BaseTools.getUUID()
+                    createTime = calendar.time
+                    updateTime = calendar.time
+                }
         }
 
         taskInfo?.apply {
             // 获取计划 类型
-            taskAction = getScheduleTypeStr(scheduleType)
+            taskAction = TaskValue.TASK_ACTION_SCHEDULE
+            // 任务 包名。
             taskPackageName = checkedPackageName
             taskRequestCode = SystemClock.uptimeMillis()
             updateTime = calendar.time
@@ -355,11 +354,15 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
                 updateTime = calendar.time
             }
         }
+        // 是否需要重复。
+        val repeatable =
+            dialogScheduleAddBinding?.dialogScheduleAddContentRepeatSwitch?.isChecked ?: false
+        // 设置计划信息
         schedule?.apply {
             taskId = taskInfo?.taskId ?: ""
-            val repeatable = dialog_schedule_add_content_repeat_switch?.isChecked
-            scheduleRepeat = repeatable ?: false
+            scheduleRepeat = repeatable
             updateTime = calendar.time
+            // 获取选中时间
             val checkedCalendar = Calendar.getInstance(Locale.getDefault())
             checkedCalendar.apply {
                 timeInMillis = checkedDate?.time ?: calendar.timeInMillis
@@ -367,12 +370,22 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
                 set(Calendar.MINUTE, checkTimeMinute)
                 set(Calendar.MILLISECOND, 0)
             }
+            // 如果 当前时间 大于 选中日期，设置选中时间为 后一日计划
             if (System.currentTimeMillis() > checkedCalendar.timeInMillis) {
                 // 当前系统时间大于 计划 时间，时间时间日期+ 1
                 checkedCalendar.set(Calendar.DATE, checkedCalendar.get(Calendar.DATE) + 1)
             }
+            // 计划时间 。
             scheduleTime = checkedCalendar.time
+
+            // TODO: 2021/10/19 this repeat info .remove.
             val checkedDateList = arrayListOf<ScheduleWeekDate>()
+            checkedRepeatDate.forEachIndexed { index, d ->
+                if (d == 1) {
+                    val scheduleWeekDate = ScheduleWeekDate.NEVER
+                }
+
+            }
             for (i in checkedRepeatDate.withIndex()) {
                 if (i.value == 1) {
                     var scheduleWeekDate = ScheduleWeekDate.NEVER
@@ -382,12 +395,30 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
             }
             setScheduleRepeatTimeJson(checkedDateList)
 
+            // TODO: 2021/10/19 TAG have many
             scheduleTag = dialog_schedule_add_content_tag_et?.text.toString()
-            setScheduleStatus(ScheduleStatus.DOING)
+            // 设置计划状态 。
+            scheduleStatus = ScheduleStatus.NOT_STARTED
+        }
+        // 如果 计划 不为空 且 允许重复
+        if (schedule != null && repeatable) {
+
         }
 
         listener?.save(taskInfo, schedule)
         this@ScheduleAddDialogFragment.dismissAllowingStateLoss()
+    }
+
+    /**
+     * 保存 任务计划重复信息， 仅在 设置重复状态时调用，。
+     */
+    private fun saveTaskScheduleRepeatInfo() {
+        if (schedule != null) {
+
+        } else {
+            L.i(TAG, "saveTaskScheduleRepeatInfo: this task schedule is null. ")
+        }
+
     }
 
     /**
@@ -429,7 +460,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
     private fun updateScheduleActionView(@ScheduleType type: Int) {
         dialogScheduleAddBinding?.let {
             // 是否需要显示
-            val needShow = ScheduleTypeValue.LAUNCHER == type
+            val needShow = TaskValue.SCHEDULE_LAUNCHER == type
             // 设置是否显示
             it.dialogScheduleAddContentActionBnl.visibility =
                 if (needShow) View.VISIBLE else View.GONE
