@@ -1,26 +1,17 @@
 package com.inz.z.note_book.database.bean;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.inz.z.note_book.R;
 import com.inz.z.note_book.bean.inside.ScheduleStatus;
-import com.inz.z.note_book.bean.inside.ScheduleWeekDate;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -53,10 +44,6 @@ public class TaskSchedule {
      */
     @Index
     private Date scheduleTime;
-    /**
-     * 计划重复时间
-     */
-    private String scheduleRepeatTimeStr = "";
 
     /**
      * 计划是否循环
@@ -82,14 +69,12 @@ public class TaskSchedule {
      */
     private Date updateTime;
 
-    @Generated(hash = 1836393225)
-    public TaskSchedule(String taskScheduleId, @NotNull String taskId, Date scheduleTime,
-                        String scheduleRepeatTimeStr, boolean scheduleRepeat, int status, String scheduleTag, Date createTime,
-                        Date updateTime) {
+    @Generated(hash = 1737681611)
+    public TaskSchedule(String taskScheduleId, @NotNull String taskId, Date scheduleTime, boolean scheduleRepeat,
+                        int status, String scheduleTag, Date createTime, Date updateTime) {
         this.taskScheduleId = taskScheduleId;
         this.taskId = taskId;
         this.scheduleTime = scheduleTime;
-        this.scheduleRepeatTimeStr = scheduleRepeatTimeStr;
         this.scheduleRepeat = scheduleRepeat;
         this.status = status;
         this.scheduleTag = scheduleTag;
@@ -161,54 +146,6 @@ public class TaskSchedule {
         this.scheduleTime = scheduleTime;
     }
 
-//    public String getScheduleRepeatTimeStr() {
-//        return this.scheduleRepeatTimeStr;
-//    }
-//
-//    public void setScheduleRepeatTimeStr(String scheduleRepeatTimeStr) {
-//        this.scheduleRepeatTimeStr = scheduleRepeatTimeStr;
-//    }
-
-    public void setScheduleRepeatTimeJson(@Nullable List<ScheduleWeekDate> weekDateList) {
-        this.scheduleRepeatTimeStr = JSONObject.toJSONString(weekDateList);
-    }
-
-    public String getScheduleRepeatTimeJsonStr(@androidx.annotation.Nullable Context context) {
-        List<ScheduleWeekDate> timeStrList = getScheduleRepeatDateList();
-        String timeStr = timeStrList.toString();
-        if (context != null) {
-            StringBuilder tStr = new StringBuilder();
-            for (ScheduleWeekDate date : timeStrList) {
-                tStr.append(date.getString(context)).append(" ");
-            }
-//            timeStr = tStr.toString();
-            if (timeStrList.size() > 0) {
-                timeStr = tStr.substring(0, tStr.length() - 1);
-//                timeStr = "{" + timeStr + "}";
-            } else {
-                timeStr = context.getString(R.string._never);
-            }
-
-        }
-        return timeStr;
-    }
-
-    public List<ScheduleWeekDate> getScheduleRepeatDateList() {
-        List<ScheduleWeekDate> timeStrList = JSON.parseArray(this.scheduleRepeatTimeStr, ScheduleWeekDate.class);
-        if (timeStrList == null) {
-            timeStrList = new ArrayList<>();
-        }
-        return timeStrList;
-    }
-
-    public String getScheduleRepeatTimeStr() {
-        return this.scheduleRepeatTimeStr;
-    }
-
-    public void setScheduleRepeatTimeStr(String scheduleRepeatTimeStr) {
-        this.scheduleRepeatTimeStr = scheduleRepeatTimeStr;
-    }
-
     public void setScheduleStatus(ScheduleStatus status) {
         this.status = status.getValue();
     }
@@ -233,7 +170,6 @@ public class TaskSchedule {
                 "taskScheduleId='" + taskScheduleId + '\'' +
                 ", taskId='" + taskId + '\'' +
                 ", scheduleTime=" + scheduleTime +
-                ", scheduleRepeatTimeStr='" + scheduleRepeatTimeStr + '\'' +
                 ", scheduleRepeat=" + scheduleRepeat +
                 ", status=" + status +
                 ", scheduleTag='" + scheduleTag + '\'' +

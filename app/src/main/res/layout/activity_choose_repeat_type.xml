@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 选择重复类型/ -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/choose_repeat_type_top_ll"
+        style="@style/NoteBookAppTheme.TopAction"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/choose_repeat_type_toolbar"
+            style="@style/Widget.AppCompat.Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            app:navigationIcon="@drawable/ic_chevron_left_black_24dp"
+            app:title="@string/_repeat" />
+    </LinearLayout>
+
+
+    <RadioGroup
+        android:id="@+id/activity_crd_content_ll"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_layout"
+        android:background="@drawable/bg_card_white_base"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/choose_repeat_type_top_ll">
+
+
+        <RadioButton
+            style="@style/NoteBookAppTheme.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/list_item_normal_height"
+            android:text="@string/repeat_once" />
+
+        <RadioButton
+            style="@style/NoteBookAppTheme.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/list_item_normal_height"
+            android:text="@string/every_day" />
+
+        <RadioButton
+            style="@style/NoteBookAppTheme.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/list_item_normal_height"
+            android:text="@string/every_week" />
+
+        <RadioButton
+            style="@style/NoteBookAppTheme.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/list_item_normal_height"
+            android:text="@string/every_month" />
+
+        <RadioButton
+            style="@style/NoteBookAppTheme.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/list_item_normal_height"
+            android:text="@string/every_year" />
+
+        <RadioButton
+            style="@style/NoteBookAppTheme.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/list_item_normal_height"
+            android:text="@string/every_year_lunar" />
+
+        <RadioButton
+            style="@style/NoteBookAppTheme.Layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/list_item_normal_height"
+            android:text="@string/repear_custom" />
+
+
+    </RadioGroup>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

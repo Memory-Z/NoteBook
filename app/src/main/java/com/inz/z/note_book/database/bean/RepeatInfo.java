@@ -2,6 +2,9 @@ package com.inz.z.note_book.database.bean;
 
 import androidx.annotation.NonNull;
 
+import com.inz.z.note_book.base.RepeatType;
+import com.inz.z.note_book.base.TaskValue;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
@@ -38,6 +41,12 @@ public class RepeatInfo {
      */
     @Index
     private String taskScheduleId = "";
+
+    /**
+     * 重复类型
+     */
+    @RepeatType
+    private int repeatType = TaskValue.TASK_REPEAT_TYPE_NONE;
     /**
      * 重复分钟 具体分钟 0-59
      */
@@ -80,13 +89,15 @@ public class RepeatInfo {
      */
     private Date updateDate;
 
-    @Generated(hash = 881536805)
-    public RepeatInfo(String repeatId, String taskScheduleId, int repeatMin,
-                      int repeatHour, int repeatDate, int repeatWeek, int repeatMonth,
-                      int repeatYear, int enable, long duration, Date createDate,
-                      Date updateDate) {
+
+    @Generated(hash = 367818410)
+    public RepeatInfo(String repeatId, String taskScheduleId, int repeatType,
+                      int repeatMin, int repeatHour, int repeatDate, int repeatWeek,
+                      int repeatMonth, int repeatYear, int enable, long duration,
+                      Date createDate, Date updateDate) {
         this.repeatId = repeatId;
         this.taskScheduleId = taskScheduleId;
+        this.repeatType = repeatType;
         this.repeatMin = repeatMin;
         this.repeatHour = repeatHour;
         this.repeatDate = repeatDate;
@@ -102,6 +113,7 @@ public class RepeatInfo {
     @Generated(hash = 1785270682)
     public RepeatInfo() {
     }
+
 
     public String getRepeatId() {
         return this.repeatId;
@@ -199,6 +211,14 @@ public class RepeatInfo {
         this.duration = duration;
     }
 
+    @RepeatType
+    public int getRepeatType() {
+        return this.repeatType;
+    }
+
+    public void setRepeatType(@RepeatType int repeatType) {
+        this.repeatType = repeatType;
+    }
 
     @NonNull
     @Override
@@ -206,6 +226,7 @@ public class RepeatInfo {
         return "RepeatInfo{" +
                 "repeatId='" + repeatId + '\'' +
                 ", taskScheduleId='" + taskScheduleId + '\'' +
+                ", repeatType=" + repeatType +
                 ", repeatMin=" + repeatMin +
                 ", repeatHour=" + repeatHour +
                 ", repeatDate=" + repeatDate +

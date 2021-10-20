@@ -1,12 +1,16 @@
 package com.inz.z.note_book.view.dialog
 
 import android.content.pm.PackageInfo
+import android.database.Observable
 import android.graphics.Point
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.Gravity
 import android.view.View
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
 import com.inz.z.base.util.LauncherHelper
@@ -16,12 +20,14 @@ import com.inz.z.note_book.base.ScheduleType
 import com.inz.z.note_book.base.TaskValue
 import com.inz.z.note_book.bean.inside.ScheduleStatus
 import com.inz.z.note_book.bean.inside.ScheduleWeekDate
+import com.inz.z.note_book.database.bean.RepeatInfo
 import com.inz.z.note_book.database.bean.TaskInfo
 import com.inz.z.note_book.database.bean.TaskSchedule
 import com.inz.z.note_book.database.controller.TaskInfoController
 import com.inz.z.note_book.database.controller.TaskScheduleController
 import com.inz.z.note_book.databinding.DialogScheduleAddBinding
 import com.inz.z.note_book.util.ClickUtil
+import com.inz.z.note_book.view.dialog.viewmodel.TaskScheduleAddViewModel
 import kotlinx.android.synthetic.main.content_schedule_add.view.*
 import kotlinx.android.synthetic.main.dialog_schedule_add.*
 import java.util.*
@@ -94,6 +100,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
 
     private var taskScheduleId = ""
     private var checkedDate: Date? = null
+    private var taskScheduleAddViewModel: TaskScheduleAddViewModel? = null
 
 
     override fun initWindow() {
@@ -138,6 +145,8 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
     }
 
     override fun initData() {
+        // 初始化 ViewModel
+        initViewModel()
         // 获取 当前 时间
         val calendar = Calendar.getInstance(Locale.getDefault())
         var checkTimeHour = calendar.get(Calendar.HOUR_OF_DAY)
@@ -170,38 +179,10 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
                 hour = checkTimeHour
                 minute = checkTimeMinute
             }
-            // 获取需要重复的 周期
-            val repeatDateList = it.scheduleRepeatDateList
-            if (repeatDateList.isNotEmpty()) {
-                for (d in repeatDateList) {
-                    when (d) {
-                        ScheduleWeekDate.MONDAY -> {
-                            checkedRepeatDate[0] = 1
-                        }
-                        ScheduleWeekDate.TUESDAY -> {
-                            checkedRepeatDate[1] = 1
-                        }
-                        ScheduleWeekDate.WEDNESDAY -> {
-                            checkedRepeatDate[2] = 1
-                        }
-                        ScheduleWeekDate.THURSDAY -> {
-                            checkedRepeatDate[3] = 1
-                        }
-                        ScheduleWeekDate.FRIDAY -> {
-                            checkedRepeatDate[4] = 1
-                        }
-                        ScheduleWeekDate.SATURDAY -> {
-                            checkedRepeatDate[5] = 1
-                        }
-                        ScheduleWeekDate.SUNDAY -> {
-                            checkedRepeatDate[6] = 1
-                        }
-                        else -> {
 
-                        }
-                    }
-                }
-            }
+            // 获取 需要 重复的日期
+            taskScheduleAddViewModel?.findTaskScheduleRepeatList(it.taskScheduleId)
+
             // 是否 重复
             val isRepeat = it.scheduleRepeat
             dialogScheduleAddBinding?.dialogScheduleAddContentRepeatSwitch?.isChecked = isRepeat
@@ -256,6 +237,11 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
         isCancelable = true
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        destroyViewModel()
+    }
+
     override fun onClick(v: View?) {
         // 判断是否为 快速点击
         if (ClickUtil.isFastClick(v)) return
@@ -292,6 +278,36 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
                 }
             }
         }
+    }
+
+    /**
+     * 初始化 ViewModel
+     */
+    private fun initViewModel() {
+        taskScheduleAddViewModel =
+            ViewModelProvider.NewInstanceFactory().create(TaskScheduleAddViewModel::class.java)
+        taskScheduleAddViewModel?.getRepeatInfoList()
+            ?.observe(
+                this,
+                Observer<List<RepeatInfo>> { list ->
+                    L.i(TAG, "initViewModel: repeat list = $list")
+                    // TODO: 2021/10/20 deal  repeatInfoList.
+                }
+            )
+        taskScheduleAddViewModel?.getTaskSchedule()
+            ?.observe(
+                this,
+                Observer<TaskSchedule> {
+
+                }
+            )
+    }
+
+    /**
+     * 销毁 ViewModel
+     */
+    private fun destroyViewModel() {
+        taskScheduleAddViewModel?.destroy()
     }
 
     /**
@@ -393,7 +409,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
                     checkedDateList.add(scheduleWeekDate)
                 }
             }
-            setScheduleRepeatTimeJson(checkedDateList)
+//            setScheduleRepeatTimeJson(checkedDateList)
 
             // TODO: 2021/10/19 TAG have many
             scheduleTag = dialog_schedule_add_content_tag_et?.text.toString()
@@ -412,11 +428,15 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
     /**
      * 保存 任务计划重复信息， 仅在 设置重复状态时调用，。
      */
-    private fun saveTaskScheduleRepeatInfo() {
-        if (schedule != null) {
-
+    private fun saveTaskScheduleRepeatInfo(schedule: TaskSchedule) {
+        // 是否需要 重复
+        val isRepeat = schedule.scheduleRepeat
+        // 如果需要重复，更新重复内容
+        if (isRepeat) {
+            // TODO: 2021/10/20 add Repeat Info
         } else {
-            L.i(TAG, "saveTaskScheduleRepeatInfo: this task schedule is null. ")
+            L.i(TAG, "saveTaskScheduleRepeatInfo: this not repeat, clear old repeat. ")
+            // TODO: 2021/10/20 清除旧 的重复信息
         }
 
     }

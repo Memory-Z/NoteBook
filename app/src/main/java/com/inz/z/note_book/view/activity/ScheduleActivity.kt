@@ -391,6 +391,7 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
                 if (taskSchedule == null) {
                     ScheduleController.insertScheduleTask(taskInfo)
                 } else {
+                    // 根据相关 任务计划进行 添加
                     ScheduleController.insertScheduleTask(taskInfo, taskSchedule)
                 }
             }
@@ -404,7 +405,7 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
 
         override fun setRepeatDate(checkedDateArray: IntArray) {
             L.i(TAG, "setRepeatDate: ")
-            val intent = Intent(mContext, CustomRepeatDateActitity::class.java)
+            val intent = Intent(mContext, RepeatTypeActivity::class.java)
             val bundle = Bundle()
             bundle.putIntArray("RepeatDate", checkedDateArray)
             intent.putExtras(bundle)

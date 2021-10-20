@@ -259,6 +259,7 @@ annotation class TaskAction
     AnnotationTarget.FIELD,
     AnnotationTarget.VALUE_PARAMETER,
     AnnotationTarget.TYPE_PARAMETER,
-    AnnotationTarget.PROPERTY
+    AnnotationTarget.PROPERTY,
+    AnnotationTarget.FUNCTION
 )
 annotation class RepeatType

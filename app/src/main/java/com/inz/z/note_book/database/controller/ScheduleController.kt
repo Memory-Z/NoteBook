@@ -2,6 +2,7 @@ package com.inz.z.note_book.database.controller
 
 import com.inz.z.base.util.BaseTools
 import com.inz.z.note_book.bean.inside.ScheduleStatus
+import com.inz.z.note_book.database.bean.RepeatInfo
 import com.inz.z.note_book.database.bean.TaskInfo
 import com.inz.z.note_book.database.bean.TaskSchedule
 import java.util.*
@@ -35,19 +36,27 @@ object ScheduleController {
      * 添加任务计划
      */
     fun insertScheduleTask(taskInfo: TaskInfo, taskSchedule: TaskSchedule) {
+        insertScheduleTask(taskInfo, taskSchedule, null)
+        TaskInfoController.insertTaskInfo(taskInfo)
+    }
+
+    /**
+     * 添加计划 任务
+     * @param taskInfo 任务信息
+     * @param taskSchedule 任务计划 信息
+     * @param repeatInfoList 重复信息
+     */
+    fun insertScheduleTask(
+        taskInfo: TaskInfo,
+        taskSchedule: TaskSchedule,
+        repeatInfoList: MutableList<RepeatInfo>?
+    ) {
         TaskInfoController.insertTaskInfo(taskInfo)
         TaskScheduleController.insertTaskSchedule(taskSchedule)
-        if (taskSchedule.scheduleRepeat) {
-            val repeatDateList = taskSchedule.scheduleRepeatDateList
-            val weekDateList = mutableListOf<Int>()
-            for (scheduleWeekDate in repeatDateList) {
-                weekDateList.add(scheduleWeekDate.value)
-            }
-            RepeatController.insertRepeatInfo(
-                taskSchedule.taskScheduleId,
-                weekDateList.toIntArray()
-            )
+        repeatInfoList?.forEach {
+            RepeatController.insertRepeatInfo(it)
         }
+
     }
 
     /**

@@ -101,7 +101,7 @@
 
         <!-- 重复日期 -->
         <activity
-            android:name=".view.activity.CustomRepeatDateActitity"
+            android:name=".view.activity.RepeatTypeActivity"
             android:configChanges="screenLayout|screenSize|keyboardHidden"
             android:screenOrientation="fullSensor" />
 

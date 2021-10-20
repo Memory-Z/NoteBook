@@ -53,6 +53,7 @@
     <string name="_is_repetition">是否重复执行? </string>
     <string name="_tag">标签</string>
     <string name="custom_repeat_date">自定义重复日期</string>
+    <string name="_repeat">重复</string>
     <string name="_never">永不</string>
     <string name="_date_time_format_h_m">HH:mm</string>
     <string name="_date_time_format_M_d">%s月%s日</string>
@@ -123,5 +124,13 @@
     <string name="schedule_state_undo">未开始</string>
 
     <string name="_shock">震动</string>
+
+    <string name="repeat_once">仅一次</string>
+    <string name="every_day">每天</string>
+    <string name="every_week">每周</string>
+    <string name="every_month">每月</string>
+    <string name="every_year">每年</string>
+    <string name="every_year_lunar">每年（农历）</string>
+    <string name="repear_custom">自定义</string>
 
 </resources>

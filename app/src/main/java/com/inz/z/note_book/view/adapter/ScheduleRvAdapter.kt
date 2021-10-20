@@ -104,10 +104,11 @@ class ScheduleRvAdapter(mContext: Context?) :
                 val time = getTimeStr(it.scheduleTime, tv.context)
                 tv.text = time
             }
-            // 设置 重复时间
-            holder.scheduleRepeatDateTv.let { tv ->
-                tv.text = it.getScheduleRepeatTimeJsonStr(tv.context)
-            }
+            // TODO: 2021/10/20 REPEAT
+//            // 设置 重复时间
+//            holder.scheduleRepeatDateTv.let { tv ->
+//                tv.text = it.getScheduleRepeatTimeJsonStr(tv.context)
+//            }
             // 计划类型。
             holder.scheduleTagTv.text = it.scheduleTag
 
