@@ -111,17 +111,6 @@ object Constants {
     const val APPLICATION_LIST_REQUEST_CODE = 0x000A01
     const val APPLICATION_LIST_RESPONSE_CODE = 0x000A02
 
-    /**
-     * 自定义重复时间
-     */
-    const val CUSTOM_DATE_REQUEST_CODE_FLAG = "0x000A02"
-    const val CUSTOM_DATE_REQUEST_CODE = 0x000A02
-
-    /**
-     * 计划类型
-     */
-    const val SCHEDULE_TYPE_REQUEST_CODE_FLAG = "0x000A03"
-    const val SCHEDULE_TYPE_REQUEST_CODE = 0x000A03
 
     /**
      * 生命 周期广播
@@ -203,6 +192,25 @@ object Constants {
          */
         const val BACKUP_SERVICE_DESTROY_ACTION =
             "${APPLICATION_ID}.action.BACKUP_SERVICE_DESTROY_ACTION"
+    }
+
+    /**
+     * 任务参数
+     */
+    object TaskParams {
+        /**
+         * 自定义重复时间
+         */
+        const val CUSTOM_DATE_REQUEST_CODE = 0x000A02
+
+        /**
+         * 请求重复类型
+         */
+        const val REQUEST_REPEAT_TYPE_CODE = 0x000A03
+        const val RESULT_REPEAT_TYPE_CODE = 0x000A04
+
+        const val PARAMS_REPEAT_TYPE = "RepeatType"
+        const val PARAMS_REPEAT_DATE = "RepeatDate"
     }
 
 

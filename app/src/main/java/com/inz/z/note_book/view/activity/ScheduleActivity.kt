@@ -2,7 +2,6 @@ package com.inz.z.note_book.view.activity
 
 import android.content.Intent
 import android.content.pm.PackageInfo
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -183,10 +182,23 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
                 }
             }
             // 选择时间返回
-            Constants.CUSTOM_DATE_REQUEST_CODE -> {
+            Constants.TaskParams.CUSTOM_DATE_REQUEST_CODE -> {
                 val checkedWeek = data?.extras?.getIntArray("CheckWeek")
                 if (checkedWeek != null) {
                     this.scheduleAddDialogFragment?.setRepeatWeekDate(checkedWeek)
+                }
+            }
+            // 请求 选择 重复类型。
+            Constants.TaskParams.RESULT_REPEAT_TYPE_CODE -> {
+                data?.let {
+                    it.extras?.let { bundle ->
+                        val repeatType = bundle.getInt(Constants.TaskParams.PARAMS_REPEAT_TYPE, -1)
+                        val repeatDate = bundle.getIntArray(Constants.TaskParams.PARAMS_REPEAT_DATE)
+                        // 如果 repeatType == -1 ，未 获取到相关内容, 不进行更新。
+                        if (repeatType != -1) {
+                            this.scheduleAddDialogFragment?.updateRepeatType(repeatType, repeatDate)
+                        }
+                    }
                 }
             }
         }
@@ -368,7 +380,8 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
                 )
             this.scheduleAddDialogFragment = scheduleAddDialogFragment
         }
-        L.i(TAG, "showScheduleAddDialog: ---> ${scheduleAddDialogFragment.isAdded} -- ${scheduleAddDialogFragment.isVisible}")
+        L.i(TAG,
+            "showScheduleAddDialog: ---> ${scheduleAddDialogFragment.isAdded} -- ${scheduleAddDialogFragment.isVisible}")
         if (!scheduleAddDialogFragment.isAdded && !scheduleAddDialogFragment.isVisible) {
             scheduleAddDialogFragment.show(manager, "ScheduleAddDialogFragment")
         }
@@ -403,13 +416,15 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
             )
         }
 
-        override fun setRepeatDate(checkedDateArray: IntArray) {
-            L.i(TAG, "setRepeatDate: ")
-            val intent = Intent(mContext, RepeatTypeActivity::class.java)
-            val bundle = Bundle()
-            bundle.putIntArray("RepeatDate", checkedDateArray)
-            intent.putExtras(bundle)
-            startActivityForResult(intent, Constants.CUSTOM_DATE_REQUEST_CODE)
+        override fun setRepeatDate(repeatType: Int, checkedDateArray: IntArray) {
+            L.i(TAG, "setRepeatDate: --> repeatType = $repeatType ")
+            // 弹出选择重复类型弹窗。
+            RepeatTypeActivity.startChooseRepeatTypeActivityForResult(
+                this@ScheduleActivity,
+                Constants.TaskParams.REQUEST_REPEAT_TYPE_CODE,
+                repeatType,
+                checkedDateArray
+            )
         }
 
         override fun chooseLauncherApplication() {

@@ -16,6 +16,7 @@ import com.inz.z.base.util.L
 import com.inz.z.base.util.LauncherHelper
 import com.inz.z.base.view.AbsBaseDialogFragment
 import com.inz.z.note_book.R
+import com.inz.z.note_book.base.RepeatType
 import com.inz.z.note_book.base.ScheduleType
 import com.inz.z.note_book.base.TaskValue
 import com.inz.z.note_book.bean.inside.ScheduleStatus
@@ -30,6 +31,7 @@ import com.inz.z.note_book.util.ClickUtil
 import com.inz.z.note_book.view.dialog.viewmodel.TaskScheduleAddViewModel
 import kotlinx.android.synthetic.main.content_schedule_add.view.*
 import kotlinx.android.synthetic.main.dialog_schedule_add.*
+import java.lang.StringBuilder
 import java.util.*
 
 /**
@@ -43,6 +45,11 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
     View.OnClickListener {
     companion object {
         const val TAG = "ScheduleAddDialogFragment"
+
+        /**
+         * 默认重复信息日期
+         */
+        private val BASE_REPEAT_DATE_ARRAY = intArrayOf(0, 0, 0, 0, 0, 0, 0)
 
         /**
          * 获取实例
@@ -80,7 +87,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
     /**
      * 选中的重复日期
      */
-    private var checkedRepeatDate: IntArray = intArrayOf(0, 0, 0, 0, 0, 0, 0)
+    private var checkedRepeatDate: IntArray = BASE_REPEAT_DATE_ARRAY
 
     /**
      * 计划描述
@@ -97,6 +104,12 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
      */
     @ScheduleType
     private var scheduleType: Int = TaskValue.SCHEDULE_NONE
+
+    /**
+     * 重复过类型
+     */
+    @RepeatType
+    private var repeatType: Int = TaskValue.TASK_REPEAT_TYPE_NONE
 
     private var taskScheduleId = ""
     private var checkedDate: Date? = null
@@ -217,8 +230,9 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
         if (checkedPackageInfo != null) {
             setChockedLauncherApplication(checkedPackageInfo!!)
         }
-        // 设置当前 重复时间
-        setRepeatWeekDate(checkedRepeatDate)
+        // TODO: 2021/10/22 // set repeat info /
+//        // 设置当前 重复时间
+//        setRepeatWeekDate(checkedRepeatDate)
     }
 
     override fun onStart() {
@@ -259,7 +273,8 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
                 }
                 // 弹窗 重复时间  选项
                 binding.dialogScheduleAddContentRepeatDateBnl.id -> {
-                    listener?.setRepeatDate(checkedRepeatDate)
+                    // 选择 重复类型与 时间
+                    listener?.setRepeatDate(repeatType, checkedRepeatDate)
                 }
                 // 弹窗 添加 内容
                 binding.dialogScheduleAddContentActionBnl.id -> {
@@ -291,7 +306,18 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
                 this,
                 Observer<List<RepeatInfo>> { list ->
                     L.i(TAG, "initViewModel: repeat list = $list")
-                    // TODO: 2021/10/20 deal  repeatInfoList.
+                    val repeatType: Int
+                    val repeatDateArray: IntArray
+                    // 获取 重复类型 。 默认为 不重复
+                    if (list.isNullOrEmpty()) {
+                        repeatType = list[0].repeatType
+                        repeatDateArray = list[0].customRepeatDataArray
+                    } else {
+                        repeatType = TaskValue.TASK_REPEAT_TYPE_NONE
+                        repeatDateArray = BASE_REPEAT_DATE_ARRAY
+                    }
+                    // 更新重复类型
+                    updateRepeatType(repeatType, repeatDateArray)
                 }
             )
         taskScheduleAddViewModel?.getTaskSchedule()
@@ -507,13 +533,18 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
         }
     }
 
+    /**
+     * 计划添加Dialog 监听。
+     */
     interface ScheduleAddDFListener {
         fun save(taskInfo: TaskInfo?, taskSchedule: TaskSchedule?)
 
         /**
          * 设置重复时间
+         * @param repeatType 重复类型
+         * @param checkedDateArray 自定义 重复时间
          */
-        fun setRepeatDate(checkedDateArray: IntArray)
+        fun setRepeatDate(@RepeatType repeatType: Int, checkedDateArray: IntArray)
 
         /**
          * 选择启动应用
@@ -559,6 +590,68 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
             timeStr = getString(R.string._never)
         }
         dialogScheduleAddBinding?.dialogScheduleAddContentRepeatDateDetailTv?.text = timeStr
+    }
+
+    /**
+     * 获取重复日期 显示内容
+     * @param repeatType 重复类型
+     * @param repeatDateArray 重复时间
+     */
+    private fun getRepeatDateString(
+        @RepeatType repeatType: Int,
+        repeatDateArray: IntArray?
+    ): String {
+        val str = StringBuilder()
+        mContext?.let {
+            when (repeatType) {
+                TaskValue.TASK_REPEAT_TYPE_NONE -> {
+                    str.append(it.getString(R.string.repeat_once))
+                }
+                TaskValue.TASK_REPEAT_TYPE_DATE -> {
+                    str.append(it.getString(R.string.every_day))
+                }
+                TaskValue.TASK_REPEAT_TYPE_WEEK -> {
+                    str.append(it.getString(R.string.every_week))
+                }
+                TaskValue.TASK_REPEAT_TYPE_MONTH -> {
+                    str.append(it.getString(R.string.every_month))
+                }
+                TaskValue.TASK_REPEAT_TYPE_LUNAR_MONTH -> {
+                    str.append(it.getString(R.string.every_year_lunar))
+                }
+                TaskValue.TASK_REPEAT_TYPE_YEAR -> {
+                    str.append(it.getString(R.string.every_year))
+                }
+                TaskValue.TASK_REPEAT_TYPE_CUSTOM -> {
+                    str.append(it.getString(R.string.repeat_custom))
+                    repeatDateArray?.let { array ->
+                        val strArray = it.resources.getStringArray(R.array._date_week_array)
+                        array.forEachIndexed { index, i ->
+                            if (i == 1) {
+                                str.append("，").append(strArray[index])
+                            }
+                        }
+                    }
+                }
+                else -> {
+                }
+            }
+        }
+        L.i(TAG, "getRepeatDateString: --->> $str")
+        return str.toString()
+    }
+
+    /**
+     * 更新 重复类型
+     * @param repeatType 重复类型
+     * @param repeatDateArray 自定义 重复 时间
+     */
+    fun updateRepeatType(@RepeatType repeatType: Int, repeatDateArray: IntArray?) {
+        this.repeatType = repeatType
+        this.checkedRepeatDate = repeatDateArray ?: BASE_REPEAT_DATE_ARRAY
+        // 设置显示 内容。
+        dialogScheduleAddBinding?.dialogScheduleAddContentRepeatDateDetailTv?.text =
+            getRepeatDateString(repeatType, repeatDateArray)
     }
 
 }

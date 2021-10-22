@@ -2,6 +2,7 @@ package com.inz.z.note_book.view.dialog.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.inz.z.note_book.base.RepeatType
 import com.inz.z.note_book.database.bean.RepeatInfo
 import com.inz.z.note_book.database.bean.TaskSchedule
 import com.inz.z.note_book.database.controller.RepeatController
@@ -56,6 +57,16 @@ class TaskScheduleAddViewModel : ViewModel() {
     fun destroy() {
         repeatInfoListLiveData = null
         taskScheduleLiveData = null
+    }
+
+    /**
+     * 更新重复类型 信息
+     */
+    fun updateRepeatInfo(@RepeatType repeatType: Int, repeatDataArray: IntArray?) {
+        val list = repeatInfoListLiveData?.value
+        if (list.isNullOrEmpty()) {
+
+        }
     }
 
 }

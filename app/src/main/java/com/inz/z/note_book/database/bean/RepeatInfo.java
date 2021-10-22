@@ -1,6 +1,7 @@
 package com.inz.z.note_book.database.bean;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.inz.z.note_book.base.RepeatType;
 import com.inz.z.note_book.base.TaskValue;
@@ -9,6 +10,7 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
+import org.greenrobot.greendao.annotation.Transient;
 
 import java.util.Date;
 
@@ -31,6 +33,9 @@ import java.util.Date;
  */
 @Entity(nameInDb = "repeat_info")
 public class RepeatInfo {
+
+    @Transient
+    private static int BASE_REPEAT_LENGTH = 1000000;
 
     @Id
     @Index
@@ -77,6 +82,7 @@ public class RepeatInfo {
     private int enable = 0;
     /**
      * 重复间隔 默认 单位: 分钟
+     * 在 重复类型为自定义时：0000000 七位表示需要重复的内容  如：1001000，表示 周一，周四 需要重复
      */
     private long duration = -1;
 
@@ -218,6 +224,37 @@ public class RepeatInfo {
 
     public void setRepeatType(@RepeatType int repeatType) {
         this.repeatType = repeatType;
+    }
+
+    public int[] getCustomRepeatDataArray() {
+        int[] array = new int[7];
+        int baseSize = BASE_REPEAT_LENGTH;
+        int index = 0;
+        int temp = (int) duration;
+        while (baseSize > 1) {
+            array[index] = temp / baseSize;
+            temp %= baseSize;
+            baseSize /= 10;
+            index++;
+        }
+        return array;
+    }
+
+    /**
+     * 通过 数组转 时间
+     *
+     * @param repeatDate 重复时间
+     */
+    public void setCustomRepeatDate(@Nullable int[] repeatDate) {
+        int baseSize = BASE_REPEAT_LENGTH;
+        int temp = 0;
+        if (repeatDate != null) {
+            for (int j : repeatDate) {
+                temp += j * baseSize;
+                baseSize /= 10;
+            }
+        }
+        setDuration(temp);
     }
 
     @NonNull
