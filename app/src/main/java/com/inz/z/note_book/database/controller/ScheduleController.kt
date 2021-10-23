@@ -37,7 +37,6 @@ object ScheduleController {
      */
     fun insertScheduleTask(taskInfo: TaskInfo, taskSchedule: TaskSchedule) {
         insertScheduleTask(taskInfo, taskSchedule, null)
-        TaskInfoController.insertTaskInfo(taskInfo)
     }
 
     /**
@@ -51,10 +50,10 @@ object ScheduleController {
         taskSchedule: TaskSchedule,
         repeatInfoList: MutableList<RepeatInfo>?
     ) {
-        TaskInfoController.insertTaskInfo(taskInfo)
-        TaskScheduleController.insertTaskSchedule(taskSchedule)
+        TaskInfoController.updateTaskInfo(taskInfo)
+        TaskScheduleController.updateTaskSchedule(taskSchedule)
         repeatInfoList?.forEach {
-            RepeatController.insertRepeatInfo(it)
+            RepeatController.updateRepeatInfo(it)
         }
 
     }

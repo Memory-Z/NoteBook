@@ -16,6 +16,7 @@ import com.inz.z.base.R
 import com.inz.z.base.util.CrashHandler
 import com.inz.z.base.util.L
 import com.inz.z.note_book.base.ActivityLifeCallbackImpl
+import com.inz.z.note_book.base.TaskValue
 import com.inz.z.note_book.broadcast.ScreenBroadcast
 import com.inz.z.note_book.database.bean.UserInfo
 import com.inz.z.note_book.database.util.GreenDaoHelper
@@ -64,6 +65,8 @@ class NoteBookApplication : Application() {
         SPHelper.instance?.saveCurrentVersionCode(BuildConfig.VERSION_CODE)
         SPHelper.instance?.saveLaterUpdateVersion(false)
 
+        // 初始化 数据
+        TaskValue.initScheduleTypeValue(this)
 
         val processName = getProcessNameStr()
         L.i(TAG, "onCreate: current process name = $processName")

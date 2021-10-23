@@ -11,6 +11,7 @@ import com.inz.z.note_book.base.ScheduleType
 import com.inz.z.note_book.base.TaskValue
 import com.inz.z.note_book.databinding.DialogChooseScheduleTypeBinding
 import com.inz.z.note_book.util.ClickUtil
+import com.inz.z.note_book.util.Constants
 
 /**
  * 选择 计划类型弹窗
@@ -23,16 +24,15 @@ class ChooseScheduleTypeDialogFragment private constructor() : AbsBaseDialogFrag
     View.OnClickListener {
     companion object {
         const val TAG = "ChooseScheduleTypeDialogFragment"
-        private const val DATA_TYPE_TAG = "type"
 
         fun getInstant(
-            type: Int,
+            @ScheduleType type: Int,
             listener: ChooseScheduleTypeDialogListener
         ): ChooseScheduleTypeDialogFragment {
             val fragment = ChooseScheduleTypeDialogFragment()
             fragment.listener = listener
             val bundle = Bundle()
-            bundle.putInt(DATA_TYPE_TAG, type)
+            bundle.putInt(Constants.TaskParams.PARAMS_SCHEDULE_TYPE, type)
             fragment.arguments = bundle
             return fragment
         }
@@ -77,7 +77,8 @@ class ChooseScheduleTypeDialogFragment private constructor() : AbsBaseDialogFrag
 
     override fun initData() {
         arguments?.let {
-            currentType = it.getInt(DATA_TYPE_TAG, 0)
+            currentType =
+                it.getInt(Constants.TaskParams.PARAMS_SCHEDULE_TYPE, TaskValue.SCHEDULE_NONE)
         }
     }
 

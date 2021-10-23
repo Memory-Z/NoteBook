@@ -209,8 +209,21 @@ object Constants {
         const val REQUEST_REPEAT_TYPE_CODE = 0x000A03
         const val RESULT_REPEAT_TYPE_CODE = 0x000A04
 
+        /**
+         * 重复类型
+         */
         const val PARAMS_REPEAT_TYPE = "RepeatType"
+
+        /**
+         * 重复日期
+         */
         const val PARAMS_REPEAT_DATE = "RepeatDate"
+
+        /**
+         * 计划类型
+         */
+        const val PARAMS_SCHEDULE_TYPE = "ScheduleType"
+
     }
 
 

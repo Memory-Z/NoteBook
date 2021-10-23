@@ -57,8 +57,14 @@ object TaskScheduleController {
     fun updateTaskSchedule(taskSchedule: TaskSchedule) {
         val dao = getTaskScheduleDao()
         if (dao != null) {
-            dao.update(taskSchedule)
-            LogController.log("update", taskSchedule, "更新任务计划", dao.tablename)
+            val taskScheduleId = taskSchedule.taskScheduleId
+            val schedule = findTaskScheduleById(taskScheduleId)
+            if (schedule == null) {
+                insertTaskSchedule(taskSchedule)
+            } else {
+                dao.update(taskSchedule)
+                LogController.log("update", taskSchedule, "更新任务计划", dao.tablename)
+            }
         }
     }
 

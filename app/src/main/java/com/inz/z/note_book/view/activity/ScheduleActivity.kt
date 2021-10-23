@@ -76,13 +76,13 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
     }
 
     override fun initView() {
-        // 设置状态栏 为 百日模式
+        // 设置状态栏 为 白日模式
         QMUIStatusBarHelper.setStatusBarLightMode(this)
         // 设置状态栏 颜色
         window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
 
         // 设置 Toolbar 状态栏
-        setSupportActionBar(schedule_top_tool_bar)
+        setSupportActionBar(activityScheduleLayoutBinding?.scheduleTopToolBar)
         // 年份切换 监听
         activityScheduleLayoutBinding?.scheduleContentCalendarView?.setOnYearChangeListener {
             activityScheduleLayoutBinding?.scheduleTopCalendarDateYearTv?.text = it.toString()
@@ -179,13 +179,6 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
                 val packageInfo = data?.extras?.getParcelable("PackageInfo") as PackageInfo?
                 if (packageInfo != null) {
                     this.scheduleAddDialogFragment?.setChockedLauncherApplication(packageInfo)
-                }
-            }
-            // 选择时间返回
-            Constants.TaskParams.CUSTOM_DATE_REQUEST_CODE -> {
-                val checkedWeek = data?.extras?.getIntArray("CheckWeek")
-                if (checkedWeek != null) {
-                    this.scheduleAddDialogFragment?.setRepeatWeekDate(checkedWeek)
                 }
             }
             // 请求 选择 重复类型。
@@ -390,30 +383,13 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
 
     /**
      * 计划添加弹窗接口实现
+     * @see ScheduleAddDialogFragment.ScheduleAddDFListener
      */
     private inner class ScheduleAddDialogFragmentListenerImpl :
         ScheduleAddDialogFragment.ScheduleAddDFListener {
-        override fun save(taskInfo: TaskInfo?, taskSchedule: TaskSchedule?) {
-            L.i(
-                TAG,
-                "save: taskInfo = ${taskInfo.toString()} , taskSchedule = ${taskSchedule.toString()}"
-            )
-            // 判断当前任务是否存在
-            if (taskInfo != null) {
-                // 如果任务 计划 不存在 是 插入任务； 否则，插入 任务 及 对应的 计划
-                if (taskSchedule == null) {
-                    ScheduleController.insertScheduleTask(taskInfo)
-                } else {
-                    // 根据相关 任务计划进行 添加
-                    ScheduleController.insertScheduleTask(taskInfo, taskSchedule)
-                }
-            }
-            // 更新广播
-            ClockAlarmManager.setAlarm(mContext, System.currentTimeMillis())
-            // 更新计划
-            updateScheduleWhenChangeCheckCalendar(
-                checkedCalendar?.time ?: Calendar.getInstance(Locale.getDefault()).time
-            )
+
+        override fun savedTaskSchedule(taskScheduleId: String) {
+            L.i(TAG, "savedTaskSchedule: taskScheduleId = $taskScheduleId")
         }
 
         override fun setRepeatDate(repeatType: Int, checkedDateArray: IntArray) {
@@ -437,11 +413,6 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
             startActivityForResult(intent, Constants.APPLICATION_LIST_REQUEST_CODE)
         }
 
-        override fun chooseScheduleType() {
-            L.i(TAG, "chooseScheduleType: ")
-
-
-        }
     }
 
 

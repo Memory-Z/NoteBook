@@ -41,8 +41,15 @@ object TaskInfoController {
     fun updateTaskInfo(taskInfo: TaskInfo) {
         val dao = getTaskInfoDao()
         if (dao != null) {
-            dao.update(taskInfo)
-            LogController.log("update", taskInfo, "更新任务", dao.tablename)
+            // 获取 需要 更新 的数据，如果库中可以查询 到，只更新，否则插入
+            val taskInfoId = taskInfo.taskId
+            val info = queryTaskInfoById(taskInfoId)
+            if (info != null) {
+                dao.update(taskInfo)
+                LogController.log("update", taskInfo, "更新任务", dao.tablename)
+            } else {
+                insertTaskInfo(taskInfo)
+            }
         }
     }
 

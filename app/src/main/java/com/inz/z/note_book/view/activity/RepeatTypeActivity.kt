@@ -8,12 +8,15 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.RadioButton
+import android.widget.ScrollView
+import androidx.core.content.ContextCompat
 import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.R
 import com.inz.z.note_book.base.RepeatType
 import com.inz.z.note_book.base.TaskValue
 import com.inz.z.note_book.databinding.ActivityChooseRepeatTypeBinding
 import com.inz.z.note_book.util.Constants
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 
 /**
  * remove: # 自定义重复日期
@@ -92,6 +95,11 @@ class RepeatTypeActivity : AbsBaseActivity(), CompoundButton.OnCheckedChangeList
     }
 
     override fun initView() {
+        // 设置状态栏 为 白日模式
+        QMUIStatusBarHelper.setStatusBarLightMode(this)
+        // 设置状态栏 颜色
+        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
+
         activityChooseRepeatTypeBinding?.chooseRepeatTypeToolbar?.let {
             setSupportActionBar(it)
         }
@@ -281,7 +289,10 @@ class RepeatTypeActivity : AbsBaseActivity(), CompoundButton.OnCheckedChangeList
             // 界面滑动到 底部
             it.activityCrdContentNsv.let { scrollView ->
                 if (show) {
-                    scrollView.scrollTo(0, scrollView.bottom)
+                    scrollView.post {
+                        scrollView.fullScroll(ScrollView.FOCUS_DOWN)
+                    }
+
                 }
             }
         }

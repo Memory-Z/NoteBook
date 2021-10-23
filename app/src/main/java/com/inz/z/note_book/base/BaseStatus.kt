@@ -131,6 +131,19 @@ object TaskValue {
             put(SCHEDULE_LAUNCHER, "launcher")
         }
 
+    /**
+     * 初始化计划类型
+     */
+    fun initScheduleTypeValue(context: Context) {
+        TYPE_VALUE_MAP.let {
+            it.clear()
+            it.put(SCHEDULE_NONE, context.getString(R.string._nothing))
+            it.put(SCHEDULE_HINT, context.getString(R.string._tips))
+            it.put(SCHEDULE_SHOCK, context.getString(R.string._shock))
+            it.put(SCHEDULE_ALARM, context.getString(R.string._clock))
+            it.put(SCHEDULE_LAUNCHER, context.getString(R.string._launcher))
+        }
+    }
 
     @ScheduleType
     fun getScheduleTypeByContentStr(content: String): Int {
@@ -154,6 +167,11 @@ object TaskValue {
      * 计划
      */
     const val TASK_ACTION_SCHEDULE = "Schedule"
+
+    /**
+     * 启动
+     */
+    const val TASK_ACTION_LAUNCHER = "Launcher"
 
     /**
      * 待办事项
@@ -229,6 +247,7 @@ annotation class ScheduleType
  */
 @StringDef(
     TaskValue.TASK_ACTION_SCHEDULE,
+    TaskValue.TASK_ACTION_LAUNCHER,
     TaskValue.TASK_ACTION_TODO,
     TaskValue.TASK_ACTION_NONE
 )
