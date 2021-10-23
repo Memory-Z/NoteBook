@@ -103,7 +103,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     private void initData() {
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());
+        dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmssSSS", Locale.getDefault());
     }
 
     @Override
