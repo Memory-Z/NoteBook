@@ -1,17 +1,10 @@
 package com.inz.z.note_book.database.bean;
 
-import com.inz.z.note_book.database.DaoSession;
-import com.inz.z.note_book.database.NoteGroupDao;
-import com.inz.z.note_book.database.NoteInfoDao;
-
-import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.ToMany;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author Zhenglj

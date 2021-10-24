@@ -1,17 +1,20 @@
 package com.inz.z.note_book.view.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.TextView
-import androidx.annotation.IntDef
-import androidx.annotation.LayoutRes
+import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseFragment
 import com.inz.z.note_book.R
+import com.inz.z.note_book.base.FragmentContentType
+import com.inz.z.note_book.base.FragmentContentTypeValue
+import com.inz.z.note_book.databinding.ActivityBaseAddContentBinding
+import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.fragment.add_content.NoteTagFragment
-import kotlinx.android.synthetic.main.activity_base_add_content.*
 
 /**
  *
@@ -28,53 +31,35 @@ class AddContentActivity : BaseNoteActivity() {
         /**
          * 获取Instance Bundle
          */
-        fun getInstanceBundle(@ContentType contentType: Int): Bundle {
+        fun getInstanceBundle(@FragmentContentType contentType: Int): Bundle {
             val bundle = Bundle()
-            bundle.putInt(ContentTypeKey, contentType)
+            bundle.putInt(Constants.FragmentParams.PARAMS_CONTENT_TYPE, contentType)
             return bundle
         }
 
         /**
-         * 内容类型: 笔记标签
+         * 启动 添加内容 界面
+         * @param activity Activity
+         * @param contentType 内容类型
+         * @param linkedId 关联 ID
+         * @param requestCode 请求Code
          */
-        const val CONTENT_TYPE_NOTE_TAG = 0x20
-
-        /**
-         * 内容类型：计划标签
-         */
-        const val CONTENT_TYPE_SCHEDULE_TAG = 0x21
-
-        /**
-         * 内容类型：记录标签
-         */
-        const val CONTENT_TYPE_RECORD_TAG = 0x22
-
-        /**
-         * 内容类型：动态标签
-         */
-        const val CONTENT_TYPE_DYNAMIC_TAG = 0x23
-
-        /**
-         * 内容类型：文件标签
-         */
-        const val CONTENT_TYPE_FILE_TAG = 0x24
-
-        /**
-         * 内容类型：未知（无）
-         */
-        const val CONTENT_TYPE_OTHER = 0xF0
-
-        @IntDef(CONTENT_TYPE_NOTE_TAG,
-            CONTENT_TYPE_SCHEDULE_TAG,
-            CONTENT_TYPE_RECORD_TAG,
-            CONTENT_TYPE_DYNAMIC_TAG,
-            CONTENT_TYPE_FILE_TAG,
-            CONTENT_TYPE_OTHER)
-        @Target(AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.PROPERTY)
-        annotation class ContentType {}
-
-        private const val ContentTypeKey = "contentType"
+        fun startActivityForResult(
+            activity: Activity,
+            @FragmentContentType contentType: Int,
+            linkedId: String?,
+            requestCode: Int
+        ) {
+            val intent = Intent(activity, AddContentActivity::class.java)
+            val bundle = Bundle()
+            bundle.putInt(Constants.FragmentParams.PARAMS_CONTENT_TYPE, contentType)
+            bundle.putString(Constants.FragmentParams.PARAMS_TAG_LINK_ID, linkedId)
+            intent.putExtras(bundle)
+            activity.startActivityForResult(intent, requestCode)
+        }
     }
+
+    private var activityBaseAddContentBinding: ActivityBaseAddContentBinding? = null
 
     /**
      * 右上角设置按钮文字
@@ -82,10 +67,15 @@ class AddContentActivity : BaseNoteActivity() {
     private var finishTextStr = ""
 
     /**
+     * 自定义 Fragment
+     */
+    var customFragment: AbsBaseFragment? = null
+
+    /**
      * 内容类型
      */
-    @ContentType
-    private var mContentType: Int = CONTENT_TYPE_OTHER
+    @FragmentContentType
+    private var mContentType: Int = FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_OTHER
 
     override fun initWindow() {
 
@@ -95,15 +85,28 @@ class AddContentActivity : BaseNoteActivity() {
         return R.layout.activity_base_add_content
     }
 
+    override fun useViewBinding(): Boolean = true
+    override fun setViewBinding() {
+        super.setViewBinding()
+        activityBaseAddContentBinding = ActivityBaseAddContentBinding.inflate(layoutInflater)
+            .apply {
+                setContentView(this.root)
+            }
+    }
+
     override fun initView() {
-        setSupportActionBar(base_add_content_bta_layout.toolbar)
+        setSupportActionBar(activityBaseAddContentBinding?.baseAddContentTopToolbar)
     }
 
     override fun initData() {
         val bundle = intent?.extras
         bundle?.let {
-            mContentType = it.getInt(ContentTypeKey, CONTENT_TYPE_OTHER)
+            mContentType = it.getInt(
+                Constants.FragmentParams.PARAMS_CONTENT_TYPE,
+                FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_OTHER
+            )
         }
+        // 切换 显示 内容
         targetContentView(mContentType)
 
     }
@@ -139,10 +142,11 @@ class AddContentActivity : BaseNoteActivity() {
     /**
      * 替换中间内容
      * @param contentType 内容布局类型
-     * @see ContentType
+     * @see FragmentContentTypeValue
      */
-    private fun targetContentView(@ContentType contentType: Int) {
+    private fun targetContentView(@FragmentContentType contentType: Int) {
         val tag = "ADD_CONTENT_FRAGMENT_$contentType"
+        L.i(TAG, "targetContentView: TAG = $tag")
         val fragmentManager = supportFragmentManager
         var fragment = fragmentManager.findFragmentByTag(tag) as AbsBaseFragment?
         if (fragment == null) {
@@ -150,19 +154,25 @@ class AddContentActivity : BaseNoteActivity() {
         }
         if (fragment != null) {
             val transaction = fragmentManager.beginTransaction()
-            transaction.replace(R.id.base_add_content_bat_content_fl, fragment, tag)
+            transaction.replace(R.id.base_add_content_fl, fragment, tag)
             transaction.commitAllowingStateLoss()
         }
 
     }
 
-    private fun getFragment(@ContentType contentType: Int): AbsBaseFragment? {
-        when (contentType) {
-            CONTENT_TYPE_NOTE_TAG -> {
-                return NoteTagFragment.getInstance()
+    /**
+     * 获取 Fragment
+     * @param contentType  内容 类型
+     */
+    private fun getFragment(@FragmentContentType contentType: Int): AbsBaseFragment? {
+        return when (contentType) {
+            FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_NOTE_TAG -> {
+                NoteTagFragment.getInstance()
+            }
+            else -> {
+                customFragment
             }
         }
-        return null
     }
 
 }

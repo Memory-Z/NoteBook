@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.inz.z.note_book.base.NoteInfoStatus;
 import com.inz.z.note_book.base.NoteStatus;
-import com.inz.z.note_book.database.DaoSession;
 import com.inz.z.note_book.database.NoteFileContentDao;
 import com.inz.z.note_book.database.NoteInfoDao;
 
@@ -16,8 +15,11 @@ import org.greenrobot.greendao.annotation.ToMany;
 
 import java.util.Date;
 import java.util.List;
+import com.inz.z.note_book.database.DaoSession;
 
 /**
+ * 笔记信息
+ *
  * @author Zhenglj
  * @version 1.0.0
  * Create by inz in 2019/10/28 14:28.
@@ -201,15 +203,6 @@ public class NoteInfo {
         myDao.update(this);
     }
 
-    /**
-     * called by internal mechanisms, do not call yourself.
-     */
-    @Generated(hash = 889194310)
-    public void __setDaoSession(DaoSession daoSession) {
-        this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getNoteInfoDao() : null;
-    }
-
     @NonNull
     @Override
     public String toString() {
@@ -224,5 +217,12 @@ public class NoteInfo {
                 ", daoSession=" + daoSession +
                 ", myDao=" + myDao +
                 '}';
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 889194310)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getNoteInfoDao() : null;
     }
 }

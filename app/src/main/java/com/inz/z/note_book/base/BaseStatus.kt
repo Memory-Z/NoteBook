@@ -72,6 +72,9 @@ object NoteStatus {
     }
 }
 
+/**
+ * 笔记 状态
+ */
 @IntDef(NoteStatus.UNFINISHED,
     NoteStatus.FINISHED,
     NoteStatus.CANCELED,
@@ -282,3 +285,65 @@ annotation class TaskAction
     AnnotationTarget.FUNCTION
 )
 annotation class RepeatType
+
+/**
+ * 碎片 界面 内容类型
+ */
+object FragmentContentTypeValue {
+    /**
+     * 笔记 标签
+     */
+    const val FRAGMENT_CONTENT_TYPE_NOTE_TAG = 0x0A01
+
+    /**
+     * 计划 标签
+     */
+    const val FRAGMENT_CONTENT_TYPE_SCHEDULE_TAG = 0x0A02
+
+    /**
+     * 记录 标签
+     */
+    const val FRAGMENT_CONTENT_TYPE_RECORD_TAG = 0x0A03
+
+    /**
+     * 动态 标签
+     */
+    const val FRAGMENT_CONTENT_TYPE_DYNAMIC_TAG = 0x0A04
+
+    /**
+     * 文件 标签
+     */
+    const val FRAGMENT_CONTENT_TYPE_FILE_TAG = 0x0A05
+
+    /**
+     * 其他
+     */
+    const val FRAGMENT_CONTENT_TYPE_OTHER = 0x0A06
+}
+
+/**
+ * 碎片 类型
+ */
+@IntDef(
+    FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_NOTE_TAG,
+    FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_SCHEDULE_TAG,
+    FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_RECORD_TAG,
+    FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_DYNAMIC_TAG,
+    FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_FILE_TAG,
+    FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_OTHER
+)
+@Target(
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.PROPERTY,
+    AnnotationTarget.VALUE_PARAMETER,
+    AnnotationTarget.TYPE_PARAMETER,
+    AnnotationTarget.FIELD
+)
+annotation class FragmentContentType
+
+/**
+ * 标签 消息
+ */
+object TagValue {
+
+}

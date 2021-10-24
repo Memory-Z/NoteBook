@@ -2,12 +2,10 @@ package com.inz.z.note_book.database.util
 
 import android.text.TextUtils
 import android.util.Log
-import com.inz.z.note_book.database.DaoMaster
 import org.greenrobot.greendao.AbstractDao
 import org.greenrobot.greendao.database.Database
 import org.greenrobot.greendao.internal.DaoConfig
 import java.lang.StringBuilder
-import java.util.*
 import kotlin.collections.ArrayList
 
 /**

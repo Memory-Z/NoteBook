@@ -5,32 +5,39 @@
     android:layout_height="match_parent">
 
 
-    <com.inz.z.base.view.widget.BaseTopActionLayout
-        android:id="@+id/base_add_content_bta_layout"
-        style="@style/Base.Layout"
+    <LinearLayout
+        android:id="@+id/base_add_content_top_ll"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_text_mulite"
         android:fitsSystemWindows="true"
-        app:base_show_background_in_status="false"
-        app:base_show_custom_view="false"
-        app:base_top_title="@string/favorite"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/base_add_content_top_toolbar"
+            style="@style/NoteBookAppTheme.TopAction"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            app:navigationIcon="@drawable/ic_chevron_left_black_24dp"
+            app:popupTheme="@style/NoteBookAppTheme.Menu.Overflow"
+            app:title="@string/base_title" />
+
+    </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/base_add_content_bat_content_ll"
+        android:id="@+id/base_add_content_ll"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/base_add_content_bta_layout">
+        app:layout_constraintTop_toBottomOf="@id/base_add_content_top_ll">
 
         <FrameLayout
-            android:id="@+id/base_add_content_bat_content_fl"
+            android:id="@+id/base_add_content_fl"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

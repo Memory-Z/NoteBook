@@ -1,22 +1,20 @@
 package com.inz.z.note_book.database.bean;
 
+import androidx.annotation.NonNull;
+
+import com.inz.z.note_book.database.NoteFileContentDao;
+
+import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.ToOne;
 
 import java.util.Date;
-
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.DaoException;
-
 import com.inz.z.note_book.database.DaoSession;
 import com.inz.z.note_book.database.FileInfoDao;
-
-import org.greenrobot.greendao.annotation.NotNull;
-
-import com.inz.z.note_book.database.NoteFileContentDao;
 
 /**
  * 笔记 - 文件 内容
@@ -57,11 +55,6 @@ public class NoteFileContent {
     private Date createDate;
     private Date updateDate;
 
-    /**
-     * Used to resolve relations
-     */
-    @Generated(hash = 2040040024)
-    private transient DaoSession daoSession;
 
     /**
      * Used for active entity operations.
@@ -71,6 +64,10 @@ public class NoteFileContent {
 
     @Generated(hash = 665517796)
     private transient Long fileInfo__resolvedKey;
+
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
 
     @Generated(hash = 584814784)
     public NoteFileContent(Long noteFileId, String noteId, String noteContent, Long fileId, int index,
@@ -145,27 +142,6 @@ public class NoteFileContent {
     }
 
     /**
-     * To-one relationship, resolved on first access.
-     */
-    @Generated(hash = 784985547)
-    public FileInfo getFileInfo() {
-        Long __key = this.fileId;
-        if (fileInfo__resolvedKey == null || !fileInfo__resolvedKey.equals(__key)) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            FileInfoDao targetDao = daoSession.getFileInfoDao();
-            FileInfo fileInfoNew = targetDao.load(__key);
-            synchronized (this) {
-                fileInfo = fileInfoNew;
-                fileInfo__resolvedKey = __key;
-            }
-        }
-        return fileInfo;
-    }
-
-    /**
      * called by internal mechanisms, do not call yourself.
      */
     @Generated(hash = 157445859)
@@ -213,16 +189,8 @@ public class NoteFileContent {
         myDao.update(this);
     }
 
-    /**
-     * called by internal mechanisms, do not call yourself.
-     */
-    @Generated(hash = 687305624)
-    public void __setDaoSession(DaoSession daoSession) {
-        this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getNoteFileContentDao() : null;
-    }
 
-
+    @NonNull
     @Override
     public String toString() {
         return "NoteFileContent{" +
@@ -235,5 +203,31 @@ public class NoteFileContent {
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +
                 '}';
+    }
+
+    /** To-one relationship, resolved on first access. */
+    @Generated(hash = 784985547)
+    public FileInfo getFileInfo() {
+        Long __key = this.fileId;
+        if (fileInfo__resolvedKey == null || !fileInfo__resolvedKey.equals(__key)) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            FileInfoDao targetDao = daoSession.getFileInfoDao();
+            FileInfo fileInfoNew = targetDao.load(__key);
+            synchronized (this) {
+                fileInfo = fileInfoNew;
+                fileInfo__resolvedKey = __key;
+            }
+        }
+        return fileInfo;
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 687305624)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getNoteFileContentDao() : null;
     }
 }

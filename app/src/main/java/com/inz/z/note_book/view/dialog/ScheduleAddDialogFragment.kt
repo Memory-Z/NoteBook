@@ -158,6 +158,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
         dialogScheduleAddBinding?.dialogScheduleAddContentActionTypeBnl?.setOnClickListener(this)
         // 默认 不显示 重复
         dialogScheduleAddBinding?.dialogScheduleAddContentRepeatDateBnl?.visibility = View.GONE
+        dialogScheduleAddBinding?.dialogScheduleAddContentTagBnl?.setOnClickListener(this)
     }
 
     override fun initData() {
@@ -229,7 +230,10 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
                     // 显示 类型 弹窗
                     showChooseScheduleTypeDialogFragment(scheduleType)
                 }
-
+                // 弹窗 添加 标签
+                binding.dialogScheduleAddContentTagBnl.id -> {
+                    // TODO: 2021/10/24 显示 添加 内容
+                }
                 else -> {
 
                 }

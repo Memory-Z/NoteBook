@@ -226,5 +226,32 @@ object Constants {
 
     }
 
+    /**
+     * 碎片 参数
+     */
+    object FragmentParams {
+        /**
+         * 内容 类型
+         */
+        const val PARAMS_CONTENT_TYPE = "Content"
+
+        /**
+         * 请求 添加 内容 Code
+         */
+        const val REQUEST_ADD_CONTENT_CODE = 0x0B01
+        const val RESULT_ADD_CONTENT_CODE = 0x0B02
+
+        /**
+         * 标签 数据
+         */
+        const val PARAMS_TAG_ARRAYS = "TagArrays"
+
+        /**
+         * 标签 关联 ID
+         */
+        const val PARAMS_TAG_LINK_ID = "TagLinkId"
+
+    }
+
 
 }

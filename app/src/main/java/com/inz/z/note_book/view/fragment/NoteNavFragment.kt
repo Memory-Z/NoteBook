@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.view.View
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.widget.NestedScrollView
@@ -15,6 +14,7 @@ import com.inz.z.base.util.L
 import com.inz.z.base.util.LauncherHelper
 import com.inz.z.base.view.AbsBaseFragment
 import com.inz.z.note_book.R
+import com.inz.z.note_book.base.FragmentContentTypeValue
 import com.inz.z.note_book.database.bean.NoteGroup
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteGroupService
@@ -34,8 +34,6 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.note_nav_hint_layout.*
 import kotlinx.android.synthetic.main.note_nav_layout.*
 import java.util.*
-import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledExecutorService
 
 /**
  * 首页导航页
@@ -210,7 +208,7 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
             note_nav_near_five_nav_right_iv.id -> {
                 // 最近五条记录 右侧按钮点击 ，跳转至添加
                 val intent = Intent(mContext, AddContentActivity::class.java)
-                intent.putExtras(AddContentActivity.getInstanceBundle(AddContentActivity.CONTENT_TYPE_NOTE_TAG))
+                intent.putExtras(AddContentActivity.getInstanceBundle(FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_NOTE_TAG))
                 startActivity(intent)
             }
             else -> {

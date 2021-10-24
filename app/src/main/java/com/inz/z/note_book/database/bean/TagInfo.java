@@ -7,49 +7,56 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 
 import java.util.Date;
-
 import org.greenrobot.greendao.annotation.Generated;
 
 /**
- * 笔记 标签 信息
+ * 标签 信息
+ * # 与 Task / Note 进行  关联
+ *
+ * @see TagNoteLink
+ * @see TagScheduleLink
  * ====================================================
- * Create by 11654 in 2021/4/11 20:29
+ * Create by 11654 in 2021/10/23 21:00
  */
-@Entity(nameInDb = "note_tag_info")
-public class NoteTagInfo {
-
-    @Index
-    @Id(autoincrement = true)
-    private Long noteTagId = 0L;
+@Entity(nameInDb = "tag_info")
+public class TagInfo {
 
     /**
-     * 标切内容
+     * 标签 ID
      */
+    @Id(autoincrement = true)
+    @Index
+    private Long tagId = 0L;
+
+    /**
+     * 标签内容
+     */
+    @Index
     private String tagContent = "";
 
-    private Date createDate = null;
+    private Date createDate;
 
-    @Generated(hash = 635434356)
-    public NoteTagInfo(Long noteTagId, String tagContent, Date createDate) {
-        this.noteTagId = noteTagId;
+    @Generated(hash = 625773284)
+    public TagInfo(Long tagId, String tagContent, Date createDate) {
+        this.tagId = tagId;
         this.tagContent = tagContent;
         this.createDate = createDate;
     }
 
-    @Generated(hash = 147985785)
-    public NoteTagInfo() {
+    @Generated(hash = 792670162)
+    public TagInfo() {
     }
 
-    public Long getNoteTagId() {
-        return this.noteTagId;
+    public Long getTagId() {
+        return tagId;
     }
 
-    public void setNoteTagId(Long noteTagId) {
-        this.noteTagId = noteTagId;
+    public void setTagId(Long tagId) {
+        this.tagId = tagId;
     }
 
     public String getTagContent() {
-        return this.tagContent;
+        return tagContent;
     }
 
     public void setTagContent(String tagContent) {
@@ -57,7 +64,7 @@ public class NoteTagInfo {
     }
 
     public Date getCreateDate() {
-        return this.createDate;
+        return createDate;
     }
 
     public void setCreateDate(Date createDate) {
@@ -67,6 +74,10 @@ public class NoteTagInfo {
     @NonNull
     @Override
     public String toString() {
-        return super.toString();
+        return "TagInfo{" +
+                "tagId=" + tagId +
+                ", tagContent='" + tagContent + '\'' +
+                ", createDate=" + createDate +
+                '}';
     }
 }
