@@ -67,10 +67,11 @@ class TaskScheduleAddViewModel : ViewModel() {
     /**
      *  获取 任务信息
      */
-    fun getTaskInfo(): MutableLiveData<TaskInfo>? {
+    fun getTaskInfo(taskId: String?): MutableLiveData<TaskInfo>? {
         if (taskInfoLiveDate == null) {
             taskInfoLiveDate = MutableLiveData()
         }
+        findTaskInfoByTaskId(taskId)
         return taskInfoLiveDate
     }
 
@@ -99,9 +100,7 @@ class TaskScheduleAddViewModel : ViewModel() {
     fun findTaskInfoByTaskId(taskId: String?) {
         taskId?.let {
             val taskInfo = TaskInfoController.queryTaskInfoById(it)
-            taskInfo?.let { info ->
-                taskInfoLiveDate?.postValue(info)
-            }
+            taskInfoLiveDate?.postValue(taskInfo)
         }
 
     }

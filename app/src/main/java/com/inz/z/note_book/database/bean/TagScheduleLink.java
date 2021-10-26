@@ -8,6 +8,7 @@ import org.greenrobot.greendao.annotation.Index;
 
 import java.util.Date;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Property;
 
 /**
  * 标签 - 任务 计划  链接
@@ -38,6 +39,7 @@ public class TagScheduleLink {
     @Index
     private String scheduleId = "";
 
+    @Property(nameInDb = "link_index")
     private int index = 0;
 
     private Date createDate;

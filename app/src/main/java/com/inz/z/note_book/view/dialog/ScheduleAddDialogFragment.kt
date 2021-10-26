@@ -300,7 +300,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
                 }
             )
         // 获取 任务 信息
-        taskScheduleAddViewModel?.getTaskInfo()
+        taskScheduleAddViewModel?.getTaskInfo(schedule.taskId)
             ?.observe(
                 this,
                 Observer { taskInfo ->
@@ -357,6 +357,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
      * 创建信息 任务信息
      */
     private fun createNewTaskInfo(): TaskInfo {
+        L.i(TAG, "createNewTaskInfo: ")
         val id = BaseTools.getUUID()
         val calendar = Calendar.getInstance(Locale.getDefault())
         return TaskInfo()
@@ -371,6 +372,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
      * 创建 新 任务计划 信息
      */
     private fun createNewTaskScheduleInfo(): TaskSchedule {
+        L.i(TAG, "createNewTaskScheduleInfo: ")
         val scheduleId = BaseTools.getUUID()
         taskScheduleId = scheduleId
         val calendar = Calendar.getInstance(Locale.getDefault())
@@ -433,6 +435,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
      * 保存 计划任务
      */
     private fun saveTaskSchedule() {
+        L.i(TAG, "saveTaskSchedule: ")
         // 获取当前时间
         val calendar = Calendar.getInstance(Locale.getDefault())
         // 更新 任务信息
@@ -468,6 +471,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
             // 设置计划状态 。
             this.scheduleStatus = ScheduleStatus.NOT_STARTED
         }
+        L.i(TAG, "saveTaskSchedule: taskInfo = $taskInfo , taskScheduleInfo = $schedule")
         if (taskInfo != null && schedule != null) {
             // 更新 任务 与 任务计划信息
             taskScheduleAddViewModel?.updateTaskScheduleInfo(taskInfo!!, schedule!!)

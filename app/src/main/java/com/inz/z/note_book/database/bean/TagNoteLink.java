@@ -8,6 +8,7 @@ import org.greenrobot.greendao.annotation.Index;
 
 import java.util.Date;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Property;
 
 /**
  * 标签-笔记 链接
@@ -37,6 +38,7 @@ public class TagNoteLink {
     @Index
     private String noteId = "";
 
+    @Property(nameInDb = "link_index")
     private int index = 0;
     private Date createDate;
 

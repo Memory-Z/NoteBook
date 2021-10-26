@@ -28,19 +28,25 @@ class AddContentViewModel : ViewModel() {
         if (tagInfoListLiveData == null) {
             tagInfoListLiveData = MutableLiveData()
         }
-        findTagInfoList(linkedId)
+        findTagInfoListBySchedule(linkedId)
         return tagInfoListLiveData
     }
 
-    fun findTagInfoList(linkedId: String?) {
-        if (linkedId != null) {
-            val list = TagLinkController.findTagInfoListByScheduleId(linkedId)
-            if (list.isNullOrEmpty()) {
-                tagInfoListLiveData?.postValue(list)
-            }
+    /**
+     * 根据计划 ID 获取 相应 的标签 信息 。
+     * @param  scheduleId 计划 ID
+     */
+    fun findTagInfoListBySchedule(scheduleId: String?) {
+        if (scheduleId != null) {
+            val list = TagLinkController.findTagInfoListByScheduleId(scheduleId)
+            tagInfoListLiveData?.postValue(list)
         } else {
             tagInfoListLiveData?.postValue(null)
         }
+    }
+
+    fun destroy() {
+        tagInfoListLiveData = null
     }
 
 }

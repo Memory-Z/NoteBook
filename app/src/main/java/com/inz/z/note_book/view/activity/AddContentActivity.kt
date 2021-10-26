@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
+import androidx.lifecycle.ViewModelProvider
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseFragment
 import com.inz.z.note_book.R
@@ -14,6 +15,7 @@ import com.inz.z.note_book.base.FragmentContentTypeValue
 import com.inz.z.note_book.databinding.ActivityBaseAddContentBinding
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.view.BaseNoteActivity
+import com.inz.z.note_book.view.activity.viewmodel.AddContentViewModel
 import com.inz.z.note_book.view.fragment.add_content.NoteTagFragment
 
 /**
@@ -77,6 +79,8 @@ class AddContentActivity : BaseNoteActivity() {
     @FragmentContentType
     private var mContentType: Int = FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_OTHER
 
+    private var addContentViewModel: AddContentViewModel? = null
+
     override fun initWindow() {
 
     }
@@ -99,6 +103,8 @@ class AddContentActivity : BaseNoteActivity() {
     }
 
     override fun initData() {
+        // 初始化 ViewModel
+        initView()
         val bundle = intent?.extras
         bundle?.let {
             mContentType = it.getInt(
@@ -106,8 +112,32 @@ class AddContentActivity : BaseNoteActivity() {
                 FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_OTHER
             )
         }
+        // 初始化 ViewModel Data
+        initViewModelData()
         // 切换 显示 内容
         targetContentView(mContentType)
+
+    }
+
+    override fun onDestroyData() {
+        super.onDestroyData()
+        destroyViewModel()
+    }
+
+    /**
+     * 初始化ViewModel
+     */
+    private fun intViewModel() {
+        addContentViewModel =
+            ViewModelProvider.NewInstanceFactory().create(AddContentViewModel::class.java)
+    }
+
+    private fun destroyViewModel() {
+        addContentViewModel?.destroy()
+        addContentViewModel = null
+    }
+
+    private fun initViewModelData() {
 
     }
 
