@@ -16,7 +16,10 @@ import com.inz.z.note_book.databinding.ActivityBaseAddContentBinding
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.activity.viewmodel.AddContentViewModel
+import com.inz.z.note_book.view.fragment.add_content.BaseTagFragment
 import com.inz.z.note_book.view.fragment.add_content.NoteTagFragment
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper
+import com.qmuiteam.qmui.util.QMUIWindowHelper
 
 /**
  *
@@ -43,7 +46,7 @@ class AddContentActivity : BaseNoteActivity() {
          * 启动 添加内容 界面
          * @param activity Activity
          * @param contentType 内容类型
-         * @param linkedId 关联 ID
+         * @param linkedId 关联 ID  如：ScheduleId, NoteId
          * @param requestCode 请求Code
          */
         fun startActivityForResult(
@@ -100,13 +103,15 @@ class AddContentActivity : BaseNoteActivity() {
 
     override fun initView() {
         setSupportActionBar(activityBaseAddContentBinding?.baseAddContentTopToolbar)
+        QMUIStatusBarHelper.setStatusBarLightMode(this)
     }
 
     override fun initData() {
         // 初始化 ViewModel
-        initView()
+        initViewModel()
         val bundle = intent?.extras
         bundle?.let {
+            // 获取 内容 类型
             mContentType = it.getInt(
                 Constants.FragmentParams.PARAMS_CONTENT_TYPE,
                 FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_OTHER
@@ -127,7 +132,7 @@ class AddContentActivity : BaseNoteActivity() {
     /**
      * 初始化ViewModel
      */
-    private fun intViewModel() {
+    private fun initViewModel() {
         addContentViewModel =
             ViewModelProvider.NewInstanceFactory().create(AddContentViewModel::class.java)
     }
@@ -196,8 +201,13 @@ class AddContentActivity : BaseNoteActivity() {
      */
     private fun getFragment(@FragmentContentType contentType: Int): AbsBaseFragment? {
         return when (contentType) {
+            // 笔记
             FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_NOTE_TAG -> {
                 NoteTagFragment.getInstance()
+            }
+            // 任务 - 计划
+            FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_SCHEDULE_TAG -> {
+                BaseTagFragment.getInstances(contentType, "")
             }
             else -> {
                 customFragment

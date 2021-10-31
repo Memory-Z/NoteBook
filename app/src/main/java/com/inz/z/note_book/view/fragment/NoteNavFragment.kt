@@ -221,7 +221,7 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
      * 检测日期
      */
     private fun checkDateText(delay: Long) {
-        L.i(TAG, "checnDateText: ---- ${delay}. ")
+        L.i(TAG, "checkDateText: ---- ${delay}. ")
         if (this.isHidden || this.isRemoving || this.isDetached || !this.isVisible) {
             checkDataRunnable = null
             return

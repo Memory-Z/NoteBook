@@ -25,6 +25,7 @@ import com.inz.z.note_book.database.bean.TaskInfo
 import com.inz.z.note_book.database.bean.TaskSchedule
 import com.inz.z.note_book.databinding.DialogScheduleAddBinding
 import com.inz.z.note_book.util.ClickUtil
+import com.inz.z.note_book.view.activity.AddContentActivity
 import com.inz.z.note_book.view.dialog.viewmodel.TaskScheduleAddViewModel
 import kotlinx.android.synthetic.main.content_schedule_add.view.*
 import kotlinx.android.synthetic.main.dialog_schedule_add.*
@@ -233,6 +234,9 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
                 // 弹窗 添加 标签
                 binding.dialogScheduleAddContentTagBnl.id -> {
                     // TODO: 2021/10/24 显示 添加 内容
+                    schedule?.let {
+                        listener?.chooseScheduleTag(it.taskScheduleId)
+                    }
                 }
                 else -> {
 
@@ -458,7 +462,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
                 set(Calendar.MILLISECOND, 0)
             }
             // 如果 当前时间 大于 选中日期，设置选中时间为 后一日计划
-            if (System.currentTimeMillis() > checkedCalendar.timeInMillis) {
+            if (System.currentTimeMillis() - 5 * 60 * 1000 > checkedCalendar.timeInMillis) {
                 // 当前系统时间大于 计划 时间，时间时间日期+ 1
                 checkedCalendar.set(Calendar.DATE, checkedCalendar.get(Calendar.DATE) + 1)
             }
@@ -552,6 +556,20 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
     }
 
     /**
+     * 显示 选择 标签 Dialog
+     * @param scheduleId 计划 ID
+     *
+     */
+    private fun showChooseTagDialogFragment(scheduleId: String) {
+        // TODO: 2021/10/28 跳转至  选择 标签
+        if (mContext == null) {
+            L.w(TAG, "showChooseTagDialogFragment: Context is null.")
+            return
+        }
+        val manager = childFragmentManager
+    }
+
+    /**
      * 计划添加Dialog 监听。
      */
     interface ScheduleAddDFListener {
@@ -571,6 +589,11 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
          * 选择启动应用
          */
         fun chooseLauncherApplication();
+
+        /**
+         * 选择 计划 标签
+         */
+        fun chooseScheduleTag(scheduleId: String)
     }
 
     /**

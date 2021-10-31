@@ -210,6 +210,12 @@ object Constants {
         const val RESULT_REPEAT_TYPE_CODE = 0x000A04
 
         /**
+         * 请求 标签
+         */
+        const val REQUEST_TAG_CODE = 0x000A05
+        const val RESULT_TAG_CODE = 0x000A06
+
+        /**
          * 重复类型
          */
         const val PARAMS_REPEAT_TYPE = "RepeatType"

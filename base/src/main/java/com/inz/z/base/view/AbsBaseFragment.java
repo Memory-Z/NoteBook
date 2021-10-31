@@ -30,6 +30,14 @@ public abstract class AbsBaseFragment extends Fragment {
 
     protected abstract void initData();
 
+    protected boolean useViewBinding() {
+        return false;
+    }
+
+    protected View getViewBindingView() {
+        return null;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +47,9 @@ public abstract class AbsBaseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (useViewBinding()) {
+            return getViewBindingView();
+        }
         return inflater.inflate(getLayoutId(), null, false);
     }
 

@@ -11,6 +11,8 @@ import com.haibin.calendarview.CalendarView
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
+import com.inz.z.note_book.base.FragmentContentTypeValue
+import com.inz.z.note_book.base.TagValue
 import com.inz.z.note_book.database.bean.TaskInfo
 import com.inz.z.note_book.database.bean.TaskSchedule
 import com.inz.z.note_book.database.controller.ScheduleController
@@ -413,6 +415,17 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
             startActivityForResult(intent, Constants.APPLICATION_LIST_REQUEST_CODE)
         }
 
+        override fun chooseScheduleTag(scheduleId: String) {
+            L.i(TAG, "chooseScheduleTag: scheduleId = $scheduleId")
+            // 跳转 至  选择内容界面
+            AddContentActivity.startActivityForResult(
+                this@ScheduleActivity,
+                FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_SCHEDULE_TAG,
+                scheduleId,
+                Constants.TaskParams.REQUEST_TAG_CODE
+            )
+
+        }
     }
 
 
