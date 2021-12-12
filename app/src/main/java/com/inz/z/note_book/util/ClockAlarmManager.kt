@@ -88,8 +88,8 @@ object ClockAlarmManager {
     /**
      * 取消
      */
-    fun cancelAlarm(contenxt: Context, pendingIntent: PendingIntent) {
-        val alarmManager = contenxt.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
+    fun cancelAlarm(context: Context, pendingIntent: PendingIntent) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
         alarmManager?.cancel(pendingIntent)
     }
 }

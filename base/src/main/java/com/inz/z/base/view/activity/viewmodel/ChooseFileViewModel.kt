@@ -5,10 +5,10 @@ import android.content.Context
 import androidx.annotation.RequiresPermission
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.inz.z.base.base.ChooseFileConstants
+import com.inz.z.base.base.ChooseFileShowType
+import com.inz.z.base.base.FileType
 import com.inz.z.base.entity.BaseChooseFileBean
-import com.inz.z.base.entity.BasePreviewImageBean
-import com.inz.z.base.entity.ChooseFileShowType
-import com.inz.z.base.entity.Constants
 import com.inz.z.base.util.FileTypeHelper
 import com.inz.z.base.util.L
 import com.inz.z.base.util.ProviderUtil
@@ -75,24 +75,24 @@ class ChooseFileViewModel : ViewModel() {
                 ObservableOnSubscribe<List<BaseChooseFileBean>> {
                     var list: MutableList<BaseChooseFileBean> = mutableListOf()
                     when (showType) {
-                        Constants.ChooseFileConstants.SHOW_TYPE_DIR -> {
+                        ChooseFileConstants.SHOW_TYPE_DIR -> {
                             list = ProviderUtil.queryFileListByDir(filePath)
                             // 更新文件类型。
                             if (context != null) {
                                 list = resetImageFileType(context, list.toList()).toMutableList()
                             }
                         }
-                        Constants.ChooseFileConstants.SHOW_TYPE_IMAGE -> {
+                        ChooseFileConstants.SHOW_TYPE_IMAGE -> {
                             if (context != null) {
                                 list = ProviderUtil.queryFileImageWithContextProvider(context)
                             }
                         }
-                        Constants.ChooseFileConstants.SHOW_TYPE_AUDIO -> {
+                        ChooseFileConstants.SHOW_TYPE_AUDIO -> {
                             if (context != null) {
                                 list = ProviderUtil.queryFileAudioWithContentProvider(context)
                             }
                         }
-                        Constants.ChooseFileConstants.SHOW_TYPE_VIDEO -> {
+                        ChooseFileConstants.SHOW_TYPE_VIDEO -> {
                         }
                         else -> {
                             it.onError(IllegalArgumentException("not find path: {$filePath} with {$showType} ,this's data list. "))
@@ -161,7 +161,7 @@ class ChooseFileViewModel : ViewModel() {
                 val file = File(it.filePath)
                 val isImage = fileTypeHelper.isImageWithFile(file)
                 if (isImage) {
-                    it.fileType = Constants.FileType.FILE_TYPE_IMAGE
+                    it.fileType = FileType.FILE_TYPE_IMAGE
                 }
             }
         }

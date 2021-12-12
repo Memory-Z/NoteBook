@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
+import com.inz.z.base.base.ChooseFileConstants
 import com.inz.z.base.view.AbsBaseDialogFragment
 import com.inz.z.base.view.activity.ChooseFileActivity
 import com.inz.z.note_book.R
@@ -79,7 +80,7 @@ class ChooseImageDialog : AbsBaseDialogFragment() {
             requireActivity(),
             requestCode,
             ChooseFileActivity.MODE_TABLE,
-            com.inz.z.base.entity.Constants.ChooseFileConstants.SHOW_TYPE_IMAGE,
+            ChooseFileConstants.SHOW_TYPE_IMAGE,
             4
         )
     }

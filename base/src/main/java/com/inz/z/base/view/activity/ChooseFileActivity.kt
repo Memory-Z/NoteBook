@@ -20,10 +20,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.R
+import com.inz.z.base.base.ChooseFileConstants
+import com.inz.z.base.base.ChooseFileShowType
 import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.entity.BaseChooseFileNavBean
-import com.inz.z.base.entity.ChooseFileShowType
-import com.inz.z.base.entity.Constants
 import com.inz.z.base.util.FileUtils
 import com.inz.z.base.util.L
 import com.inz.z.base.util.ProviderUtil
@@ -103,7 +103,7 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
                 activity,
                 requestCode,
                 showMode,
-                Constants.ChooseFileConstants.SHOW_TYPE_DIR,
+                ChooseFileConstants.SHOW_TYPE_DIR,
                 tableColumn
             )
         }
@@ -185,7 +185,7 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
     private var maxChooseFileCount = DEFAULT_MAX_CHOOSE_FILE_COUNT
 
     @ChooseFileShowType
-    private var showType = Constants.ChooseFileConstants.SHOW_TYPE_DIR
+    private var showType = ChooseFileConstants.SHOW_TYPE_DIR
 
     /**
      * 显示模式，默认：列表
@@ -284,7 +284,7 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
 
         val bundle = intent?.extras
         bundle?.let {
-            showType = it.getInt("showType", Constants.ChooseFileConstants.SHOW_TYPE_DIR)
+            showType = it.getInt("showType", ChooseFileConstants.SHOW_TYPE_DIR)
             showMode = it.getInt("showMode", MODE_LIST)
             showTableModeColumn = it.getInt("tableColumn", DEFAULT_TABLE_COLUMNS)
             maxChooseFileCount = it.getInt("maxChooseFile", DEFAULT_MAX_CHOOSE_FILE_COUNT)
@@ -412,7 +412,7 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
             )
         }
         // 当前是否为显示文件夹
-        val isDirContent = showType == Constants.ChooseFileConstants.SHOW_TYPE_DIR
+        val isDirContent = showType == ChooseFileConstants.SHOW_TYPE_DIR
         // 如果需要显示文件夹，将导航栏显示出。
         base_choose_file_nav_rv?.visibility = if (isDirContent) {
             View.VISIBLE
@@ -502,15 +502,15 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
         val intent = Intent()
         val bundle = Bundle()
         bundle.putParcelableArrayList(
-            Constants.ChooseFileConstants.CHOOSE_FILE_RESULT_LIST_TAG,
+            ChooseFileConstants.CHOOSE_FILE_RESULT_LIST_TAG,
             chooseFileList
         )
         bundle.putInt(
-            Constants.ChooseFileConstants.CHOOSE_FILE_RESULT_SIZE_TAG,
+            ChooseFileConstants.CHOOSE_FILE_RESULT_SIZE_TAG,
             chooseFileList.size
         )
         intent.putExtras(bundle)
-        setResult(Constants.ChooseFileConstants.CHOOSE_FILE_RESULT_CODE, intent)
+        setResult(ChooseFileConstants.CHOOSE_FILE_RESULT_CODE, intent)
         finish()
     }
 
@@ -763,7 +763,7 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
                 var fileList = mutableListOf<BaseChooseFileBean>()
                 when (showType) {
                     // 查询图片
-                    Constants.ChooseFileConstants.SHOW_TYPE_IMAGE -> {
+                    ChooseFileConstants.SHOW_TYPE_IMAGE -> {
                         // 分页查询
                         fileList = ProviderUtil.queryFileImageWithContextProvider(
                             mContext,
@@ -772,16 +772,16 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
                         )
                     }
                     // 查询音频
-                    Constants.ChooseFileConstants.SHOW_TYPE_AUDIO -> {
+                    ChooseFileConstants.SHOW_TYPE_AUDIO -> {
                         // 分页查询
 
                     }
                     // 查询视频
-                    Constants.ChooseFileConstants.SHOW_TYPE_VIDEO -> {
+                    ChooseFileConstants.SHOW_TYPE_VIDEO -> {
                         // 分页查询
                     }
                     // 根据目录查询
-                    Constants.ChooseFileConstants.SHOW_TYPE_DIR -> {
+                    ChooseFileConstants.SHOW_TYPE_DIR -> {
                         // 判断是否有权限进行查询
                         if (checkHavePermission()) {
                             fileList = ProviderUtil.queryFileListByDir(filePath)

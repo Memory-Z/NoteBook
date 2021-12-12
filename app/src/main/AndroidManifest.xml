@@ -6,8 +6,13 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 设置 壁纸 -->
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
 
     <application
         android:name=".NoteBookApplication"
@@ -17,7 +22,12 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
         android:theme="@style/NoteBookAppTheme.Transparent"
+        android:resizeableActivity="true"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
+
+<!--        &lt;!&ndash; 适配全面屏 &ndash;&gt;-->
+<!--        <meta-data android:name="android.max_aspect" android:value="2.4" />-->
+<!--        <meta-data android:name="android.notch_support" android:value="true" />-->
 
         <activity android:name=".view.activity.TestViewActivity" />
         <!-- 测试界面 -->
@@ -33,13 +43,25 @@
             <!--                <category android:name="android.intent.category.LAUNCHER" />-->
             <!--            </intent-filter>-->
         </activity>
+        <!-- 滑动界面 测试  -->
+        <activity
+            android:name=".view.activity.ScrollImageTestActivity"
+            android:exported="true">
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+
+            <!--                <category android:name="android.intent.category.DEFAULT" />-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
+        </activity>
         <!-- 主页 -->
         <activity
             android:name=".view.activity.MainActivity"
             android:configChanges="keyboardHidden|screenLayout|screenSize|orientation"
             android:exported="true"
             android:launchMode="singleInstance"
-            android:windowSoftInputMode="adjustResize">
+            android:theme="@style/NoteBookAppTheme.Transparent"
+            >
             <intent-filter>
                 <category android:name="android.intent.category.APP_CALENDAR" />
             </intent-filter>
@@ -49,6 +71,9 @@
         <activity
             android:name=".view.activity.SplashActivity"
             android:configChanges="screenSize|screenLayout|keyboardHidden|orientation"
+            android:resizeableActivity="true"
+            android:uiOptions="splitActionBarWhenNarrow"
+            android:theme="@style/NoteBookAppTheme.Transparent"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -151,6 +176,17 @@
             android:theme="@style/NoteBookAppTheme.Transparent" />
 
 
+        <!-- 设置壁纸界面  -->
+        <activity
+            android:name=".view.activity.SetWallpaperActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/NoteBookAppTheme.Transparent"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.inz.z.note_boot.SetWallpaperAction" />
+            </intent-filter>
+        </activity>
+
         <!-- 通知服务 -->
         <service
             android:name=".service.NotificationForegroundService"
@@ -172,6 +208,11 @@
             android:label="@string/user_info_service">
 
         </service>
+
+        <!-- 设置 壁纸 服务  -->
+        <service
+            android:name=".service.SetWallpaperService"
+            android:label="@string/set_wallpaper_service" />
 
         <!-- 闹钟 广播 -->
         <receiver

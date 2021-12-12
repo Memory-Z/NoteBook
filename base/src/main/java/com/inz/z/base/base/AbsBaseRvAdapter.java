@@ -66,6 +66,7 @@ public abstract class AbsBaseRvAdapter<T, VH extends RecyclerView.ViewHolder> ex
     public void onDetachedFromRecyclerView(@NonNull @NotNull RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
         mContext = null;
+        mLayoutInflater = null;
         this.list.clear();
         this.list = null;
     }

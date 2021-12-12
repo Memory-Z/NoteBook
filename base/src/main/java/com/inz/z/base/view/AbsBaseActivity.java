@@ -1,10 +1,12 @@
 package com.inz.z.base.view;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -249,7 +251,7 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
                 // 刘海屏支持/ 设置刘海屏不显示界面内容
                 WindowManager.LayoutParams params = getWindow().getAttributes();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    params.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER;
+                    params.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
                 }
                 getWindow().setAttributes(params);
 
@@ -462,7 +464,8 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
             haveNavigationBar = resources.getBoolean(barId);
         }
         try {
-            Class className = Class.forName("android.os.SystemProperties");
+            @SuppressLint("PrivateApi")
+            Class<?> className = Class.forName("android.os.SystemProperties");
             Method method = className.getMethod("get", String.class);
             String navBarOverride = (String) method.invoke(className, "qemu.hw.mainkeys");
             if ("1".equals(navBarOverride)) {
@@ -476,7 +479,9 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
             }
         } catch (Exception ignore) {
         }
-        return haveNavigationBar;
+        boolean isShowNav = isShowNavigationBar();
+        L.d(getClass().getName(), "checkNavigation: isShowNav = " + isShowNav + " , haveNav = " + haveNavigationBar);
+        return haveNavigationBar && isShowNav;
     }
 
     /**
@@ -485,6 +490,48 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
     protected int getNavigationBarHeight(Activity activity) {
         int resId = activity.getResources().getIdentifier("navigation_bar_height", "dimen", "android");
         return activity.getResources().getDimensionPixelSize(resId);
+    }
+
+    /**
+     * 获取 状态栏高度
+     *
+     * @param activity Activity
+     * @return height
+     */
+    protected int getStatusBarHeight(Activity activity) {
+        int resId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        return activity.getResources().getDimensionPixelSize(resId);
+    }
+
+    /**
+     * 获取屏幕实际 Size
+     *
+     * @return Rect
+     */
+    protected Rect getScreenSize() {
+        Rect rect = new Rect();
+        WindowManager manager = getWindowManager();
+        if (manager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                rect = manager.getCurrentWindowMetrics().getBounds();
+            } else {
+                manager.getDefaultDisplay().getRectSize(rect);
+            }
+        }
+        return rect;
+    }
+
+    /**
+     * 是否显示 底部导航栏
+     *
+     * @return 是否显示
+     */
+    protected boolean isShowNavigationBar() {
+        Rect windowRect = new Rect();
+        getWindow().getDecorView().getWindowVisibleDisplayFrame(windowRect);
+        int activityHeight = windowRect.height();
+        int remainHeight = getScreenSize().height() - getNavigationBarHeight(this) - getStatusBarHeight(this);
+        return activityHeight == remainHeight;
     }
     /* -------------------- 底部状态栏 ------------------------ */
 

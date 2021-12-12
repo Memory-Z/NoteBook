@@ -61,4 +61,7 @@
     <color name="schedule_color_doing">@color/colorPrimary</color>
     <color name="schedule_color_done">@color/nearColorRed</color>
     <color name="schedule_color_undo">@color/lightGray</color>
+
+    <color name="button_color_def">#FFF</color>
+    <color name="button_color_press">#EFEFEF</color>
 </resources>

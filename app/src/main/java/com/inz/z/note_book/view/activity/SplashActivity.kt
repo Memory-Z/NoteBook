@@ -32,13 +32,6 @@ class SplashActivity : AbsBaseActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
 //        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         // 刘海屏支持/ 设置刘海屏不显示界面内容
-
-        // 刘海屏支持/ 设置刘海屏不显示界面内容
-        val params = window.attributes
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            params.layoutInDisplayCutoutMode =
-                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
-        }
     }
 
     override fun resetBottomNavigationBar(): Boolean {

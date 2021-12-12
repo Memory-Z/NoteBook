@@ -1,14 +1,12 @@
 package com.inz.z.note_book.view.activity
 
 import android.content.Intent
-import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.inz.z.base.base.ChooseFileConstants
 import com.inz.z.base.entity.BaseChooseFileBean
-import com.inz.z.base.entity.Constants
 import com.inz.z.base.util.L
-import com.inz.z.base.view.activity.ChooseFileActivity
 import com.inz.z.note_book.R
 import com.inz.z.note_book.bean.response.LoginResponse
 import com.inz.z.note_book.http.BaseHttpResponseListener
@@ -90,15 +88,15 @@ class NewDynamicActivity : BaseNoteActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             CHOOSE_IMAGE_REQUEST_CODE -> {
-                if (resultCode == Constants.ChooseFileConstants.CHOOSE_FILE_RESULT_CODE) {
+                if (resultCode == ChooseFileConstants.CHOOSE_FILE_RESULT_CODE) {
                     data?.extras?.let {
                         val fileList: List<BaseChooseFileBean>? =
-                            it.getParcelableArrayList(Constants.ChooseFileConstants.CHOOSE_FILE_RESULT_LIST_TAG)
+                            it.getParcelableArrayList(ChooseFileConstants.CHOOSE_FILE_RESULT_LIST_TAG)
                         fileList?.let {
                             addDynamicImageList(it)
                         }
                         val fileSize =
-                            it.getInt(Constants.ChooseFileConstants.CHOOSE_FILE_RESULT_SIZE_TAG, 0)
+                            it.getInt(ChooseFileConstants.CHOOSE_FILE_RESULT_SIZE_TAG, 0)
                         L.i(
                             TAG,
                             "onActivityResult: CHOOSE_IMAGE_REQUEST_CODE: $fileList == $fileSize"

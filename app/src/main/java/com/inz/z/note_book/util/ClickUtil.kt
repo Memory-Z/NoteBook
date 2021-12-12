@@ -73,7 +73,7 @@ object ClickUtil {
         // 更新 最新时间
         clickViewMap[vId] = currentTime
         if (BuildConfig.DEBUG) {
-            L.i(TAG, "isFastClick: this is fast click, $view")
+            L.i(TAG, "isFastClick: this is fast click ::: $isFast, $view")
         }
         return isFast
     }

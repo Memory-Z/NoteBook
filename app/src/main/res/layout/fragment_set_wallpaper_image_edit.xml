@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 设置 壁纸 界面 -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/base_background_color">
+
+    <com.inz.z.note_book.view.widget.layout.ScrollImageView
+        android:id="@+id/fm_set_wallpaper_img_siv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/fm_set_wallpaper_img_content_null_rl"
+        android:layout_width="@dimen/dp0"
+        android:layout_height="@dimen/dp0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.inz.z.base.view.widget.BaseNoDataView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:base_no_data_image_src="@drawable/ic_no_image" />
+    </RelativeLayout>
+
+    <!-- 底部设置按钮 -->
+    <LinearLayout
+        android:id="@+id/fm_set_wallpaper_img_bottom_set_ll"
+        style="@style/NoteBookAppTheme.Layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_layout"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent=".6">
+
+        <Button
+            android:id="@+id/fm_set_wallpaper_img_bottom_set_btn"
+            style="@style/NoteBookAppTheme.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/set_as"
+            android:textSize="@dimen/text_subhead_size"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+    <!--        android:id="@+id/fm_set_wallpaper_img_setting_fab"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginEnd="@dimen/margin_layout"-->
+    <!--        android:layout_marginBottom="@dimen/margin_layout"-->
+    <!--        android:contentDescription="@string/set_wallpaper"-->
+    <!--        android:src="@drawable/ic_menu_black_24dp"-->
+    <!--        android:tint="@color/white"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fm_set_wallpaper_img_add_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_layout"
+        android:layout_marginBottom="@dimen/margin_layout"
+        android:contentDescription="@string/set_wallpaper"
+        android:src="@drawable/ic_add_black_24dp"
+        android:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

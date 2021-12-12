@@ -142,4 +142,11 @@
     <string name="every_year_lunar">每年（农历）</string>
     <string name="repeat_custom">自定义</string>
 
+    <string name="_wallpaper">壁纸</string>
+    <string name="system_wallpaper">系统壁纸</string>
+    <string name="set_wallpaper">设置壁纸</string>
+    <string name="set_wallpaper_service">设置壁纸服务</string>
+
+    <string name="set_as">设为</string>
+
 </resources>

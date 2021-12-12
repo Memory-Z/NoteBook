@@ -10,9 +10,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.inz.z.base.R
+import com.inz.z.base.base.FileType
 import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.entity.BasePreviewImageBean
-import com.inz.z.base.entity.Constants
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseDialogFragment
 import com.inz.z.base.view.dialog.adapter.PreviewImageListRvAdapter
@@ -176,7 +176,7 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
                     this.canChoose = true
                     this.fileName = fileName
                     this.fileIsDirectory = false
-                    this.fileType = Constants.FileType.FILE_TYPE_IMAGE
+                    this.fileType = FileType.FILE_TYPE_IMAGE
                 }
         }
         L.i(TAG, "initData ----------------- $fileName ")
@@ -225,7 +225,7 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
     private fun loadImageToRv(selectedPosition: Int) {
         val imageFileList = ArrayList<BasePreviewImageBean>()
         selectedFileList?.forEachIndexed { index, it ->
-            if (it.fileType == Constants.FileType.FILE_TYPE_IMAGE) {
+            if (it.fileType == FileType.FILE_TYPE_IMAGE) {
                 val bean = BasePreviewImageBean(it)
                 bean.isSelectedPreview = index == selectedPosition
                 imageFileList.add(bean)

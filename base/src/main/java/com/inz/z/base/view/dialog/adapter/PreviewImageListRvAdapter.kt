@@ -9,8 +9,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.inz.z.base.R
 import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
+import com.inz.z.base.base.FileType
 import com.inz.z.base.entity.BasePreviewImageBean
-import com.inz.z.base.entity.Constants
 import kotlinx.android.synthetic.main.base_item_preview_img_list.view.*
 
 /**
@@ -38,7 +38,7 @@ class PreviewImageListRvAdapter(mContext: Context?) :
 
     override fun onBindVH(holder: PreviewImageListRvHolder, position: Int) {
         val item = list.get(position)
-        if (item.fileType == Constants.FileType.FILE_TYPE_IMAGE) {
+        if (item.fileType == FileType.FILE_TYPE_IMAGE) {
             holder.preIv.visibility = View.VISIBLE
             Glide.with(mContext).load(item.filePath).apply(option).into(holder.preIv)
             if (position == currentSelectedPosition) {

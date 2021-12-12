@@ -1,5 +1,6 @@
 package com.inz.z.note_book.base
 
+import android.app.WallpaperManager
 import android.content.Context
 import androidx.annotation.IntDef
 import androidx.annotation.NonNull
@@ -75,14 +76,18 @@ object NoteStatus {
 /**
  * 笔记 状态
  */
-@IntDef(NoteStatus.UNFINISHED,
+@IntDef(
+    NoteStatus.UNFINISHED,
     NoteStatus.FINISHED,
     NoteStatus.CANCELED,
     NoteStatus.TIMEOUT,
-    NoteStatus.UNKNOWN)
-@Target(AnnotationTarget.TYPE_PARAMETER, AnnotationTarget.FIELD,
+    NoteStatus.UNKNOWN
+)
+@Target(
+    AnnotationTarget.TYPE_PARAMETER, AnnotationTarget.FIELD,
     AnnotationTarget.PROPERTY,
-    AnnotationTarget.VALUE_PARAMETER)
+    AnnotationTarget.VALUE_PARAMETER
+)
 annotation class NoteInfoStatus
 
 /**
@@ -234,15 +239,19 @@ object TaskValue {
 /**
  * 计划类型
  */
-@IntDef(TaskValue.SCHEDULE_NONE,
+@IntDef(
+    TaskValue.SCHEDULE_NONE,
     TaskValue.SCHEDULE_HINT,
     TaskValue.SCHEDULE_SHOCK,
     TaskValue.SCHEDULE_ALARM,
-    TaskValue.SCHEDULE_LAUNCHER)
-@Target(AnnotationTarget.FUNCTION,
+    TaskValue.SCHEDULE_LAUNCHER
+)
+@Target(
+    AnnotationTarget.FUNCTION,
     AnnotationTarget.VALUE_PARAMETER,
     AnnotationTarget.PROPERTY,
-    AnnotationTarget.TYPE_PARAMETER)
+    AnnotationTarget.TYPE_PARAMETER
+)
 annotation class ScheduleType
 
 /**
@@ -319,6 +328,31 @@ object FragmentContentTypeValue {
      * 其他
      */
     const val FRAGMENT_CONTENT_TYPE_OTHER = 0x0A06
+
+    /**
+     * 设置壁纸 - 预览
+     */
+    const val FRAGMENT_CONTENT_TYPE_SET_WALLPAPER_PREVIEW = 0x0A07
+
+    /**
+     * 设置壁纸 - 编辑
+     */
+    const val FRAGMENT_CONTENT_TYPE_SET_WALLPAPER_EDIT = 0x0A08
+
+    /**
+     * 壁纸类型：系统
+     */
+    const val WALLPAPER_FLAG_SYSTEM = WallpaperManager.FLAG_SYSTEM
+
+    /**
+     * 壁纸类型：锁屏
+     */
+    const val WALLPAPER_FLAG_LOCK = WallpaperManager.FLAG_LOCK
+
+    /**
+     * 壁纸类型：全部
+     */
+    const val WALLPAPER_FLAG_ALL = WallpaperManager.FLAG_SYSTEM.or(WallpaperManager.FLAG_LOCK)
 }
 
 /**
@@ -340,6 +374,42 @@ object FragmentContentTypeValue {
     AnnotationTarget.FIELD
 )
 annotation class FragmentContentType
+
+
+/**
+ * 设置 壁纸 内容
+ */
+@IntDef(
+    FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_SET_WALLPAPER_PREVIEW,
+    FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_SET_WALLPAPER_EDIT
+)
+@Target(
+    AnnotationTarget.FIELD,
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.VALUE_PARAMETER,
+    AnnotationTarget.TYPE_PARAMETER,
+    AnnotationTarget.PROPERTY
+)
+annotation class SetWallpaperFragmentContentType
+
+
+/**
+ * 设置壁纸类型
+ */
+@IntDef(
+    FragmentContentTypeValue.WALLPAPER_FLAG_SYSTEM,
+    FragmentContentTypeValue.WALLPAPER_FLAG_LOCK,
+    FragmentContentTypeValue.WALLPAPER_FLAG_ALL
+)
+@Target(
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.TYPE,
+    AnnotationTarget.FIELD,
+    AnnotationTarget.PROPERTY,
+    AnnotationTarget.VALUE_PARAMETER,
+    AnnotationTarget.TYPE_PARAMETER
+)
+annotation class SetWallpaperFlag
 
 /**
  * 标签 消息

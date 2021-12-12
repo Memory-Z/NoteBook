@@ -49,7 +49,7 @@ class BaseTagFragment : AbsBaseFragment() {
         return true
     }
 
-    override fun getViewBindingView(): View {
+    override fun getViewBindingView(): View? {
         return super.getViewBindingView()
     }
 

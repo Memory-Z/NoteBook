@@ -257,6 +257,42 @@ object Constants {
          */
         const val PARAMS_TAG_LINK_ID = "TagLinkId"
 
+        /**
+         * 碎片 前缀
+         */
+        const val FRAGMENT_TAG_PREFIX = "FragmentTag_"
+
+    }
+
+    /**
+     * 壁纸 参数
+     */
+    object WallpaperParams {
+        /**
+         * 壁纸 Rect
+         */
+        const val PARAMS_TAG_WALLPAPER_RECT_ARRAY = "WallpaperRectArray"
+
+        /**
+         * 壁纸 文件地址
+         */
+        const val PARAMS_TAG_WALLPAPER_FILE_PATH = "WallpaperFilePath"
+
+        /**
+         * 壁纸ID
+         */
+        const val PARAMS_TAG_WALLPAPER_ID = "WallpaperId"
+
+        /**
+         * 选择图片 请求Code
+         */
+        const val CHOOSE_IMAGE_REQUEST_CODE = 0x00A0
+
+        /**
+         * 请求设置壁纸权限
+         */
+        const val SET_WALLPAPER_REQUEST_CODE = 0x00A1
+
     }
 
 

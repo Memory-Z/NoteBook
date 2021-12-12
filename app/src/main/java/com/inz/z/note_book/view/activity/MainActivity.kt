@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
+import android.view.WindowManager
 import android.widget.PopupMenu
 import androidx.annotation.IntDef
 import androidx.annotation.NonNull
@@ -152,6 +153,7 @@ class MainActivity : BaseNoteActivity() {
         mln_4_bnl.setOnClickListener(leftMenuViewClickListener)
         mln_5_bnl.setOnClickListener(leftMenuViewClickListener)
         mln_6_bnl.setOnClickListener(leftMenuViewClickListener)
+        mln_set_wallpaper_mlnil.setOnClickListener(leftMenuViewClickListener)
     }
 
     /**
@@ -307,8 +309,12 @@ class MainActivity : BaseNoteActivity() {
                 R.id.mln_6_bnl -> {
                     startActivity(Intent(mContext, SystemFileActivity::class.java))
                 }
+                // 设置 系统壁纸
+                R.id.mln_set_wallpaper_mlnil -> {
+                    startActivity(Intent(mContext, SetWallpaperActivity::class.java))
+                }
                 else -> {
-                    L.w(TAG, "LeftMenuViewClickLisntenerImpl: onClick -> not find click view. ")
+                    L.w(TAG, "LeftMenuViewClickListenerImpl: onClick -> not find click view. ")
                 }
             }
         }

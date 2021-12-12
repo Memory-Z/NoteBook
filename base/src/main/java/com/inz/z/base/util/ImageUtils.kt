@@ -5,14 +5,11 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.util.Base64
-import androidx.core.graphics.BitmapCompat
-import com.bumptech.glide.load.resource.bitmap.BitmapEncoder
 import com.inz.z.base.entity.Constants
 import com.inz.z.base.entity.MergeBitmapOrientation
 import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
 import java.io.InputStream
+import kotlin.math.abs
 
 /**
  * @author Zhenglj
@@ -224,5 +221,42 @@ object ImageUtils {
             L.e(TAG, "tranStr2Bitmap: --- failure !! ", e)
         }
         return null
+    }
+
+    /**
+     * 图像旋转
+     * @param tempBitmap 需要旋转的图。
+     * @param orientation 旋转角度， 0， 90， 180， 270，
+     */
+    fun rotateBitmap(tempBitmap: Bitmap, orientation: Int): Bitmap {
+        val ori = abs(orientation)
+        val degrees = when {
+            (ori < 45) -> {
+                0F
+            }
+            (ori < 135) -> {
+                90F
+            }
+            (ori < 225) -> {
+                180F
+            }
+            (ori < 316) -> {
+                270F
+            }
+            else -> {
+                0F
+            }
+        }
+        val matrix = Matrix()
+        matrix.postRotate(degrees)
+        return Bitmap.createBitmap(
+            tempBitmap,
+            0,
+            0,
+            tempBitmap.width,
+            tempBitmap.height,
+            matrix,
+            true
+        )
     }
 }

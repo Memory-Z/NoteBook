@@ -34,6 +34,7 @@ public abstract class AbsBaseFragment extends Fragment {
         return false;
     }
 
+    @Nullable
     protected View getViewBindingView() {
         return null;
     }

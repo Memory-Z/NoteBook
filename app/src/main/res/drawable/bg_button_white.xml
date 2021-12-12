@@ -9,9 +9,9 @@
     </item>
 
     <item android:state_pressed="true">
-        <shape android:shape="line">
+        <shape>
             <corners android:radius="8dp" />
-            <gradient android:endColor="@color/threadColor" android:startColor="@color/colorPrimary" />
+            <solid android:color="@color/colorPrimaryDark" />
 
         </shape>
     </item>

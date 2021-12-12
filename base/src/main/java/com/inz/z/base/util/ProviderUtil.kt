@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -12,8 +13,8 @@ import android.util.Log
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresPermission
 import com.inz.z.base.BuildConfig
+import com.inz.z.base.base.FileType
 import com.inz.z.base.entity.BaseChooseFileBean
-import com.inz.z.base.entity.Constants
 import java.io.File
 import java.io.FileInputStream
 import java.net.URLConnection
@@ -56,7 +57,7 @@ object ProviderUtil {
                     bean.fileIsDirectory = childFile.isDirectory
                     bean.fileChangeDate = formatDatetime(childFile.lastModified())
                     bean.fileFromDatabase = false
-                    bean.fileType = Constants.FileType.FILE_TYPE_FILE
+                    bean.fileType = FileType.FILE_TYPE_FILE
                     fileList.add(bean)
                     Log.i(TAG, "queryFileListByDir: ----------> ${bean.fileName} ")
                 }
@@ -101,7 +102,7 @@ object ProviderUtil {
                 bean.fileDatabaseId = id.toString()
                 bean.fileIsDirectory = false
                 bean.fileLength = size
-                bean.fileType = Constants.FileType.FILE_TYPE_IMAGE
+                bean.fileType = FileType.FILE_TYPE_IMAGE
                 fileList.add(bean)
             }
         }
@@ -149,7 +150,7 @@ object ProviderUtil {
             bean.fileDatabaseId = id.toString()
             bean.fileIsDirectory = false
             bean.fileLength = size
-            bean.fileType = Constants.FileType.FILE_TYPE_IMAGE
+            bean.fileType = FileType.FILE_TYPE_IMAGE
             fileList.add(bean)
         }
         cursor.close()
@@ -193,7 +194,7 @@ object ProviderUtil {
                 bean.fileDatabaseId = id.toString()
                 bean.fileIsDirectory = false
                 bean.fileLength = size
-                bean.fileType = Constants.FileType.FILE_TYPE_AUDIO
+                bean.fileType = FileType.FILE_TYPE_AUDIO
                 fileList.add(bean)
             }
         }
@@ -295,6 +296,33 @@ object ProviderUtil {
             L.e(TAG, "insertImageFileToDCIM: ", e)
         }
 
+    }
+
+
+    /**
+     * 查询 uri
+     * @param context 上下文
+     * @param uri 链接地址
+     * @param 查询 cursor
+     */
+    private fun queryUri(context: Context, uri: Uri) =
+        context.contentResolver.query(uri, null, null, null, null)
+
+
+    /**
+     * 通过 URI 获取 图片文件信息
+     * @param context 上下文
+     * @param uri 链接 地址
+     * @return 查询结果
+     */
+    fun queryImageFileByUri(context: Context, uri: Uri): MutableList<BaseChooseFileBean>? {
+        val cursor = queryUri(context, uri)
+        cursor?.let {
+            val list = queryFileImage(it)
+            it.close()
+            return list
+        }
+        return null
     }
 
 }

@@ -14,10 +14,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.inz.z.base.R
 import com.inz.z.base.base.AbsBaseRvAdapter
+import com.inz.z.base.base.FileType
 import com.inz.z.base.databinding.BaseItemChooseFileListBinding
 import com.inz.z.base.databinding.BaseItemChooseFileTableBinding
 import com.inz.z.base.entity.BaseChooseFileBean
-import com.inz.z.base.entity.Constants
 import com.inz.z.base.util.L
 import com.inz.z.base.util.ThreadPoolUtils
 import com.inz.z.base.view.activity.ChooseFileActivity
@@ -116,21 +116,21 @@ class ChooseFileRvAdapter :
             } else {
                 iv.apply {
                     when (bean.fileType) {
-                        Constants.FileType.FILE_TYPE_IMAGE -> {
+                        FileType.FILE_TYPE_IMAGE -> {
                             Glide.with(mContext).load(bean.filePath).apply(requestOption)
                                 .into(this)
                             ImageViewCompat.setImageTintList(this, null)
                         }
-                        Constants.FileType.FILE_TYPE_AUDIO -> {
+                        FileType.FILE_TYPE_AUDIO -> {
                             loadImageIcon(this, R.drawable.ic_file_music)
                         }
-                        Constants.FileType.FILE_TYPE_VIDEO -> {
+                        FileType.FILE_TYPE_VIDEO -> {
                             loadImageIcon(this, R.drawable.ic_file_video)
                         }
-                        Constants.FileType.FILE_TYPE_APPLICATION -> {
+                        FileType.FILE_TYPE_APPLICATION -> {
                             loadImageIcon(this, R.drawable.ic_file_installation_pa)
                         }
-                        Constants.FileType.FILE_TYPE_TEXT -> {
+                        FileType.FILE_TYPE_TEXT -> {
                             loadImageIcon(this, R.drawable.ic_file_txt)
                         }
                         else -> {
@@ -161,7 +161,7 @@ class ChooseFileRvAdapter :
             } else {
                 iv.apply {
                     when (bean.fileType) {
-                        Constants.FileType.FILE_TYPE_IMAGE -> {
+                        FileType.FILE_TYPE_IMAGE -> {
                             Glide.with(mContext).load(bean.filePath).apply(requestOption)
                                 .into(iv)
                             ImageViewCompat.setImageTintList(this, null)

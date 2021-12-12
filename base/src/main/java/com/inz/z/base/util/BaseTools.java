@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -103,12 +104,21 @@ public class BaseTools {
     }
 
     /**
+     * 获取 当前时间
+     *
+     * @return Date
+     */
+    public static Date getLocalDate() {
+        return Calendar.getInstance(Locale.getDefault()).getTime();
+    }
+
+    /**
      * 获取当前时间字符串
      *
      * @return 时间串  yyyy-MM-dd HH:mm:ss
      */
     public static String getCurrentTimeStr() {
-        return getDateFormatTime().format(Calendar.getInstance(Locale.getDefault()));
+        return getDateFormatTime().format(getLocalDate());
     }
 
     /**

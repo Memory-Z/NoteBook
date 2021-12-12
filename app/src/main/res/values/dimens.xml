@@ -45,7 +45,7 @@
     <dimen name="image_icon_min_padding_size">@dimen/dp02</dimen>
 
     <dimen name="app_bar_text_size">20sp</dimen>
-    <dimen name="button_norma_text_size">15sp</dimen>
+    <dimen name="button_normal_text_size">15sp</dimen>
     <dimen name="headline_text_size">24sp</dimen>
     <dimen name="title_size">21sp</dimen>
     <dimen name="subheading_text_size">17sp</dimen>

@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    compileSdkVersion APP_COMPILE_SDK_VERSION.toInteger()
+//    buildToolsVersion "29.0.2"
 
 
     defaultConfig {
         applicationId "com.inz.z.addressbook"
-        minSdkVersion 21
-        targetSdkVersion 29
+        minSdkVersion APP_MIN_SDK_VERSION.toInteger()
+        targetSdkVersion APP_TARGET_SDK_VERSION.toInteger()
         versionCode 1
         versionName "1.0"
 

@@ -2,6 +2,8 @@ package com.inz.z.base.entity
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.inz.z.base.base.FileType
+import com.inz.z.base.base.FileTypeAnn
 import java.io.Serializable
 
 /**
@@ -36,8 +38,8 @@ open class BaseChooseFileBean : Serializable, Parcelable {
     /**
      * 文件类型
      */
-    @Constants.FileType.FileTypeAnn
-    var fileType: Int = Constants.FileType.FILE_TYPE_FILE
+    @FileTypeAnn
+    var fileType: Int = FileType.FILE_TYPE_FILE
 
     /**
      * 文件修改日期

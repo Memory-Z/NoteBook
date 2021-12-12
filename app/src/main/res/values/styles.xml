@@ -155,7 +155,7 @@
         <item name="android:textSize">@dimen/text_content_size</item>
         <item name="android:text">@string/_button</item>
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/textColor70</item>
+        <item name="android:textColor">@color/textInverseColor70</item>
     </style>
 
     <style name="NoteBookAppTheme.Button.Dialog" parent="NoteBookAppTheme.Button">

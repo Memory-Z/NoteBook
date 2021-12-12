@@ -22,16 +22,3 @@ annotation class MergeBitmapOrientation {
 
 }
 
-/**
- * 选择文件显示类型
- */
-@IntDef(
-    Constants.ChooseFileConstants.SHOW_TYPE_AUDIO,
-    Constants.ChooseFileConstants.SHOW_TYPE_DIR,
-    Constants.ChooseFileConstants.SHOW_TYPE_IMAGE,
-    Constants.ChooseFileConstants.SHOW_TYPE_VIDEO
-)
-@Target(AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.PROPERTY)
-annotation class ChooseFileShowType {
-
-}

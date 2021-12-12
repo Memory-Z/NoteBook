@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 设置 壁纸 预览  -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/fm_set_wallpaper_preview_srl"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:id="@+id/fm_set_wallpaper_preview_content_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- 显示内容: 默认不显示   -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fm_set_wallpaper_preview_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+
+
+            <!-- 空界面： 默认显示  -->
+            <com.inz.z.base.view.widget.BaseNoDataView
+                android:id="@+id/fm_set_wallpaper_preview_bnd_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                app:base_no_data_image_src="@drawable/ic_no_content"
+                app:base_no_data_message="@string/_no_content" />
+        </RelativeLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+    <!-- 添加 相应的 壁纸 切换  -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fm_set_wallpaper_img_preview_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_layout"
+        android:layout_marginBottom="@dimen/margin_layout"
+        android:contentDescription="@string/set_wallpaper"
+        android:src="@drawable/ic_add_black_24dp"
+        android:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

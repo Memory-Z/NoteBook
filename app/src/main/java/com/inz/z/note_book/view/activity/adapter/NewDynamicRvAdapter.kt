@@ -8,8 +8,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
+import com.inz.z.base.base.FileType
 import com.inz.z.base.entity.BaseChooseFileBean
-import com.inz.z.base.entity.Constants
 import com.inz.z.note_book.R
 import kotlinx.android.synthetic.main.item_new_dynamic_image.view.*
 import kotlinx.android.synthetic.main.item_new_dynamic_null.view.*
@@ -69,7 +69,7 @@ class NewDynamicRvAdapter(mContext: Context) :
                 var filePath = ""
                 if (item != null) {
                     item.let {
-                        if (it.fileType == Constants.FileType.FILE_TYPE_IMAGE) {
+                        if (it.fileType == FileType.FILE_TYPE_IMAGE) {
                             filePath = it.filePath
                         }
                     }

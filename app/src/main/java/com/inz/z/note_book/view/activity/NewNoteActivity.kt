@@ -5,8 +5,8 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.inz.z.base.base.ChooseFileConstants
 import com.inz.z.base.entity.BaseChooseFileBean
-import com.inz.z.base.entity.Constants
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.KeyBoardUtils
 import com.inz.z.base.util.L
@@ -132,12 +132,12 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == IMAGE_REQUEST_CODE) {
             when (resultCode) {
-                Constants.ChooseFileConstants.CHOOSE_FILE_RESULT_CODE -> {
+                ChooseFileConstants.CHOOSE_FILE_RESULT_CODE -> {
                     data?.extras?.apply {
                         val list =
-                            this.getParcelableArrayList<BaseChooseFileBean>(Constants.ChooseFileConstants.CHOOSE_FILE_RESULT_LIST_TAG)
+                            this.getParcelableArrayList<BaseChooseFileBean>(ChooseFileConstants.CHOOSE_FILE_RESULT_LIST_TAG)
                         val listSize = this.getInt(
-                            Constants.ChooseFileConstants.CHOOSE_FILE_RESULT_SIZE_TAG,
+                            ChooseFileConstants.CHOOSE_FILE_RESULT_SIZE_TAG,
                             0
                         )
                         L.i(TAG, "onActivityResult: $listSize --- $list ")
