@@ -1,14 +1,14 @@
 package com.inz.z.note_book.view.fragment
 
 import android.graphics.BitmapFactory
-import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.WindowInsets
-import android.view.WindowManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.work.*
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.util.L
 import com.inz.z.base.util.ToastUtil
@@ -20,6 +20,7 @@ import com.inz.z.note_book.util.ClickUtil
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.viewmodel.DesktopWallpaperViewModel
 import com.inz.z.note_book.work.SetDesktopWallpaperWorker
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * 设置 壁纸 界面
@@ -92,6 +93,11 @@ class EditWallpaperFragment private constructor() : AbsBaseFragment(), View.OnCl
     private var currentWallpaperInfoId: Long = -1L
 
     private var currentFileBean: BaseChooseFileBean? = null
+
+    /**
+     * 当前是否拥有数据， 默认：无
+     */
+    private var haveData: AtomicBoolean = AtomicBoolean(false)
 
     override fun initWindow() {
 
@@ -227,12 +233,19 @@ class EditWallpaperFragment private constructor() : AbsBaseFragment(), View.OnCl
      */
     private fun targetFloatButtonIcon(haveData: Boolean) {
         binding?.let {
-            if (haveData) {
-                it.fmSetWallpaperImgAddFab.hide()
-                // 切换至全屏显示
-            } else {
-                it.fmSetWallpaperImgAddFab.show()
-            }
+            this.haveData.set(haveData)
+//            if (haveData) {
+//                it.fmSetWallpaperImgAddFab.hide()
+//                // 切换至全屏显示
+//            } else {
+//                it.fmSetWallpaperImgAddFab.show()
+//            }
+            it.fmSetWallpaperImgAddFab.setImageResource(
+                if (haveData)
+                    R.drawable.ic_baseline_swap_horiz_24
+                else
+                    R.drawable.ic_add_black_24dp
+            )
             it.fmSetWallpaperImgBottomSetLl.visibility = if (haveData) View.VISIBLE else View.GONE
         }
     }
@@ -271,9 +284,17 @@ class EditWallpaperFragment private constructor() : AbsBaseFragment(), View.OnCl
                         when (info.state) {
                             WorkInfo.State.SUCCEEDED -> {
                                 L.i(TAG, "setDesktopWallpaper: Setting wallpaper success! ")
+                                ToastUtil.showToast(
+                                    mContext,
+                                    getString(R.string.set_wallpaper_success)
+                                )
                             }
                             WorkInfo.State.FAILED -> {
                                 L.i(TAG, "setDesktopWallpaper: Setting wallpaper FAILURE! ")
+                                ToastUtil.showToast(
+                                    mContext,
+                                    getString(R.string.set_wallpaper_failure)
+                                )
                             }
                             WorkInfo.State.RUNNING -> {
                                 L.i(TAG, "setDesktopWallpaper: Running ... ")
