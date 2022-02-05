@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_70_color">
+
+    <com.inz.z.note_book.view.widget.layout.ScrollImageView
+        android:id="@+id/test_scroll_iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/img_phone_2" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:id="@+id/test_scroll_get_rect_btn"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

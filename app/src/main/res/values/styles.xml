@@ -135,7 +135,7 @@
     </style>
 
     <style name="NoteBookAppTheme.ImageView.Tint">
-        <item name="android:tint">@color/card_inverse_color</item>
+<!--        <item name="android:tint">@color/card_inverse_color</item>-->
     </style>
 
     <style name="NoteBookAppTheme.ImageView.Icon" parent="NoteBookAppTheme.ImageView">

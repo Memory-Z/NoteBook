@@ -18,3 +18,4 @@ app/libs/
 app/src/main/java/com/inz/z/note_book/database/DaoMaster.java
 app/src/main/java/com/inz/z/note_book/database/DaoSession.java
 app/src/main/java/com/inz/z/note_book/database/*Dao.java
+/docs/*.~$lock

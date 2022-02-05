@@ -1,6 +1,8 @@
 package com.inz.z.note_book.view.dialog
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.Gravity
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
@@ -76,13 +78,20 @@ class ChooseImageDialog : AbsBaseDialogFragment() {
 //        intent.type = "image/*"
 //        startActivity(intent)
 //        ChooseFileActivity.gotoChooseFileActivity(requireActivity(), 800)
-        ChooseFileActivity.gotoChooseFileActivity(
-            requireActivity(),
-            requestCode,
-            ChooseFileActivity.MODE_TABLE,
-            ChooseFileConstants.SHOW_TYPE_IMAGE,
-            4
-        )
+//        ChooseFileActivity.gotoChooseFileActivity(
+//            requireActivity(),
+//            requestCode,
+//            ChooseFileActivity.MODE_TABLE,
+//            ChooseFileConstants.SHOW_TYPE_IMAGE,
+//            4
+//        )
+        val intent = Intent(Intent.ACTION_PICK)
+            .apply {
+                type = "image/*"
+                data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+//                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            }
+        requireActivity().startActivityForResult(intent, requestCode)
     }
 
     ///////////////////////////////////////////////////////////////////////////

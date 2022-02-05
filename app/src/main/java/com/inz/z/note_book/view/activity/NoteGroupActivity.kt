@@ -7,13 +7,14 @@ import android.os.Message
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
+import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.KeyBoardUtils
 import com.inz.z.base.util.L
+import com.inz.z.base.util.ToastUtil
 import com.inz.z.base.view.widget.BaseNoDataView
 import com.inz.z.note_book.R
 import com.inz.z.note_book.base.NoteStatus
@@ -22,13 +23,12 @@ import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteController
 import com.inz.z.note_book.database.controller.NoteGroupService
 import com.inz.z.note_book.databinding.ActivityGroupLayoutBinding
+import com.inz.z.note_book.databinding.NoteInfoAddSampleLayoutBinding
 import com.inz.z.note_book.util.ClickUtil
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.adapter.NoteInfoRecyclerAdapter
 import com.inz.z.note_book.view.fragment.NewGroupDialogFragment
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
-import kotlinx.android.synthetic.main.activity_group_layout.*
-import kotlinx.android.synthetic.main.note_info_add_sample_layout.*
 import java.util.*
 
 /**
@@ -43,7 +43,8 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
         private const val HANDLER_REFRESH_DATA = 0x00A0
     }
 
-    private lateinit var mGroupLayoutBinding: ActivityGroupLayoutBinding
+    private var binding: ActivityGroupLayoutBinding? = null
+    private var noteInfoAddBinding: NoteInfoAddSampleLayoutBinding? = null
     private var mNoteInfoRecyclerAdapter: NoteInfoRecyclerAdapter? = null
 
     /**
@@ -81,8 +82,7 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
 
     override fun initView() {
         QMUIStatusBarHelper.setStatusBarLightMode(this)
-        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
-        group_content_note_info_rv.layoutManager = LinearLayoutManager(mContext)
+
         mNoteInfoRecyclerAdapter = NoteInfoRecyclerAdapter(mContext)
         mNoteInfoRecyclerAdapter?.setNoteInfoRvAdapterListener(
             object : NoteInfoRecyclerAdapter.NoteInfoRvAdapterListener {
@@ -96,19 +96,24 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
                 }
             }
         )
-        group_content_note_info_rv.adapter = mNoteInfoRecyclerAdapter
-        group_top_back_rl.setOnClickListener(this)
-        group_content_srl.setOnRefreshListener {
-            // 刷新笔记数据
-            loadNoteInfoWithDatabase()
-            if (group_content_srl.isRefreshing) {
-                Toast.makeText(mContext, getString(R.string.fresh_success), Toast.LENGTH_SHORT)
-                    .show()
-                group_content_srl.isRefreshing = false
+        binding?.let {
+            it.groupContentNoteInfoRv.layoutManager = LinearLayoutManager(mContext)
+            it.groupContentNoteInfoRv.adapter = mNoteInfoRecyclerAdapter
+            it.groupContentSrl.setOnRefreshListener {
+                // 刷新笔记数据
+                loadNoteInfoWithDatabase()
+                if (it.groupContentSrl.isRefreshing) {
+                    // 刷新成功
+                    ToastUtil.showToast(mContext, getString(R.string.fresh_success))
+                    it.groupContentSrl.isRefreshing = false
+                }
             }
+            it.groupAddNoteInfoFab.setOnClickListener(this)
+            it.groupTopBackRl.setOnClickListener(this)
         }
-        group_add_note_info_fab.setOnClickListener(this)
+        // 初始化 添加
         initAddNoteView()
+        // 初始化空数据
         initNoDataView()
         groupHandler = Handler(mainLooper, GroupHandlerCallbackImpl())
     }
@@ -121,7 +126,7 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
             currentGroupId = bundle.getString("groupId", "")
         }
         // 組名
-        var groupName: String
+        val groupName: String
         if (isAddNewGroup || currentGroupId.isEmpty()) {
             groupName = getString(R.string.no_title_group).format("")
             L.i(TAG, "get Intent data is Null , $isAddNewGroup and $currentGroupId")
@@ -131,8 +136,8 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
                 noteGroup?.groupName ?: getString(R.string.no_title_group).format("")
 //            setNoteInfoListData()
         }
-
-        mGroupLayoutBinding.groupTopTitleTv.text = groupName
+        // 设置标题
+        binding?.groupTopTitleTv?.text = groupName
 
     }
 
@@ -142,15 +147,21 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
 
     override fun setDataBindingView() {
         super.setDataBindingView()
-        mGroupLayoutBinding = ActivityGroupLayoutBinding.inflate(layoutInflater)
+        binding = ActivityGroupLayoutBinding.inflate(layoutInflater)
             .apply {
+                noteInfoAddBinding = groupBottomAddNoteSampleInclude
                 setContentView(this.root)
             }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (group_bottom_add_note_sample_include.visibility == View.VISIBLE) {
+            // 如果新建分组存在，返回上级
+            if (isShowNewGroupDialog()) {
+                finish()
+                return true
+            }
+            if (noteInfoAddBinding?.noteInfoAddSampleRootRl?.visibility == View.VISIBLE) {
                 targetFabView(true)
                 return true
             }
@@ -165,6 +176,7 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
             // 显示新建弹窗
             showNewGroupDialog()
         } else if (!isAddNewGroup && currentGroupId.isNotEmpty()) {
+            // 加载数据
             loadNoteInfoWithDatabase()
         }
     }
@@ -175,6 +187,8 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
         mNoteInfoRecyclerAdapter = null
         groupHandler?.removeCallbacksAndMessages(null)
         groupHandler = null
+        noteInfoAddBinding = null
+        binding = null
     }
 
     override fun onClick(v: View?) {
@@ -183,43 +197,55 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
             return
         }
         when (v?.id) {
-            group_top_back_rl.id -> {
-                // 顶部返回按钮
-                finish()
-            }
-            group_add_note_info_fab.id -> {
-                // 浮动按钮 添加笔记
+            // 浮动按钮 点击
+            binding?.groupAddNoteInfoFab?.id -> {
+                // 切换显示状态
                 targetFabView(false)
-                note_info_add_sample_title_et.requestFocus()
+                // 请求焦点
+                noteInfoAddBinding?.noteInfoAddSampleTitleEt?.requestFocus()
             }
-            note_info_add_sample_add_iv.id -> {
-                // 笔记添加按钮
-                val str = note_info_add_sample_title_et.text.toString()
+            // 点击 返回
+            binding?.groupTopBackRl?.id -> {
+                this.finish()
+            }
+            // 添加 笔记 信息 按钮
+            noteInfoAddBinding?.noteInfoAddSampleAddIv?.id -> {
+                // 获取新 笔记标题内容
+                val str = noteInfoAddBinding?.noteInfoAddSampleTitleEt?.text.toString()
                 if (str.isBlank()) {
                     return
                 }
+                // 添加笔记
                 val added = addNoteInfo(currentGroupId, str)
                 if (added) {
                     // 添加数据成功
                     targetAddView(false)
                     targetFabView(true)
                     // 隐藏键盘
-                    KeyBoardUtils.hideKeyBoardByWindowToken(v.context, v.windowToken)
+                    KeyBoardUtils.hideKeyBoardByWindowToken(v!!.context, v.windowToken)
+                    // 加载笔记信息
                     loadNoteInfoWithDatabase()
-
                 }
             }
-            else -> {
+            else -> {}
+        }
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            // 返回
+            android.R.id.home -> {
+                finish()
             }
         }
+        return super.onOptionsItemSelected(item)
     }
 
     /**
      * 空数据界面初始化
      */
     private fun initNoDataView() {
-        group_content_empty_bndv?.let {
+        binding?.groupContentEmptyBndv?.let {
             it.listener = NoDataListenerImpl()
             val noDataStr = getString(R.string.no_title_group).format("")
             // 设置提示内容为无
@@ -241,14 +267,14 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
      * 开始加载
      */
     private fun startLoad(message: String) {
-        group_content_empty_bndv?.startRefresh(message)
+        binding?.groupContentEmptyBndv?.startRefresh(message)
     }
 
     /**
      * 结束加载
      */
-    private fun stopLoad(message: String, retry: Boolean) {
-        group_content_empty_bndv?.stopRefresh(message, retry)
+    private fun stopLoad(message: String, retry: Boolean = false) {
+        binding?.groupContentEmptyBndv?.stopRefresh(message, retry)
     }
 
     /**
@@ -270,10 +296,12 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
      * @param haveData 是否存在数据
      */
     private fun targetContentView(haveData: Boolean) {
-        group_content_srl?.visibility =
-            if (haveData) View.VISIBLE else View.GONE
-        group_content_empty_bndv?.visibility =
-            if (haveData) View.GONE else View.VISIBLE
+        binding?.let {
+            it.groupContentSrl.visibility =
+                if (haveData) View.VISIBLE else View.GONE
+            it.groupContentEmptyBndv.visibility =
+                if (haveData) View.GONE else View.VISIBLE
+        }
     }
 
     /* ========================================= 分组相关 ===================================== */
@@ -298,6 +326,19 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
     private fun hideNewGroupDialog() {
         val manager = supportFragmentManager
         (manager.findFragmentByTag("NewGroupDialogFragment") as NewGroupDialogFragment?)?.dismiss()
+    }
+
+    /**
+     * 是否显示 新建分组弹窗
+     * @return 是否显示弹窗
+     */
+    private fun isShowNewGroupDialog(): Boolean {
+        if (mContext == null) {
+            return false
+        }
+        val newGroupDialogFragment =
+            supportFragmentManager.findFragmentByTag("NewGroupDialogFragment") as NewGroupDialogFragment?
+        return newGroupDialogFragment?.isVisible ?: false
     }
 
     /**
@@ -330,8 +371,8 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
             // 同步数据
             currentGroupId = noteGroup.noteGroupId
             this@NoteGroupActivity.noteGroup = noteGroup
-
-            mGroupLayoutBinding.groupTopTitleTv.text = title
+            // 设置标题
+            binding?.groupTopTitleTv?.text = title
         }
     }
 
@@ -352,11 +393,11 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
             title += " ($order)"
         }
         val noteGroup = NoteGroupService.findNoteGroupByGroupName(title)
-        if (noteGroup != null) {
+        return if (noteGroup != null) {
             titleNumber += 1
-            return getGroupTitle(suffix, titleNumber)
+            getGroupTitle(suffix, titleNumber)
         } else {
-            return title
+            title
         }
     }
 
@@ -368,25 +409,38 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
      * 初始化添加笔记布局
      */
     private fun initAddNoteView() {
-        note_info_add_sample_title_et.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-            }
+        noteInfoAddBinding?.apply {
+            // 笔记信息标题
+            noteInfoAddSampleTitleEt.addTextChangedListener(
+                object : TextWatcher {
+                    override fun afterTextChanged(s: Editable?) {
+                    }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+                    override fun beforeTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        count: Int,
+                        after: Int
+                    ) {
+                    }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                targetAddView(s.isNullOrBlank())
+                    override fun onTextChanged(
+                        s: CharSequence?,
+                        start: Int,
+                        before: Int,
+                        count: Int
+                    ) {
+                        targetAddView(s.isNullOrBlank())
+                    }
+                }
+            )
+            // 添加笔记按钮
+            noteInfoAddSampleAddIv.apply {
+                isClickable = false
+                setOnClickListener(this@NoteGroupActivity)
             }
-        })
-
-        /**
-         * 添加笔记按钮
-         */
-        note_info_add_sample_add_iv.apply {
-            isClickable = false
-            setOnClickListener(this@NoteGroupActivity)
         }
+
 
     }
 
@@ -396,15 +450,17 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
      */
     private fun targetAddView(isShow: Boolean) {
         if (isShow) {
-            note_info_add_sample_add_iv.apply {
+            noteInfoAddBinding?.noteInfoAddSampleAddIv?.apply {
                 isClickable = false
                 background = ContextCompat.getDrawable(mContext, R.drawable.bg_card_gray)
+                foregroundTintList = mContext.getColorStateList(R.color.base_background_color)
             }
         } else {
-            note_info_add_sample_add_iv.apply {
+            noteInfoAddBinding?.noteInfoAddSampleAddIv?.apply {
                 isClickable = true
                 background =
                     ContextCompat.getDrawable(mContext, R.drawable.bg_card_main_color)
+                foregroundTintList = mContext.getColorStateList(R.color.white)
             }
         }
     }
@@ -413,13 +469,20 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
      * 切换Float Button
      */
     private fun targetFabView(isShow: Boolean) {
-        if (isShow) {
-            group_add_note_info_fab.show()
-            note_info_add_sample_title_et.setText("")
-            group_bottom_add_note_sample_include.visibility = View.GONE
-        } else {
-            group_add_note_info_fab.hide()
-            group_bottom_add_note_sample_include.visibility = View.VISIBLE
+        binding?.let {
+            if (isShow) {
+                it.groupAddNoteInfoFab.show()
+            } else {
+                it.groupAddNoteInfoFab.hide()
+            }
+        }
+        noteInfoAddBinding?.let {
+            if (isShow) {
+                it.noteInfoAddSampleTitleEt.setText("")
+                it.noteInfoAddSampleRootRl.visibility = View.GONE
+            } else {
+                it.noteInfoAddSampleRootRl.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -450,7 +513,7 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
                     // 切换内容
                     targetContentView(!noteInfoList.isNullOrEmpty())
                     mNoteInfoRecyclerAdapter?.replaceNoteInfoList(noteInfoList ?: arrayListOf())
-                    stopLoad(getString(R.string.loading_finish), false)
+                    stopLoad(getString(R.string.loading_finish))
                 }
             }
             return true

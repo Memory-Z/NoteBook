@@ -340,5 +340,7 @@
     <color name="darkblue">#00008b</color>
     <!-- 海军色 -->
     <color name="navy">#000080</color>
+    <!-- 黑色 -->
+    <color name="black">#FF000000</color>
     <!-- /Base Color  -->
 </resources>

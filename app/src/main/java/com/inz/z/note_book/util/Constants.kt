@@ -111,6 +111,20 @@ object Constants {
     const val APPLICATION_LIST_REQUEST_CODE = 0x000A01
     const val APPLICATION_LIST_RESPONSE_CODE = 0x000A02
 
+    /**
+     * 笔记信息 参数
+     */
+    object NoteBookParams {
+        /**
+         * 笔记分组ID
+         */
+        const val NOTE_GROUP_ID_TAG = "groupId"
+
+        /**
+         * 笔记 ID
+         */
+        const val NOTE_ID_TAG = "noteId"
+    }
 
     /**
      * 生命 周期广播

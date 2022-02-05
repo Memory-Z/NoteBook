@@ -1,5 +1,6 @@
 package com.inz.z.note_book.view.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.view.KeyEvent
 import android.view.View
@@ -130,8 +131,16 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        L.i(TAG, "onActivityResult: -->>> $requestCode == $resultCode")
         if (requestCode == IMAGE_REQUEST_CODE) {
             when (resultCode) {
+                // 通过 系统相册选择
+                Activity.RESULT_OK -> {
+                    L.i(TAG, "onActivityResult: ${data?.data}")
+                    data?.let {
+                        L.i(TAG, "onActivityResult: ${data.extras}")
+                    }
+                }
                 ChooseFileConstants.CHOOSE_FILE_RESULT_CODE -> {
                     data?.extras?.apply {
                         val list =
@@ -144,7 +153,6 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
                     }
                 }
             }
-
         }
     }
 
