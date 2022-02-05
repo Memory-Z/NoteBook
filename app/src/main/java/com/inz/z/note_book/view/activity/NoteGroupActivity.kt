@@ -181,6 +181,14 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        // 如果显示 添加框，则隐藏
+        if (getAddNoteInfoIsShow()) {
+            targetFabView(false)
+        }
+    }
+
     override fun onDestroyData() {
         super.onDestroyData()
         mNoteInfoRecyclerAdapter?.setNoteInfoRvAdapterListener(null)
@@ -466,6 +474,12 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
     }
 
     /**
+     * 获取添加内容显示状态。
+     * 如果显示切换按钮，表示未显示新建笔记
+     */
+    private fun getAddNoteInfoIsShow() = binding?.groupAddNoteInfoFab?.isShown == false
+
+    /**
      * 切换Float Button
      */
     private fun targetFabView(isShow: Boolean) {
@@ -487,7 +501,7 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
     }
 
     /**
-     * 添加笔记
+     * 添加笔记  createNoteInfo
      * @param noteGroupId 组id
      * @param noteTitle 标题
      */
