@@ -112,21 +112,31 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/group_content_note_info_rv"
+            <RelativeLayout
+                android:id="@+id/group_content_srl_content_ll"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/group_content_note_info_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+                <!-- 空数据 -->
+                <com.inz.z.base.view.widget.BaseNoDataView
+                    android:id="@+id/group_content_empty_bndv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:base_no_data_button_str="@string/_retry"
+                    app:base_no_data_image_src="@drawable/ic_baseline_backup_24"
+                    app:base_no_data_message="@string/_nothing"
+                    app:base_no_data_show_refresh_btn="true" />
+
+            </RelativeLayout>
+
+
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <!-- 空数据 -->
-        <com.inz.z.base.view.widget.BaseNoDataView
-            android:id="@+id/group_content_empty_bndv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:base_no_data_button_str="@string/_retry"
-            app:base_no_data_image_src="@drawable/ic_baseline_backup_24"
-            app:base_no_data_message="@string/_nothing"
-            app:base_no_data_show_refresh_btn="true" />
 
     </com.inz.z.base.view.widget.BaseRelativeLayout>
 

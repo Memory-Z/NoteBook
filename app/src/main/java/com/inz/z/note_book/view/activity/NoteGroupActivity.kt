@@ -27,7 +27,7 @@ import com.inz.z.note_book.databinding.NoteInfoAddSampleLayoutBinding
 import com.inz.z.note_book.util.ClickUtil
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.adapter.NoteInfoRecyclerAdapter
-import com.inz.z.note_book.view.fragment.NewGroupDialogFragment
+import com.inz.z.note_book.view.fragment.CreateNewGroupDialogFragment
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import java.util.*
 
@@ -297,7 +297,7 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
      */
     private fun targetContentView(haveData: Boolean) {
         binding?.let {
-            it.groupContentSrl.visibility =
+            it.groupContentNoteInfoRv.visibility =
                 if (haveData) View.VISIBLE else View.GONE
             it.groupContentEmptyBndv.visibility =
                 if (haveData) View.GONE else View.VISIBLE
@@ -312,10 +312,10 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
     private fun showNewGroupDialog() {
         val manager = supportFragmentManager
         var newGroupDialogFragment =
-            manager.findFragmentByTag("NewGroupDialogFragment") as NewGroupDialogFragment?
+            manager.findFragmentByTag("NewGroupDialogFragment") as CreateNewGroupDialogFragment?
         if (newGroupDialogFragment == null) {
             newGroupDialogFragment =
-                NewGroupDialogFragment.getInstance(NewGroupDialogFragmentListenerImpl())
+                CreateNewGroupDialogFragment.getInstance(NewGroupDialogFragmentListenerImpl())
         }
         newGroupDialogFragment.show(manager, "NewGroupDialogFragment")
     }
@@ -325,7 +325,7 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
      */
     private fun hideNewGroupDialog() {
         val manager = supportFragmentManager
-        (manager.findFragmentByTag("NewGroupDialogFragment") as NewGroupDialogFragment?)?.dismiss()
+        (manager.findFragmentByTag("NewGroupDialogFragment") as CreateNewGroupDialogFragment?)?.dismiss()
     }
 
     /**
@@ -337,7 +337,7 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
             return false
         }
         val newGroupDialogFragment =
-            supportFragmentManager.findFragmentByTag("NewGroupDialogFragment") as NewGroupDialogFragment?
+            supportFragmentManager.findFragmentByTag("NewGroupDialogFragment") as CreateNewGroupDialogFragment?
         return newGroupDialogFragment?.isVisible ?: false
     }
 
@@ -345,7 +345,7 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
      * 新分组弹窗监听实现
      */
     inner class NewGroupDialogFragmentListenerImpl :
-        NewGroupDialogFragment.NewGroupDialogFragmentListener {
+        CreateNewGroupDialogFragment.NewGroupDialogFragmentListener {
         override fun cancelCreate() {
             this@NoteGroupActivity.finish()
         }
@@ -367,11 +367,11 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
                 updateDate = currentDate
             }
             NoteGroupService.addNoteGroupWithGroupName(noteGroup)
-            hideNewGroupDialog()
             // 同步数据
             currentGroupId = noteGroup.noteGroupId
             this@NoteGroupActivity.noteGroup = noteGroup
             // 设置标题
+            hideNewGroupDialog()
             binding?.groupTopTitleTv?.text = title
         }
     }

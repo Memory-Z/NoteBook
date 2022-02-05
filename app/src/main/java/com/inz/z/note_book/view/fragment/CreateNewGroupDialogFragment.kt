@@ -18,12 +18,12 @@ import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.viewmodel.NoteGroupViewModel
 
 /**
- * 新分组弹窗
+ * 创建 日志 新分组弹窗
  * @author Zhenglj
  * @version 1.0.0
  * Create by inz in 2019/10/29 15:46.
  */
-class NewGroupDialogFragment : AbsBaseDialogFragment(), View.OnClickListener {
+class CreateNewGroupDialogFragment : AbsBaseDialogFragment(), View.OnClickListener {
 
     companion object {
 
@@ -33,7 +33,7 @@ class NewGroupDialogFragment : AbsBaseDialogFragment(), View.OnClickListener {
          * 获取弹窗实例。
          * @param listener 监听
          */
-        fun getInstance(listener: NewGroupDialogFragmentListener): NewGroupDialogFragment {
+        fun getInstance(listener: NewGroupDialogFragmentListener): CreateNewGroupDialogFragment {
             return getInstance(null, listener)
         }
 
@@ -45,8 +45,8 @@ class NewGroupDialogFragment : AbsBaseDialogFragment(), View.OnClickListener {
         fun getInstance(
             groupId: String?,
             listener: NewGroupDialogFragmentListener
-        ): NewGroupDialogFragment {
-            val mNewGroupDialogFragment = NewGroupDialogFragment()
+        ): CreateNewGroupDialogFragment {
+            val mNewGroupDialogFragment = CreateNewGroupDialogFragment()
             val bundle = Bundle()
             bundle.putString(Constants.NoteBookParams.NOTE_GROUP_ID_TAG, groupId)
             mNewGroupDialogFragment.arguments = bundle
@@ -191,14 +191,14 @@ class NewGroupDialogFragment : AbsBaseDialogFragment(), View.OnClickListener {
             when (v?.id) {
                 // 取消
                 binding.dialogAddGroupBottomCancelTv.id -> {
+                    mNewGroupDialogFragmentListener?.cancelCreate()
+                }
+                // 创建 分组
+                binding.dialogAddGroupBottomCreateGroupTv.id -> {
                     if (binding.dialogAddGroupTitleEt.text.isNullOrEmpty()) {
                         return
                     }
                     mNewGroupDialogFragmentListener?.createNewGroup(binding.dialogAddGroupTitleEt.text.toString())
-                }
-                // 创建 分组
-                binding.dialogAddGroupBottomCreateGroupTv.id -> {
-                    mNewGroupDialogFragmentListener?.cancelCreate()
                 }
                 else -> {
 
