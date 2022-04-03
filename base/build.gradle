@@ -1,7 +1,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
+
+def libArrays = rootProject.ext.dependencies
 
 android {
     compileSdkVersion APP_COMPILE_SDK_VERSION.toInteger()
@@ -32,8 +34,8 @@ android {
 //    dataBinding{
 //        enabled = true
 //    }
-    buildFeatures {
-        viewBinding = true
+    viewBinding {
+        enabled = true
     }
 
 }
@@ -41,80 +43,80 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.3.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}"
+    implementation libArrays['appcompat']
+    testImplementation libArrays['junit']
+    androidTestImplementation libArrays['test-runner']
+    androidTestImplementation libArrays['junit']
+    androidTestImplementation libArrays['test-espresso-core']
+    implementation libArrays['kotlin-stdlib']
 
     /* 添加 Android design  */
-    api 'com.google.android.material:material:1.2.1'
-    api 'androidx.recyclerview:recyclerview:1.1.0'
-    api 'androidx.cardview:cardview:1.0.0'
-    api 'androidx.exifinterface:exifinterface:1.3.0'
-    api 'androidx.fragment:fragment:1.2.5'
-    api 'androidx.constraintlayout:constraintlayout:2.0.1'
-    api "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    api libArrays['material']
+    api libArrays['recyclerview']
+    api libArrays['cardview']
+    api libArrays['exifinterface']
+    api libArrays['fragment']
+    api libArrays['constraintlayout']
+    api libArrays['swiperefreshlayout']
 
     /**
      * 网络连接
      * */
-    api 'com.squareup.okhttp3:okhttp:3.11.0'
+    api libArrays['okhttp']
 
     /**
      * 网络请求
      */
-    api 'com.squareup.retrofit2:retrofit:2.3.0'
-    api 'com.squareup.retrofit2:converter-gson:2.3.0'
-    api 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    api 'io.reactivex.rxjava2:rxjava:2.1.10'
-    api 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    api libArrays['retrofit']
+    api libArrays['retrofit-converter-gson']
+    api libArrays['retrofit-adapter-rxjava2']
+    api libArrays['rxjava']
+    api libArrays['rxandroid']
 
 
     /**
      *  okdownload 文件下载
      *  需配置 maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }*
      * */
-    api 'com.liulishuo.okdownload:okdownload:1.0.3'
-    api 'com.liulishuo.okdownload:sqlite:1.0.3'
-    api 'com.liulishuo.okdownload:okhttp:1.0.3'
+    api libArrays['okdownload']
+    api libArrays['okdownload-sqlite']
+    api libArrays['okdownload-okhttp']
 
     /**
      * Glide 4 图片加载器 加载大型图片
      * */
-    implementation 'com.github.bumptech.glide:glide:4.7.1'
-    kapt 'com.github.bumptech.glide:compiler:4.7.1'
+    api libArrays['glide']
+    kapt libArrays['glide-compiler']
 //    // 转换
 //    implementation 'jp.wasabeef:glide-transformations:4.0.0'
 
     /**
      * 环形图片
      * */
-    api('de.hdodenhof:circleimageview:2.2.0') {
+    api(libArrays['circleimageview']) {
         exclude group: 'com.android.support'
     }
 
     // Logger 日志输出
-    api 'com.orhanobut:logger:2.2.0'
-    api 'com.alibaba:fastjson:1.2.70'
+    api libArrays['logger']
+    api libArrays['fastjson']
 
     // 侧滑 RecyclerView
-    implementation 'com.yanzhenjie.recyclerview:x:1.3.2'
+    api libArrays['recyclerview-x']
 
 
     // 阿里 路由 （多模块通信）
-    api 'com.alibaba:arouter-api:1.5.0'
+    api libArrays['arouter']
 //    annotationProcessor 'com.alibaba:arouter-compiler:1.2.2'
 
-    api 'com.qmuiteam:qmui:1.4.0'
+    api libArrays['qmui']
 
     // debugImplementation because LeakCanary should only run in debug builds.
-    debugApi 'com.squareup.leakcanary:leakcanary-android:2.4'
+    debugApi libArrays['leakcanary-android']
     // 动图加载
-    api 'com.airbnb.android:lottie:3.6.0'
+    api libArrays['lottie']
     // 图片缩放
-    api 'com.github.chrisbanes:PhotoView:1.2.5'
+    api libArrays['PhotoView']
 
 }
 repositories {

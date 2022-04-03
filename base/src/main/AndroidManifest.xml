@@ -18,7 +18,8 @@
 
     <application>
         <!-- 文件选择界面 -->
-        <activity android:name=".view.activity.ChooseFileActivity"
+        <activity
+            android:name=".view.activity.ChooseFileActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait">
 
@@ -26,6 +27,7 @@
 
         <receiver
             android:name=".broadcast.VersionUpdateBroadcast"
+            android:exported="true"
             android:permission="com.inz.z.base.permission.VERSION_UPDATE">
             <meta-data
                 android:name="applicationId"

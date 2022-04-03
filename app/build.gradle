@@ -1,11 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'androidx.navigation.safeargs'
 
+
 def applicationIdName = 'com.inz.z.note_book'
+def libArrays = rootProject.ext.dependencies
 
 android {
     compileSdkVersion APP_COMPILE_SDK_VERSION.toInteger()
@@ -26,8 +28,11 @@ android {
 //    dataBinding {
 //        enabled = true
 //    }
-    buildFeatures {
-        viewBinding = true
+//    buildFeatures {
+//        viewBinding = true
+//    }
+    viewBinding {
+        enabled = true
     }
 
     buildTypes {
@@ -62,84 +67,84 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.core:core-ktx:1.3.1'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation libArrays['kotlin-stdlib']
+    implementation libArrays['appcompat']
+    implementation libArrays['core-ktx']
+    testImplementation libArrays['junit']
+    androidTestImplementation libArrays['test-ext-junit']
+    androidTestImplementation libArrays['test-espresso-core']
 
     implementation project(':base')
 //    implementation project(':calendar_view')
 
     implementation project(':slide_table')
 
-    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation libArrays['multidex']
 
     /* 添加 Android design  */
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.exifinterface:exifinterface:1.2.0'
-    implementation 'androidx.fragment:fragment:1.2.5'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation libArrays['material']
+    implementation libArrays['recyclerview']
+    implementation libArrays['cardview']
+    implementation libArrays['exifinterface']
+    implementation libArrays['fragment']
+    implementation libArrays['constraintlayout']
+    implementation libArrays['swiperefreshlayout']
 
-    implementation 'androidx.lifecycle:lifecycle-runtime:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation libArrays['lifecycle-runtime']
+    implementation libArrays['lifecycle-extensions']
+    implementation libArrays['lifecycle-viewmodel-ktx']
 
-    implementation 'androidx.paging:paging-runtime:2.1.2'
-    implementation 'androidx.paging:paging-runtime-ktx:2.1.2'
-    implementation 'androidx.paging:paging-common:2.1.2'
-    implementation 'androidx.paging:paging-rxjava2:2.1.2'
+    implementation libArrays['paging-runtime']
+    implementation libArrays['paging-runtime-ktx']
+    implementation libArrays['paging-common']
+    implementation libArrays['paging-rxjava2']
 
-    implementation 'androidx.navigation:navigation-fragment:2.3.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
-    implementation 'androidx.navigation:navigation-ui:2.3.0'
-    implementation 'androidx.navigation:navigation-runtime:2.3.0'
+    implementation libArrays['navigation-fragment']
+    implementation libArrays['navigation-ui-ktx']
+    implementation libArrays['navigation-ui']
+    implementation libArrays['navigation-runtime']
 //    implementation 'androidx.navigation:navigation-safe-args-generator:2.3.0'
 //    implementation 'androidx.navigation:navigation-safe-args-gradle-plugin:2.3.0'
 
 
-    implementation 'androidx.work:work-runtime:2.4.0'
-    implementation 'androidx.work:work-runtime-ktx:2.4.0'
-    implementation 'androidx.work:work-rxjava2:2.4.0'
-    implementation "androidx.work:work-gcm:2.4.0"
-    androidTestImplementation "androidx.work:work-testing:2.4.0"
+    implementation libArrays['work-runtime']
+    implementation libArrays['work-runtime-ktx']
+    implementation libArrays['work-rxjava2']
+    implementation libArrays['work-gcm']
+    androidTestImplementation libArrays['work-testing']
 
 
     /**
      * Glide 4 图片加载器 加载大型图片
      * */
-    implementation 'com.github.bumptech.glide:glide:4.7.1'
-    kapt 'com.github.bumptech.glide:compiler:4.7.1'
+    implementation libArrays['glide']
+    kapt libArrays['glide-compiler']
 //    // 转换
 //    implementation 'jp.wasabeef:glide-transformations:4.0.0'
 
     /**
      * 环形图片
      * */
-    implementation('de.hdodenhof:circleimageview:2.2.0') {
+    implementation(libArrays['circleimageview']) {
         exclude group: 'com.android.support'
     }
 
     /**
      * GreenDao
      */
-    implementation "org.greenrobot:greendao:$greendao_version"
-    implementation "org.greenrobot:greendao-generator:$greendao_version"
+    implementation libArrays['greendao']
+    implementation libArrays['greendao-generator']
 
     /**
      * 日历
      */
-    implementation 'com.haibin:calendarview:3.7.1'
+    implementation libArrays['calendarview']
 
     /**
      * 导出 Excel
      */
     // https://mvnrepository.com/artifact/net.sourceforge.jexcelapi/jxl
-    implementation 'net.sourceforge.jexcelapi:jxl:2.6.12'
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.3.72"
+    implementation libArrays['jxl']
+    implementation libArrays['kotlin-reflect']
 
 }

@@ -1,0 +1,98 @@
+ext {
+    versionName = ''
+    dependencies = [
+            'kotlin-stdlib'             : 'org.jetbrains.kotlin:kotlin-stdlib:1.6.10',
+            'core-ktx'                  : 'androidx.core:core-ktx:1.7.0',
+            'appcompat'                 : 'androidx.appcompat:appcompat:1.3.0',
+            'material'                  : 'com.google.android.material:material:1.4.0',
+            'junit'                     : 'junit:junit:4.+',
+            'test-runner'               : 'androidx.test:runner:1.4.0',
+            'test-ext-junit'            : 'androidx.test.ext:junit:1.1.3',
+            'test-espresso-core'        : 'androidx.test.espresso:espresso-core:3.4.0',
+
+            'multidex'                  : 'androidx.multidex:multidex:2.0.1',
+            // Android design
+            'recyclerview'              : 'androidx.recyclerview:recyclerview:1.2.1',
+            'cardview'                  : 'androidx.cardview:cardview:1.0.0',
+            'exifinterface'             : 'androidx.exifinterface:exifinterface:1.3.2',
+            'fragment'                  : 'androidx.fragment:fragment:1.3.5',
+            'constraintlayout'          : 'androidx.constraintlayout:constraintlayout:2.0.4',
+            'swiperefreshlayout'        : "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0",
+            'leanback'                  : 'androidx.leanback:leanback:1.0.0',
+
+            // lifecycle
+            'lifecycle-runtime'         : 'androidx.lifecycle:lifecycle-runtime:2.3.1',
+            'lifecycle-extensions'      : 'androidx.lifecycle:lifecycle-extensions:2.2.0',
+            'lifecycle-viewmodel-ktx'   : 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1',
+            // paging
+            'paging-runtime'            : 'androidx.paging:paging-runtime:3.0.0',
+            'paging-runtime-ktx'        : 'androidx.paging:paging-runtime-ktx:3.0.0',
+            'paging-common'             : 'androidx.paging:paging-common:3.0.0',
+            'paging-rxjava2'            : 'androidx.paging:paging-rxjava2:3.0.0',
+            // navigation
+            'navigation-fragment'       : 'androidx.navigation:navigation-fragment:2.3.5',
+            'navigation-ui-ktx'         : 'androidx.navigation:navigation-ui-ktx:2.3.5',
+            'navigation-ui'             : 'androidx.navigation:navigation-ui:2.3.5',
+            'navigation-runtime'        : 'androidx.navigation:navigation-runtime:2.3.5',
+            // work
+            'work-runtime'              : 'androidx.work:work-runtime:2.7.1',
+            'work-runtime-ktx'          : 'androidx.work:work-runtime-ktx:2.7.1',
+            'work-rxjava2'              : 'androidx.work:work-rxjava2:2.7.1',
+            'work-gcm'                  : 'androidx.work:work-gcm:2.7.1',
+            'work-testing'              : 'androidx.work:work-testing:2.7.1',
+
+            // glide4
+            'glide'                     : 'com.github.bumptech.glide:glide:4.11.0',
+            'glide-compiler'            : 'com.github.bumptech.glide:compiler:4.11.0',
+
+            // 环形图片
+            'circleimageview'           : 'de.hdodenhof:circleimageview:2.2.0',
+
+            // GreenDao
+            'greendao'                  : 'org.greenrobot:greendao:3.3.0',
+            'greendao-generator'        : 'org.greenrobot:greendao-generator:3.3.0',
+
+            // 日历
+            'calendarview'              : 'com.haibin:calendarview:3.7.1',
+
+            // 导出 Excel
+            'jxl'                       : 'net.sourceforge.jexcelapi:jxl:2.6.12',
+
+            'kotlin-reflect'            : 'org.jetbrains.kotlin:kotlin-reflect:1.6.10',
+
+            // OkHttp
+            'okhttp'                    : 'com.squareup.okhttp3:okhttp:3.11.0',
+            // retrofit
+            'retrofit'                  : 'com.squareup.retrofit2:retrofit:2.3.0',
+            'retrofit-converter-gson'   : 'com.squareup.retrofit2:converter-gson:2.3.0',
+            'retrofit-adapter-rxjava2'  : 'com.squareup.retrofit2:adapter-rxjava2:2.3.0',
+            'rxjava'                    : 'io.reactivex.rxjava2:rxjava:2.2.9',
+            'rxandroid'                 : 'io.reactivex.rxjava2:rxandroid:2.0.2',
+
+            // ok download
+            'okdownload'                : 'com.liulishuo.okdownload:okdownload:1.0.3',
+            'okdownload-sqlite'         : 'com.liulishuo.okdownload:sqlite:1.0.3',
+            'okdownload-okhttp'         : 'com.liulishuo.okdownload:okhttp:1.0.3',
+
+            // Logger 日志 输出
+            'logger'                    : 'com.orhanobut:logger:2.2.0',
+
+            'fastjson'                  : 'com.alibaba:fastjson:1.2.70',
+
+            // 侧滑 RecyclerView
+            'recyclerview-x'            : 'com.yanzhenjie.recyclerview:x:1.3.2',
+            // 阿里 路由 ARouter
+            'arouter'                   : 'com.alibaba:arouter-api:1.5.0',
+            // QMUI
+            'qmui'                      : 'com.qmuiteam:qmui:1.4.0',
+            // leakcanary-android
+            'leakcanary-android'        : 'com.squareup.leakcanary:leakcanary-android:2.8',
+            // 动图加载
+            'lottie'                    : 'com.airbnb.android:lottie:3.6.0',
+            // 图片缩放
+            'PhotoView'                 : 'com.github.chrisbanes:PhotoView:2.0.0',
+            // pinyin4j
+            'pinyin4j'                  : 'com.github.open-android:pinyin4j:2.5.0',
+
+    ]
+}

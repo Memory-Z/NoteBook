@@ -217,6 +217,7 @@
         <!-- 闹钟 广播 -->
         <receiver
             android:name=".broadcast.ClockAlarmBroadcast"
+            android:exported="true"
             android:permission="true">
             <intent-filter>
                 <action android:name="${applicationId}.action.CLOCK_ALARM_START_ACTION" />
@@ -241,7 +242,8 @@
 
 
         <!-- 桌面插件 -->
-        <receiver android:name=".view.app_widget.NoteInfoAppWidget">
+        <receiver android:name=".view.app_widget.NoteInfoAppWidget"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
