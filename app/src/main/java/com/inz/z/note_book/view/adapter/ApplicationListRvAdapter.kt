@@ -5,13 +5,10 @@ import android.content.pm.PackageInfo
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
-import com.inz.z.note_book.R
-import kotlinx.android.synthetic.main.item_application_info.view.*
+import com.inz.z.note_book.databinding.ItemApplicationInfoBinding
 
 /**
  *
@@ -34,26 +31,25 @@ class ApplicationListRvAdapter(mContext: Context?) :
     }
 
     override fun onCreateVH(parent: ViewGroup, viewType: Int): ApplicationListRvViewHolder {
-        val view = layoutInflater?.inflate(R.layout.item_application_info, parent, false)
-        return ApplicationListRvViewHolder(view!!)
+        val binding = ItemApplicationInfoBinding.inflate(mLayoutInflater, parent, false)
+        return ApplicationListRvViewHolder(binding)
     }
 
     override fun onBindVH(holder: ApplicationListRvViewHolder, position: Int) {
         val packageInfo = list[position]
 
-        holder.appIconIv.post {
+        holder.binding.itemAppInfoIconIv.post {
             Glide.with(mContext).load(packageInfo.applicationInfo.loadIcon(mContext.packageManager))
-                .into(holder.appIconIv)
+                .into(holder.binding.itemAppInfoIconIv)
         }
-        holder.appNameTv.post {
-            holder.appNameTv.setText(packageInfo.applicationInfo.loadLabel(mContext.packageManager))
+        holder.binding.itemAppInfoNameTv.post {
+            holder.binding.itemAppInfoNameTv.setText(packageInfo.applicationInfo.loadLabel(mContext.packageManager))
         }
     }
 
-    inner class ApplicationListRvViewHolder(itemView: View) : AbsBaseRvViewHolder(itemView),
+    inner class ApplicationListRvViewHolder(val binding: ItemApplicationInfoBinding) :
+        AbsBaseRvViewHolder(binding.root),
         View.OnClickListener {
-        var appNameTv: TextView = itemView.item_app_info_name_tv
-        var appIconIv: ImageView = itemView.item_app_info_icon_iv
 
         init {
             itemView.setOnClickListener(this)

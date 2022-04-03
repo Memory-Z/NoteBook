@@ -1,12 +1,6 @@
 package com.inz.z.note_book.view.activity
 
 import android.view.View
-import android.widget.Button
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.inz.z.base.util.FileUtils
 import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.R
@@ -15,7 +9,6 @@ import com.inz.z.note_book.database.controller.LogController
 import com.inz.z.note_book.util.ExcelUtil
 import com.inz.z.note_book.view.activity.adapter.TestViewStringRvAdapter
 import com.inz.z.note_book.view.activity.test_data.TestExcelBean
-import kotlinx.android.synthetic.main.test_view_adapter.*
 import java.io.File
 
 /**
@@ -38,23 +31,23 @@ class TestViewActivity : AbsBaseActivity() {
     }
 
     override fun initView() {
-        test_view_btn.setOnClickListener {
-
-            testAdapter?.let {
-                val posi = stringList.size - 1
-                it.list.removeAt(posi)
-                it.notifyItemRemoved(posi)
-            }
-        }
-
-        testAdapter = TestViewStringRvAdapter(mContext)
-        test_view_rv.apply {
-            layoutManager = GridLayoutManager(mContext, 3)
-            this.adapter = testAdapter
-        }
-
-        Glide.with(mContext).load(ContextCompat.getDrawable(mContext, R.drawable.img_photo_3))
-            .into(test_top_bg_iv)
+//        test_view_btn.setOnClickListener {
+//
+//            testAdapter?.let {
+//                val posi = stringList.size - 1
+//                it.list.removeAt(posi)
+//                it.notifyItemRemoved(posi)
+//            }
+//        }
+//
+//        testAdapter = TestViewStringRvAdapter(mContext)
+//        test_view_rv.apply {
+//            layoutManager = GridLayoutManager(mContext, 3)
+//            this.adapter = testAdapter
+//        }
+//
+//        Glide.with(mContext).load(ContextCompat.getDrawable(mContext, R.drawable.img_photo_3))
+//            .into(test_top_bg_iv)
 
     }
 

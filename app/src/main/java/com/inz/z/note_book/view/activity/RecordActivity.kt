@@ -9,12 +9,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
+import com.inz.z.note_book.databinding.ActivityRecordBinding
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.activity.adapter.RecordListRvAdapter
 import com.inz.z.note_book.view.dialog.RecordSearchDialog
 import com.inz.z.note_book.view.dialog.SearchDialog
 import com.inz.z.note_book.viewmodel.RecordViewModel
-import kotlinx.android.synthetic.main.activity_record.*
 
 /**
  *
@@ -38,6 +38,7 @@ class RecordActivity : BaseNoteActivity() {
      * 搜索内容
      */
     private var searchRecordContent = ""
+    private var binding: ActivityRecordBinding? = null
 
     override fun initWindow() {
 
@@ -47,25 +48,35 @@ class RecordActivity : BaseNoteActivity() {
         return R.layout.activity_record
     }
 
+    override fun useViewBinding(): Boolean = true
+
+    override fun setViewBinding() {
+        super.setViewBinding()
+        binding = ActivityRecordBinding.inflate(layoutInflater)
+            .apply {
+                setContentView(root)
+            }
+    }
+
     override fun initView() {
         recordListRvAdapter = RecordListRvAdapter(mContext)
         recordListRvAdapter?.apply {
             this.listener = RecordListRvAdapterListenerImpl()
         }
-        record_content_rv.apply {
-            this.layoutManager = LinearLayoutManager(mContext)
-            this.adapter = recordListRvAdapter
-        }
-        record_add_fab?.setOnClickListener {
-            startActivity(Intent(mContext, NewRecordActivity::class.java))
-        }
-
-        record_content_srl?.setOnRefreshListener {
-            recordViewModel?.refreshRecordList()
-        }
-
-        record_top_search_rl?.setOnClickListener {
-            showRecordSearchDialog()
+        binding?.let {
+            it.recordContentRv.apply {
+                this.layoutManager = LinearLayoutManager(mContext)
+                this.adapter = recordListRvAdapter
+            }
+            it.recordAddFab.setOnClickListener {
+                startActivity(Intent(mContext, NewRecordActivity::class.java))
+            }
+            it.recordContentSrl.setOnRefreshListener {
+                recordViewModel?.refreshRecordList()
+            }
+            it.recordTopSearchRl.setOnClickListener {
+                showRecordSearchDialog()
+            }
         }
     }
 
@@ -77,6 +88,11 @@ class RecordActivity : BaseNoteActivity() {
     override fun onResume() {
         super.onResume()
         recordViewModel?.refreshRecordList()
+    }
+
+    override fun onDestroyTask() {
+        super.onDestroyTask()
+        binding = null
     }
 
     override fun onDestroyData() {
@@ -92,11 +108,12 @@ class RecordActivity : BaseNoteActivity() {
         recordViewModel?.getRecordInfoList()?.observe(
             this,
             Observer {
-                record_content_srl?.isRefreshing = false
+                binding?.recordContentSrl?.isRefreshing = false
                 if (!TextUtils.isEmpty(searchRecordContent)) {
-                    record_top_search_tv.text = searchRecordContent
+                    binding?.recordTopSearchTv?.text = searchRecordContent
                 } else {
-                    record_top_search_tv.text = mContext.getString(R.string.search_record_content)
+                    binding?.recordTopSearchTv?.text =
+                        mContext.getString(R.string.search_record_content)
                 }
                 recordListRvAdapter?.refreshData(it, searchRecordContent)
             }
@@ -104,7 +121,7 @@ class RecordActivity : BaseNoteActivity() {
         recordViewModel?.getRecordInfoListSize()?.observe(
             this,
             Observer {
-                record_content_srl?.isRefreshing = false
+                binding?.recordContentSrl?.isRefreshing = false
             }
         )
     }

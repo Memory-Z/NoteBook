@@ -8,8 +8,7 @@ import android.widget.TextView
 import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
 import com.inz.z.note_book.R
-import kotlinx.android.synthetic.main.item_application_info.*
-import kotlinx.android.synthetic.main.item_application_info.view.*
+import com.inz.z.note_book.databinding.ItemApplicationInfoBinding
 
 /**
  *
@@ -36,32 +35,31 @@ class TestViewStringRvAdapter :
     }
 
     override fun onCreateVH(parent: ViewGroup, viewType: Int): TestViewStringRvHolder {
-        val view = mLayoutInflater.inflate(R.layout.item_application_info, null, false)
-        return TestViewStringRvHolder(view)
+        val binding = ItemApplicationInfoBinding.inflate(mLayoutInflater, parent, false)
+        return TestViewStringRvHolder(binding)
     }
 
     override fun onBindVH(holder: TestViewStringRvHolder, position: Int) {
         if (position == list.size) {
-            holder.nameTv.text = "Add"
-            holder.nameTv.setTextColor(Color.GREEN)
-            holder.nameTv.setOnClickListener {
+            holder.binding.itemAppInfoNameTv.text = "Add"
+            holder.binding.itemAppInfoNameTv.setTextColor(Color.GREEN)
+            holder.binding.itemAppInfoNameTv.setOnClickListener {
                 clickListener?.addClick(it)
             }
         } else {
-            holder.nameTv.text = list.get(position)
-            holder.nameTv.setTextColor(Color.BLACK)
-            holder.nameTv.setOnClickListener(null)
+            holder.binding.itemAppInfoNameTv.text = list.get(position)
+            holder.binding.itemAppInfoNameTv.setTextColor(Color.BLACK)
+            holder.binding.itemAppInfoNameTv.setOnClickListener(null)
         }
 
     }
 
-    class TestViewStringRvHolder(itemView: View) : AbsBaseRvViewHolder(itemView) {
-
-        public var nameTv: TextView = itemView.findViewById(R.id.item_app_info_name_tv)
+    class TestViewStringRvHolder(val binding: ItemApplicationInfoBinding) :
+        AbsBaseRvViewHolder(binding.root) {
 
         init {
-            itemView.item_app_info_icon_iv.visibility = View.GONE
-            itemView.item_app_info_right_ic_iv.visibility = View.GONE
+            binding.itemAppInfoIconIv.visibility = View.GONE
+            binding.itemAppInfoRightIcIv.visibility = View.GONE
         }
     }
 

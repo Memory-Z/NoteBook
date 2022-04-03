@@ -11,14 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.inz.z.base.R
 import com.inz.z.base.base.FileType
+import com.inz.z.base.databinding.BaseDialogPreviewImageBinding
 import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.entity.BasePreviewImageBean
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseDialogFragment
 import com.inz.z.base.view.dialog.adapter.PreviewImageListRvAdapter
 import com.inz.z.base.view.dialog.adapter.PreviewImageVpRvAdapter
-import kotlinx.android.synthetic.main.base_dialog_preview_image.*
-import kotlinx.android.synthetic.main.base_dialog_preview_image.view.*
 
 /**
  *
@@ -92,6 +91,8 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
 
     var listener: PreviewImageFragmentDialogListener? = null
 
+    private var binding: BaseDialogPreviewImageBinding? = null
+
     /**
      * 是否为预览模式
      */
@@ -105,12 +106,18 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
         return R.layout.base_dialog_preview_image
     }
 
+    override fun useViewBinding(): Boolean = true
+    override fun getViewBindingView(): View? {
+        binding = BaseDialogPreviewImageBinding.inflate(layoutInflater)
+        return binding?.root
+    }
+
     override fun initView() {
         previewImageListRvAdapter = PreviewImageListRvAdapter(mContext)
         previewImageListRvAdapter?.listener = PreviewImageListRvAdapterListenerImpl()
         val linearManager = LinearLayoutManager(mContext)
         linearManager.orientation = LinearLayoutManager.HORIZONTAL
-        base_dpi_list_rv.apply {
+        binding?.baseDpiListRv?.apply {
             setItemViewCacheSize(5)
             adapter = previewImageListRvAdapter
             layoutManager = linearManager
@@ -118,18 +125,18 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
 
         previewImageVpRvAdapter = PreviewImageVpRvAdapter(mContext)
         previewImageVpRvAdapter?.listener = PreviewImageVpRvAdapterListenerImpl()
-        base_dpi_preview_vp2.apply {
+        binding?.baseDpiPreviewVp2?.apply {
             this.adapter = previewImageVpRvAdapter
             offscreenPageLimit = 5
             this.registerOnPageChangeCallback(ViewPager2ChangeListenerExt())
         }
 
-        base_dpi_top_back_iv?.setOnClickListener {
+        binding?.baseDpiTopBackIv?.setOnClickListener {
             dismissAllowingStateLoss()
         }
 
-        base_dpi_bottom_cbox?.setOnCheckedChangeListener { buttonView, isChecked ->
-            val position = base_dpi_preview_vp2?.currentItem
+        binding?.baseDpiBottomCbox?.setOnCheckedChangeListener { buttonView, isChecked ->
+            val position = binding?.baseDpiPreviewVp2?.currentItem
             if (position != null) {
                 val bean = previewImageVpRvAdapter?.getItemByPosition(position)
                 if (bean != null && bean.checked != isChecked) {
@@ -140,7 +147,7 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
             }
         }
 
-        base_dpi_top_done_tv?.setOnClickListener {
+        binding?.baseDpiTopDoneTv?.setOnClickListener {
             val previewList = previewImageVpRvAdapter?.list?.toList()
             val fileList = resetChooseFileListWithPreview(previewList)
             listener?.onSubmit(fileList)
@@ -157,7 +164,7 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
             isPreview = this.getBoolean(TAG_IS_PREVIEW, false)
         }
         val haveMoreImg = !selectedFileList.isNullOrEmpty()
-        base_dpi_list_rv?.visibility = if (haveMoreImg) View.VISIBLE else View.GONE
+        binding?.baseDpiListRv?.visibility = if (haveMoreImg) View.VISIBLE else View.GONE
 
         var fileName = ""
         if (selectedImageBean != null) {
@@ -183,9 +190,9 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
 //        base_dpi_top_title_tv?.text = fileName
         setTopTitleStr("1/1")
 
-        base_dpi_top_done_tv?.visibility = if (isPreview) View.INVISIBLE else View.VISIBLE
+        binding?.baseDpiTopDoneTv?.visibility = if (isPreview) View.INVISIBLE else View.VISIBLE
 
-        base_dpi_top_rl.postDelayed({
+        binding?.baseDpiTopRl?.postDelayed({
             val index = getImageInListPosition(selectedImageSrc ?: "", selectedFileList)
             loadImageToRv(index)
         }, 1000)
@@ -215,6 +222,11 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
     override fun onPause() {
         super.onPause()
         listener?.onDialogHide()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 
     /**
@@ -280,7 +292,7 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
             previewImageListRvAdapter?.targetSelectedPosition(position)
             val bean = previewImageVpRvAdapter?.getItemByPosition(position)
             if (bean != null) {
-                mView?.base_dpi_bottom_cbox?.isChecked = bean.checked
+                binding?.baseDpiBottomCbox?.isChecked = bean.checked
 //                mView?.base_dpi_top_title_tv?.text = bean.fileName
                 setTopTitleStr(str)
             }
@@ -292,7 +304,7 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
      */
     private fun targetBottomRvVisibility() {
         if (!selectedFileList.isNullOrEmpty()) {
-            base_dpi_list_rv?.apply {
+            binding?.baseDpiListRv?.apply {
                 val vs = this.visibility
                 this.visibility = if (vs == View.VISIBLE) View.GONE else View.VISIBLE
             }
@@ -303,10 +315,10 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
      * 切换 界面显示
      */
     private fun targetImageContent() {
-        val isShow = base_dpi_top_rl?.visibility == View.VISIBLE
+        val isShow = binding?.baseDpiTopRl?.visibility == View.VISIBLE
         val vi = if (isShow) View.GONE else View.VISIBLE
-        base_dpi_top_rl?.visibility = vi
-        base_dpi_bottom_rl?.visibility = vi
+        binding?.baseDpiTopRl?.visibility = vi
+        binding?.baseDpiBottomRl?.visibility = vi
         targetBottomRvVisibility()
     }
 
@@ -314,7 +326,7 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
      * 设置顶部标题
      */
     private fun setTopTitleStr(title: String) {
-        base_dpi_top_title_tv?.text = title
+        binding?.baseDpiTopTitleTv?.text = title
     }
 
     /**
@@ -323,7 +335,7 @@ class PreviewImageFragmentDialog private constructor() : AbsBaseDialogFragment()
     private inner class PreviewImageListRvAdapterListenerImpl :
         PreviewImageListRvAdapter.PreviewImageListRvAdapterListener {
         override fun onImageClick(v: View?, position: Int) {
-            base_dpi_preview_vp2?.currentItem = position
+            binding?.baseDpiPreviewVp2?.currentItem = position
         }
     }
 

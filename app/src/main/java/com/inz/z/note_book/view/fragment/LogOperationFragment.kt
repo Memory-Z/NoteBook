@@ -1,9 +1,10 @@
 package com.inz.z.note_book.view.fragment
 
+import android.view.View
 import com.inz.z.base.view.AbsBaseFragment
 import com.inz.z.note_book.R
-import com.inz.z.note_book.database.bean.OperationLogInfo
 import com.inz.z.note_book.database.controller.LogController
+import com.inz.z.note_book.databinding.FragmentLogOperationBinding
 import com.inz.z.note_book.view.fragment.adapter.LogOperationRowTitleRvAdapter
 import com.inz.z.note_book.view.fragment.adapter.LogOperationRvAdapter
 import com.inz.z.note_book.view.fragment.bean.LogOperationSlideTableBean
@@ -12,7 +13,6 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DefaultObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_log_operation.*
 
 /**
  * 操作日志界面
@@ -34,12 +34,22 @@ class LogOperationFragment : AbsBaseFragment() {
     private var logOperationHeaderRvAdapter: LogOperationRvAdapter? = null
     private var logOperationRowTitleRvAdapter: LogOperationRowTitleRvAdapter? = null
 
+    private var binding: FragmentLogOperationBinding? = null
 
     override fun initWindow() {
 
     }
 
-    override fun getLayoutId(): Int = R.layout.fragment_log_operation
+    override fun getLayoutId(): Int {
+        return R.layout.fragment_log_operation
+    }
+
+    override fun useViewBinding(): Boolean = true
+
+    override fun getViewBindingView(): View? {
+        binding = FragmentLogOperationBinding.inflate(layoutInflater)
+        return binding?.root
+    }
 
     override fun initView() {
         logOperationAdapter = LogOperationRvAdapter(mContext)
@@ -52,7 +62,7 @@ class LogOperationFragment : AbsBaseFragment() {
         }
         logOperationHeaderRvAdapter?.setContentData(mutableListOf(bean))
 
-        fm_log_operation_stv.apply {
+        binding?.fmLogOperationStv?.apply {
             setRowHeaderAdapter(logOperationHeaderRvAdapter)
             setRowTitleRvAdapter(logOperationRowTitleRvAdapter)
             setRowContentAdapter(logOperationAdapter)
@@ -62,6 +72,11 @@ class LogOperationFragment : AbsBaseFragment() {
 
     override fun initData() {
         loadLocalOperationLog(0, 10)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 
     private inner class LogOperationRvAdapterListenerImpl :

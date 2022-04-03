@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
-import android.view.WindowManager
 import android.widget.PopupMenu
 import androidx.annotation.IntDef
 import androidx.annotation.NonNull
@@ -15,6 +14,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.util.GreenDaoHelper
+import com.inz.z.note_book.databinding.ActivityMainBinding
+import com.inz.z.note_book.databinding.FragmentMainLeftNavLayoutBinding
+import com.inz.z.note_book.databinding.TopSearchNavLayoutBinding
 import com.inz.z.note_book.service.FloatMessageViewService
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.activity.listener.MainActivityListener
@@ -23,9 +25,6 @@ import com.inz.z.note_book.view.fragment.LauncherApplicationFragment
 import com.inz.z.note_book.view.fragment.LogFragment
 import com.inz.z.note_book.view.fragment.NoteNavFragment
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_main_left_nav_layout.*
-import kotlinx.android.synthetic.main.top_search_nav_layout.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -44,11 +43,15 @@ class MainActivity : BaseNoteActivity() {
      */
     private var morePopupMenu: PopupMenu? = null
 
+    private var mainBinding: ActivityMainBinding? = null
+    private var leftBinding: FragmentMainLeftNavLayoutBinding? = null
+    private var topBinding: TopSearchNavLayoutBinding? = null
+
     /**
      * 监听列表
      */
     private val mainListenerMap =
-        HashMap<@com.inz.z.note_book.view.activity.MainActivity.ContentViewType Int, MainActivityListener?>()
+        HashMap<Int, MainActivityListener?>()
 
 
     companion object {
@@ -78,20 +81,35 @@ class MainActivity : BaseNoteActivity() {
         return R.layout.activity_main
     }
 
+    override fun useViewBinding(): Boolean = true
+
+    override fun setViewBinding() {
+        super.setViewBinding()
+        mainBinding = ActivityMainBinding.inflate(layoutInflater)
+            .apply {
+                setContentView(root)
+                leftBinding = noteMainLeftInc
+                topBinding = mainNoteNavTopInclude
+            }
+    }
+
     override fun initView() {
         L.i(TAG, "initView: ")
-        drawerLayout = main_note_drawer_layout
+        drawerLayout = mainBinding?.mainNoteDrawerLayout
         initLeftNavView()
         initContentView()
         targetMainFragment(VIEW_TYPE_MAIN)
 
 
-        top_search_nav_content_rl.setOnClickListener {
-            top_search_nav_search_view.performClick()
-            top_search_nav_search_view.isIconified = false
+        topBinding?.topSearchNavContentRl?.setOnClickListener {
+            topBinding?.let {
+                it.topSearchNavSearchView.performClick()
+                it.topSearchNavSearchView.isIconified = false
+            }
         }
 
-        top_search_nav_search_view?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        topBinding?.topSearchNavSearchView?.setOnQueryTextListener(object :
+            SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 val keys = mainListenerMap.keys
                 for (type in keys) {
@@ -118,6 +136,13 @@ class MainActivity : BaseNoteActivity() {
 //        showFloatWindowTintDialog()
     }
 
+    override fun onDestroyTask() {
+        super.onDestroyTask()
+        mainBinding = null
+        leftBinding = null
+        topBinding = null
+    }
+
     override fun needCheckVersion(): Boolean {
         return false
     }
@@ -127,10 +152,10 @@ class MainActivity : BaseNoteActivity() {
      */
     private fun initContentView() {
         // 点击头像，展开左侧栏
-        top_search_nav_scan_iv?.setOnClickListener {
+        topBinding?.topSearchNavScanIv?.setOnClickListener {
             drawerLayout?.openDrawer(GravityCompat.START)
         }
-        top_searche_nav_end_more_iv?.setOnClickListener {
+        topBinding?.topSearcheNavEndMoreIv?.setOnClickListener {
             showMoreMenuView()
         }
 //        top_search_nav_search_view.setIconifiedByDefault(false)
@@ -142,18 +167,20 @@ class MainActivity : BaseNoteActivity() {
      */
     private fun initLeftNavView() {
         leftMenuViewClickListener = LeftMenuViewClickListenerImpl()
-        main_left_nav_bottom_setting_ll.setOnClickListener {
-            val intent = Intent(mContext, SettingActivity::class.java)
-            startActivity(intent)
+        leftBinding?.let {
+            it.mainLeftNavBottomSettingLl.setOnClickListener {
+                val intent = Intent(mContext, SettingActivity::class.java)
+                startActivity(intent)
+            }
+            it.mln0Bnl.setOnClickListener(leftMenuViewClickListener)
+            it.mln1Bnl.setOnClickListener(leftMenuViewClickListener)
+            it.mln2Bnl.setOnClickListener(leftMenuViewClickListener)
+            it.mln3Bnl.setOnClickListener(leftMenuViewClickListener)
+            it.mln4Bnl.setOnClickListener(leftMenuViewClickListener)
+            it.mln5Bnl.setOnClickListener(leftMenuViewClickListener)
+            it.mln6Bnl.setOnClickListener(leftMenuViewClickListener)
+            it.mlnSetWallpaperMlnil.setOnClickListener(leftMenuViewClickListener)
         }
-        mln_0_bnl.setOnClickListener(leftMenuViewClickListener)
-        mln_1_bnl.setOnClickListener(leftMenuViewClickListener)
-        mln_2_bnl.setOnClickListener(leftMenuViewClickListener)
-        mln_3_bnl.setOnClickListener(leftMenuViewClickListener)
-        mln_4_bnl.setOnClickListener(leftMenuViewClickListener)
-        mln_5_bnl.setOnClickListener(leftMenuViewClickListener)
-        mln_6_bnl.setOnClickListener(leftMenuViewClickListener)
-        mln_set_wallpaper_mlnil.setOnClickListener(leftMenuViewClickListener)
     }
 
     /**
@@ -184,7 +211,7 @@ class MainActivity : BaseNoteActivity() {
      */
     private fun showMoreMenuView() {
         if (morePopupMenu == null) {
-            morePopupMenu = PopupMenu(mContext, top_search_nav_end_rl)
+            morePopupMenu = PopupMenu(mContext, topBinding?.topSearchNavEndRl)
             menuInflater.inflate(R.menu.menu_main_more, morePopupMenu!!.menu)
             morePopupMenu?.setOnMenuItemClickListener {
                 when (it.itemId) {

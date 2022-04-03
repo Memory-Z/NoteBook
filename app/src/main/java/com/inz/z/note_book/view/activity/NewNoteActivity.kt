@@ -15,13 +15,13 @@ import com.inz.z.note_book.R
 import com.inz.z.note_book.base.NoteStatus
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteInfoController
+import com.inz.z.note_book.databinding.NoteInfoAddLayoutBinding
 import com.inz.z.note_book.util.ClickUtil
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.dialog.BaseDialogFragment
 import com.inz.z.note_book.view.dialog.ChooseImageDialog
 import com.inz.z.note_book.view.widget.ScheduleLayout
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
-import kotlinx.android.synthetic.main.note_info_add_layout.*
 import java.io.File
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -66,12 +66,24 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
      */
     private var checkNoteRunnable: Runnable? = null
 
+    private var binding: NoteInfoAddLayoutBinding? = null
+
     override fun initWindow() {
 
     }
 
     override fun getLayoutId(): Int {
         return R.layout.note_info_add_layout
+    }
+
+    override fun useViewBinding(): Boolean = true
+
+    override fun setViewBinding() {
+        super.setViewBinding()
+        binding = NoteInfoAddLayoutBinding.inflate(layoutInflater)
+            .apply {
+                setContentView(root)
+            }
     }
 
     override fun setNavigationBar() {
@@ -82,10 +94,12 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
         QMUIStatusBarHelper.setStatusBarLightMode(this)
         window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
         noteInfoScheduleLayout = findViewById(R.id.note_info_add_content_schedule_layout)
-        note_info_add_top_finish_tv.setOnClickListener(this)
-        note_info_add_content_brl?.setOnClickListener(this)
-        note_info_add_top_back_iv?.setOnClickListener(this)
-        note_iab_image_ll?.setOnClickListener(this)
+        binding?.let {
+            it.noteInfoAddTopFinishTv.setOnClickListener(this)
+            it.noteInfoAddContentBrl.setOnClickListener(this)
+            it.noteInfoAddTopBackIv.setOnClickListener(this)
+            it.noteIabImageLl.setOnClickListener(this)
+        }
     }
 
     override fun initData() {
@@ -96,9 +110,9 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
         if (noteInfoId.isNotEmpty()) {
             noteInfo = NoteInfoController.findById(noteInfoId)
             noteInfo?.apply {
-                note_info_add_top_title_tv.text = noteTitle
-                note_info_add_content_schedule_layout.setContent(noteContent)
-                note_info_add_content_top_time_tv.text =
+                binding?.noteInfoAddTopTitleTv?.text = noteTitle
+                binding?.noteInfoAddContentScheduleLayout?.setContent(noteContent)
+                binding?.noteInfoAddContentTopTimeTv?.text =
                     BaseTools.getBaseDateFormat().format(updateDate)
                 oldNoteContent = noteContent
             }
@@ -172,6 +186,7 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
             getScheduleThread("${TAG}_onDestroy")?.shutdown()
         }
         checkNoteRunnable = null
+        binding = null
     }
 
     override fun onClick(v: View?) {
@@ -179,31 +194,34 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
             L.w(TAG, "onClick: this is fast click, ignore ! ")
             return
         }
-        when (v?.id) {
-            note_info_add_top_finish_tv.id -> {
-                // 底部完成按钮
-                saveNoteInfo()
-            }
-            note_info_add_content_brl.id -> {
-                // 笔记内容点击
-                note_info_add_content_content_ll?.let {
-                    val count = it.childCount
-                    val lastView = it.getChildAt(count - 1)
-                    lastView.performClick()
+        binding?.let { bindingTemp ->
+            when (v?.id) {
+                bindingTemp.noteInfoAddTopFinishTv.id -> {
+                    // 底部完成按钮
+                    saveNoteInfo()
                 }
-            }
-            note_info_add_top_back_iv.id -> {
-                // 点击顶部返回按钮。 如果不存在修改内容，关闭界面
-                if (!checkHaveChange()) {
-                    this@NewNoteActivity.finish()
+                bindingTemp.noteInfoAddContentBrl.id -> {
+                    // 笔记内容点击
+                    bindingTemp.noteInfoAddContentCenterLl.let {
+                        val count = it.childCount
+                        val lastView = it.getChildAt(count - 1)
+                        lastView.performClick()
+                    }
                 }
-            }
-            note_iab_image_ll.id -> {
-                // 选择图片弹窗
-                showChooseImageDialog()
-            }
-            else -> {
+                bindingTemp.noteInfoAddTopBackIv.id -> {
+                    // 点击顶部返回按钮。 如果不存在修改内容，关闭界面
+                    if (!checkHaveChange()) {
+                        this@NewNoteActivity.finish()
+                    } else {
+                    }
+                }
+                bindingTemp.noteIabImageLl.id -> {
+                    // 选择图片弹窗
+                    showChooseImageDialog()
+                }
+                else -> {
 
+                }
             }
         }
 
@@ -213,7 +231,7 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
      * 检测是否有内容更改
      */
     private fun checkHaveChange(): Boolean {
-        val newContent = note_info_add_content_schedule_layout.getContent()
+        val newContent = binding?.noteInfoAddContentScheduleLayout?.getContent()
         noteInfo?.let {
             // 判断内容是否存在修改，有修改显示提示框。
             if (newContent != it.noteContent) {
@@ -229,7 +247,7 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
      * 保存笔录信息
      */
     private fun saveNoteInfo() {
-        val newContent = note_info_add_content_schedule_layout.getContent()
+        val newContent = binding?.noteInfoAddContentScheduleLayout?.getContent()
         if (oldNoteContent != newContent) {
             if (noteInfo != null) {
                 noteInfo!!.apply {

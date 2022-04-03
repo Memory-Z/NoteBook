@@ -11,9 +11,9 @@ import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.RecordInfo
 import com.inz.z.note_book.database.controller.RecordInfoController
+import com.inz.z.note_book.databinding.ActivityNewRecordBinding
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.dialog.BaseDialogFragment
-import kotlinx.android.synthetic.main.activity_new_record.*
 import java.util.*
 
 /**
@@ -30,6 +30,8 @@ class NewRecordActivity : BaseNoteActivity() {
 
     private var recordInfo: RecordInfo? = null
 
+    private var binding: ActivityNewRecordBinding? = null
+
     override fun initWindow() {
 
     }
@@ -38,15 +40,25 @@ class NewRecordActivity : BaseNoteActivity() {
         return R.layout.activity_new_record
     }
 
+    override fun useViewBinding(): Boolean = true
+
+    override fun setViewBinding() {
+        super.setViewBinding()
+        binding = ActivityNewRecordBinding.inflate(layoutInflater)
+            .apply {
+                setContentView(root)
+            }
+    }
+
     override fun initView() {
-        new_record_done_fab.setOnClickListener {
+        binding?.newRecordDoneFab?.setOnClickListener {
             readEditTextContent()
         }
-        new_record_content_et.addTextChangedListener(ContentTextWatcher())
+        binding?.newRecordContentEt?.addTextChangedListener(ContentTextWatcher())
     }
 
     override fun initData() {
-        setSupportActionBar(new_record_toolbar)
+        setSupportActionBar(binding?.newRecordToolbar)
         val bundle = intent?.extras
         bundle?.let {
             val recordInfoId = it.getString("recordInfoId", "")
@@ -56,10 +68,11 @@ class NewRecordActivity : BaseNoteActivity() {
         }
         val calendar = Calendar.getInstance(Locale.getDefault())
         initRecordInfo(calendar)
-        new_record_content_et?.setText(recordInfo?.recordContent ?: "")
-        new_record_content_title_et?.setText(recordInfo?.recordTitle ?: "")
+        binding?.newRecordContentEt?.setText(recordInfo?.recordContent ?: "")
+        binding?.newRecordContentTitleEt?.setText(recordInfo?.recordTitle ?: "")
 
-        new_record_time_content_title_tv?.text = BaseTools.getBaseDateFormat().format(calendar.time)
+        binding?.newRecordTimeContentTitleTv?.text =
+            BaseTools.getBaseDateFormat().format(calendar.time)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -87,6 +100,11 @@ class NewRecordActivity : BaseNoteActivity() {
             }
         }
         return super.onKeyUp(keyCode, event)
+    }
+
+    override fun onDestroyTask() {
+        super.onDestroyTask()
+        binding = null
     }
 
     private fun initViewModel() {
@@ -119,7 +137,7 @@ class NewRecordActivity : BaseNoteActivity() {
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             val haveText = s?.length ?: 0 > 0
-            new_record_done_fab?.apply {
+            binding?.newRecordDoneFab?.apply {
                 if (haveText) {
                     this.show()
                 } else {
@@ -137,8 +155,8 @@ class NewRecordActivity : BaseNoteActivity() {
      * 读取填写内容
      */
     private fun readEditTextContent() {
-        val content = new_record_content_et?.text?.toString() ?: ""
-        val title = new_record_content_title_et?.text?.toString() ?: ""
+        val content = binding?.newRecordContentEt?.text?.toString() ?: ""
+        val title = binding?.newRecordContentTitleEt?.text?.toString() ?: ""
         if (!TextUtils.isEmpty(title)) {
             saveRecordInfo(title, content)
         } else {
@@ -151,8 +169,8 @@ class NewRecordActivity : BaseNoteActivity() {
      * 检测记录是否被修改
      */
     private fun checkRecordChange(): Boolean {
-        val title = new_record_content_title_et?.text?.toString() ?: ""
-        val content = new_record_content_et?.text?.toString() ?: ""
+        val title = binding?.newRecordContentTitleEt?.text?.toString() ?: ""
+        val content = binding?.newRecordContentEt?.text?.toString() ?: ""
         recordInfo?.let {
             if (!title.equals(it.recordTitle) || !content.equals(it.recordContent)) {
                 return true

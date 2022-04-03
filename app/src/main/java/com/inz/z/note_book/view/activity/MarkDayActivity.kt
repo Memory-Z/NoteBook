@@ -3,9 +3,9 @@ package com.inz.z.note_book.view.activity
 import android.view.View
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
+import com.inz.z.note_book.databinding.ActivityMarkDayBinding
 import com.inz.z.note_book.util.ClickUtil
 import com.inz.z.note_book.view.BaseNoteActivity
-import kotlinx.android.synthetic.main.activity_mark_day.*
 
 /**
  * 纪念日。
@@ -19,12 +19,24 @@ class MarkDayActivity : BaseNoteActivity(), View.OnClickListener {
 
     }
 
+    private var binding: ActivityMarkDayBinding? = null
+
     override fun getLayoutId(): Int {
         return R.layout.activity_mark_day
     }
 
+    override fun useViewBinding(): Boolean = true
+
+    override fun setViewBinding() {
+        super.setViewBinding()
+        binding = ActivityMarkDayBinding.inflate(layoutInflater)
+            .apply {
+                setContentView(root)
+            }
+    }
+
     override fun initView() {
-        setSupportActionBar(mark_day_toolbar)
+        setSupportActionBar(binding?.markDayToolbar)
     }
 
     override fun initData() {
@@ -37,5 +49,10 @@ class MarkDayActivity : BaseNoteActivity(), View.OnClickListener {
             return
         }
 
+    }
+
+    override fun onDestroyTask() {
+        super.onDestroyTask()
+        binding = null
     }
 }

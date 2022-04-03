@@ -9,8 +9,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.inz.z.base.R
 import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
+import com.inz.z.base.databinding.BaseItemPreviceImageBinding
 import com.inz.z.base.entity.BasePreviewImageBean
-import kotlinx.android.synthetic.main.base_item_previce_image.view.*
 
 /**
  *
@@ -28,8 +28,8 @@ class PreviewImageVpRvAdapter(mContext: Context?) :
     var listener: PreviewImageVpRvAdapterListener? = null
 
     override fun onCreateVH(parent: ViewGroup, viewType: Int): PreviewImageVpRvHolder {
-        val view = mLayoutInflater.inflate(R.layout.base_item_previce_image, parent, false)
-        return PreviewImageVpRvHolder(view)
+        val binding = BaseItemPreviceImageBinding.inflate(mLayoutInflater, parent, false)
+        return PreviewImageVpRvHolder(binding)
     }
 
     override fun onBindVH(holder: PreviewImageVpRvHolder, position: Int) {
@@ -40,9 +40,10 @@ class PreviewImageVpRvAdapter(mContext: Context?) :
         }
     }
 
-    inner class PreviewImageVpRvHolder(itemView: View) : AbsBaseRvViewHolder(itemView),
+    inner class PreviewImageVpRvHolder(binding: BaseItemPreviceImageBinding) :
+        AbsBaseRvViewHolder(binding.root),
         View.OnClickListener {
-        val contentIv = itemView.base_item_pi_content_iv
+        val contentIv = binding.baseItemPiContentIv
 
         init {
             contentIv.setOnClickListener(this)

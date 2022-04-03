@@ -4,13 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Gravity
+import android.view.View
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
-import com.inz.z.base.base.ChooseFileConstants
 import com.inz.z.base.view.AbsBaseDialogFragment
-import com.inz.z.base.view.activity.ChooseFileActivity
 import com.inz.z.note_book.R
-import kotlinx.android.synthetic.main.dialog_choose_image.*
+import com.inz.z.note_book.databinding.DialogChooseImageBinding
 
 /**
  * 图片选择弹窗
@@ -35,6 +34,8 @@ class ChooseImageDialog : AbsBaseDialogFragment() {
 
     private var requestCode = -1
 
+    private var binding: DialogChooseImageBinding? = null
+
     override fun initWindow() {
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.NoteBookAppTheme_Dialog_BottomToTop)
     }
@@ -43,12 +44,19 @@ class ChooseImageDialog : AbsBaseDialogFragment() {
         return R.layout.dialog_choose_image
     }
 
+    override fun useViewBinding(): Boolean = true
+
+    override fun getViewBindingView(): View? {
+        binding = DialogChooseImageBinding.inflate(layoutInflater)
+        return binding?.root
+    }
+
     override fun initView() {
-        dialog_choose_image_album_tv?.setOnClickListener {
+        binding?.dialogChooseImageAlbumTv?.setOnClickListener {
             pickPhotoFromAlbum()
             dismissAllowingStateLoss()
         }
-        dialog_choose_image_cancel_tv?.setOnClickListener {
+        binding?.dialogChooseImageCancelTv?.setOnClickListener {
             dismissAllowingStateLoss()
         }
     }
@@ -68,6 +76,11 @@ class ChooseImageDialog : AbsBaseDialogFragment() {
             lp.width = WindowManager.LayoutParams.MATCH_PARENT
             this.attributes = lp
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 
     /**

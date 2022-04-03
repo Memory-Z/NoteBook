@@ -1,15 +1,15 @@
 package com.inz.z.note_book.view.activity
 
 import android.os.Bundle
+import android.os.PersistableBundle
 import androidx.core.content.ContextCompat
 import com.inz.z.base.util.L
-import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.R
+import com.inz.z.note_book.databinding.NewNoteInfoSampleLayoutBinding
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.app_widget.util.WidgetBroadcastUtil
 import com.inz.z.note_book.view.fragment.NoteInfoAddDialogFragment
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
-import kotlinx.android.synthetic.main.new_note_info_sample_layout.*
 
 /**
  *
@@ -28,10 +28,13 @@ class NewNoteInfoSampleActivity : BaseNoteActivity() {
      * 当前组 ID
      */
     private var currentGroupId = ""
+
     /**
      * 启动类型: 0: 普通启动；1：新建笔记弹窗；2：改变笔记组弹窗
      */
     private var launchType: Int = 0
+
+    private var binding: NewNoteInfoSampleLayoutBinding? = null
 
 
     override fun initWindow() {
@@ -40,6 +43,16 @@ class NewNoteInfoSampleActivity : BaseNoteActivity() {
 
     override fun getLayoutId(): Int {
         return R.layout.new_note_info_sample_layout
+    }
+
+    override fun useViewBinding(): Boolean = true
+
+    override fun setViewBinding() {
+        super.setViewBinding()
+        binding = NewNoteInfoSampleLayoutBinding.inflate(layoutInflater)
+            .apply {
+                setContentView(root)
+            }
     }
 
     override fun initView() {
@@ -96,9 +109,9 @@ class NewNoteInfoSampleActivity : BaseNoteActivity() {
                 }
                 1 -> {
                     // 新建笔记弹窗
-                    new_note_info_sample_layout_fl.postDelayed({
+                    binding?.newNoteInfoSampleLayoutFl?.postDelayed({
                         showNowAddNoteInfoDialog()
-                        new_note_info_sample_layout_fl.postDelayed(checkRunnable, 100)
+                        binding?.newNoteInfoSampleLayoutFl?.postDelayed(checkRunnable, 100)
                     }, 300)
                 }
                 2 -> {
@@ -116,9 +129,14 @@ class NewNoteInfoSampleActivity : BaseNoteActivity() {
      */
     private var isSaveStated = false
 
-    override fun onSaveInstanceState(outState: Bundle) {
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
         isSaveStated = true
-        super.onSaveInstanceState(outState)
+        super.onSaveInstanceState(outState, outPersistentState)
+    }
+
+    override fun onDestroyTask() {
+        super.onDestroyTask()
+        binding = null
     }
 
     private var addNoteInfoAddDialogFragment: NoteInfoAddDialogFragment? = null

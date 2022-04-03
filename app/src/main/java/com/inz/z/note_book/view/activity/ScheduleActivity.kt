@@ -12,14 +12,10 @@ import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.base.FragmentContentTypeValue
-import com.inz.z.note_book.base.TagValue
-import com.inz.z.note_book.database.bean.TaskInfo
 import com.inz.z.note_book.database.bean.TaskSchedule
-import com.inz.z.note_book.database.controller.ScheduleController
 import com.inz.z.note_book.database.controller.TaskScheduleController
 import com.inz.z.note_book.databinding.ActivityScheduleLayoutBinding
 import com.inz.z.note_book.util.ClickUtil
-import com.inz.z.note_book.util.ClockAlarmManager
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.adapter.ScheduleRvAdapter
@@ -30,7 +26,6 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DefaultObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_schedule_layout.*
 import java.util.*
 
 /**

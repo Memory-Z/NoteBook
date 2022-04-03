@@ -84,14 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/list_item_normal_height"
                 app:icon="@drawable/ic_home_black_24dp"
-                app:title="@string/_main_page">
-
-                <TextView
-                    android:id="@+id/mlm_0_content_tc"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/_main_page" />
-            </com.inz.z.note_book.view.widget.layout.MainLeftNavItemLayout>
+                app:title="@string/_main_page"/>
 
             <View
                 android:layout_width="match_parent"

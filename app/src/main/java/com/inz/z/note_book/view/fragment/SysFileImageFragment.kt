@@ -1,27 +1,22 @@
 package com.inz.z.note_book.view.fragment
 
 import android.util.Log
-import android.view.*
+import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.util.L
 import com.inz.z.base.util.ThreadPoolUtils
-import com.inz.z.base.view.AbsBaseFragment
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.local.LocalImageInfo
+import com.inz.z.note_book.databinding.FragmentSysFileImageBinding
 import com.inz.z.note_book.util.LocalMediaHelper
 import com.inz.z.note_book.view.fragment.adapter.SysFileImageRvAdapter
 import io.reactivex.Observable
 import io.reactivex.ObservableOnSubscribe
-import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DefaultObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_sys_file_image.*
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -56,6 +51,8 @@ class SysFileImageFragment private constructor() : BaseSysFileFragment() {
 
     private var layoutManager: GridLayoutManager? = null
 
+    private var binding: FragmentSysFileImageBinding? = null
+
     override fun getInstance(): BaseSysFileFragment {
         val fragment = SysFileImageFragment()
         return fragment
@@ -69,6 +66,12 @@ class SysFileImageFragment private constructor() : BaseSysFileFragment() {
 
     override fun getLayoutId(): Int {
         return R.layout.fragment_sys_file_image
+    }
+
+    override fun useViewBinding(): Boolean = true
+    override fun getViewBindingView(): View? {
+        binding = FragmentSysFileImageBinding.inflate(layoutInflater)
+        return binding?.root
     }
 
     override fun initView() {
@@ -91,13 +94,13 @@ class SysFileImageFragment private constructor() : BaseSysFileFragment() {
                 }
             }
 
-        fm_sys_file_image_rv?.apply {
+        binding?.fmSysFileImageRv?.apply {
             this.adapter = imageAdapter
             this.layoutManager = this@SysFileImageFragment.layoutManager
 
         }
-        fm_sys_file_image_srl?.setOnRefreshListener {
-            fm_sys_file_image_srl?.isRefreshing = false
+        binding?.fmSysFileImageSrl?.setOnRefreshListener {
+            binding?.fmSysFileImageSrl?.isRefreshing = false
             currentPage.set(0)
             loadImageList(currentPage.get())
         }
@@ -105,6 +108,11 @@ class SysFileImageFragment private constructor() : BaseSysFileFragment() {
 
     override fun initData() {
         loadImageList(currentPage.get())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 
     override fun targetShowMode(showList: Boolean) {

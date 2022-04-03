@@ -7,8 +7,8 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.inz.z.base.util.L
 import com.inz.z.base.util.LauncherHelper
-import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.R
+import com.inz.z.note_book.databinding.FragmentLauncherBinding
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.adapter.ApplicationListRvAdapter
@@ -17,7 +17,6 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DefaultObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_launcher.*
 
 /**
  * 启动程序
@@ -35,11 +34,23 @@ class ApplicationListActivity : BaseNoteActivity() {
     private var requestCode = 0
     private var applicationListRvAdapter: ApplicationListRvAdapter? = null
 
+    private var binding: FragmentLauncherBinding? = null
+
     override fun initWindow() {
     }
 
     override fun getLayoutId(): Int {
         return R.layout.fragment_launcher
+    }
+
+    override fun useViewBinding(): Boolean = true
+
+    override fun setViewBinding() {
+        super.setViewBinding()
+        binding = FragmentLauncherBinding.inflate(layoutInflater)
+            .apply {
+                setContentView(root)
+            }
     }
 
     override fun initView() {
@@ -48,7 +59,7 @@ class ApplicationListActivity : BaseNoteActivity() {
         applicationListRvAdapter?.apply {
             listener = ApplicationInfoListRvAdapterListenerImpl()
         }
-        fm_launcher_rv?.apply {
+        binding?.fmLauncherRv?.apply {
             layoutManager = LinearLayoutManager(mContext)
             adapter = applicationListRvAdapter
         }
@@ -57,6 +68,11 @@ class ApplicationListActivity : BaseNoteActivity() {
     override fun initData() {
         requestCode = intent?.getIntExtra(Constants.APPLICATION_LIST_REQUEST_CODE_FLAG, 0) ?: 0
         loadApplicationData()
+    }
+
+    override fun onDestroyTask() {
+        super.onDestroyTask()
+        binding = null
     }
 
     /**

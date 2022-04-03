@@ -10,8 +10,8 @@ import com.inz.z.base.R
 import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
 import com.inz.z.base.base.FileType
+import com.inz.z.base.databinding.BaseItemPreviewImgListBinding
 import com.inz.z.base.entity.BasePreviewImageBean
-import kotlinx.android.synthetic.main.base_item_preview_img_list.view.*
 
 /**
  *
@@ -32,8 +32,8 @@ class PreviewImageListRvAdapter(mContext: Context?) :
     var listener: PreviewImageListRvAdapterListener? = null
 
     override fun onCreateVH(parent: ViewGroup, viewType: Int): PreviewImageListRvHolder {
-        val view = mLayoutInflater.inflate(R.layout.base_item_preview_img_list, parent, false)
-        return PreviewImageListRvHolder(view)
+        val binding = BaseItemPreviewImgListBinding.inflate(mLayoutInflater, parent, false)
+        return PreviewImageListRvHolder(binding)
     }
 
     override fun onBindVH(holder: PreviewImageListRvHolder, position: Int) {
@@ -52,9 +52,10 @@ class PreviewImageListRvAdapter(mContext: Context?) :
         }
     }
 
-    inner class PreviewImageListRvHolder(itemView: View) : AbsBaseRvViewHolder(itemView),
+    inner class PreviewImageListRvHolder(binding: BaseItemPreviewImgListBinding) :
+        AbsBaseRvViewHolder(binding.root),
         View.OnClickListener {
-        val preIv = itemView.base_item_pi_iv
+        val preIv = binding.baseItemPiIv
 
         init {
             preIv.setOnClickListener(this)

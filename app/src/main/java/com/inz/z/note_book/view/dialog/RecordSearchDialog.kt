@@ -17,7 +17,6 @@ import io.reactivex.functions.Function
 import io.reactivex.observers.DefaultObserver
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.dialog_search.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -55,7 +54,7 @@ class RecordSearchDialog private constructor() : SearchDialog() {
         recordSearchRvAdapter = RecordSearchRvAdapter(mContext)
         recordSearchRvAdapter?.recordSearchRvAdapterListener = RecordSearchRvAdapterListenerImpl()
 
-        dialog_search_content_rv.apply {
+        binding?.dialogSearchContentRv?.apply {
             this.layoutManager = LinearLayoutManager(mContext)
             this.adapter = recordSearchRvAdapter
         }

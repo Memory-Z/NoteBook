@@ -7,6 +7,7 @@ import com.inz.z.base.util.L
 import com.inz.z.base.util.LauncherHelper
 import com.inz.z.base.view.AbsBaseFragment
 import com.inz.z.note_book.R
+import com.inz.z.note_book.databinding.FragmentLauncherBinding
 import com.inz.z.note_book.view.activity.listener.MainActivityListener
 import com.inz.z.note_book.view.adapter.ApplicationListRvAdapter
 import com.inz.z.note_book.view.dialog.BaseDialogFragment
@@ -15,7 +16,6 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DefaultObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_launcher.*
 
 /**
  * 第三方程序启动
@@ -34,6 +34,8 @@ class LauncherApplicationFragment : AbsBaseFragment() {
         }
     }
 
+    private var binding: FragmentLauncherBinding? = null
+
     private var applicationListRvAdapter: ApplicationListRvAdapter? = null
 
     val mainListener = MainListenerImpl()
@@ -43,13 +45,20 @@ class LauncherApplicationFragment : AbsBaseFragment() {
         return R.layout.fragment_launcher
     }
 
+    override fun useViewBinding(): Boolean = true
+
+    override fun getViewBindingView(): View? {
+        binding = FragmentLauncherBinding.inflate(layoutInflater)
+        return binding?.root
+    }
+
     override fun initView() {
         applicationListRvAdapter = ApplicationListRvAdapter(mContext)
         applicationListRvAdapter?.apply {
             listener = ApplicationInfoListRvAdapterListenerImpl()
         }
 
-        fm_launcher_rv.apply {
+        binding?.fmLauncherRv?.apply {
             layoutManager = LinearLayoutManager(mContext)
             adapter = applicationListRvAdapter
         }
@@ -59,6 +68,12 @@ class LauncherApplicationFragment : AbsBaseFragment() {
     override fun initData() {
         loadApplicationData()
 //        initApplicationList()
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 
     private fun initApplicationList() {

@@ -8,7 +8,7 @@ import android.view.View
 import androidx.appcompat.widget.TintTypedArray
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.inz.z.note_book.R
-import kotlinx.android.synthetic.main.float_view_message_base.view.*
+import com.inz.z.note_book.databinding.FloatViewMessageBaseBinding
 import java.util.*
 
 /**
@@ -24,6 +24,7 @@ class FloatMessageBaseView : ConstraintLayout {
 
     private var mContext: Context? = null
     private var mView: View? = null
+    private var binding: FloatViewMessageBaseBinding? = null
 
     constructor(context: Context) : super(context) {
         this.mContext = context
@@ -55,18 +56,23 @@ class FloatMessageBaseView : ConstraintLayout {
 
     private fun initView() {
         if (mView == null) {
-            mView =
-                LayoutInflater.from(mContext).inflate(R.layout.float_view_message_base, this, true)
+            binding = FloatViewMessageBaseBinding.inflate(LayoutInflater.from(mContext), this, true)
+            mView = binding?.root
             val calendar = Calendar.getInstance(Locale.getDefault())
             calendar[Calendar.HOUR_OF_DAY] = 18
             calendar[Calendar.MINUTE] = 0
             calendar[Calendar.SECOND] = 0
             calendar[Calendar.MILLISECOND] = 0
-            float_message_base_cdtv.start(
+            binding?.floatMessageBaseCdtv?.start(
                 CountdownRingView.MODE_COUNT_TIME_FIXED,
                 calendar.timeInMillis
             )
         }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        binding = null
     }
 
     interface FloatMessageBaseViewListener {

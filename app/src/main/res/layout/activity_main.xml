@@ -38,10 +38,10 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:focusable="true"
-        app:base_relative_layout_content_view="@id/note_maint_left_inc">
+        app:base_relative_layout_content_view="@id/note_main_left_inc">
 
         <include
-            android:id="@+id/note_maint_left_inc"
+            android:id="@+id/note_main_left_inc"
             layout="@layout/fragment_main_left_nav_layout" />
     </com.inz.z.base.view.widget.BaseRelativeLayout>
 

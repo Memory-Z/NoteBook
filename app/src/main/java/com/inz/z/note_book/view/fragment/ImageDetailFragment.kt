@@ -1,12 +1,12 @@
 package com.inz.z.note_book.view.fragment
 
 import android.os.Bundle
+import android.view.View
 import com.bumptech.glide.Glide
 import com.inz.z.base.view.AbsBaseFragment
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.local.LocalImageInfo
-import kotlinx.android.synthetic.main.fragment_image_detail_base.*
-import java.io.Serializable
+import com.inz.z.note_book.databinding.FragmentImageDetailBaseBinding
 
 /**
  *
@@ -27,6 +27,8 @@ class ImageDetailFragment : AbsBaseFragment() {
         }
     }
 
+    private var binding: FragmentImageDetailBaseBinding? = null
+
     private var imageInfo: LocalImageInfo? = null
     private var imagePath: String = ""
 
@@ -38,6 +40,13 @@ class ImageDetailFragment : AbsBaseFragment() {
         return R.layout.fragment_image_detail_base
     }
 
+    override fun useViewBinding(): Boolean = true
+
+    override fun getViewBindingView(): View? {
+        binding = FragmentImageDetailBaseBinding.inflate(layoutInflater)
+        return binding?.root
+    }
+
     override fun initView() {
 
     }
@@ -47,8 +56,13 @@ class ImageDetailFragment : AbsBaseFragment() {
             imagePath = it.getString("imagePath", "") ?: ""
             val imageId = it.getLong("imageId", 0L)
         }
-        Glide.with(mContext).load(imagePath).into(fm_image_detail_base_iv)
+        binding?.let {
+            Glide.with(mContext).load(imagePath).into(it.fmImageDetailBaseIv)
+        }
     }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
+    }
 }

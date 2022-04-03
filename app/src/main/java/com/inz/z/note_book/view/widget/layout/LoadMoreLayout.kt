@@ -10,11 +10,9 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.TintTypedArray
-import com.airbnb.lottie.Lottie
-import com.airbnb.lottie.LottieConfig
 import com.bumptech.glide.Glide
 import com.inz.z.note_book.R
-import kotlinx.android.synthetic.main.item_load_more.view.*
+import com.inz.z.note_book.databinding.ItemLoadMoreBinding
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -31,6 +29,7 @@ class LoadMoreLayout : LinearLayout {
 
     private var mContext: Context? = null
     private var mView: View? = null
+    private var binding: ItemLoadMoreBinding? = null
 
     private val loading = AtomicBoolean(false)
 
@@ -92,11 +91,12 @@ class LoadMoreLayout : LinearLayout {
 
     private fun initView() {
         if (mView == null) {
-            mView = LayoutInflater.from(mContext).inflate(R.layout.item_load_more, this, true)
+            binding = ItemLoadMoreBinding.inflate(LayoutInflater.from(mContext), this, true)
+            mView = binding?.root
         }
         mView?.let {
-            loadingIv = it.item_load_more_loading_iv
-            hintTv = it.item_load_more_hint_tv
+            loadingIv = binding?.itemLoadMoreLoadingIv
+            hintTv = binding?.itemLoadMoreHintTv
             it.setOnClickListener {
                 if (!loading.get()) {
                     startLoad()

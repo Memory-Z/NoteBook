@@ -3,6 +3,7 @@ package com.inz.z.note_book.view.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.view.View
 import android.widget.LinearLayout
@@ -19,6 +20,8 @@ import com.inz.z.note_book.database.bean.NoteGroup
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteGroupService
 import com.inz.z.note_book.database.controller.NoteInfoController
+import com.inz.z.note_book.databinding.NoteNavHintLayoutBinding
+import com.inz.z.note_book.databinding.NoteNavLayoutBinding
 import com.inz.z.note_book.util.ClickUtil
 import com.inz.z.note_book.view.activity.AddContentActivity
 import com.inz.z.note_book.view.activity.MarkDayActivity
@@ -31,8 +34,6 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DefaultObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.note_nav_hint_layout.*
-import kotlinx.android.synthetic.main.note_nav_layout.*
 import java.util.*
 
 /**
@@ -84,6 +85,9 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
 
     val mainListener = MainListenerImpl()
 
+    private var binding: NoteNavLayoutBinding? = null
+    private var hintBinding: NoteNavHintLayoutBinding? = null
+
     override fun initWindow() {
 
     }
@@ -92,9 +96,20 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
         return R.layout.note_nav_layout
     }
 
+    override fun useViewBinding(): Boolean {
+        return true
+    }
+
+    override fun getViewBindingView(): View? {
+        binding = NoteNavLayoutBinding.inflate(layoutInflater)
+        binding?.let {
+            hintBinding = it.noteNavContentInc
+        }
+        return binding?.root
+    }
+
     override fun initView() {
-        hintNovDateLl = note_nav_hint_data_center_ll
-        hintNovDateLl?.apply {
+        hintBinding?.noteNavHintDataCenterLl?.apply {
             this.setOnClickListener(this@NoteNavFragment)
         }
         mNoteGroupRvAdapter = NoteGroupRvAdapter(mContext)
@@ -115,33 +130,33 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
             .apply {
                 orientation = RecyclerView.VERTICAL
             }
-        note_nav_group_rv.apply {
+        binding?.noteNavGroupRv?.apply {
             layoutManager = mNoteGroupLayoutManager
             adapter = mNoteGroupRvAdapter
             isNestedScrollingEnabled = false
         }
 
-        note_nav_content_nsv.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, _, _, _ ->
+        binding?.noteNavContentNsv?.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, _, _, _ ->
             if (v.scrollY == 0) {
-                note_nav_add_fab.show()
+                binding?.noteNavAddFab?.show()
             } else {
-                note_nav_add_fab.hide()
+                binding?.noteNavAddFab?.hide()
             }
         })
         // 最近 五条 记录 右侧按钮 点击，
-        note_nav_near_five_nav_right_iv.setOnClickListener(this)
+        binding?.noteNavNearFiveNavRightIv?.setOnClickListener(this)
         // 设置笔记导航栏组 右侧 箭头 点击
-        note_nav_group_right_iv.setOnClickListener(this)
+        binding?.noteNavGroupRightIv?.setOnClickListener(this)
     }
 
     override fun initData() {
-        mNoteNavHandler = Handler(NoteNavHandlerCallback())
+        mNoteNavHandler = Handler(Looper.getMainLooper(), NoteNavHandlerCallback())
 
         val date = Calendar.getInstance(Locale.getDefault()).time
         setDateText(date)
 
 
-        note_nav_hint_ibtn.setOnClickListener {
+        hintBinding?.noteNavHintIbtn?.setOnClickListener {
             val packageName = "com.netease.cloudmusic"
             try {
                 LauncherHelper.launcherPackageName(mContext, packageName)
@@ -187,6 +202,8 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
             checkDataRunnable = null
         }
         mNoteNavHandler.removeCallbacksAndMessages(null)
+        binding = null
+        hintBinding = null
     }
 
     override fun onClick(v: View?) {
@@ -195,17 +212,17 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
             return
         }
         when (v?.id) {
-            hintNovDateLl?.id -> {
+            hintBinding?.noteNavHintDataCenterLl?.id -> {
                 //  点击 时间。跳转至纪念日界面，
                 val intent = Intent(v?.context, MarkDayActivity::class.java)
                 startActivity(intent)
             }
-            note_nav_group_right_iv.id -> {
+            binding?.noteNavGroupRightIv?.id -> {
                 // 点击 nav 右侧按钮，跳转至组
                 L.i(TAG, "note_nav_group_right_iv  is Click ! ")
                 gotoGroupActivity(true, "")
             }
-            note_nav_near_five_nav_right_iv.id -> {
+            binding?.noteNavNearFiveNavRightIv?.id -> {
                 // 最近五条记录 右侧按钮点击 ，跳转至添加
                 val intent = Intent(mContext, AddContentActivity::class.java)
                 intent.putExtras(AddContentActivity.getInstanceBundle(FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_NOTE_TAG))
@@ -229,16 +246,21 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
         if (checkDataRunnable == null) {
             checkDataRunnable = CheckDataRunnable()
         }
-        note_nav_hint_data_tv.postDelayed(checkDataRunnable, delay)
+        hintBinding?.noteNavHintDataTv?.postDelayed(checkDataRunnable, delay)
     }
 
     /**
      * 设置日期
      */
     private fun setDateText(date: Date) {
-        note_nav_hint_year_tv.text = getString(R.string.base_format_year_month).format(date)
-        note_nav_hint_data_tv.text = getString(R.string.base_format_day).format(date)
-        note_nav_hint_week_tv.text = getString(R.string.base_format_week).format(date)
+        L.i(TAG, "setDateText: hintBinding = $hintBinding , date = $date")
+        hintBinding?.let {
+            L.i(TAG, "setDateText: year1 = ${it.noteNavHintYearTv.text}")
+            it.noteNavHintYearTv.text = getString(R.string.base_format_year_month).format(date)
+            it.noteNavHintDataTv.text = getString(R.string.base_format_day).format(date)
+            it.noteNavHintWeekTv.text = getString(R.string.base_format_week).format(date)
+            L.i(TAG, "setDateText: year2 = ${it.noteNavHintYearTv.text}")
+        }
     }
 
     /**
@@ -307,7 +329,7 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
                 }
 
                 override fun onNext(t: List<NoteInfo>) {
-                    note_nav_near_five_content_ll.removeAllViews()
+                    binding?.noteNavNearFiveContentLl?.removeAllViews()
                     if (t.isNotEmpty()) {
                         val lp = LinearLayout.LayoutParams(
                             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -320,7 +342,10 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
                                 itemSampleNoteInfoLayout.setSampleOnClickListener(View.OnClickListener {
                                     L.i(TAG, "itemSampleNoteInfoLayout is click. ")
                                 })
-                                note_nav_near_five_content_ll.addView(itemSampleNoteInfoLayout, lp)
+                                binding?.noteNavNearFiveContentLl?.addView(
+                                    itemSampleNoteInfoLayout,
+                                    lp
+                                )
                             }
                         }
                     }

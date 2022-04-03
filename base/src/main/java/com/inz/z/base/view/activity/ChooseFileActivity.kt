@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.R
 import com.inz.z.base.base.ChooseFileConstants
 import com.inz.z.base.base.ChooseFileShowType
+import com.inz.z.base.databinding.BaseActivityChooseFileBinding
 import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.base.entity.BaseChooseFileNavBean
 import com.inz.z.base.util.FileUtils
@@ -38,7 +39,6 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DefaultObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.base_activity_choose_file.*
 import java.io.File
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -245,6 +245,7 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
      */
     private var chooseFileViewModel: ChooseFileViewModel? = null
 
+    private var binding: BaseActivityChooseFileBinding? = null
 
     override fun initWindow() {
 
@@ -258,25 +259,35 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
         return R.layout.base_activity_choose_file
     }
 
+    override fun useViewBinding(): Boolean = true
+
+    override fun setViewBinding() {
+        super.setViewBinding()
+        binding = BaseActivityChooseFileBinding.inflate(layoutInflater)
+            .apply {
+                setContentView(root)
+            }
+    }
+
     override fun initView() {
 
         initColorStateList()
 //        base_choose_file_top_r_more_iv?.setOnClickListener { createMorePopupMenu() }
-        setSupportActionBar(base_choose_file_top_toolbar)
+        setSupportActionBar(binding?.baseChooseFileTopToolbar)
 
         navLayoutManager = LinearLayoutManager(mContext)
         navLayoutManager?.orientation = LinearLayoutManager.HORIZONTAL
         // 顶部导航栏。
         chooseFileNavRvAdapter = ChooseFileNavRvAdapter(mContext)
         chooseFileNavRvAdapter?.listener = ChooseFileNavRvAdapterListenerImpl()
-        base_choose_file_nav_rv?.apply {
+        binding?.baseChooseFileNavRv?.apply {
             this.layoutManager = navLayoutManager
             this.adapter = chooseFileNavRvAdapter
         }
         // 文件选择 左下角 预览按钮
-        base_choose_file_bl_preview_tv?.setOnClickListener(this)
+        binding?.baseChooseFileBlPreviewTv?.setOnClickListener(this)
         // 文件选择 右上角 提交按钮
-        base_choose_file_top_submit_tv?.setOnClickListener(this)
+        binding?.baseChooseFileTopSubmitTv?.setOnClickListener(this)
     }
 
     override fun initData() {
@@ -298,7 +309,7 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
         mRootPath = FileUtils.getSDPath()
         addNavBody(mRootPath, getString(R.string.root_directory))
         // 延迟查询文件。
-        base_choose_file_content_rv.postDelayed(
+        binding?.baseChooseFileContentRv?.postDelayed(
             {
                 if (checkHavePermission()) {
                     checkQueryType(mRootPath)
@@ -327,11 +338,12 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
         chooseFileListRvAdapter = null
         chooseFileNavRvAdapter = null
         chooseFileList.clear()
+        binding = null
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            base_choose_file_bl_preview_tv.id -> {
+            binding?.baseChooseFileBlPreviewTv?.id -> {
                 // 预览
                 if (!chooseFileList.isNullOrEmpty()) {
                     val bean = chooseFileList[0]
@@ -342,7 +354,7 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
                     }
                 }
             }
-            base_choose_file_top_submit_tv.id -> {
+            binding?.baseChooseFileTopSubmitTv?.id -> {
                 // 提交
                 closeChooseFileView()
             }
@@ -384,7 +396,7 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
         // 内容列表。
         chooseFileListRvAdapter = ChooseFileRvAdapter(mContext, showMode)
         chooseFileListRvAdapter?.listener = ChooseFileRvAdapterListenerImpl()
-        base_choose_file_content_rv?.apply {
+        binding?.baseChooseFileContentRv?.apply {
             layoutManager = mLayoutManager
             adapter = chooseFileListRvAdapter
             this.addOnScrollListener(
@@ -414,7 +426,7 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
         // 当前是否为显示文件夹
         val isDirContent = showType == ChooseFileConstants.SHOW_TYPE_DIR
         // 如果需要显示文件夹，将导航栏显示出。
-        base_choose_file_nav_rv?.visibility = if (isDirContent) {
+        binding?.baseChooseFileNavRv?.visibility = if (isDirContent) {
             View.VISIBLE
         } else {
             View.GONE
@@ -919,7 +931,7 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
             val size = fileSize / 1024.0
             val fileSizeStr = this.getString(R.string.file_size_k_format)
                 .format(Locale.getDefault(), String.format("%.2f", size))
-            base_choose_file_bottom_total_size_tv?.text = fileSizeStr
+            binding?.baseChooseFileBottomTotalSizeTv?.text = fileSizeStr
         }
     }
 
@@ -939,7 +951,7 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
             } else {
                 mContext.getString(R.string._submit)
             }
-            base_choose_file_bl_preview_tv?.apply {
+            binding?.baseChooseFileBlPreviewTv?.apply {
                 this.isClickable = haveSelected
                 if (haveSelected) {
                     setTextColor(buttonClickScl)
@@ -948,7 +960,7 @@ class ChooseFileActivity : AbsBaseActivity(), View.OnClickListener {
                 }
                 text = fileSizeStr
             }
-            base_choose_file_top_submit_tv?.apply {
+            binding?.baseChooseFileTopSubmitTv?.apply {
                 this.isClickable = haveSelected
                 this.backgroundTintList = if (haveSelected) {
                     buttonClickScl

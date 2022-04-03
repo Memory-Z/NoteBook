@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.R
 import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
+import com.inz.z.base.databinding.BaseItemChooseFileNavBinding
 import com.inz.z.base.entity.BaseChooseFileNavBean
-import kotlinx.android.synthetic.main.base_item_choose_file_nav.view.*
 
 /**
  * 选择文件 导航适配器
@@ -47,9 +47,8 @@ class ChooseFileNavRvAdapter(mContext: Context) :
     override fun onCreateVH(parent: ViewGroup, viewType: Int): ChooseFileNavRvHolder {
         when (viewType) {
             VIEW_TYPE_ITEM -> {
-                val view =
-                    mLayoutInflater.inflate(R.layout.base_item_choose_file_nav, parent, false)
-                return ChooseFileNavItemRvHolder(view)
+                val binding = BaseItemChooseFileNavBinding.inflate(mLayoutInflater, parent, false)
+                return ChooseFileNavItemRvHolder(binding)
             }
             else -> {
                 return ChooseFileNavBackRvHolder(Space(mContext))
@@ -76,10 +75,10 @@ class ChooseFileNavRvAdapter(mContext: Context) :
 
     }
 
-    open inner class ChooseFileNavItemRvHolder(itemView: View) : ChooseFileNavRvHolder(itemView),
+    open inner class ChooseFileNavItemRvHolder(binding: BaseItemChooseFileNavBinding) : ChooseFileNavRvHolder(binding.root),
         View.OnClickListener {
-        var titleNameTv = itemView.base_item_cfn_tv
-        var rightArrowIv = itemView.base_item_cfn_iv
+        var titleNameTv = binding.baseItemCfnTv
+        var rightArrowIv = binding.baseItemCfnIv
 
         init {
             itemView.setOnClickListener(this)

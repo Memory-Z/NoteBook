@@ -2,20 +2,18 @@ package com.inz.z.base.view.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.text.Layout
 import android.text.SpannableString
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.TintTypedArray
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import com.inz.z.base.R
-import kotlinx.android.synthetic.main.base_no_data_layout.view.*
+import com.inz.z.base.databinding.BaseNoDataLayoutBinding
 
 /**
  *
@@ -37,6 +35,7 @@ public open class BaseNoDataView : ConstraintLayout {
     private var message: String? = ""
     private var showRefreshBtn: Boolean = false
     private var refreshBtnStr: String? = ""
+    private var binding: BaseNoDataLayoutBinding? = null
 
     @DrawableRes
     private var imageRes: Int? = null
@@ -60,8 +59,9 @@ public open class BaseNoDataView : ConstraintLayout {
 
     private fun initView() {
         if (mView == null) {
-            mView = LayoutInflater.from(mContext).inflate(R.layout.base_no_data_layout, this, true)
-            mView?.base_no_data_btn?.setOnClickListener {
+            binding = BaseNoDataLayoutBinding.inflate(LayoutInflater.from(mContext), this, true)
+            mView = binding?.root
+            binding?.baseNoDataBtn?.setOnClickListener {
                 listener?.onRefreshButtonClick(it)
             }
 
@@ -103,29 +103,29 @@ public open class BaseNoDataView : ConstraintLayout {
 
 
     fun setTitle(titleStr: String) {
-        mView?.base_no_data_title_tv?.text = titleStr
-        mView?.base_no_data_title_tv?.visibility =
+        binding?.baseNoDataTitleTv?.text = titleStr
+        binding?.baseNoDataTitleTv?.visibility =
             if (TextUtils.isEmpty(title)) GONE else VISIBLE
     }
 
     fun setMessage(message: String) {
-        mView?.base_no_data_message_tv?.text = message
+        binding?.baseNoDataMessageTv?.text = message
     }
 
     fun setHintImage(@DrawableRes imageRes: Int) {
-        mView?.base_no_data_hint_iv?.setImageResource(imageRes)
+        binding?.baseNoDataHintIv?.setImageResource(imageRes)
     }
 
     /**
      * 是否显示刷新按钮
      */
     fun showRefreshBtn(show: Boolean) {
-        mView?.base_no_data_btn?.visibility = if (show) View.VISIBLE else View.GONE
+        binding?.baseNoDataBtn?.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     fun setButtonStr(buttonStr: String) {
         if (!TextUtils.isEmpty(buttonStr)) {
-            mView?.base_no_data_btn?.text = buttonStr
+            binding?.baseNoDataBtn?.text = buttonStr
         }
     }
 
@@ -138,11 +138,11 @@ public open class BaseNoDataView : ConstraintLayout {
      * @param loadingStr 刷新提示内容
      */
     fun startRefresh(loadingStr: String) {
-        base_no_data_operation_ll?.apply {
+        binding?.baseNoDataOperationLl?.apply {
             this.visibility = GONE
         }
-        base_no_data_load_tv?.text = loadingStr
-        base_no_data_load_ll?.apply {
+        binding?.baseNoDataLoadTv?.text = loadingStr
+        binding?.baseNoDataLoadLl?.apply {
             this.visibility = VISIBLE
         }
     }
@@ -177,22 +177,22 @@ public open class BaseNoDataView : ConstraintLayout {
         spannableStr: SpannableString,
         @DrawableRes hintImage: Int
     ) {
-        base_no_data_load_ll?.visibility = GONE
-        base_no_data_message_tv?.text = hintMessage
-        base_no_data_operation_ll?.visibility = if (canRetry) VISIBLE else GONE
-        base_no_data_click_tv?.visibility = if (useSpannable) VISIBLE else GONE
-        base_no_data_click_tv?.text = spannableStr
-        base_no_data_btn?.visibility = if (useSpannable) GONE else VISIBLE
+        binding?.baseNoDataLoadLl?.visibility = GONE
+        binding?.baseNoDataMessageTv?.text = hintMessage
+        binding?.baseNoDataOperationLl?.visibility = if (canRetry) VISIBLE else GONE
+        binding?.baseNoDataClickTv?.visibility = if (useSpannable) VISIBLE else GONE
+        binding?.baseNoDataClickTv?.text = spannableStr
+        binding?.baseNoDataBtn?.visibility = if (useSpannable) GONE else VISIBLE
         mContext?.apply {
-            if (hintImage != 0 && base_no_data_hint_iv != null) {
-                Glide.with(this).load(hintImage).into(base_no_data_hint_iv!!)
+            if (hintImage != 0 && binding?.baseNoDataHintIv != null) {
+                Glide.with(this).load(hintImage).into(binding?.baseNoDataHintIv!!)
             }
         }
 
     }
 
     fun getButton(): Button? {
-        return mView?.base_no_data_btn
+        return binding?.baseNoDataBtn
     }
 
 

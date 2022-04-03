@@ -11,8 +11,8 @@ import com.inz.z.base.base.AbsBaseRvViewHolder
 import com.inz.z.base.base.FileType
 import com.inz.z.base.entity.BaseChooseFileBean
 import com.inz.z.note_book.R
-import kotlinx.android.synthetic.main.item_new_dynamic_image.view.*
-import kotlinx.android.synthetic.main.item_new_dynamic_null.view.*
+import com.inz.z.note_book.databinding.ItemNewDynamicImageBinding
+import com.inz.z.note_book.databinding.ItemNewDynamicNullBinding
 
 /**
  * 新动态 适配器
@@ -52,12 +52,12 @@ class NewDynamicRvAdapter(mContext: Context) :
     override fun onCreateVH(parent: ViewGroup, viewType: Int): BaseNewDynamicRvViewHolder {
         when (viewType) {
             TYPE_IMAGE -> {
-                val view = mLayoutInflater.inflate(R.layout.item_new_dynamic_image, parent, false)
-                return ImageNewDynamicRvViewHolder(view)
+                val binding = ItemNewDynamicImageBinding.inflate(mLayoutInflater, parent, false)
+                return ImageNewDynamicRvViewHolder(binding)
             }
             else -> {
-                val view = mLayoutInflater.inflate(R.layout.item_new_dynamic_null, parent, false)
-                return NullNewDynamicRvViewHolder(view)
+                val binding = ItemNewDynamicNullBinding.inflate(mLayoutInflater, parent, false)
+                return NullNewDynamicRvViewHolder(binding)
             }
         }
     }
@@ -96,9 +96,10 @@ class NewDynamicRvAdapter(mContext: Context) :
     /**
      * 空
      */
-    inner class NullNewDynamicRvViewHolder(itemView: View) : BaseNewDynamicRvViewHolder(itemView),
+    inner class NullNewDynamicRvViewHolder(binding: ItemNewDynamicNullBinding) :
+        BaseNewDynamicRvViewHolder(binding.root),
         View.OnClickListener {
-        val addIv = itemView.item_ndn_iv
+        val addIv = binding.itemNdnIv
 
         init {
             addIv.setOnClickListener(this)
@@ -115,10 +116,11 @@ class NewDynamicRvAdapter(mContext: Context) :
     /**
      * 图片
      */
-    inner class ImageNewDynamicRvViewHolder(itemView: View) : BaseNewDynamicRvViewHolder(itemView),
+    inner class ImageNewDynamicRvViewHolder(binding: ItemNewDynamicImageBinding) :
+        BaseNewDynamicRvViewHolder(binding.root),
         View.OnClickListener {
-        val centerIv = itemView.item_nd_image_iv
-        val closeIv = itemView.item_nd_image_close_iv
+        val centerIv = binding.itemNdImageIv
+        val closeIv = binding.itemNdImageCloseIv
 
         init {
             closeIv.setOnClickListener(this)

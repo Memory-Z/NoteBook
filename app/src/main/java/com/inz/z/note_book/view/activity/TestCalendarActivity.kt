@@ -1,14 +1,12 @@
 package com.inz.z.note_book.view.activity
 
 import android.content.Intent
-import androidx.core.content.ContextCompat
 import com.inz.slide_table.BaseSlideRowRvAdapter
 import com.inz.slide_table.BaseSlideRvAdapter
 import com.inz.slide_table.BaseSlideTableBean
 import com.inz.slide_table.Gold
 import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.R
-import kotlinx.android.synthetic.main.calendar_view_date.*
 import java.math.BigDecimal
 import java.util.*
 
@@ -124,7 +122,7 @@ class TestCalendarActivity : AbsBaseActivity() {
 //            this.setTableTitle("TABLE - TABLE ")
 //        }
 
-        cvd_ctl_layout.contentScrim = ContextCompat.getDrawable(mContext, R.drawable.img_photo_3)
+//        cvd_ctl_layout.contentScrim = ContextCompat.getDrawable(mContext, R.drawable.img_photo_3)
     }
 
 //    val imgResArray = intArrayOf(

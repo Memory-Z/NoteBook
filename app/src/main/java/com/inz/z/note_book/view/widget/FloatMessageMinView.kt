@@ -8,9 +8,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.widget.TintTypedArray
-import androidx.core.view.LayoutInflaterCompat
 import com.inz.z.note_book.R
-import kotlinx.android.synthetic.main.float_view_message_min.view.*
+import com.inz.z.note_book.databinding.FloatViewMessageMinBinding
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -36,6 +35,7 @@ class FloatMessageMinView : LinearLayout {
 
     private var mContext: Context? = null
     private var mView: View? = null
+    private var binding: FloatViewMessageMinBinding? = null
 
     constructor(context: Context?) : super(context) {
         this.mContext = context
@@ -71,16 +71,23 @@ class FloatMessageMinView : LinearLayout {
      */
     private fun initView() {
         if (mView == null) {
-            mView =
-                LayoutInflater.from(mContext).inflate(R.layout.float_view_message_min, this, true)
-            float_message_min_iv.setOnClickListener {
-                floatMessageMinViewListener?.onImageClick(it)
+            binding = FloatViewMessageMinBinding.inflate(LayoutInflater.from(mContext), this, true)
+            mView = binding?.root
+            binding?.floatMessageMinIv?.let {
+                it.setOnClickListener {
+                    floatMessageMinViewListener?.onImageClick(it)
+                }
+                it.isFocusable = false
+                it.isClickable = false
             }
-            float_message_min_iv.isFocusable = false
-            float_message_min_iv.isClickable = false
 
 
         }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        binding = null
     }
 
     private var lastOnTouchTime: Long = 0L
@@ -101,7 +108,7 @@ class FloatMessageMinView : LinearLayout {
                 val difTime = time - lastOnTouchTime
                 if (difTime < MIN_TOUCH_TIME && MAX_CLICK_TIME > difTime && !touchMove.get()) {
                     this.performClick()
-                    float_message_min_iv?.performClick()
+                    binding?.floatMessageMinIv?.performClick()
                 }
                 touchMove.set(false)
             }

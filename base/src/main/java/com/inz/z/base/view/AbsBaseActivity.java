@@ -301,7 +301,7 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
      * @return 当前版本号
      */
     protected int getCurrentVersionCode() {
-        return BuildConfig.VERSION_CODE;
+        return 0;
     }
 
     /**

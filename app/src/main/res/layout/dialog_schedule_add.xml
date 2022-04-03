@@ -64,7 +64,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/content_schedule_add" />
+            <include android:id="@+id/dialog_schedule_add_inc"
+                layout="@layout/content_schedule_add" />
 
             <!-- Action 类型 -->
             <com.inz.z.base.view.widget.BaseNavLayout

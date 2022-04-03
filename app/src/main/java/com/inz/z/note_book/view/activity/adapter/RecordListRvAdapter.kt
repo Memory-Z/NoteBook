@@ -15,8 +15,8 @@ import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
 import com.inz.z.note_book.R
 import com.inz.z.note_book.bean.record.RecordInfoStatus
-import kotlinx.android.synthetic.main.item_note_record_list_content.view.*
-import kotlinx.android.synthetic.main.item_note_record_list_title.view.*
+import com.inz.z.note_book.databinding.ItemNoteRecordListContentBinding
+import com.inz.z.note_book.databinding.ItemNoteRecordListTitleBinding
 
 /**
  *
@@ -91,14 +91,13 @@ class RecordListRvAdapter(mContext: Context) :
     override fun onCreateVH(parent: ViewGroup, viewType: Int): BaseRecordListRvHolder {
         when (viewType) {
             VIEW_TYPE_LIST -> {
-                val view =
-                    mLayoutInflater.inflate(R.layout.item_note_record_list_content, parent, false)
-                return ContentRecordListRvHolder(view)
+                val binding =
+                    ItemNoteRecordListContentBinding.inflate(mLayoutInflater, parent, false)
+                return ContentRecordListRvHolder(binding)
             }
             VIEW_TYPE_TITLE -> {
-                val view =
-                    mLayoutInflater.inflate(R.layout.item_note_record_list_title, parent, false)
-                return TitleRecodListRvHolder(view)
+                val binding = ItemNoteRecordListTitleBinding.inflate(mLayoutInflater, parent, false)
+                return TitleRecordListRvHolder(binding)
             }
             else -> {
                 return EmptyRecordListRvHolder(View(mContext))
@@ -117,10 +116,10 @@ class RecordListRvAdapter(mContext: Context) :
                 timeSpan = setSearchContentColor(time)
                 titleSpan = setSearchContentColor(title)
             }
-            holder.itemView.item_note_rc_time_tv.text = timeSpan
-            holder.itemView.item_note_rc_title_tv.text = titleSpan
-        } else if (holder is TitleRecodListRvHolder) {
-            holder.itemView.item_note_rt_title_tv.text = recordInfoStatus.titleName
+            holder.binding.itemNoteRcTimeTv.text = timeSpan
+            holder.binding.itemNoteRcTitleTv.text = titleSpan
+        } else if (holder is TitleRecordListRvHolder) {
+            holder.binding.itemNoteRtTitleTv.text = recordInfoStatus.titleName
         }
     }
 
@@ -153,10 +152,11 @@ class RecordListRvAdapter(mContext: Context) :
 
     open inner class BaseRecordListRvHolder(itemView: View) : AbsBaseRvViewHolder(itemView) {}
 
-    inner class ContentRecordListRvHolder(itemView: View) : BaseRecordListRvHolder(itemView),
+    inner class ContentRecordListRvHolder(val binding: ItemNoteRecordListContentBinding) :
+        BaseRecordListRvHolder(binding.root),
         View.OnClickListener {
         init {
-            itemView.item_note_rc_content_rl.setOnClickListener(this)
+            binding.itemNoteRcContentRl.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {
@@ -167,7 +167,8 @@ class RecordListRvAdapter(mContext: Context) :
         }
     }
 
-    inner class TitleRecodListRvHolder(itemView: View) : BaseRecordListRvHolder(itemView) {}
+    inner class TitleRecordListRvHolder(val binding: ItemNoteRecordListTitleBinding) :
+        BaseRecordListRvHolder(binding.root) {}
 
     inner class EmptyRecordListRvHolder(itemView: View) : BaseRecordListRvHolder(itemView) {}
 

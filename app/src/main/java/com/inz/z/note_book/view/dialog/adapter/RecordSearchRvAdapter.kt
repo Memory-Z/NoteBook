@@ -6,15 +6,13 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
-import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.SearchContentInfo
-import kotlinx.android.synthetic.main.item_search_record.view.*
+import com.inz.z.note_book.databinding.ItemSearchRecordBinding
 
 /**
  * 记录搜索弹窗 适配器
@@ -37,13 +35,14 @@ class RecordSearchRvAdapter(mContext: Context) :
     }
 
     override fun onCreateVH(parent: ViewGroup, viewType: Int): RecordSearchRvViewHolder {
-        val view = mLayoutInflater.inflate(R.layout.item_search_record, parent, false)
-        return RecordSearchRvViewHolder(view)
+        val binding = ItemSearchRecordBinding.inflate(mLayoutInflater, parent, false)
+        return RecordSearchRvViewHolder(binding)
     }
 
     override fun onBindVH(holder: RecordSearchRvViewHolder, position: Int) {
         val searchContentInfo = list.get(position)
-        holder.contextTv.text = setSearchContentColor(searchContentInfo.searchContent)
+        holder.binding.itemSearchContentTv.text =
+            setSearchContentColor(searchContentInfo.searchContent)
     }
 
     /**
@@ -73,29 +72,29 @@ class RecordSearchRvAdapter(mContext: Context) :
         return sp
     }
 
-    inner class RecordSearchRvViewHolder(itemView: View) : AbsBaseRvViewHolder(itemView),
+    inner class RecordSearchRvViewHolder(val binding: ItemSearchRecordBinding) :
+        AbsBaseRvViewHolder(binding.root),
         View.OnClickListener {
 
-        val contextTv: TextView = itemView.item_search_content_tv
-        val deleteIv = itemView.item_search_content_close_iv
-
         init {
-            contextTv.setOnClickListener(this)
-            deleteIv.setOnClickListener(this)
+            binding.itemSearchContentTv.setOnClickListener(this)
+            binding.itemSearchContentCloseIv.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {
             val position = adapterPosition
-            if (position != RecyclerView.NO_POSITION) {
-                when (v?.id) {
-                    contextTv.id -> {
-                        recordSearchRvAdapterListener?.onItemClick(v, position)
-                    }
-                    deleteIv.id -> {
-                        recordSearchRvAdapterListener?.onDeleteClick(v, position)
-                    }
-                    else -> {
+            binding.let {
+                if (position != RecyclerView.NO_POSITION) {
+                    when (v?.id) {
+                        it.itemSearchContentTv.id -> {
+                            recordSearchRvAdapterListener?.onItemClick(v, position)
+                        }
+                        it.itemSearchContentCloseIv.id -> {
+                            recordSearchRvAdapterListener?.onDeleteClick(v, position)
+                        }
+                        else -> {
 
+                        }
                     }
                 }
             }

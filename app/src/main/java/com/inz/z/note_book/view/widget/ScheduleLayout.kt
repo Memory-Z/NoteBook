@@ -2,20 +2,15 @@ package com.inz.z.note_book.view.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.CheckBox
-import android.widget.CheckedTextView
 import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.widget.TintTypedArray
-import com.inz.z.base.view.widget.BaseRichEditText
 import com.inz.z.note_book.R
-import kotlinx.android.synthetic.main.widget_schedule_item_layout.view.*
+import com.inz.z.note_book.databinding.WidgetScheduleItemLayoutBinding
 
 /**
  * 计划TextView
@@ -53,6 +48,7 @@ class ScheduleLayout : LinearLayout {
     private var mView: View? = null
     private var mCheckBox: CheckBox? = null
     private var mEditText: EditText? = null
+    private var binding: WidgetScheduleItemLayoutBinding? = null
 
 
     constructor(context: Context?) : this(context, null)
@@ -72,11 +68,17 @@ class ScheduleLayout : LinearLayout {
      */
     private fun initView(context: Context?) {
         if (mView == null) {
-            mView = LayoutInflater.from(context)
-                .inflate(R.layout.widget_schedule_item_layout, this, true)
-            mCheckBox = mView!!.widget_schedule_check_box
-            mEditText = mView!!.widget_schedule_et
+            binding =
+                WidgetScheduleItemLayoutBinding.inflate(LayoutInflater.from(context), this, true)
+            mView = binding?.root
+            mCheckBox = binding?.widgetScheduleCheckBox
+            mEditText = binding?.widgetScheduleEt
         }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        binding = null
     }
 
     /**

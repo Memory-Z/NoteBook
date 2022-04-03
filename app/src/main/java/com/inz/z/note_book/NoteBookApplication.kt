@@ -176,6 +176,14 @@ class NoteBookApplication : Application() {
                 ).show()
             }
         }
+
+        override fun getVersionName(): String {
+            return BuildConfig.VERSION_NAME
+        }
+
+        override fun getVersionCode(): String {
+            return BuildConfig.VERSION_CODE.toString()
+        }
     }
 
 

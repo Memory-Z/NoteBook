@@ -3,14 +3,13 @@ package com.inz.z.note_book.view.dialog
 import android.graphics.Point
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.DialogFragment
 import com.inz.z.base.view.AbsBaseDialogFragment
 import com.inz.z.note_book.R
+import com.inz.z.note_book.databinding.DialogSearchBinding
 import com.qmuiteam.qmui.util.QMUIKeyboardHelper
-import kotlinx.android.synthetic.main.dialog_search.*
 
 /**
  * 搜素界面
@@ -26,6 +25,8 @@ abstract class SearchDialog : AbsBaseDialogFragment(), TextWatcher {
 
     var searchDialogListener: SearchDialogListener? = null
 
+    var binding: DialogSearchBinding? = null
+
     override fun initWindow() {
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.NoteBookAppTheme_Dialog)
     }
@@ -34,11 +35,18 @@ abstract class SearchDialog : AbsBaseDialogFragment(), TextWatcher {
         return R.layout.dialog_search
     }
 
+    override fun useViewBinding(): Boolean = true
+
+    override fun getViewBindingView(): View? {
+        binding = DialogSearchBinding.inflate(layoutInflater)
+        return binding?.root
+    }
+
     override fun initView() {
-        dialog_search_top_left_iv.setOnClickListener {
+        binding?.dialogSearchTopLeftIv?.setOnClickListener {
             dismissAllowingStateLoss()
         }
-        dialog_search_top_search_et.apply {
+        binding?.dialogSearchTopSearchEt?.apply {
             this.addTextChangedListener(this@SearchDialog)
             this.setOnEditorActionListener { v, actionId, event ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -84,7 +92,12 @@ abstract class SearchDialog : AbsBaseDialogFragment(), TextWatcher {
 
     override fun onResume() {
         super.onResume()
-        QMUIKeyboardHelper.showKeyboard(dialog_search_top_search_et, true)
+        QMUIKeyboardHelper.showKeyboard(binding?.dialogSearchTopSearchEt, true)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 
     ///////////////////////////////////////////////////////////////////////////

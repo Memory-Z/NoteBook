@@ -3,8 +3,6 @@ package com.inz.z.note_book.view.dialog
 import android.content.pm.PackageInfo
 import android.graphics.Point
 import android.os.Bundle
-import android.os.SystemClock
-import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
 import androidx.core.widget.NestedScrollView
@@ -23,12 +21,10 @@ import com.inz.z.note_book.bean.inside.ScheduleStatus
 import com.inz.z.note_book.database.bean.RepeatInfo
 import com.inz.z.note_book.database.bean.TaskInfo
 import com.inz.z.note_book.database.bean.TaskSchedule
+import com.inz.z.note_book.databinding.ContentScheduleAddBinding
 import com.inz.z.note_book.databinding.DialogScheduleAddBinding
 import com.inz.z.note_book.util.ClickUtil
-import com.inz.z.note_book.view.activity.AddContentActivity
 import com.inz.z.note_book.view.dialog.viewmodel.TaskScheduleAddViewModel
-import kotlinx.android.synthetic.main.content_schedule_add.view.*
-import kotlinx.android.synthetic.main.dialog_schedule_add.*
 import java.util.*
 
 /**
@@ -69,7 +65,8 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
         }
     }
 
-    private var dialogScheduleAddBinding: DialogScheduleAddBinding? = null
+    private var binding: DialogScheduleAddBinding? = null
+    private var contentBinding: ContentScheduleAddBinding? = null
 
     var listener: ScheduleAddDFListener? = null
     private var checkTimeHour = 0
@@ -126,15 +123,18 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
     }
 
     override fun getViewBindingView(): View? {
-        dialogScheduleAddBinding = DialogScheduleAddBinding.inflate(layoutInflater)
-        return dialogScheduleAddBinding?.root
+        binding = DialogScheduleAddBinding.inflate(layoutInflater)
+        binding?.let {
+            contentBinding = it.dialogScheduleAddInc
+        }
+        return binding?.root
     }
 
     override fun initView() {
         // 设置 点击 时间监听
-        dialogScheduleAddBinding?.dialogScheduleAddTopCancelTv?.setOnClickListener(this)
-        dialogScheduleAddBinding?.dialogScheduleAddTopSaveTv?.setOnClickListener(this)
-        dialogScheduleAddBinding?.dialogScheduleAddContentNsv?.content_time_picker?.let {
+        binding?.dialogScheduleAddTopCancelTv?.setOnClickListener(this)
+        binding?.dialogScheduleAddTopSaveTv?.setOnClickListener(this)
+        contentBinding?.contentTimePicker?.let {
             it.setIs24HourView(true)
             it.setOnTimeChangedListener { _, hourOfDay, minute ->
                 checkTimeHour = hourOfDay
@@ -142,13 +142,13 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
                 L.i(TAG, "change time  $hourOfDay : $minute ")
             }
         }
-        dialogScheduleAddBinding?.dialogScheduleAddContentRepeatDateBnl?.setOnClickListener(this)
-        dialogScheduleAddBinding?.dialogScheduleAddContentActionBnl?.setOnClickListener(this)
-        dialogScheduleAddBinding?.dialogScheduleAddContentRepeatSwitch?.setOnCheckedChangeListener { buttonView, isChecked ->
-            dialogScheduleAddBinding?.dialogScheduleAddContentRepeatDateBnl?.visibility =
+        binding?.dialogScheduleAddContentRepeatDateBnl?.setOnClickListener(this)
+        binding?.dialogScheduleAddContentActionBnl?.setOnClickListener(this)
+        binding?.dialogScheduleAddContentRepeatSwitch?.setOnCheckedChangeListener { buttonView, isChecked ->
+            binding?.dialogScheduleAddContentRepeatDateBnl?.visibility =
                 if (isChecked) View.VISIBLE else View.GONE
             if (isChecked) {
-                dialogScheduleAddBinding?.let {
+                binding?.let {
                     it.dialogScheduleAddContentNsv.post {
                         it.dialogScheduleAddContentNsv.fullScroll(NestedScrollView.FOCUS_DOWN)
                     }
@@ -156,10 +156,10 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
             }
         }
 
-        dialogScheduleAddBinding?.dialogScheduleAddContentActionTypeBnl?.setOnClickListener(this)
+        binding?.dialogScheduleAddContentActionTypeBnl?.setOnClickListener(this)
         // 默认 不显示 重复
-        dialogScheduleAddBinding?.dialogScheduleAddContentRepeatDateBnl?.visibility = View.GONE
-        dialogScheduleAddBinding?.dialogScheduleAddContentTagBnl?.setOnClickListener(this)
+        binding?.dialogScheduleAddContentRepeatDateBnl?.visibility = View.GONE
+        binding?.dialogScheduleAddContentTagBnl?.setOnClickListener(this)
     }
 
     override fun initData() {
@@ -203,7 +203,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
     override fun onClick(v: View?) {
         // 判断是否为 快速点击
         if (ClickUtil.isFastClick(v)) return
-        dialogScheduleAddBinding?.let { binding ->
+        binding?.let { binding ->
             when (v?.id) {
                 // 弹窗 顶部 取消
                 binding.dialogScheduleAddTopCancelTv.id -> {
@@ -348,8 +348,10 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
         // 获取 选中 执行事件包名 。
         if (checkedPackageName.isNotEmpty()) {
             checkedPackageInfo =
-                LauncherHelper.findApplicationInfoByPackageName(mContext,
-                    checkedPackageName)
+                LauncherHelper.findApplicationInfoByPackageName(
+                    mContext,
+                    checkedPackageName
+                )
             // 如果选中 包名不为空时，设置选中 应用
             if (checkedPackageInfo != null) {
                 setChockedLauncherApplication(checkedPackageInfo!!)
@@ -399,21 +401,21 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
         val hourStr = BaseTools.getDateFormat("HH", Locale.getDefault()).format(scheduleDate)
         this.checkTimeHour = hourStr.toInt()
         // 设置 timePicker 时间
-        dialogScheduleAddBinding?.dialogScheduleAddContentNsv?.content_time_picker?.apply {
+        contentBinding?.contentTimePicker?.apply {
             hour = checkTimeHour
             minute = checkTimeMinute
         }
 
         // 是否 重复
         val isRepeat = schedule.scheduleRepeat
-        dialogScheduleAddBinding?.dialogScheduleAddContentRepeatSwitch?.isChecked = isRepeat
+        binding?.dialogScheduleAddContentRepeatSwitch?.isChecked = isRepeat
 
         // TODO: 2021/10/17 可能多个标签
         // 设置标签
         val scheduleTag = schedule.scheduleTag
-        dialogScheduleAddBinding?.dialogScheduleAddContentTagEt?.setText(scheduleTag)
+        binding?.dialogScheduleAddContentTagEt?.setText(scheduleTag)
         // 是否显示重复 日期 内容
-        dialogScheduleAddBinding?.dialogScheduleAddContentRepeatDateBnl?.visibility =
+        binding?.dialogScheduleAddContentRepeatDateBnl?.visibility =
             if (isRepeat) View.VISIBLE else View.GONE
     }
 
@@ -448,7 +450,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
         }
         // 是否需要重复。
         val repeatable =
-            dialogScheduleAddBinding?.dialogScheduleAddContentRepeatSwitch?.isChecked ?: false
+            binding?.dialogScheduleAddContentRepeatSwitch?.isChecked ?: false
         // 设置计划信息
         schedule?.apply {
             this.scheduleRepeat = repeatable
@@ -471,7 +473,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
 
             // 更新 计划 标签
             // TODO: 2021/10/19 TAG have many
-            this.scheduleTag = dialog_schedule_add_content_tag_et?.text.toString()
+            this.scheduleTag = binding?.dialogScheduleAddContentTagEt?.text.toString()
             // 设置计划状态 。
             this.scheduleStatus = ScheduleStatus.NOT_STARTED
         }
@@ -505,8 +507,10 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
             manager.findFragmentByTag("ChooseScheduleTypeDialogFragment") as ChooseScheduleTypeDialogFragment?
         if (chooseScheduleTypeDialogFragment == null) {
             chooseScheduleTypeDialogFragment =
-                ChooseScheduleTypeDialogFragment.getInstant(scheduleType,
-                    ChooseScheduleTypeDialogListenerImpl())
+                ChooseScheduleTypeDialogFragment.getInstant(
+                    scheduleType,
+                    ChooseScheduleTypeDialogListenerImpl()
+                )
         }
         if (!chooseScheduleTypeDialogFragment.isAdded && !chooseScheduleTypeDialogFragment.isVisible) {
             chooseScheduleTypeDialogFragment.show(manager, "ChooseScheduleTypeDialogFragment")
@@ -528,7 +532,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
      * @param type 计划类型
      */
     private fun updateScheduleActionView(@ScheduleType scheduleType: Int) {
-        dialogScheduleAddBinding?.let {
+        binding?.let {
             // 是否需要显示
             val needShow = TaskValue.SCHEDULE_LAUNCHER == scheduleType
             // 设置是否显示
@@ -600,7 +604,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
      * 设置选中的程序信息
      */
     fun setChockedLauncherApplication(packageInfo: PackageInfo) {
-        dialogScheduleAddBinding?.dialogScheduleAddContentActionNameTv?.text =
+        binding?.dialogScheduleAddContentActionNameTv?.text =
             packageInfo.applicationInfo.loadLabel(mContext.packageManager)
         this.checkedPackageInfo = packageInfo
         this.checkedPackageName = packageInfo.packageName
@@ -664,7 +668,7 @@ class ScheduleAddDialogFragment private constructor() : AbsBaseDialogFragment(),
         this.repeatType = repeatType
         this.checkedRepeatDate = repeatDateArray ?: BASE_REPEAT_DATE_ARRAY
         // 设置显示 内容。
-        dialogScheduleAddBinding?.dialogScheduleAddContentRepeatDateDetailTv?.text =
+        binding?.dialogScheduleAddContentRepeatDateDetailTv?.text =
             getRepeatDateString(repeatType, repeatDateArray)
     }
 

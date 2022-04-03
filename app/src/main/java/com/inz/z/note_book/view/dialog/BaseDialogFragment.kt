@@ -11,7 +11,7 @@ import androidx.fragment.app.DialogFragment
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseDialogFragment
 import com.inz.z.note_book.R
-import kotlinx.android.synthetic.main.base_dialog_layout.*
+import com.inz.z.note_book.databinding.BaseDialogLayoutBinding
 import org.jetbrains.annotations.Contract
 import kotlin.String as String1
 
@@ -34,6 +34,7 @@ class BaseDialogFragment private constructor() : AbsBaseDialogFragment() {
     }
 
     private var builder: Builder? = null
+    private var binding: BaseDialogLayoutBinding? = null
 
     override fun initWindow() {
         setStyle(DialogFragment.STYLE_NORMAL, R.style.NoteBookAppTheme_Dialog)
@@ -41,6 +42,13 @@ class BaseDialogFragment private constructor() : AbsBaseDialogFragment() {
 
     override fun getLayoutId(): Int {
         return R.layout.base_dialog_layout
+    }
+
+    override fun useViewBinding(): Boolean = true
+
+    override fun getViewBindingView(): View? {
+        binding = BaseDialogLayoutBinding.inflate(layoutInflater)
+        return binding?.root
     }
 
     override fun initView() {
@@ -65,6 +73,11 @@ class BaseDialogFragment private constructor() : AbsBaseDialogFragment() {
             setBackgroundDrawableResource(android.R.color.transparent)
         }
         isCancelable = true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 
     /**
@@ -169,7 +182,7 @@ class BaseDialogFragment private constructor() : AbsBaseDialogFragment() {
      * 设置中间提示
      */
     private fun setContentMessage(message: SpannableStringBuilder) {
-        base_dialog_content_message_tv?.apply {
+        binding?.baseDialogContentMessageTv?.apply {
             gravity = View.VISIBLE
             text = message
         }
@@ -183,22 +196,22 @@ class BaseDialogFragment private constructor() : AbsBaseDialogFragment() {
             L.w(TAG, "setContentView: this $contentView is already added parent view. ")
             return
         }
-        base_dialog_content_ll?.addView(contentView)
-        base_dialog_content_message_tv?.visibility = View.GONE
+        binding?.baseDialogContentLl?.addView(contentView)
+        binding?.baseDialogContentMessageTv?.visibility = View.GONE
     }
 
     /**
      * 设置标题
      */
     private fun setTitle(@NonNull title: String1) {
-        base_dialog_title_tv?.text = title
+        binding?.baseDialogTitleTv?.text = title
     }
 
     @Contract(value = "Null -> false")
     private fun setTitleIcon(@NonNull show: Boolean, @DrawableRes iconRes: Int?) {
-        base_dialog_title_icon_iv?.visibility = if (show) View.VISIBLE else View.GONE
+        binding?.baseDialogTitleIconIv?.visibility = if (show) View.VISIBLE else View.GONE
         if (show && mContext != null && iconRes != null) {
-            base_dialog_title_icon_iv?.setImageDrawable(
+            binding?.baseDialogTitleIconIv?.setImageDrawable(
                 ContextCompat.getDrawable(
                     mContext,
                     iconRes
@@ -211,7 +224,7 @@ class BaseDialogFragment private constructor() : AbsBaseDialogFragment() {
      * 设置左侧按钮
      */
     private fun setLeftBtn(btn: String1, clickListener: View.OnClickListener?) {
-        base_dialog_left_btn?.apply {
+        binding?.baseDialogLeftBtn?.apply {
             visibility = View.VISIBLE
             text = btn
             setOnClickListener(clickListener)
@@ -222,7 +235,7 @@ class BaseDialogFragment private constructor() : AbsBaseDialogFragment() {
      * 设置中间按钮
      */
     private fun setCenterBtn(btn: String1, clickListener: View.OnClickListener?) {
-        base_dialog_center_btn?.apply {
+        binding?.baseDialogCenterBtn?.apply {
             visibility = View.VISIBLE
             text = btn
             setOnClickListener(clickListener)
@@ -233,7 +246,7 @@ class BaseDialogFragment private constructor() : AbsBaseDialogFragment() {
      * 设置右侧按钮
      */
     private fun setRightBtn(btn: String1, clickListener: View.OnClickListener?) {
-        base_dialog_right_btn?.apply {
+        binding?.baseDialogRightBtn?.apply {
             visibility = View.VISIBLE
             text = btn
             setOnClickListener(clickListener)

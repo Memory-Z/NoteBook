@@ -1,12 +1,13 @@
 package com.inz.z.note_book.view.fragment
 
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.inz.z.base.view.AbsBaseFragment
 import com.inz.z.note_book.R
+import com.inz.z.note_book.databinding.FragmentLogRootBinding
 import com.inz.z.note_book.view.activity.listener.MainActivityListener
 import com.inz.z.note_book.view.fragment.adapter.LogFragmentStateAdapter
-import kotlinx.android.synthetic.main.fragment_log_root.*
 
 /**
  * 日志界面
@@ -35,26 +36,39 @@ class LogFragment : AbsBaseFragment() {
 
     private var logSystemFragment: LogSystemFragment? = null
     private var logOperationFragment: LogOperationFragment? = null
+    private var binding: FragmentLogRootBinding? = null
 
 
     override fun initWindow() {
 
     }
 
-    override fun getLayoutId(): Int = R.layout.fragment_log_root
+    override fun getLayoutId(): Int {
+        return R.layout.fragment_log_root
+    }
+
+    override fun useViewBinding(): Boolean = true
+
+    override fun getViewBindingView(): View? {
+        binding = FragmentLogRootBinding.inflate(layoutInflater)
+        return binding?.root
+    }
 
     override fun initView() {
         tabNameTextArray.add(mContext.getString(R.string.system_log))
         tabNameTextArray.add(mContext.getString(R.string.operation_log))
-        fm_log_tab_layout?.apply {
+        binding?.fmLogTabLayout?.apply {
             tabNameTextArray.forEach {
                 this.addTab(newTab().setText(it))
             }
-            setupWithViewPager(fm_log_vp)
+            setupWithViewPager(binding?.fmLogVp)
 
         }
-        fragmentAdapter = LogFragmentStateAdapter(childFragmentManager, FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
-        fm_log_vp.apply {
+        fragmentAdapter = LogFragmentStateAdapter(
+            childFragmentManager,
+            FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+        )
+        binding?.fmLogVp?.apply {
             this.adapter = this@LogFragment.fragmentAdapter
         }
 
@@ -81,6 +95,10 @@ class LogFragment : AbsBaseFragment() {
 //        tabLayoutMediator?.detach()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
+    }
 
     /* ------------------------------ Fragment List ------------------------------- */
 

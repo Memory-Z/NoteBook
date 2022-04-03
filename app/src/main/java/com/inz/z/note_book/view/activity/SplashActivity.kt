@@ -10,7 +10,6 @@ import com.inz.z.note_book.BuildConfig
 import com.inz.z.note_book.R
 import com.inz.z.note_book.databinding.SplashLayoutBinding
 import com.inz.z.note_book.service.NotificationForegroundService
-import kotlinx.android.synthetic.main.splash_layout.*
 
 /**
  *
@@ -24,9 +23,9 @@ class SplashActivity : AbsBaseActivity() {
         const val TAG = "SplashActivity"
     }
 
-    private lateinit var splashLayoutBinding: SplashLayoutBinding
     private var isPause = false
 
+    private var binding: SplashLayoutBinding? = null
 
     override fun initWindow() {
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
@@ -42,25 +41,25 @@ class SplashActivity : AbsBaseActivity() {
         return R.layout.splash_layout
     }
 
-    override fun useDataBinding(): Boolean {
+    override fun useViewBinding(): Boolean {
         return true
     }
 
-    override fun setDataBindingView() {
-        super.setDataBindingView()
-        splashLayoutBinding = SplashLayoutBinding.inflate(layoutInflater)
+    override fun setViewBinding() {
+        super.setViewBinding()
+        binding = SplashLayoutBinding.inflate(layoutInflater)
             .apply {
                 setContentView(this.root)
             }
     }
 
     override fun getRootContentView(): View? {
-        return splash_root_brl
+        return binding?.splashRootBrl
     }
 
     override fun initView() {
-        splashLayoutBinding.splashVersionTv.text = BuildConfig.VERSION_NAME
-        splashLayoutBinding.splashTopEndNumTv.text = time.toString()
+        binding?.splashVersionTv?.text = BuildConfig.VERSION_NAME
+        binding?.splashTopEndNumTv?.text = time.toString()
     }
 
     override fun initData() {
@@ -84,6 +83,11 @@ class SplashActivity : AbsBaseActivity() {
         isPause = true
     }
 
+    override fun onDestroyTask() {
+        super.onDestroyTask()
+        binding = null
+    }
+
     override fun needCheckVersion(): Boolean {
         return false
     }
@@ -94,13 +98,13 @@ class SplashActivity : AbsBaseActivity() {
      * 设置右上角倒计时。
      */
     private fun setRightTopTimer() {
-        splash_top_end_num_tv.postDelayed({
+        binding?.splashTopEndNumTv?.postDelayed({
             if (time == 1) {
                 gotoMainActivity()
             } else {
                 setRightTopTimer()
                 time -= 1
-                splashLayoutBinding.splashTopEndNumTv.text = time.toString()
+                binding?.splashTopEndNumTv?.text = time.toString()
             }
         }, 1000)
     }

@@ -4,9 +4,6 @@ import android.app.*
 import android.content.*
 import android.os.Build
 import android.os.IBinder
-import android.text.format.DateUtils
-import android.view.LayoutInflater
-import android.view.View
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -19,7 +16,6 @@ import com.inz.z.note_book.database.controller.ScreenTimeController
 import com.inz.z.note_book.util.ClockAlarmManager
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.view.activity.MainActivity
-import kotlinx.android.synthetic.main.notification_screen_layout.view.*
 import java.util.*
 
 /**
@@ -170,11 +166,12 @@ class NotificationForegroundService : Service() {
                     .or(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP)
                     .or(Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
+        val flag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_CANCEL_CURRENT
         return PendingIntent.getActivity(
             applicationContext,
             NOTIFICATION_TO_MAIN_REQUEST_CODE,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            flag
         )
     }
 

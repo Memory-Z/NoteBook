@@ -8,7 +8,7 @@ import com.inz.z.base.util.FileUtils
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseFragment
 import com.inz.z.note_book.R
-import com.inz.z.note_book.util.FileUtil
+import com.inz.z.note_book.databinding.FragmentLogSystemBinding
 import com.inz.z.note_book.view.fragment.adapter.LogSystemRvAdapter
 import com.inz.z.note_book.view.fragment.bean.LogSystemInfo
 import io.reactivex.Observable
@@ -16,8 +16,6 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DefaultObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_log_system.*
-import java.io.File
 
 /**
  *
@@ -40,13 +38,23 @@ class LogSystemFragment : AbsBaseFragment() {
 
     private var layoutManager: LinearLayoutManager? = null
     private var logSystemAdapter: LogSystemRvAdapter? = null
+    private var binding: FragmentLogSystemBinding? = null
 
 
     override fun initWindow() {
 
     }
 
-    override fun getLayoutId(): Int = R.layout.fragment_log_system
+    override fun getLayoutId(): Int {
+        return R.layout.fragment_log_system
+    }
+
+    override fun useViewBinding(): Boolean = true
+
+    override fun getViewBindingView(): View? {
+        binding = FragmentLogSystemBinding.inflate(layoutInflater)
+        return binding?.root
+    }
 
     override fun initView() {
         layoutManager = LinearLayoutManager(mContext)
@@ -55,7 +63,7 @@ class LogSystemFragment : AbsBaseFragment() {
             .apply {
                 listener = logSystemRvAdapterLister
             }
-        fm_log_sys_rv?.apply {
+        binding?.fmLogSysRv?.apply {
             this.layoutManager = this@LogSystemFragment.layoutManager
             this.adapter = logSystemAdapter
         }
@@ -68,6 +76,11 @@ class LogSystemFragment : AbsBaseFragment() {
     override fun onDetach() {
         super.onDetach()
         logSystemRvAdapterLister = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
     }
 
     /**

@@ -13,13 +13,13 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.inz.z.base.R
 import com.inz.z.base.broadcast.VersionUpdateBroadcast
+import com.inz.z.base.databinding.BaseUpdateVersionBinding
 import com.inz.z.base.entity.Constants
 import com.inz.z.base.entity.UpdateVersionBean
 import com.inz.z.base.util.L
 import com.inz.z.base.util.LauncherHelper
 import com.inz.z.base.util.SPHelper
 import com.inz.z.base.view.AbsBaseDialogFragment
-import kotlinx.android.synthetic.main.base_update_version.*
 import java.io.File
 
 /**
@@ -94,6 +94,8 @@ class UpdateVersionDialog : AbsBaseDialogFragment() {
     private var updateBroadcastListener: UpdateVersionListenerImpl? = null
     private var updateVersion: UpdateVersionBean? = null
 
+    private var binding: BaseUpdateVersionBinding? = null
+
     /**
      * 当前状态
      */
@@ -115,10 +117,17 @@ class UpdateVersionDialog : AbsBaseDialogFragment() {
         return R.layout.base_update_version
     }
 
+    override fun useViewBinding(): Boolean = true
+
+    override fun getViewBindingView(): View? {
+        binding = BaseUpdateVersionBinding.inflate(layoutInflater)
+        return binding?.root
+    }
+
     override fun initView() {
         isCancelable = false
-        base_update_version_background_tv?.setOnClickListener { this.dismissAllowingStateLoss() }
-        base_update_version_later_notification_tv?.setOnClickListener {
+        binding?.baseUpdateVersionBackgroundTv?.setOnClickListener { this.dismissAllowingStateLoss() }
+        binding?.baseUpdateVersionLaterNotificationTv?.setOnClickListener {
             if (ignoreVersion) {
                 updateVersion?.let {
                     SPHelper.getInstance().saveIgnoreCurrentVersion(it.versionCode)
@@ -131,12 +140,12 @@ class UpdateVersionDialog : AbsBaseDialogFragment() {
             }
             this.dismissAllowingStateLoss()
         }
-        base_update_version_operation_download_tv?.setOnClickListener {
+        binding?.baseUpdateVersionOperationDownloadTv?.setOnClickListener {
             updateVersion?.let {
                 sendDownloadBroadcast(it.url)
             }
         }
-        base_update_version_finish_tv?.setOnClickListener {
+        binding?.baseUpdateVersionFinishTv?.setOnClickListener {
             when (state) {
                 STATE_DOWNLOAD_SUCCESS -> {
                     val intent = LauncherHelper.installApk(
@@ -180,12 +189,12 @@ class UpdateVersionDialog : AbsBaseDialogFragment() {
         }
 
         if (showUpdateNum == Constants.VersionUpdate.MAX_SHOW_UPDATE_NUMBER) {
-            base_update_version_later_notification_tv?.text =
+            binding?.baseUpdateVersionLaterNotificationTv?.text =
                 getString(R.string.ignore_current_version)
             ignoreVersion = true
         }
-        base_update_version_content_tv?.text = content
-        base_update_version_content_name_tv?.text = newVersionName
+        binding?.baseUpdateVersionContentTv?.text = content
+        binding?.baseUpdateVersionContentNameTv?.text = newVersionName
 
     }
 
@@ -195,6 +204,7 @@ class UpdateVersionDialog : AbsBaseDialogFragment() {
             VersionUpdateBroadcast.removeListener(it)
         }
         updateBroadcastListener = null
+        binding = null
     }
 
     override fun onStart() {
@@ -240,25 +250,27 @@ class UpdateVersionDialog : AbsBaseDialogFragment() {
      * 切换底部显示内容
      */
     private fun targetBottomContent(@VersionState state: Int) {
-        when (state) {
-            STATE_DEFAULT -> {
-                base_update_version_operation_ll?.visibility = View.VISIBLE
-                base_update_version_progress_ll?.visibility = View.GONE
-                base_update_version_finish_ll?.visibility = View.GONE
-            }
-            STATE_DOWNLOADING -> {
-                base_update_version_operation_ll?.visibility = View.GONE
-                base_update_version_progress_ll?.visibility = View.VISIBLE
-                base_update_version_finish_ll?.visibility = View.GONE
-            }
-            STATE_DOWNLOAD_FAILURE,
-            STATE_DOWNLOAD_SUCCESS -> {
-                base_update_version_operation_ll?.visibility = View.GONE
-                base_update_version_progress_ll?.visibility = View.GONE
-                base_update_version_finish_ll?.visibility = View.VISIBLE
-            }
-            STATE_UNKNOWN -> {
+        binding?.let {
+            when (state) {
+                STATE_DEFAULT -> {
+                    it.baseUpdateVersionOperationLl.visibility = View.VISIBLE
+                    it.baseUpdateVersionProgressLl.visibility = View.GONE
+                    it.baseUpdateVersionFinishLl.visibility = View.GONE
+                }
+                STATE_DOWNLOADING -> {
+                    it.baseUpdateVersionOperationLl.visibility = View.GONE
+                    it.baseUpdateVersionProgressLl.visibility = View.VISIBLE
+                    it.baseUpdateVersionFinishLl.visibility = View.GONE
+                }
+                STATE_DOWNLOAD_FAILURE,
+                STATE_DOWNLOAD_SUCCESS -> {
+                    it.baseUpdateVersionOperationLl.visibility = View.GONE
+                    it.baseUpdateVersionProgressLl.visibility = View.GONE
+                    it.baseUpdateVersionFinishLl.visibility = View.VISIBLE
+                }
+                STATE_UNKNOWN -> {
 
+                }
             }
         }
     }
@@ -268,7 +280,7 @@ class UpdateVersionDialog : AbsBaseDialogFragment() {
      */
     private fun setDownloadProgress(currentProgress: Long, totalProgress: Long) {
         val currentP = (currentProgress * 100 / totalProgress).toInt()
-        base_update_version_progress_bar?.progress = currentP
+        binding?.baseUpdateVersionProgressBar?.progress = currentP
     }
 
     /**
@@ -289,7 +301,7 @@ class UpdateVersionDialog : AbsBaseDialogFragment() {
         override fun downloadSuccess(fileUrl: String, filePath: String) {
             state = STATE_DOWNLOAD_SUCCESS
             mContext?.let {
-                base_update_version_finish_tv?.apply {
+                binding?.baseUpdateVersionFinishTv?.apply {
                     text = it.getString(R.string._install)
                     backgroundTintList =
                         ColorStateList.valueOf(ContextCompat.getColor(it, R.color.colorPrimary))
@@ -302,7 +314,7 @@ class UpdateVersionDialog : AbsBaseDialogFragment() {
         override fun downloadFailure(message: String, fileUrl: String) {
             state = STATE_DOWNLOAD_FAILURE
             mContext?.let {
-                base_update_version_finish_tv?.apply {
+                binding?.baseUpdateVersionFinishTv?.apply {
                     text = it.getString(R.string._retry)
                     backgroundTintList =
                         ColorStateList.valueOf(ContextCompat.getColor(it, R.color.danger_color))

@@ -12,6 +12,7 @@ import androidx.transition.*
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.local.LocalImageInfo
+import com.inz.z.note_book.databinding.ActivitySystemFileBinding
 import com.inz.z.note_book.util.PermissionUtil
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.dialog.BaseDialogFragment
@@ -19,7 +20,6 @@ import com.inz.z.note_book.view.fragment.BaseSysFileFragment
 import com.inz.z.note_book.view.fragment.ImageDetailFragment
 import com.inz.z.note_book.view.fragment.SysFileAudioFragment
 import com.inz.z.note_book.view.fragment.SysFileImageFragment
-import kotlinx.android.synthetic.main.activity_system_file.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -60,6 +60,8 @@ class SystemFileActivity : BaseNoteActivity() {
      */
     private var showList = AtomicBoolean(true)
 
+    private var binding: ActivitySystemFileBinding? = null
+
     @Target(AnnotationTarget.PROPERTY, AnnotationTarget.VALUE_PARAMETER)
     @Retention(AnnotationRetention.SOURCE)
     private annotation class ContentType
@@ -71,8 +73,18 @@ class SystemFileActivity : BaseNoteActivity() {
         return R.layout.activity_system_file
     }
 
+    override fun useViewBinding(): Boolean = true
+
+    override fun setViewBinding() {
+        super.setViewBinding()
+        binding = ActivitySystemFileBinding.inflate(layoutInflater)
+            .apply {
+                setContentView(root)
+            }
+    }
+
     override fun initView() {
-        setSupportActionBar(sys_file_top_btal.toolbar)
+        setSupportActionBar(binding?.sysFileTopBtal?.toolbar)
 
     }
 
@@ -95,6 +107,11 @@ class SystemFileActivity : BaseNoteActivity() {
                 currentFragment?.refreshView()
             }
         }
+    }
+
+    override fun onDestroyTask() {
+        super.onDestroyTask()
+        binding = null
     }
 
     /**

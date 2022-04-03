@@ -11,8 +11,8 @@ import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.local.LocalImageInfo
+import com.inz.z.note_book.databinding.ItemImageBaseBinding
 import com.inz.z.note_book.view.widget.layout.LoadMoreLayout
-import kotlinx.android.synthetic.main.item_image_base.view.*
 
 /**
  * 系统文件 适配器
@@ -67,8 +67,8 @@ class SysFileImageRvAdapter(mContext: Context?) :
     override fun onCreateVH(parent: ViewGroup, viewType: Int): SysFileImageBaseRvViewHolder {
         when (viewType) {
             VIEW_TYPE_ITEM -> {
-                val view = mLayoutInflater.inflate(R.layout.item_image_base, parent, false)
-                return SysFileImageItemRvViewHolder(view, listener)
+                val binding = ItemImageBaseBinding.inflate(mLayoutInflater, parent, false)
+                return SysFileImageItemRvViewHolder(binding, listener)
             }
             else -> {
                 loadMoreLayout = LoadMoreLayout(mContext)
@@ -88,15 +88,16 @@ class SysFileImageRvAdapter(mContext: Context?) :
         holder.listener = listener
         when (holder) {
             is SysFileImageItemRvViewHolder -> {
-                holder.nameTv.text = info?.localImageName
-                holder.contentLl.visibility = if (this.showList) View.VISIBLE else View.GONE
+                holder.binding.itemImageBaseContentTitleTv.text = info?.localImageName
+                holder.binding.itemImageBaseContentLl.visibility =
+                    if (this.showList) View.VISIBLE else View.GONE
                 Glide.with(mContext).load(info?.localImagePath).apply(requestOption)
-                    .into(holder.shortIv)
+                    .into(holder.binding.itemImageBaseShortIv)
                 ViewCompat.setTransitionName(
-                    holder.shortIv,
+                    holder.binding.itemImageBaseShortIv,
                     holder.itemView.context.getString(R.string.base_image) + "_item_" + position
                 )
-                holder.dateTv.text = info?.imageModifiedDateStr
+                holder.binding.itemImageBaseContentDateTv.text = info?.imageModifiedDateStr
             }
             is SysFileImageMoreRvViewHolder -> {
             }
@@ -112,18 +113,18 @@ class SysFileImageRvAdapter(mContext: Context?) :
     ) : AbsBaseRvViewHolder(itemView) {}
 
     class SysFileImageItemRvViewHolder(
-        itemView: View,
+        val binding: ItemImageBaseBinding,
         listener: SysFileImageRvAdapterListener?
     ) :
-        SysFileImageBaseRvViewHolder(itemView, listener), View.OnClickListener {
+        SysFileImageBaseRvViewHolder(binding.root, listener), View.OnClickListener {
 
-        val nameTv = itemView.item_image_base_content_title_tv
-        val dateTv = itemView.item_image_base_content_date_tv
-        val shortIv = itemView.item_image_base_short_iv
-        val contentLl = itemView.item_image_base_content_ll
+//        val nameTv = itemView.item_image_base_content_title_tv
+//        val dateTv = itemView.item_image_base_content_date_tv
+//        val shortIv = itemView.item_image_base_short_iv
+//        val contentLl = itemView.item_image_base_content_ll
 
         init {
-            shortIv.setOnClickListener(this)
+            binding.itemImageBaseShortIv.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {
