@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="NoteBookAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="NoteBookAppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -33,7 +33,7 @@
 
     </style>
 
-    <style name="NoteBookAppTheme.Menu.Overflow" parent="Widget.AppCompat.PopupMenu.Overflow" >
+    <style name="NoteBookAppTheme.Menu.Overflow" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="overlapAnchor">false</item>
     </style>
 
@@ -135,7 +135,7 @@
     </style>
 
     <style name="NoteBookAppTheme.ImageView.Tint">
-<!--        <item name="android:tint">@color/card_inverse_color</item>-->
+        <!--        <item name="android:tint">@color/card_inverse_color</item>-->
     </style>
 
     <style name="NoteBookAppTheme.ImageView.Icon" parent="NoteBookAppTheme.ImageView">

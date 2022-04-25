@@ -225,9 +225,15 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         // 添加崩溃日志写入时间：
         sb.append("------------ CRASH_WRITER_TIME --------------------- \n")
                 .append(dateFormat.format(System.currentTimeMillis()))
-                .append("\n")
-                .append(BuildConfig.VERSION_NAME).append(" -- ").append(BuildConfig.VERSION_CODE)
-                .append("\n")
+                .append("\n");
+        if (crashHandlerListener != null) {
+            sb.append(crashHandlerListener.getVersionName())
+                    .append(" -- ")
+                    .append(crashHandlerListener.getVersionCode());
+        } else {
+            sb.append("----------------------------------------------");
+        }
+        sb.append("\n")
                 .append("------------ CRASH_WRITER_TIME --------------------- \n")
                 .append("\n\n");
         Writer writer = new StringWriter();
@@ -344,5 +350,19 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
          */
         @UiThread
         void showErrorTintOnUI();
+
+        /**
+         * 获取版本名
+         *
+         * @return 名
+         */
+        String getVersionName();
+
+        /**
+         * 获取版本 号
+         *
+         * @return 号
+         */
+        String getVersionCode();
     }
 }
