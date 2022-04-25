@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.inz.z.base.util.L
 import com.inz.z.base.util.ProviderUtil
-import com.inz.z.base.util.ToastUtil
 import com.inz.z.note_book.R
 import com.inz.z.note_book.base.BaseLifecycleObserver
 import com.inz.z.note_book.base.FragmentContentTypeValue
@@ -45,19 +44,20 @@ class SetWallpaperActivity : BaseNoteActivity(), View.OnClickListener {
          */
         private const val FRAGMENT_TAG_PREFIX = "FragmentSetWallpaper_"
 
+        /**
+         * 设置壁纸权限
+         */
+        private val REQUEST_SET_WALLPAPER_PERMISSION = arrayOf(
+            Manifest.permission.SET_WALLPAPER
+        )
+
+        private val REQUEST_READ_FILE_PERMISSION = arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+
     }
 
-    /**
-     * 设置壁纸权限
-     */
-    private val REQUEST_SET_WALLPAPER_PERMISSTION = arrayOf(
-        Manifest.permission.SET_WALLPAPER
-    )
-
-    private val REQUEST_READ_FILE_PERMISSION = arrayOf(
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
-    )
 
     private var binding: ActivitySetWallpaperLayoutBinding? = null
 
@@ -104,7 +104,7 @@ class SetWallpaperActivity : BaseNoteActivity(), View.OnClickListener {
     }
 
     override fun initView() {
-        QMUIStatusBarHelper.setStatusBarLightMode(this)
+//        QMUIStatusBarHelper.setStatusBarLightMode(this)
 
         setSupportActionBar(binding?.setWallpaperTopToolbar)
         binding?.let {
@@ -432,7 +432,7 @@ class SetWallpaperActivity : BaseNoteActivity(), View.OnClickListener {
             }
             // 无权限 请求权限
             requestPermissions(
-                REQUEST_SET_WALLPAPER_PERMISSTION,
+                REQUEST_SET_WALLPAPER_PERMISSION,
                 Constants.WallpaperParams.SET_WALLPAPER_REQUEST_CODE
             )
         }

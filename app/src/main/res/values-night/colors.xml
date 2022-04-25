@@ -26,7 +26,10 @@
     <color name="card_inverse_thread_color">@color/textColor50</color>
     <color name="card_inverse_four_color">@color/textColor30</color>
 
-    <color name="cardColor">#666666</color>
+    <color name="tool_bar_color">@color/black</color>
+
+    <color name="cardColor">@color/black</color>
+    <color name="cardBackgroundColor">#666666</color>
 
     <color name="textColor">#FFF5F5F5</color>
     <color name="textColor70">#B3F5F5F5</color>

@@ -15,7 +15,7 @@
             layout="@layout/top_search_nav_layout" />
 
         <com.inz.z.base.view.widget.BaseRelativeLayout
-            android:id="@+id/note_main_centent_brl"
+            android:id="@+id/note_main_content_brl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/main_note_nav_top_include"

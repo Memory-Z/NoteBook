@@ -76,8 +76,7 @@
     </style>
 
     <style name="NoteBookAppTheme.TopAction">
-        <item name="android:background">@color/card_main_color</item>
-        <item name="android:backgroundTint">@color/textInverseColor</item>
+        <item name="android:background">@color/tool_bar_color</item>
     </style>
     <!-- 顶部栏，连同顶部 -->
     <style name="NoteBookAppTheme.TopAction.NoAction" parent="NoteBookAppTheme.TopAction">

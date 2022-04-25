@@ -95,10 +95,10 @@ class RepeatTypeActivity : AbsBaseActivity(), CompoundButton.OnCheckedChangeList
     }
 
     override fun initView() {
-        // 设置状态栏 为 白日模式
-        QMUIStatusBarHelper.setStatusBarLightMode(this)
-        // 设置状态栏 颜色
-        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
+//        // 设置状态栏 为 白日模式
+//        QMUIStatusBarHelper.setStatusBarLightMode(this)
+//        // 设置状态栏 颜色
+//        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
 
         activityChooseRepeatTypeBinding?.chooseRepeatTypeToolbar?.let {
             setSupportActionBar(it)

@@ -74,9 +74,9 @@ class ScheduleActivity : BaseNoteActivity(), View.OnClickListener {
 
     override fun initView() {
         // 设置状态栏 为 白日模式
-        QMUIStatusBarHelper.setStatusBarLightMode(this)
+//        QMUIStatusBarHelper.setStatusBarLightMode(this)
         // 设置状态栏 颜色
-        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
+//        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
 
         // 设置 Toolbar 状态栏
         setSupportActionBar(activityScheduleLayoutBinding?.scheduleTopToolBar)

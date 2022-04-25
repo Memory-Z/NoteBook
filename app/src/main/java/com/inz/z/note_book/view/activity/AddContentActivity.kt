@@ -103,7 +103,7 @@ class AddContentActivity : BaseNoteActivity() {
 
     override fun initView() {
         setSupportActionBar(activityBaseAddContentBinding?.baseAddContentTopToolbar)
-        QMUIStatusBarHelper.setStatusBarLightMode(this)
+//        QMUIStatusBarHelper.setStatusBarLightMode(this)
     }
 
     override fun initData() {

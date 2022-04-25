@@ -91,8 +91,8 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
     }
 
     override fun initView() {
-        QMUIStatusBarHelper.setStatusBarLightMode(this)
-        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
+//        QMUIStatusBarHelper.setStatusBarLightMode(this)
+//        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
         noteInfoScheduleLayout = findViewById(R.id.note_info_add_content_schedule_layout)
         binding?.let {
             it.noteInfoAddTopFinishTv.setOnClickListener(this)

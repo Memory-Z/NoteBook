@@ -1,6 +1,10 @@
 package com.inz.z.note_book.util
 
+import android.app.UiModeManager
+import android.content.Context
+import android.content.res.Configuration
 import android.graphics.RectF
+import com.inz.z.base.util.L
 
 /**
  *  View 工具 类
@@ -35,5 +39,22 @@ object ViewUtil {
             )
         }
         return null
+    }
+
+    /**
+     * 判断当前是否为深色模式 。
+     *
+     */
+    fun getIsNightMode(mContext: Context): Boolean {
+        val uiModeManager = mContext.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager?
+        var useNightMode = false
+        uiModeManager?.let {
+            val mode = it.nightMode
+            useNightMode = (mode == UiModeManager.MODE_NIGHT_YES)
+                .or(mode == UiModeManager.MODE_NIGHT_AUTO)
+        }
+        val uiMode = mContext.resources.configuration.uiMode
+        return ((uiMode.and(Configuration.UI_MODE_TYPE_MASK)) == Configuration.UI_MODE_NIGHT_YES)
+            .or(useNightMode)
     }
 }

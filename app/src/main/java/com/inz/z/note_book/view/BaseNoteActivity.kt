@@ -1,29 +1,24 @@
 package com.inz.z.note_book.view
 
-import android.app.Activity
-import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.widget.ContentFrameLayout
-import androidx.core.view.marginBottom
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.BuildConfig
 import com.inz.z.note_book.R
 import com.inz.z.note_book.base.BaseLifecycleObserver
+import com.inz.z.note_book.util.ViewUtil
 import com.inz.z.note_book.view.widget.FullFrameLayout
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper
-import java.lang.Exception
-import kotlin.reflect.jvm.internal.impl.metadata.ProtoBuf
 
 /**
  *
@@ -60,7 +55,20 @@ abstract class BaseNoteActivity : AbsBaseActivity() {
         lifecycleListenerList?.forEach {
             lifecycle.addObserver(it)
         }
+        setNightMode(ViewUtil.getIsNightMode(this))
         super.onCreate(savedInstanceState)
+        initRootViewBackground()
+    }
+
+    private fun initRootViewBackground() {
+        val rootView: View? = findViewById(android.R.id.content)
+        rootView?.setBackgroundColor(
+            ResourcesCompat.getColor(
+                resources,
+                R.color.cardBackgroundColor,
+                null
+            )
+        )
     }
 
     override fun onResume() {
@@ -80,7 +88,7 @@ abstract class BaseNoteActivity : AbsBaseActivity() {
 
     override fun onNightModeChanged(mode: Int) {
         super.onNightModeChanged(mode)
-        L.d(TAG, "onNightModeChanged: ")
+        L.d(TAG, "onNightModeChanged: mode =  $mode")
         when (mode) {
             // 不开启
             AppCompatDelegate.MODE_NIGHT_NO -> {
@@ -95,10 +103,11 @@ abstract class BaseNoteActivity : AbsBaseActivity() {
                         resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
                     }
                 L.d(TAG, "onNightModeChanged: isNightMode = $isNightMode")
+                setNightMode(ViewUtil.getIsNightMode(this))
             }
             // 开启
             AppCompatDelegate.MODE_NIGHT_YES -> {
-
+                setNightMode(ViewUtil.getIsNightMode(this))
             }
             // 跟随电量
             AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY -> {
@@ -112,6 +121,21 @@ abstract class BaseNoteActivity : AbsBaseActivity() {
 
             }
         }
+    }
+
+    private fun setNightMode(nightMode: Boolean) {
+        L.i(TAG, "setNightMode: night = $nightMode")
+        if (nightMode) {
+            // 设置状态栏 为 白日模式
+            QMUIStatusBarHelper.setStatusBarDarkMode(this)
+            // 设置状态栏 颜色
+        } else {
+            // 设置状态栏 为 白日模式
+            QMUIStatusBarHelper.setStatusBarLightMode(this)
+//                    window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
+        }
+        // 设置状态栏 颜色
+        window.statusBarColor = ContextCompat.getColor(this, R.color.cardColor)
     }
 
     private fun addClockView() {

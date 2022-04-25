@@ -8,6 +8,7 @@
         android:id="@+id/top_search_nav_rl"
         android:layout_width="match_parent"
         android:layout_height="@dimen/tool_bar_height"
+        style="@style/NoteBookAppTheme.TopAction"
         app:base_center_layout="@id/top_search_nav_content_rl"
         app:base_left_layout="@id/top_search_nav_left_rl"
         app:base_right_layout="@id/top_search_nav_end_rl">

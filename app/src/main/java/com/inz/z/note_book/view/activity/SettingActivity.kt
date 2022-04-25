@@ -53,8 +53,8 @@ class SettingActivity : BaseNoteActivity() {
     }
 
     override fun initView() {
-        QMUIStatusBarHelper.setStatusBarLightMode(this)
-        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
+//        QMUIStatusBarHelper.setStatusBarLightMode(this)
+//        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
 
         setSupportActionBar(activitySettingLayoutBinding.settingInfoTopToolBar)
 

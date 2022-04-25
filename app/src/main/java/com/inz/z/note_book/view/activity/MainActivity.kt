@@ -74,7 +74,7 @@ class MainActivity : BaseNoteActivity() {
     private var viewType: Int = VIEW_TYPE_MAIN
 
     override fun initWindow() {
-        QMUIStatusBarHelper.setStatusBarLightMode(this)
+//        QMUIStatusBarHelper.setStatusBarLightMode(this)
     }
 
     override fun getLayoutId(): Int {

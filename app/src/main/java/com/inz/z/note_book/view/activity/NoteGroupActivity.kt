@@ -81,7 +81,7 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
     }
 
     override fun initView() {
-        QMUIStatusBarHelper.setStatusBarLightMode(this)
+//        QMUIStatusBarHelper.setStatusBarLightMode(this)
 
         mNoteInfoRecyclerAdapter = NoteInfoRecyclerAdapter(mContext)
         mNoteInfoRecyclerAdapter?.setNoteInfoRvAdapterListener(
