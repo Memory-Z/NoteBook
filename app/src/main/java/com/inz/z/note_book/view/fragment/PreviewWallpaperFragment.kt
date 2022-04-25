@@ -5,8 +5,10 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseFragment
 import com.inz.z.note_book.R
+import com.inz.z.note_book.database.bean.DesktopWallpaperInfo
 import com.inz.z.note_book.databinding.FragmentSetWallpaperPreviewBinding
 import com.inz.z.note_book.util.ClickUtil
 import com.inz.z.note_book.view.fragment.adapter.PreviewWallpaperRvAdapter
@@ -42,6 +44,11 @@ class PreviewWallpaperFragment : AbsBaseFragment(), View.OnClickListener {
      */
     interface PreviewWallpaperFragmentListener {
         /**
+         * 添加新壁纸
+         */
+        fun pickNewWallpaper()
+
+        /**
          * 添加 壁纸 设置
          */
         fun addWallpaperSetting()
@@ -68,6 +75,7 @@ class PreviewWallpaperFragment : AbsBaseFragment(), View.OnClickListener {
      * 预览 壁纸界面 适配器
      */
     private var previewWallpaperRvAdapter: PreviewWallpaperRvAdapter? = null
+    private var previewWallpaperLayoutManager: GridLayoutManager? = null
 
     /**
      * 适配器 监听
@@ -112,9 +120,19 @@ class PreviewWallpaperFragment : AbsBaseFragment(), View.OnClickListener {
             .apply {
                 listener = previewWallpaperRvAdapterListener
             }
+        previewWallpaperLayoutManager = GridLayoutManager(mContext, 2)
+            .apply {
+                // 设置行数
+                this.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        return 1
+                    }
+                }
+            }
         binding?.fmSetWallpaperPreviewRv?.apply {
-            layoutManager = GridLayoutManager(mContext, 2)
+            layoutManager = previewWallpaperLayoutManager
             adapter = previewWallpaperRvAdapter
+
         }
 
     }
@@ -130,16 +148,32 @@ class PreviewWallpaperFragment : AbsBaseFragment(), View.OnClickListener {
             ?.observe(
                 this,
                 Observer {
-                    // TODO: 2021/11/9 getLst
+                    it.add(DesktopWallpaperInfo().apply {
+                        isEmptyData = true
+                    })
+                    L.d(TAG, "initViewModel: wallpaper info list.size = ${it.size} -- list = [$it]")
+                    // 刷新数据
+                    if (it.isNotEmpty()) {
+                        previewWallpaperRvAdapter?.refreshData(it)
+                        targetContentView(true)
+                    }
                     // 停止 界面刷新
                     binding?.fmSetWallpaperPreviewSrl?.isRefreshing = false
                 }
             )
-        // 查询 全部 数据 。
-        desktopWallpaperViewModel?.findWallpaperList()
+
     }
 
     override fun initData() {
+        // 加载数据。
+    }
+
+    override fun onResume() {
+        super.onResume()
+        L.i(TAG, "onResume: ")
+        // 加载数据
+        // 查询 全部 数据 。
+        desktopWallpaperViewModel?.findWallpaperList()
     }
 
     override fun onDestroy() {
@@ -201,7 +235,18 @@ class PreviewWallpaperFragment : AbsBaseFragment(), View.OnClickListener {
      */
     private inner class PreviewWallpaperRvAdapterListenerImpl :
         PreviewWallpaperRvAdapter.PreviewWallpaperRvAdapterListener {
+
+        override fun onAddItemClick(v: View?) {
+            // 点击 跳转至选择界面
+            previewWallpaperFragmentListener?.pickNewWallpaper()
+
+        }
+
         override fun onItemClick(position: Int, v: View?) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onItemChoose(checked: Boolean, v: View?) {
             TODO("Not yet implemented")
         }
 

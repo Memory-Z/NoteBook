@@ -35,8 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/card_second_color"
-                android:orientation="vertical"
-                android:paddingTop="@dimen/status_bar_height">
+                android:orientation="vertical">
 
                 <RelativeLayout
                     android:id="@+id/mln_user_info_rl"

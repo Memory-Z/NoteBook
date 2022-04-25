@@ -307,6 +307,11 @@ object Constants {
          */
         const val SET_WALLPAPER_REQUEST_CODE = 0x00A1
 
+        /**
+         * 读取 文件 权限
+         */
+        const val READ_FILE_REQUEST_CODE = 0x00A2
+
     }
 
 

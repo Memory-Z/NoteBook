@@ -17,6 +17,7 @@ import androidx.appcompat.widget.ContentFrameLayout
 import androidx.core.view.marginBottom
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseActivity
+import com.inz.z.note_book.BuildConfig
 import com.inz.z.note_book.R
 import com.inz.z.note_book.base.BaseLifecycleObserver
 import com.inz.z.note_book.view.widget.FullFrameLayout
@@ -51,7 +52,7 @@ abstract class BaseNoteActivity : AbsBaseActivity() {
     }
 
     override fun resetBottomNavigationBar(): Boolean {
-        return true
+        return false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -149,4 +150,8 @@ abstract class BaseNoteActivity : AbsBaseActivity() {
         return fullFrameLayout
     }
 
+
+    override fun getCurrentVersionCode(): Int {
+        return BuildConfig.VERSION_CODE
+    }
 }

@@ -7,9 +7,9 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.MediaStore
 import android.view.*
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import com.inz.z.base.util.L
 import com.inz.z.base.util.ProviderUtil
 import com.inz.z.base.util.ToastUtil
@@ -54,12 +54,26 @@ class SetWallpaperActivity : BaseNoteActivity(), View.OnClickListener {
         Manifest.permission.SET_WALLPAPER
     )
 
+    private val REQUEST_READ_FILE_PERMISSION = arrayOf(
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
+
     private var binding: ActivitySetWallpaperLayoutBinding? = null
 
     /**
      * 桌面壁纸 ViewModel
      */
     private var desktopWallpaperViewModel: DesktopWallpaperViewModel? = null
+
+    /**
+     * 当前设置界面内容
+     * 保证显示的数据在 列表 最后一个数据
+     */
+    @SetWallpaperFragmentContentType
+    private var currentContentType: MutableList<Int> = mutableListOf(
+        FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_SET_WALLPAPER_PREVIEW
+    )
 
     /**
      * 当前是否正前往选择图片
@@ -122,6 +136,7 @@ class SetWallpaperActivity : BaseNoteActivity(), View.OnClickListener {
     override fun onResume() {
         super.onResume()
         // 权限 检查
+        checkHaveReadFilePermission()
         checkHaveSetWallpaperPermission()
     }
 
@@ -172,13 +187,18 @@ class SetWallpaperActivity : BaseNoteActivity(), View.OnClickListener {
                         val currentChooseFileBean = list?.firstOrNull()
                         // 判断 当前状态 是否前往选择图片
                         if (currentIsToPickImage?.get() == true) {
-                            // 更新选中图片至 ViewModel 中;
-                            desktopWallpaperViewModel?.currentChooseFileBeanLiveData?.postValue(
-                                currentChooseFileBean
-                            )
+                            // 更新选中图片至 ViewModel 中
+                            desktopWallpaperViewModel?.updateCurrentFileBean(currentChooseFileBean)
+                        }
+                        // 如果当显示界面 为 预览界面， 跳转至 编辑界面
+                        if (FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_SET_WALLPAPER_PREVIEW == currentContentType.last()) {
+                            targetContentView(FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_SET_WALLPAPER_EDIT)
                         }
                     }
 
+                } else {
+                    L.e(TAG, "onActivityResult: pick image fail !")
+                    // TODO: 2022/3/5 未选择图片 nothing to do.
                 }
             }
 
@@ -195,11 +215,41 @@ class SetWallpaperActivity : BaseNoteActivity(), View.OnClickListener {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == Constants.WallpaperParams.SET_WALLPAPER_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // 权限请求成功
-            } else {
-                // 仍无权限 .
-                // TODO: 2021/12/11 Toast/Snake
+            // 设置壁纸权限
+            binding?.let {
+
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 权限请求成功
+                    Snackbar
+                        .make(
+                            it.setWallpaperContentFragment,
+                            R.string.permission_request_set_wallpaper_success,
+                            Snackbar.LENGTH_SHORT
+                        )
+                        .show()
+                } else {
+                    // 仍无权限 .
+                    // TODO: 2021/12/11 Toast/Snake
+
+                }
+            }
+        } else if (requestCode == Constants.WallpaperParams.READ_FILE_REQUEST_CODE) {
+            // 文件读写权限
+            binding?.let {
+
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 提示 文件 读写成功。
+                    Snackbar
+                        .make(
+                            it.setWallpaperContentFragment,
+                            R.string.permission_request_file_success,
+                            Snackbar.LENGTH_SHORT
+                        )
+                        .show()
+                } else {
+                    // 提示 获取失败
+                    // TODO: 2022/2/28 设置 获取失败 提示 ，重试。
+                }
             }
         }
     }
@@ -262,9 +312,12 @@ class SetWallpaperActivity : BaseNoteActivity(), View.OnClickListener {
         // 如果 界面 未显示，显示 界面
         if (!fragment.isAdded && !fragment.isVisible) {
             val transaction = manager.beginTransaction()
-            transaction.add(R.id.set_wallpaper_content_fragment, fragment, fragmentTag)
+            transaction.replace(R.id.set_wallpaper_content_fragment, fragment, fragmentTag)
             transaction.commitAllowingStateLoss()
         }
+        // 判断 当前状态数据中是否有 对应数据
+        currentContentType.remove(contentType)
+        currentContentType.add(contentType)
     }
 
     /**
@@ -283,6 +336,9 @@ class SetWallpaperActivity : BaseNoteActivity(), View.OnClickListener {
             transaction.remove(it)
             transaction.commitAllowingStateLoss()
         }
+
+        // 判断数组 中是否存在当前界面类型，存在 则移除
+        currentContentType.remove(contentType)
     }
 
     /**
@@ -339,21 +395,41 @@ class SetWallpaperActivity : BaseNoteActivity(), View.OnClickListener {
      * 返回预览
      */
     private fun backToPreview() {
+        // 移除 壁纸编辑 界面
         removeContentView(FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_SET_WALLPAPER_EDIT)
 //        // 设置 显示 内容 。 预览
-//        targetContentView(FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_SET_WALLPAPER_PREVIEW)
+        targetContentView(FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_SET_WALLPAPER_PREVIEW)
         // 显示 非全屏
         targetFullScreenShow(false)
+    }
+
+    // TODO: 2022/2/22  ....
+
+    /**
+     * 检测是否有文件读写权限
+     */
+    private fun checkHaveReadFilePermission() {
+        // 无读取 文件权限 申请
+        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            requestPermissions(
+                REQUEST_READ_FILE_PERMISSION,
+                Constants.WallpaperParams.READ_FILE_REQUEST_CODE
+            )
+        }
     }
 
     /**
      * 检查是否拥有 权限，并进行请求
      */
     private fun checkHaveSetWallpaperPermission() {
-        if (checkSelfPermission(Manifest.permission.SET_WALLPAPER) == PackageManager.PERMISSION_GRANTED) {
-            // 有权限，不处理
-            ToastUtil.showToast("已有设置壁纸权限")
-        } else {
+        if (checkSelfPermission(Manifest.permission.SET_WALLPAPER) == PackageManager.PERMISSION_DENIED) {
+            binding?.let {
+                Snackbar.make(
+                    it.setWallpaperContentFragment,
+                    R.string.request_permission_storage_hint,
+                    Snackbar.LENGTH_INDEFINITE
+                ).show()
+            }
             // 无权限 请求权限
             requestPermissions(
                 REQUEST_SET_WALLPAPER_PERMISSTION,
@@ -375,6 +451,12 @@ class SetWallpaperActivity : BaseNoteActivity(), View.OnClickListener {
      */
     private inner class PreviewSetWallpaperFragmentListenerImpl :
         PreviewWallpaperFragment.PreviewWallpaperFragmentListener {
+
+        override fun pickNewWallpaper() {
+            L.i(TAG, "pickNewWallpaper: ")
+            pickImageWithIntent()
+        }
+
         override fun addWallpaperSetting() {
             L.i(TAG, "addWallpaperSetting: ")
             targetContentView(FragmentContentTypeValue.FRAGMENT_CONTENT_TYPE_SET_WALLPAPER_EDIT)
@@ -402,21 +484,9 @@ class SetWallpaperActivity : BaseNoteActivity(), View.OnClickListener {
     private inner class EditWallpaperFragmentListenerImpl :
         EditWallpaperFragment.EditWallpaperFragmentListener {
         override fun pickImage() {
-            // 设置 当前 状态 。
-            if (currentIsToPickImage == null) {
-                currentIsToPickImage = AtomicBoolean(true)
-            }
-            // 跳转选择图片
-            val intent = Intent()
-                .apply {
-                    action = Intent.ACTION_PICK
-                    data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                    type = "image/*"
-                }
-            this@SetWallpaperActivity.startActivityForResult(
-                intent,
-                Constants.WallpaperParams.CHOOSE_IMAGE_REQUEST_CODE
-            )
+            L.i(TAG, "pickImage: ")
+            // 选择 图片 文件
+            pickImageWithIntent()
         }
 
         override fun saveWallpaper() {
@@ -424,8 +494,32 @@ class SetWallpaperActivity : BaseNoteActivity(), View.OnClickListener {
         }
 
         override fun targetFullScreen(full: Boolean) {
+            L.i(TAG, "targetFullScreen: full = $full")
             // 切换全屏显示
             targetFullScreenShow(full)
         }
+    }
+
+
+    /**
+     * 跳转至相册选择图片
+     */
+    private fun pickImageWithIntent() {
+        L.i(TAG, "pickImageWithIntent: ")
+        // 设置 当前 状态 。
+        if (currentIsToPickImage == null) {
+            currentIsToPickImage = AtomicBoolean(true)
+        }
+        // 跳转选择图片
+        val intent = Intent()
+            .apply {
+                action = Intent.ACTION_PICK
+                data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                type = "image/*"
+            }
+        this@SetWallpaperActivity.startActivityForResult(
+            intent,
+            Constants.WallpaperParams.CHOOSE_IMAGE_REQUEST_CODE
+        )
     }
 }

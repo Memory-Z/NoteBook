@@ -9,6 +9,7 @@ import org.greenrobot.greendao.annotation.Index;
 import java.util.Date;
 
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Transient;
 
 /**
  * 设置 桌面壁纸信息
@@ -21,7 +22,7 @@ public class DesktopWallpaperInfo {
 
     @Index
     @Id(autoincrement = true)
-    private Long wallpaperId = 0L;
+    private Long wallpaperId;
     /**
      * 壁纸地址
      */
@@ -69,6 +70,9 @@ public class DesktopWallpaperInfo {
 
     private Date createTime;
     private Date updateTime;
+
+    @Transient
+    private boolean isEmptyData = false;
 
 
     @Generated(hash = 1459373151)
@@ -212,6 +216,14 @@ public class DesktopWallpaperInfo {
         this.isCurrentWallpaper = isCurrentWallpaper;
     }
 
+    public boolean isEmptyData() {
+        return isEmptyData;
+    }
+
+    public void setEmptyData(boolean emptyData) {
+        isEmptyData = emptyData;
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -228,6 +240,7 @@ public class DesktopWallpaperInfo {
                 ", startTime=" + startTime +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
+                ", isEmptyData=" + isEmptyData +
                 '}';
     }
 }

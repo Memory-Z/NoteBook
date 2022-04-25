@@ -6,11 +6,13 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.text.TextUtils
+import androidx.core.graphics.toRect
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.inz.z.base.util.ImageUtils
 import com.inz.z.base.util.L
 import com.inz.z.note_book.base.FragmentContentTypeValue
+import com.inz.z.note_book.util.ViewUtil
 
 /**
  * 设置桌面壁纸 - worker
@@ -48,9 +50,12 @@ open class SetDesktopWallpaperWorker(context: Context, workerParams: WorkerParam
     private var mWorkerParams: WorkerParameters? = workerParams
 
     override fun doWork(): Result {
+        // 设置 壁纸 是否成功
         return if (setWallpaper()) {
+            L.d(TAG, "doWork: setWallpaper Success")
             Result.success()
         } else {
+            L.d(TAG, "doWork: setWallpaper Success")
             Result.failure()
         }
     }
@@ -69,7 +74,8 @@ open class SetDesktopWallpaperWorker(context: Context, workerParams: WorkerParam
             imagePath = it.getString(IMAGE_PATH_TAG) ?: ""
             val imageRectArray = it.getIntArray(IMAGE_RECT_TAG)
             imageRectArray?.let { array ->
-                imageRect = Rect(array[0], array[1], array[2], array[3])
+                // 转为 Rect
+                imageRect = ViewUtil.array2RectF(array)?.toRect()
             }
             imageRotate = it.getInt(IMAGE_ROTATE_TAG, 0)
             try {

@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.widget.RemoteViews
 import com.inz.z.base.util.L
@@ -109,7 +110,7 @@ class NoteInfoAppWidget : AppWidgetProvider() {
         if (noteGroupId.isNotEmpty()) {
             noteInfoList = NoteController.findAllNoteInfoByGroupId(noteGroupId)
         } else {
-            L.w(TAG, "_getNoteGrop: noteGroupId is empty ! can check this --> ${this}")
+            L.w(TAG, "_getNoteGroup: noteGroupId is empty ! can check this --> $this")
         }
 
 
@@ -138,12 +139,18 @@ class NoteInfoAppWidget : AppWidgetProvider() {
                 bundle.putInt("launchType", 2)
                 putExtras(bundle)
             }
+        // +bug, 11654, 2022/4/25 , modify, PendingIntent flag Type with S+.
+        var flag = PendingIntent.FLAG_UPDATE_CURRENT
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            flag = PendingIntent.FLAG_MUTABLE
+        }
         val changePendingIntent = PendingIntent.getActivity(
             context,
             9,
             changeGroupIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            flag
         )
+        // -bug, 11654, 2022/4/25 , modify, PendingIntent flag Type with S+.
         views.setOnClickPendingIntent(R.id.app_widget_top_title_tv, changePendingIntent)
 
         // 添加笔记
@@ -157,7 +164,7 @@ class NoteInfoAppWidget : AppWidgetProvider() {
                 putExtras(bundle)
             }
         val addNotePendingIntent =
-            PendingIntent.getActivity(context, 8, addNoteIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.getActivity(context, 8, addNoteIntent, flag)
         views.setOnClickPendingIntent(R.id.app_widget_top_add_iv, addNotePendingIntent)
 
         // 设置 ListView  Adapter
@@ -165,7 +172,7 @@ class NoteInfoAppWidget : AppWidgetProvider() {
         views.setRemoteAdapter(R.id.app_widget_content_lv, noteIntentService)
 
         // 设置 intent 模板
-        // <GrigView/ListView/StackView> 存在很多子元素，不能通过 setOnClickPendingIntent 设置点击事件
+        // <GridView/ListView/StackView> 存在很多子元素，不能通过 setOnClickPendingIntent 设置点击事件
         // 1. 通过 setPendingIntentTemplate 设置 Intent 模板
         // 2. 在 RemoteViewsFactory 的 getViewAt 中，通过 setOnClickFillInIntent 设置 item 点击事件
         val listIntent = Intent()
@@ -174,7 +181,7 @@ class NoteInfoAppWidget : AppWidgetProvider() {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             }
         val pendingIntent =
-            PendingIntent.getBroadcast(context, 7, listIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.getBroadcast(context, 7, listIntent, flag)
         views.setPendingIntentTemplate(R.id.app_widget_content_lv, pendingIntent)
 
 

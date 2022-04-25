@@ -38,6 +38,10 @@ object DesktopWallpaperController {
     fun updateWallpaperInfo(info: DesktopWallpaperInfo) {
         getWallpaperDao()?.let {
             val id = info.wallpaperId
+            if (id == null) {
+                insertWallpaperInfo(info)
+                return
+            }
             val wallpaperInfo = findWallpaperInfoById(id)
             if (wallpaperInfo != null) {
                 it.update(info)

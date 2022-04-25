@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import java.util.*
 
 /**
@@ -58,11 +59,13 @@ object ClockAlarmManager {
         val intent = Intent()
         intent.action = Constants.AlarmAction.ALARM_BROADCAST_BASE_ACTION
         intent.`package` = context.packageName
+        val flag =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_CANCEL_CURRENT
         val pi = PendingIntent.getBroadcast(
             context,
             Calendar.getInstance(Locale.getDefault()).get(Calendar.MILLISECOND),
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            flag
         )
         this.setAlarm(context, time, repeat, pi)
     }

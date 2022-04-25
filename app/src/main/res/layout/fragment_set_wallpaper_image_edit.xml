@@ -28,6 +28,7 @@
         <com.inz.z.base.view.widget.BaseNoDataView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:base_no_data_message="@string/_wallpaper"
             app:base_no_data_image_src="@drawable/ic_no_image" />
     </RelativeLayout>
 
