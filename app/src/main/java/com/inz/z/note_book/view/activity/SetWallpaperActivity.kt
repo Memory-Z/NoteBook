@@ -23,7 +23,6 @@ import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.fragment.EditWallpaperFragment
 import com.inz.z.note_book.view.fragment.PreviewWallpaperFragment
 import com.inz.z.note_book.viewmodel.DesktopWallpaperViewModel
-import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -85,6 +84,7 @@ class SetWallpaperActivity : BaseNoteActivity(), View.OnClickListener {
     }
 
     override fun initWindow() {
+
     }
 
     override fun getLayoutId(): Int {
@@ -375,16 +375,20 @@ class SetWallpaperActivity : BaseNoteActivity(), View.OnClickListener {
             } else {
                 window.decorView.windowInsetsController?.hide(
                     WindowInsets.Type.statusBars()
+                        .or(WindowInsets.Type.systemBars())
                 )
             }
+            window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
         } else {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
                 window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
             } else {
                 window.decorView.windowInsetsController?.show(
                     WindowInsets.Type.statusBars()
+                        .or(WindowInsets.Type.systemBars())
                 )
             }
+            window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
         }
         // 显示 返回按钮 。
         binding?.setWallpaperTopBackLl?.visibility = if (isFull) View.VISIBLE else View.GONE

@@ -180,7 +180,7 @@
         <!-- 设置壁纸界面  -->
         <activity
             android:name=".view.activity.SetWallpaperActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="orientation|keyboardHidden"
             android:theme="@style/NoteBookAppTheme.Transparent"
             android:exported="true">
             <intent-filter>

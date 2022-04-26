@@ -268,6 +268,7 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
      * 适配刘海屏布局
      */
     private void fitNotchView(View rootView) {
+        L.i(this.getClass().getName(), "fitNotchView: ");
         View mView = getWindow().getDecorView();
         int left = QMUINotchHelper.getSafeInsetLeft(mView);
         int top = QMUINotchHelper.getSafeInsetTop(mView);

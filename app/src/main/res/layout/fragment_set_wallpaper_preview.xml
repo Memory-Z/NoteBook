@@ -25,8 +25,9 @@
                 android:id="@+id/fm_set_wallpaper_preview_rv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingStart="@dimen/margin_text_layout"
+                android:paddingEnd="@dimen/margin_text_layout"
                 android:visibility="gone" />
-
 
             <!-- 空界面： 默认显示  -->
             <com.inz.z.base.view.widget.BaseNoDataView
@@ -49,9 +50,9 @@
         android:layout_marginEnd="@dimen/margin_layout"
         android:layout_marginBottom="@dimen/margin_layout"
         android:contentDescription="@string/set_wallpaper"
-        android:src="@drawable/ic_add_black_24dp"
-        android:tint="@color/white"
+        android:src="@drawable/ic_add_white_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/cardColor" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,6 +18,17 @@
         <!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
     </style>
 
+    <style name="NoteBookAppTheme.Full" parent="NoteBookAppTheme">
+        <item name="android:fitsSystemWindows">false</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+    </style>
+
     <style name="NoteBookAppTheme.TransparentAni" parent="NoteBookAppTheme">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -76,7 +87,7 @@
     </style>
 
     <style name="NoteBookAppTheme.TopAction">
-        <item name="android:background">@color/tool_bar_color</item>
+        <item name="android:background">@drawable/bg_top_toolbar</item>
     </style>
     <!-- 顶部栏，连同顶部 -->
     <style name="NoteBookAppTheme.TopAction.NoAction" parent="NoteBookAppTheme.TopAction">

@@ -4,7 +4,9 @@ import android.app.UiModeManager
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.RectF
-import com.inz.z.base.util.L
+import android.os.Build
+import android.view.Window
+import android.view.WindowInsets
 
 /**
  *  View 工具 类
@@ -56,5 +58,16 @@ object ViewUtil {
         val uiMode = mContext.resources.configuration.uiMode
         return ((uiMode.and(Configuration.UI_MODE_TYPE_MASK)) == Configuration.UI_MODE_NIGHT_YES)
             .or(useNightMode)
+    }
+
+    fun showSystemUI(window: Window) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.decorView.windowInsetsController?.hide(
+                WindowInsets.Type.statusBars()
+                    .or(WindowInsets.Type.systemBars())
+                    .or(WindowInsets.Type.ime())
+            )
+        }
+
     }
 }

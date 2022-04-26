@@ -3,6 +3,7 @@ package com.inz.z.note_book.view.activity
 import android.content.Intent
 import android.os.Build
 import android.view.View
+import android.view.WindowInsets
 import android.view.WindowManager
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseActivity
@@ -28,7 +29,11 @@ class SplashActivity : AbsBaseActivity() {
     private var binding: SplashLayoutBinding? = null
 
     override fun initWindow() {
-        window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.decorView.windowInsetsController?.hide(WindowInsets.Type.systemBars())
+        } else {
+            window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        }
 //        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         // 刘海屏支持/ 设置刘海屏不显示界面内容
     }
