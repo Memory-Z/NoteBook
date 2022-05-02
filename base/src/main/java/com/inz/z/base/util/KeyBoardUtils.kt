@@ -33,7 +33,7 @@ object KeyBoardUtils {
     fun hideKeyBoardByWindowToken(context: Context, windowToken: IBinder) {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         if (imm.isActive) {
-            imm.hideSoftInputFromWindow(windowToken, 0)
+            imm.hideSoftInputFromWindow(windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
         }
     }
 }

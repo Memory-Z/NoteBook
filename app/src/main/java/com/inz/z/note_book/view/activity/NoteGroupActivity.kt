@@ -4,12 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.KeyBoardUtils
@@ -23,12 +20,11 @@ import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteController
 import com.inz.z.note_book.database.controller.NoteGroupService
 import com.inz.z.note_book.databinding.ActivityGroupLayoutBinding
-import com.inz.z.note_book.databinding.NoteInfoAddSampleLayoutBinding
 import com.inz.z.note_book.util.ClickUtil
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.adapter.NoteInfoRecyclerAdapter
+import com.inz.z.note_book.view.dialog.AddNoteInfoDialog
 import com.inz.z.note_book.view.fragment.CreateNewGroupDialogFragment
-import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import java.util.*
 
 /**
@@ -44,7 +40,8 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
     }
 
     private var binding: ActivityGroupLayoutBinding? = null
-    private var noteInfoAddBinding: NoteInfoAddSampleLayoutBinding? = null
+
+    //    private var noteInfoAddBinding: NoteInfoAddSampleLayoutBinding? = null
     private var mNoteInfoRecyclerAdapter: NoteInfoRecyclerAdapter? = null
 
     /**
@@ -97,6 +94,8 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
             }
         )
         binding?.let {
+            setSupportActionBar(it.groupTopToolbar)
+
             it.groupContentNoteInfoRv.layoutManager = LinearLayoutManager(mContext)
             it.groupContentNoteInfoRv.adapter = mNoteInfoRecyclerAdapter
             it.groupContentSrl.setOnRefreshListener {
@@ -109,10 +108,7 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
                 }
             }
             it.groupAddNoteInfoFab.setOnClickListener(this)
-            it.groupTopBackRl.setOnClickListener(this)
         }
-        // 初始化 添加
-        initAddNoteView()
         // 初始化空数据
         initNoDataView()
         groupHandler = Handler(mainLooper, GroupHandlerCallbackImpl())
@@ -137,7 +133,7 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
 //            setNoteInfoListData()
         }
         // 设置标题
-        binding?.groupTopTitleTv?.text = groupName
+        binding?.groupTopToolbar?.title = groupName
 
     }
 
@@ -149,7 +145,6 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
         super.setDataBindingView()
         binding = ActivityGroupLayoutBinding.inflate(layoutInflater)
             .apply {
-                noteInfoAddBinding = groupBottomAddNoteSampleInclude
                 setContentView(this.root)
             }
     }
@@ -159,10 +154,6 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
             // 如果新建分组存在，返回上级
             if (isShowNewGroupDialog()) {
                 finish()
-                return true
-            }
-            if (noteInfoAddBinding?.noteInfoAddSampleRootRl?.visibility == View.VISIBLE) {
-                targetFabView(true)
                 return true
             }
         }
@@ -195,7 +186,6 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
         mNoteInfoRecyclerAdapter = null
         groupHandler?.removeCallbacksAndMessages(null)
         groupHandler = null
-        noteInfoAddBinding = null
         binding = null
     }
 
@@ -209,31 +199,8 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
             binding?.groupAddNoteInfoFab?.id -> {
                 // 切换显示状态
                 targetFabView(false)
-                // 请求焦点
-                noteInfoAddBinding?.noteInfoAddSampleTitleEt?.requestFocus()
-            }
-            // 点击 返回
-            binding?.groupTopBackRl?.id -> {
-                this.finish()
-            }
-            // 添加 笔记 信息 按钮
-            noteInfoAddBinding?.noteInfoAddSampleAddIv?.id -> {
-                // 获取新 笔记标题内容
-                val str = noteInfoAddBinding?.noteInfoAddSampleTitleEt?.text.toString()
-                if (str.isBlank()) {
-                    return
-                }
-                // 添加笔记
-                val added = addNoteInfo(currentGroupId, str)
-                if (added) {
-                    // 添加数据成功
-                    targetAddView(false)
-                    targetFabView(true)
-                    // 隐藏键盘
-                    KeyBoardUtils.hideKeyBoardByWindowToken(v!!.context, v.windowToken)
-                    // 加载笔记信息
-                    loadNoteInfoWithDatabase()
-                }
+//                // 请求焦点
+//                noteInfoAddBinding?.noteInfoAddSampleTitleEt?.requestFocus()
             }
             else -> {}
         }
@@ -380,7 +347,7 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
             this@NoteGroupActivity.noteGroup = noteGroup
             // 设置标题
             hideNewGroupDialog()
-            binding?.groupTopTitleTv?.text = title
+            binding?.groupTopToolbar?.title = title
         }
     }
 
@@ -414,66 +381,6 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
     /* ---------------------------------------- 新笔记 ------------------------------------- */
 
     /**
-     * 初始化添加笔记布局
-     */
-    private fun initAddNoteView() {
-        noteInfoAddBinding?.apply {
-            // 笔记信息标题
-            noteInfoAddSampleTitleEt.addTextChangedListener(
-                object : TextWatcher {
-                    override fun afterTextChanged(s: Editable?) {
-                    }
-
-                    override fun beforeTextChanged(
-                        s: CharSequence?,
-                        start: Int,
-                        count: Int,
-                        after: Int
-                    ) {
-                    }
-
-                    override fun onTextChanged(
-                        s: CharSequence?,
-                        start: Int,
-                        before: Int,
-                        count: Int
-                    ) {
-                        targetAddView(s.isNullOrBlank())
-                    }
-                }
-            )
-            // 添加笔记按钮
-            noteInfoAddSampleAddIv.apply {
-                isClickable = false
-                setOnClickListener(this@NoteGroupActivity)
-            }
-        }
-
-
-    }
-
-    /**
-     * 切换添加笔记按钮状态
-     * @param isShow  false: 不可点击， true : 可更新
-     */
-    private fun targetAddView(isShow: Boolean) {
-        if (isShow) {
-            noteInfoAddBinding?.noteInfoAddSampleAddIv?.apply {
-                isClickable = false
-                background = ContextCompat.getDrawable(mContext, R.drawable.bg_card_gray)
-                foregroundTintList = mContext.getColorStateList(R.color.base_background_color)
-            }
-        } else {
-            noteInfoAddBinding?.noteInfoAddSampleAddIv?.apply {
-                isClickable = true
-                background =
-                    ContextCompat.getDrawable(mContext, R.drawable.bg_card_main_color)
-                foregroundTintList = mContext.getColorStateList(R.color.white)
-            }
-        }
-    }
-
-    /**
      * 获取添加内容显示状态。
      * 如果显示切换按钮，表示未显示新建笔记
      */
@@ -486,18 +393,17 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
         binding?.let {
             if (isShow) {
                 it.groupAddNoteInfoFab.show()
+                it.root.postDelayed({
+                    // 隐藏键盘
+                    KeyBoardUtils.hideKeyBoardByWindowToken(it.root.context, it.root.windowToken)
+                }, 500)
+
             } else {
                 it.groupAddNoteInfoFab.hide()
             }
         }
-        noteInfoAddBinding?.let {
-            if (isShow) {
-                it.noteInfoAddSampleTitleEt.setText("")
-                it.noteInfoAddSampleRootRl.visibility = View.GONE
-            } else {
-                it.noteInfoAddSampleRootRl.visibility = View.VISIBLE
-            }
-        }
+        // 切换弹窗显示状态
+        targetAddNoteInfoDialog(!isShow)
     }
 
     /**
@@ -516,6 +422,65 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
                 updateDate = Date()
             }
         return NoteController.addNoteInfo(noteGroupId, noteInfo)
+    }
+
+    private var addNoteInfoDialog: AddNoteInfoDialog? = null
+
+    /**
+     * 切换添加弹窗显示状态。
+     * @param show 是否需要显示，。
+     */
+    private fun targetAddNoteInfoDialog(show: Boolean) {
+        L.i(TAG, "targetAddNoteInfoDialog: ---->> show = $show ")
+        if (addNoteInfoDialog != null) {
+            if (addNoteInfoDialog?.isShowing == true && show) {
+                return
+            }
+            if (!show) {
+                addNoteInfoDialog?.hide()
+                addNoteInfoDialog = null
+                return
+            }
+        }
+        if (!show) {
+            return
+        }
+        addNoteInfoDialog = AddNoteInfoDialog(mContext)
+        addNoteInfoDialog?.let {
+            it.setOnDismissListener {
+                // 显示 底部 添加 按钮
+                targetFabView(show)
+            }
+            // 设置监听。
+            it.addNoteInfoListener = AddNoteInfoDialogListenerImpl()
+            it.show()
+        }
+        L.i(TAG, "targetAddNoteInfoDialog: add note info dialog is showing .")
+    }
+
+    /**
+     * 弹窗监听。
+     */
+    private inner class AddNoteInfoDialogListenerImpl :
+        AddNoteInfoDialog.Companion.AddNoteInfoListener {
+        override fun onSubmitClick(v: View?, message: String?) {
+            L.i(TAG, "onSubmitClick: message = $message")
+            // 获取新 笔记标题内容
+            if (message.isNullOrBlank()) {
+                L.i(TAG, "onSubmitClick: WARNING title is empty ! ")
+                return
+            }
+            // 添加笔记
+            val added = addNoteInfo(currentGroupId, message)
+            if (added) {
+//                // 添加数据成功
+//                targetAddView(false)
+                targetFabView(true)
+                // 加载笔记信息
+                loadNoteInfoWithDatabase()
+            }
+        }
+
     }
 
     /* ---------------------------------------- 笔记相关 ------------------------------------- */
