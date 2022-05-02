@@ -13,6 +13,7 @@ import com.inz.z.note_book.R
 import com.inz.z.note_book.broadcast.ClockAlarmBroadcast
 import com.inz.z.note_book.database.bean.ScreenInfo
 import com.inz.z.note_book.database.controller.ScreenTimeController
+import com.inz.z.note_book.util.BaseUtil
 import com.inz.z.note_book.util.ClockAlarmManager
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.view.activity.MainActivity
@@ -112,11 +113,12 @@ class NotificationForegroundService : Service() {
         notification.flags = Notification.FLAG_FOREGROUND_SERVICE
         val intent = Intent(applicationContext, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK.or(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+        val flag = BaseUtil.getPendingIntentFlag()
         val pendingIntent = PendingIntent.getActivity(
             applicationContext,
             NOTIFICATION_TO_MAIN_REQUEST_CODE,
             intent,
-            PendingIntent.FLAG_CANCEL_CURRENT
+            flag
         )
         notification.contentIntent = pendingIntent
         manager?.notify(NOTIFICATION_CODE, notification)
@@ -166,7 +168,9 @@ class NotificationForegroundService : Service() {
                     .or(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP)
                     .or(Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
-        val flag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_CANCEL_CURRENT
+        // +bug, 11654, 2022/5/2 , modify , update pendingIntent FLAG .
+        val flag = BaseUtil.getPendingIntentFlag()
+        // -bug, 11654, 2022/5/2 , modify , update pendingIntent FLAG .
         return PendingIntent.getActivity(
             applicationContext,
             NOTIFICATION_TO_MAIN_REQUEST_CODE,
