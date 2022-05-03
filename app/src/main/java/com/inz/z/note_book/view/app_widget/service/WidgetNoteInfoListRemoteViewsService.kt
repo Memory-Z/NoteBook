@@ -32,9 +32,19 @@ class WidgetNoteInfoListRemoteViewsService : RemoteViewsService() {
         L.i(TAG, "init .......... ")
     }
 
+    private var factory: WidgetNoteInfoListRemoteViewsServiceFactory? = null
+
     override fun onCreate() {
         super.onCreate()
         L.i(TAG, "onCreate..")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (factory != null) {
+            factory?.onDestroy()
+            factory = null
+        }
     }
 
     override fun onGetViewFactory(intent: Intent?): RemoteViewsFactory {
@@ -43,7 +53,12 @@ class WidgetNoteInfoListRemoteViewsService : RemoteViewsService() {
             AppWidgetManager.EXTRA_APPWIDGET_ID,
             AppWidgetManager.INVALID_APPWIDGET_ID
         )
-        return WidgetNoteInfoListRemoteViewsServiceFactory(applicationContext, appWidgetId)
+        if (factory != null) {
+            factory?.onDestroy()
+            factory = null
+        }
+        factory = WidgetNoteInfoListRemoteViewsServiceFactory(baseContext, appWidgetId)
+        return factory!!
     }
 
     private inner class WidgetNoteInfoListRemoteViewsServiceFactory(
@@ -124,6 +139,7 @@ class WidgetNoteInfoListRemoteViewsService : RemoteViewsService() {
 
         override fun onDestroy() {
             L.i(TAG, "onDestroy. ")
+            this.mContext = null
         }
 
         /**
