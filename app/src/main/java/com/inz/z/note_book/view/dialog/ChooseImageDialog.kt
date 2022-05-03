@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import com.inz.z.base.view.AbsBaseDialogFragment
 import com.inz.z.note_book.R
 import com.inz.z.note_book.databinding.DialogChooseImageBinding
+import com.inz.z.note_book.util.ClickUtil
 
 /**
  * 图片选择弹窗
@@ -17,22 +18,35 @@ import com.inz.z.note_book.databinding.DialogChooseImageBinding
  * @version 1.0.0
  * Create by inz in 2020/08/20 10:20.
  */
-class ChooseImageDialog : AbsBaseDialogFragment() {
+class ChooseImageDialog : AbsBaseDialogFragment(), View.OnClickListener {
     companion object {
         private const val TAG = "ChooseImageDialog"
 
-        private const val REQUEST_CODE_TAG = "requestCode"
 
-        fun getInstance(requestCode: Int): ChooseImageDialog {
+        fun getInstance(): ChooseImageDialog {
             val dialog = ChooseImageDialog()
             val bundle = Bundle()
-            bundle.putInt(REQUEST_CODE_TAG, requestCode)
             dialog.arguments = bundle
             return dialog
         }
     }
 
-    private var requestCode = -1
+    /**
+     * 监听。/
+     */
+    interface ChooseImageDialogListener {
+        /**
+         * 从相册选择照片
+         */
+        fun chooseImageFromAlbum();
+
+        /**
+         * 拍照
+         */
+        fun takePicture()
+    }
+
+    var dialogListener: ChooseImageDialogListener? = null
 
     private var binding: DialogChooseImageBinding? = null
 
@@ -52,19 +66,14 @@ class ChooseImageDialog : AbsBaseDialogFragment() {
     }
 
     override fun initView() {
-        binding?.dialogChooseImageAlbumTv?.setOnClickListener {
-            pickPhotoFromAlbum()
-            dismissAllowingStateLoss()
-        }
-        binding?.dialogChooseImageCancelTv?.setOnClickListener {
-            dismissAllowingStateLoss()
+        binding?.let {
+            it.dialogChooseImageAlbumTv.setOnClickListener(this)
+            it.dialogChooseImageCameraTv.setOnClickListener(this)
+            it.dialogChooseImageCancelTv.setOnClickListener(this)
         }
     }
 
     override fun initData() {
-        arguments?.apply {
-            requestCode = this.getInt(REQUEST_CODE_TAG, -1)
-        }
     }
 
     override fun onStart() {
@@ -80,44 +89,28 @@ class ChooseImageDialog : AbsBaseDialogFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        dialogListener = null
         binding = null
     }
 
-    /**
-     * 选择图片 (相册)
-     */
-    private fun pickPhotoFromAlbum() {
-//        val intent = Intent(Intent.ACTION_GET_CONTENT)
-//        intent.type = "image/*"
-//        startActivity(intent)
-//        ChooseFileActivity.gotoChooseFileActivity(requireActivity(), 800)
-//        ChooseFileActivity.gotoChooseFileActivity(
-//            requireActivity(),
-//            requestCode,
-//            ChooseFileActivity.MODE_TABLE,
-//            ChooseFileConstants.SHOW_TYPE_IMAGE,
-//            4
-//        )
-        val intent = Intent(Intent.ACTION_PICK)
-            .apply {
-                type = "image/*"
-                data = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-//                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+    override fun onClick(v: View?) {
+        if (ClickUtil.isFastClick(v)) {
+            return
+        }
+        binding?.let {
+            when (v?.id) {
+                it.dialogChooseImageAlbumTv.id -> {
+                    dialogListener?.chooseImageFromAlbum()
+                }
+                it.dialogChooseImageCameraTv.id -> {
+                    dialogListener?.takePicture()
+                }
+                it.dialogChooseImageCancelTv.id -> {}
+                else -> {
+                    return
+                }
             }
-        requireActivity().startActivityForResult(intent, requestCode)
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // open
-    ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * 选择图片监听
-     */
-    interface ChooseImageDialogListener {
-        /**
-         *
-         */
-        fun startPickFromAlbum(resultCode: Int)
+            dismissAllowingStateLoss()
+        }
     }
 }

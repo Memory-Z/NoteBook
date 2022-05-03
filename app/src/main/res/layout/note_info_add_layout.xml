@@ -6,57 +6,73 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <com.inz.z.base.view.widget.BaseNavLayout
-        android:id="@+id/note_info_add_top_bnl"
-        style="@style/NoteBookAppTheme.Layout"
+    <LinearLayout
+        android:id="@+id/note_info_add_top_ll"
+        style="@style/NoteBookAppTheme.TopAction"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/tool_bar_height"
-        android:background="@color/card_second_color"
-        app:base_center_layout="@id/note_info_add_top_title_tv"
-        app:base_left_layout="@id/note_info_add_top_back_iv"
-        app:base_right_layout="@id/note_info_add_top_finish_tv">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/note_info_add_top_back_iv"
-            style="@style/NoteBookAppTheme.ImageView.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/base_image"
-            android:src="@drawable/ic_chevron_left_black_24dp" />
-
-        <TextView
-            android:id="@+id/note_info_add_top_title_tv"
-            style="@style/NoteBookAppTheme.Text.Title"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/note_info_add_top_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/content_space_between_dimen"
-            android:layout_marginEnd="@dimen/content_space_between_dimen"
-            android:gravity="center_vertical"
-            android:text="@string/base_title" />
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_chevron_left_black_24dp"
+            app:title="@string/base_title" />
 
-        <TextView
-            android:id="@+id/note_info_add_top_finish_tv"
-            style="@style/NoteBookAppTheme.Text"
-            android:layout_width="@dimen/touch_target_size"
-            android:layout_height="@dimen/touch_target_size"
-            android:gravity="center"
-            android:text="@string/completed" />
+    </LinearLayout>
 
-    </com.inz.z.base.view.widget.BaseNavLayout>
+    <!--    <com.inz.z.base.view.widget.BaseNavLayout-->
+    <!--        android:id="@+id/note_info_add_top_bnl"-->
+    <!--        style="@style/NoteBookAppTheme.Layout"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="@dimen/tool_bar_height"-->
+    <!--        android:background="@color/card_second_color"-->
+    <!--        app:base_center_layout="@id/note_info_add_top_title_tv"-->
+    <!--        app:base_left_layout="@id/note_info_add_top_back_iv"-->
+    <!--        app:base_right_layout="@id/note_info_add_top_finish_tv">-->
+
+    <!--        <ImageView-->
+    <!--            android:id="@+id/note_info_add_top_back_iv"-->
+    <!--            style="@style/NoteBookAppTheme.ImageView.Icon"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:contentDescription="@string/base_image"-->
+    <!--            android:src="@drawable/ic_chevron_left_black_24dp" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/note_info_add_top_title_tv"-->
+    <!--            style="@style/NoteBookAppTheme.Text.Title"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_marginStart="@dimen/content_space_between_dimen"-->
+    <!--            android:layout_marginEnd="@dimen/content_space_between_dimen"-->
+    <!--            android:gravity="center_vertical"-->
+    <!--            android:text="@string/base_title" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/note_info_add_top_finish_tv"-->
+    <!--            style="@style/NoteBookAppTheme.Text"-->
+    <!--            android:layout_width="@dimen/touch_target_size"-->
+    <!--            android:layout_height="@dimen/touch_target_size"-->
+    <!--            android:gravity="center"-->
+    <!--            android:text="@string/completed" />-->
+
+    <!--    </com.inz.z.base.view.widget.BaseNavLayout>-->
 
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_below="@id/note_info_add_top_bnl"
-        android:background="@color/lineColor" />
+    <!--    <View-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="1px"-->
+    <!--        android:layout_below="@id/note_info_add_top_bnl"-->
+    <!--        android:background="@color/lineColor" />-->
 
     <com.inz.z.base.view.widget.BaseRelativeLayout
         android:id="@+id/note_info_add_content_brl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/note_info_add_content_bottom_ll"
-        android:layout_below="@id/note_info_add_top_bnl"
+        android:layout_below="@id/note_info_add_top_ll"
         app:base_relative_layout_content_view="@id/note_info_add_content_center_ll">
 
         <LinearLayout

@@ -1,12 +1,16 @@
 package com.inz.z.note_book.util
 
 import android.content.Context
+import android.net.Uri
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.appcompat.app.AppCompatActivity
 import com.inz.z.base.util.FileUtils
+import com.inz.z.note_book.base.PickImageActivityResultContracts
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.ObjectOutputStream
-import java.lang.Exception
 import java.util.*
 
 /**
@@ -110,7 +114,20 @@ object FileUtil : FileUtils() {
             return file.delete()
         }
         return false
+    }
 
+
+    /**
+     * 图片选择 （目前只支持单选 ）
+     */
+    fun getContentWithResult(
+        activity: AppCompatActivity,
+        callback: ActivityResultCallback<Uri?>
+    ): ActivityResultLauncher<String> {
+        return activity.registerForActivityResult(
+            PickImageActivityResultContracts(),
+            callback
+        )
     }
 
 }

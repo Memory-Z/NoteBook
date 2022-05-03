@@ -1,18 +1,19 @@
 package com.inz.z.note_book.view.activity
 
-import android.app.Activity
-import android.content.Intent
+import android.net.Uri
 import android.view.KeyEvent
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.core.content.ContextCompat
-import com.inz.z.base.base.ChooseFileConstants
-import com.inz.z.base.entity.BaseChooseFileBean
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.KeyBoardUtils
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.base.NoteStatus
+import com.inz.z.note_book.base.PickImageActivityResultContracts
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteInfoController
 import com.inz.z.note_book.databinding.NoteInfoAddLayoutBinding
@@ -21,7 +22,6 @@ import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.dialog.BaseDialogFragment
 import com.inz.z.note_book.view.dialog.ChooseImageDialog
 import com.inz.z.note_book.view.widget.ScheduleLayout
-import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import java.io.File
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -36,9 +36,6 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
 
     companion object {
         const val TAG = "NewNoteActivity"
-
-        // Reqeust code 0~65535
-        private const val IMAGE_REQUEST_CODE = 0x0FE0
     }
 
     /**
@@ -68,6 +65,16 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
 
     private var binding: NoteInfoAddLayoutBinding? = null
 
+    /**
+     * 获取 选择 图片启动 器
+     */
+    private var getImageLauncher: ActivityResultLauncher<String>? = null
+
+    /**
+     * 拍照 启动器
+     */
+    private var takePictureLauncher: ActivityResultLauncher<Uri>? = null
+
     override fun initWindow() {
 
     }
@@ -75,6 +82,7 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
     override fun getLayoutId(): Int {
         return R.layout.note_info_add_layout
     }
+
 
     override fun useViewBinding(): Boolean = true
 
@@ -93,14 +101,44 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
     override fun initView() {
 //        QMUIStatusBarHelper.setStatusBarLightMode(this)
 //        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
+
         noteInfoScheduleLayout = findViewById(R.id.note_info_add_content_schedule_layout)
         binding?.let {
-            it.noteInfoAddTopFinishTv.setOnClickListener(this)
+            setSupportActionBar(it.noteInfoAddTopToolbar)
             it.noteInfoAddContentBrl.setOnClickListener(this)
-            it.noteInfoAddTopBackIv.setOnClickListener(this)
             it.noteIabImageLl.setOnClickListener(this)
         }
+
+        // 注册启动器
+        registerLauncher()
     }
+
+    /**
+     * 注册启动器
+     */
+    private fun registerLauncher() {
+        // 注册 请求 图片 启动器
+        getImageLauncher = registerForActivityResult(PickImageActivityResultContracts()) { result ->
+            L.i(TAG, "onActivityResult: uri - $result")
+            // TODO: 2022/5/3 处理选中文件
+        }
+
+        // 注册 拍照 启动器
+        takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) {
+
+        }
+    }
+
+    /**
+     * 注销启动器
+     */
+    private fun unregisterLauncher() {
+        getImageLauncher?.unregister()
+        getImageLauncher = null
+        takePictureLauncher?.unregister()
+        takePictureLauncher = null
+    }
+
 
     override fun initData() {
         val bundle = intent.extras
@@ -110,7 +148,7 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
         if (noteInfoId.isNotEmpty()) {
             noteInfo = NoteInfoController.findById(noteInfoId)
             noteInfo?.apply {
-                binding?.noteInfoAddTopTitleTv?.text = noteTitle
+                binding?.noteInfoAddTopToolbar?.title = noteTitle
                 binding?.noteInfoAddContentScheduleLayout?.setContent(noteContent)
                 binding?.noteInfoAddContentTopTimeTv?.text =
                     BaseTools.getBaseDateFormat().format(updateDate)
@@ -125,13 +163,35 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
             ?.scheduleAtFixedRate(checkNoteRunnable, 5, 5, TimeUnit.SECONDS)
     }
 
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-//        if (hasFocus) {
-//            val nslHeight = note_info_add_content_content_nsv.height
-//            val topHeight = note_info_add_content_top_time_tv.height
-//            note_info_add_content_schedule_layout.minimumHeight = nslHeight - topHeight * 2
-//        }
+//    override fun onWindowFocusChanged(hasFocus: Boolean) {
+//        super.onWindowFocusChanged(hasFocus)
+////        if (hasFocus) {
+////            val nslHeight = note_info_add_content_content_nsv.height
+////            val topHeight = note_info_add_content_top_time_tv.height
+////            note_info_add_content_schedule_layout.minimumHeight = nslHeight - topHeight * 2
+////        }
+//    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_note_add, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_note_info_add_finish_item -> {
+                // 点击 完成按钮
+                saveNoteInfo()
+            }
+            android.R.id.home -> {
+                // 点击 返回按钮。
+                // 点击顶部返回按钮。 如果不存在修改内容，关闭界面
+                if (!checkHaveChange()) {
+                    this@NewNoteActivity.finish()
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
@@ -143,32 +203,32 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
         return super.onKeyUp(keyCode, event)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        L.i(TAG, "onActivityResult: -->>> $requestCode == $resultCode")
-        if (requestCode == IMAGE_REQUEST_CODE) {
-            when (resultCode) {
-                // 通过 系统相册选择
-                Activity.RESULT_OK -> {
-                    L.i(TAG, "onActivityResult: ${data?.data}")
-                    data?.let {
-                        L.i(TAG, "onActivityResult: ${data.extras}")
-                    }
-                }
-                ChooseFileConstants.CHOOSE_FILE_RESULT_CODE -> {
-                    data?.extras?.apply {
-                        val list =
-                            this.getParcelableArrayList<BaseChooseFileBean>(ChooseFileConstants.CHOOSE_FILE_RESULT_LIST_TAG)
-                        val listSize = this.getInt(
-                            ChooseFileConstants.CHOOSE_FILE_RESULT_SIZE_TAG,
-                            0
-                        )
-                        L.i(TAG, "onActivityResult: $listSize --- $list ")
-                    }
-                }
-            }
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        L.i(TAG, "onActivityResult: -->>> $requestCode == $resultCode")
+//        if (requestCode == IMAGE_REQUEST_CODE) {
+//            when (resultCode) {
+//                // 通过 系统相册选择
+//                Activity.RESULT_OK -> {
+//                    L.i(TAG, "onActivityResult: ${data?.data}")
+//                    data?.let {
+//                        L.i(TAG, "onActivityResult: ${data.extras}")
+//                    }
+//                }
+//                ChooseFileConstants.CHOOSE_FILE_RESULT_CODE -> {
+//                    data?.extras?.apply {
+//                        val list =
+//                            this.getParcelableArrayList<BaseChooseFileBean>(ChooseFileConstants.CHOOSE_FILE_RESULT_LIST_TAG)
+//                        val listSize = this.getInt(
+//                            ChooseFileConstants.CHOOSE_FILE_RESULT_SIZE_TAG,
+//                            0
+//                        )
+//                        L.i(TAG, "onActivityResult: $listSize --- $list ")
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     override fun onPause() {
         super.onPause()
@@ -185,6 +245,7 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
         checkNoteRunnable?.let {
             getScheduleThread("${TAG}_onDestroy")?.shutdown()
         }
+        unregisterLauncher()
         checkNoteRunnable = null
         binding = null
     }
@@ -196,23 +257,12 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
         }
         binding?.let { bindingTemp ->
             when (v?.id) {
-                bindingTemp.noteInfoAddTopFinishTv.id -> {
-                    // 底部完成按钮
-                    saveNoteInfo()
-                }
                 bindingTemp.noteInfoAddContentBrl.id -> {
                     // 笔记内容点击
                     bindingTemp.noteInfoAddContentCenterLl.let {
                         val count = it.childCount
                         val lastView = it.getChildAt(count - 1)
                         lastView.performClick()
-                    }
-                }
-                bindingTemp.noteInfoAddTopBackIv.id -> {
-                    // 点击顶部返回按钮。 如果不存在修改内容，关闭界面
-                    if (!checkHaveChange()) {
-                        this@NewNoteActivity.finish()
-                    } else {
                     }
                 }
                 bindingTemp.noteIabImageLl.id -> {
@@ -290,20 +340,14 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
         if (hintDialog == null) {
             hintDialog = BaseDialogFragment.Builder()
                 .setCenterMessage(getString(R.string.note_content_have_change_is_saveable))
-                .setLeftButton(
-                    getString(R.string._quit),
-                    View.OnClickListener {
-                        hideExitHintDialog()
-                        this@NewNoteActivity.finish()
-                    }
-                )
-                .setRightButton(
-                    getString(R.string._save),
-                    View.OnClickListener {
-                        saveNoteInfo()
-                        this@NewNoteActivity.finish()
-                    }
-                )
+                .setLeftButton(getString(R.string._quit)) {
+                    hideExitHintDialog()
+                    this@NewNoteActivity.finish()
+                }
+                .setRightButton(getString(R.string._save)) {
+                    saveNoteInfo()
+                    this@NewNoteActivity.finish()
+                }
                 .build()
         }
         if (!hintDialog.isAdded && !hintDialog.isVisible) {
@@ -335,13 +379,31 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
         val manager = supportFragmentManager
         var chooseImageDialog = manager.findFragmentByTag("ChooseImageDialog") as ChooseImageDialog?
         if (chooseImageDialog == null) {
-            chooseImageDialog = ChooseImageDialog.getInstance(IMAGE_REQUEST_CODE)
+            chooseImageDialog = ChooseImageDialog.getInstance()
+                .apply {
+                    this.dialogListener = ChooseImageDialogImpl()
+                }
         }
         if (!chooseImageDialog.isAdded && !chooseImageDialog.isVisible) {
             chooseImageDialog.show(manager, "ChooseImageDialog")
         }
     }
 
+    /**
+     * 选择图片弹窗 监听
+     */
+    private inner class ChooseImageDialogImpl : ChooseImageDialog.ChooseImageDialogListener {
+        override fun chooseImageFromAlbum() {
+            L.i(TAG, "chooseImageFromAlbum: ")
+            getImageLauncher?.launch("image/*")
+        }
+
+        override fun takePicture() {
+            L.i(TAG, "takePicture: ")
+            // TODO: 2022/5/3 根据当前时间创建 相册 URI ;
+//            takePictureLauncher?.launch("")
+        }
+    }
     /* ------------------------ 添加笔记土图片内容 ---------------------- */
 
     private class TransferImageThread : Thread() {

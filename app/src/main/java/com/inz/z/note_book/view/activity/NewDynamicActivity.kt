@@ -169,7 +169,8 @@ class NewDynamicActivity : BaseNoteActivity() {
         val manager = supportFragmentManager
         var chooseImageDialog = manager.findFragmentByTag("ChooseImageDialog") as ChooseImageDialog?
         if (chooseImageDialog == null) {
-            chooseImageDialog = ChooseImageDialog.getInstance(CHOOSE_IMAGE_REQUEST_CODE)
+            chooseImageDialog = ChooseImageDialog.getInstance()
+            // TODO: 2022/5/3 Add pick image listener .
         }
         if (!chooseImageDialog.isVisible) {
             chooseImageDialog.show(manager, "ChooseImageDialog")
