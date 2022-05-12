@@ -90,33 +90,29 @@
                 android:text="@string/base_time"
                 android:textColor="@color/textGray" />
 
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/note_info_add_content_content_nsv"
+
+            <LinearLayout
+                android:id="@+id/note_info_add_content_content_ll"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/border_lr_dimen"
+                android:paddingEnd="@dimen/border_lr_dimen">
 
-                <LinearLayout
-                    android:id="@+id/note_info_add_content_content_ll"
+
+                <com.inz.z.note_book.view.widget.ScheduleLayout
+                    android:id="@+id/note_info_add_content_schedule_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingStart="@dimen/border_lr_dimen"
-                    android:paddingEnd="@dimen/border_lr_dimen">
+                    android:layout_height="match_parent"
+                    app:have_schedule_check_box="false" />
 
-
-                    <com.inz.z.note_book.view.widget.ScheduleLayout
-                        android:id="@+id/note_info_add_content_schedule_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:have_schedule_check_box="false" />
-
-                </LinearLayout>
-            </androidx.core.widget.NestedScrollView>
+            </LinearLayout>
         </LinearLayout>
 
 
     </com.inz.z.base.view.widget.BaseRelativeLayout>
 
+    <!-- 底部栏 -->
     <LinearLayout
         android:id="@+id/note_info_add_content_bottom_ll"
         android:layout_width="match_parent"
@@ -192,11 +188,14 @@
         </RelativeLayout>
 
         <LinearLayout
+            style="@style/NoteBookAppTheme.Layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:baselineAligned="true"
             android:gravity="center"
             android:orientation="horizontal"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
             android:weightSum="4">
 
             <LinearLayout

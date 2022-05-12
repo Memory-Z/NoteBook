@@ -5,6 +5,7 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,7 +24,9 @@ import com.inz.z.note_book.view.dialog.BaseDialogFragment
 import com.inz.z.note_book.view.dialog.ChooseImageDialog
 import com.inz.z.note_book.view.widget.ScheduleLayout
 import java.io.File
+import java.lang.ref.WeakReference
 import java.util.*
+import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 
 /**
@@ -62,6 +65,7 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
      * 检测笔记线程
      */
     private var checkNoteRunnable: Runnable? = null
+    private var checkNoteFeature: ScheduledFuture<*>? = null
 
     private var binding: NoteInfoAddLayoutBinding? = null
 
@@ -159,7 +163,7 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
             checkNoteRunnable = CheckNoteInfoRunnable(noteInfoId)
         }
         // 每 5 S 检测一次
-        getScheduleThread(TAG + "_initData")
+        checkNoteFeature = getScheduleThread(TAG + "_initData")
             ?.scheduleAtFixedRate(checkNoteRunnable, 5, 5, TimeUnit.SECONDS)
     }
 
@@ -242,11 +246,11 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
 
     override fun onDestroyTask() {
         super.onDestroyTask()
-        checkNoteRunnable?.let {
-            getScheduleThread("${TAG}_onDestroy")?.shutdown()
-        }
-        unregisterLauncher()
+        L.i(TAG, "onDestroyTask: =================>>>> ")
+        checkNoteFeature?.cancel(true)
+        checkNoteFeature = null
         checkNoteRunnable = null
+        unregisterLauncher()
         binding = null
     }
 
@@ -321,9 +325,36 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
      */
     private inner class CheckNoteInfoRunnable(val noteInfoId: String) : Runnable {
 
+        var editText: WeakReference<EditText>? = null
+        var changed = false
+
+        init {
+            binding?.let {
+                editText = WeakReference(
+                    it.noteInfoAddContentScheduleLayout.getEditTextView()
+                )
+            }
+        }
+
         override fun run() {
             val noteInfo = NoteInfoController.findById(noteInfoId)
-            L.i(TAG, "run: noteInfo = $noteInfo")
+            if (noteInfo == null) {
+                checkNoteRunnable = null
+                L.w(TAG, "run: note info is null. ")
+                return
+            }
+            val content = editText?.get()?.text.toString()
+            // 内容是否有修改。
+            val haveChange = noteInfo.noteContent != content
+            L.d(TAG, "run: haveChanged = $haveChange")
+            if (changed != haveChange) {
+                getUiThread("_check_noteInfo")?.execute {
+                    val title = noteInfo.noteTitle
+                    val t = if (haveChange) "${title}*" else title
+                    supportActionBar?.title = t
+                }
+            }
+            changed = haveChange
         }
     }
 

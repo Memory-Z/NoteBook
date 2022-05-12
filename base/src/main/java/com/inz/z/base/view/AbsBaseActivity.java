@@ -563,8 +563,8 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
         if (uiThread == null) {
             if (tag == null) {
                 tag = getPackageName();
-                uiThread = ThreadPoolUtils.INSTANCE.getUiThread(tag);
             }
+            uiThread = ThreadPoolUtils.INSTANCE.getUiThread(tag);
         }
         if (SHOW_THREAD_LOG) {
             L.d("BASE_THREAD", "getUiThread: TAG = " + tag);
