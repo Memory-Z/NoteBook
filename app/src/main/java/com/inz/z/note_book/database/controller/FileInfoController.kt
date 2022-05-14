@@ -1,5 +1,6 @@
 package com.inz.z.note_book.database.controller
 
+import android.net.Uri
 import com.inz.z.note_book.database.FileInfoDao
 import com.inz.z.note_book.database.bean.FileInfo
 import com.inz.z.note_book.database.util.GreenDaoHelper
@@ -22,7 +23,7 @@ object FileInfoController {
     fun insertFileInfo(fileInfo: FileInfo) {
         getFileInfoDao()?.apply {
             this.insert(fileInfo)
-            LogController.log("INSERT", fileInfo, "添加文件信息", this.tablename)
+            LogController.log(LogController.TYPE_INSERT, fileInfo, "添加文件信息", this.tablename)
         }
     }
 
@@ -35,7 +36,7 @@ object FileInfoController {
             val oldFileInfo = findFileInfoById(fileId)
             if (oldFileInfo != null) {
                 this.update(fileInfo)
-                LogController.log("UPADTE", fileInfo, "更新文件信息", this.tablename)
+                LogController.log(LogController.TYPE_UPDATE, fileInfo, "更新文件信息", this.tablename)
             } else {
                 insertFileInfo(fileInfo)
             }
@@ -53,7 +54,38 @@ object FileInfoController {
                 )
                 .list()
             if (!list.isNullOrEmpty()) {
-                return list.get(0)
+                return list[0]
+            }
+        }
+        return null
+    }
+
+    /**
+     * 通过uri 查询文件信息
+     * @param uri uri
+     */
+    fun findFileInfoByUri(uri: Uri): FileInfo? {
+        val path = uri.path
+        path?.let {
+            return findFileInfoByPath(it)
+        }
+        return null
+    }
+
+    /**
+     * 通过文件地址 查询文件信息
+     * @param path 文件地址
+     */
+    fun findFileInfoByPath(path: String): FileInfo? {
+        getFileInfoDao()?.apply {
+            val list = this.queryBuilder()
+                .where(
+                    FileInfoDao.Properties.FilePath.eq(path)
+                )
+                .orderDesc(FileInfoDao.Properties.UpdateDate)
+                .list()
+            if (!list.isNullOrEmpty()) {
+                return list[0]
             }
         }
         return null

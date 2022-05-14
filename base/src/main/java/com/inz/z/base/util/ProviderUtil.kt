@@ -12,6 +12,7 @@ import android.text.TextUtils
 import android.util.Log
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresPermission
+import androidx.core.content.FileProvider
 import com.inz.z.base.BuildConfig
 import com.inz.z.base.base.FileType
 import com.inz.z.base.entity.BaseChooseFileBean
@@ -88,22 +89,26 @@ object ProviderUtil {
         val fileList = mutableListOf<BaseChooseFileBean>()
         cursor?.let {
             while (it.moveToNext()) {
-                val id = it.getLong(it.getColumnIndex(imageParamArray[0]))
-                val name = it.getString(it.getColumnIndex(imageParamArray[1]))
-                val modifiedDate = it.getLong(it.getColumnIndex(imageParamArray[2]))
-                val size = it.getLong(it.getColumnIndex(imageParamArray[3]))
-                val path = it.getString(it.getColumnIndex(imageParamArray[4]))
-                val bean = BaseChooseFileBean()
-                bean.fileFromDatabase = true
-                bean.fileDatabaseTable = MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString()
-                bean.fileName = name
-                bean.filePath = path
-                bean.fileChangeDate = formatDatetime(modifiedDate)
-                bean.fileDatabaseId = id.toString()
-                bean.fileIsDirectory = false
-                bean.fileLength = size
-                bean.fileType = FileType.FILE_TYPE_IMAGE
-                fileList.add(bean)
+                try {
+                    val id = it.getLong(it.getColumnIndexOrThrow(imageParamArray[0]))
+                    val name = it.getString(it.getColumnIndexOrThrow(imageParamArray[1]))
+                    val modifiedDate = it.getLong(it.getColumnIndexOrThrow(imageParamArray[2]))
+                    val size = it.getLong(it.getColumnIndexOrThrow(imageParamArray[3]))
+                    val path = it.getString(it.getColumnIndexOrThrow(imageParamArray[4]))
+                    val bean = BaseChooseFileBean()
+                    bean.fileFromDatabase = true
+                    bean.fileDatabaseTable = MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString()
+                    bean.fileName = name
+                    bean.filePath = path
+                    bean.fileChangeDate = formatDatetime(modifiedDate)
+                    bean.fileDatabaseId = id.toString()
+                    bean.fileIsDirectory = false
+                    bean.fileLength = size
+                    bean.fileType = FileType.FILE_TYPE_IMAGE
+                    fileList.add(bean)
+                } catch (ignore: IllegalArgumentException) {
+
+                }
             }
         }
         cursor?.close()
@@ -136,22 +141,25 @@ object ProviderUtil {
     private fun queryFileImage(cursor: Cursor): MutableList<BaseChooseFileBean> {
         val fileList = mutableListOf<BaseChooseFileBean>()
         while (cursor.moveToNext()) {
-            val id = cursor.getLong(cursor.getColumnIndex(imageParamArray[0]))
-            val name = cursor.getString(cursor.getColumnIndex(imageParamArray[1]))
-            val modifiedDate = cursor.getLong(cursor.getColumnIndex(imageParamArray[2]))
-            val size = cursor.getLong(cursor.getColumnIndex(imageParamArray[3]))
-            val path = cursor.getString(cursor.getColumnIndex(imageParamArray[4]))
-            val bean = BaseChooseFileBean()
-            bean.fileFromDatabase = true
-            bean.fileDatabaseTable = MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString()
-            bean.fileName = name
-            bean.filePath = path
-            bean.fileChangeDate = formatDatetime(modifiedDate)
-            bean.fileDatabaseId = id.toString()
-            bean.fileIsDirectory = false
-            bean.fileLength = size
-            bean.fileType = FileType.FILE_TYPE_IMAGE
-            fileList.add(bean)
+            try {
+                val id = cursor.getLong(cursor.getColumnIndexOrThrow(imageParamArray[0]))
+                val name = cursor.getString(cursor.getColumnIndexOrThrow(imageParamArray[1]))
+                val modifiedDate = cursor.getLong(cursor.getColumnIndexOrThrow(imageParamArray[2]))
+                val size = cursor.getLong(cursor.getColumnIndexOrThrow(imageParamArray[3]))
+                val path = cursor.getString(cursor.getColumnIndexOrThrow(imageParamArray[4]))
+                val bean = BaseChooseFileBean()
+                bean.fileFromDatabase = true
+                bean.fileDatabaseTable = MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString()
+                bean.fileName = name
+                bean.filePath = path
+                bean.fileChangeDate = formatDatetime(modifiedDate)
+                bean.fileDatabaseId = id.toString()
+                bean.fileIsDirectory = false
+                bean.fileLength = size
+                bean.fileType = FileType.FILE_TYPE_IMAGE
+                fileList.add(bean)
+            } catch (ignore: IllegalArgumentException) {
+            }
         }
         cursor.close()
         // 排序
@@ -180,22 +188,25 @@ object ProviderUtil {
 
         cursor?.let {
             while (cursor.moveToNext()) {
-                val id = cursor.getLong(cursor.getColumnIndex(paramArray[0]))
-                val name = cursor.getString(cursor.getColumnIndex(paramArray[1]))
-                val modifiedDate = cursor.getLong(cursor.getColumnIndex(paramArray[2]))
-                val size = cursor.getLong(cursor.getColumnIndex(paramArray[3]))
-                val path = cursor.getString(cursor.getColumnIndex(paramArray[4]))
-                val bean = BaseChooseFileBean()
-                bean.fileFromDatabase = true
-                bean.fileDatabaseTable = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString()
-                bean.fileName = name
-                bean.filePath = path
-                bean.fileChangeDate = formatDatetime(modifiedDate)
-                bean.fileDatabaseId = id.toString()
-                bean.fileIsDirectory = false
-                bean.fileLength = size
-                bean.fileType = FileType.FILE_TYPE_AUDIO
-                fileList.add(bean)
+                try {
+                    val id = cursor.getLong(cursor.getColumnIndexOrThrow(paramArray[0]))
+                    val name = cursor.getString(cursor.getColumnIndexOrThrow(paramArray[1]))
+                    val modifiedDate = cursor.getLong(cursor.getColumnIndexOrThrow(paramArray[2]))
+                    val size = cursor.getLong(cursor.getColumnIndexOrThrow(paramArray[3]))
+                    val path = cursor.getString(cursor.getColumnIndexOrThrow(paramArray[4]))
+                    val bean = BaseChooseFileBean()
+                    bean.fileFromDatabase = true
+                    bean.fileDatabaseTable = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString()
+                    bean.fileName = name
+                    bean.filePath = path
+                    bean.fileChangeDate = formatDatetime(modifiedDate)
+                    bean.fileDatabaseId = id.toString()
+                    bean.fileIsDirectory = false
+                    bean.fileLength = size
+                    bean.fileType = FileType.FILE_TYPE_AUDIO
+                    fileList.add(bean)
+                } catch (ignore: IllegalArgumentException) {
+                }
             }
         }
         cursor?.close()
@@ -323,6 +334,46 @@ object ProviderUtil {
             return list
         }
         return null
+    }
+
+    /**
+     * 通过 URI 查询文件地址
+     */
+    fun queryFilePathByUri(context: Context, uri: Uri): String? {
+        val cursor = queryUri(context, uri)
+        var path: String? = null
+        cursor?.let {
+            it.moveToFirst()
+            try {
+                path = it.getString(it.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA))
+            } catch (ignore: IllegalArgumentException) {
+                path = uri.path
+            }
+            it.close()
+        }
+        return path
+    }
+
+    /**
+     * 通过文件 获取 URI
+     * @param context 上下文
+     * @param file 文件
+     * @param applicationId 应用ID
+     */
+    fun getUriFromFile(context: Context, file: File, applicationId: String): Uri? {
+        val uri: Uri? =
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
+                try {
+                    val authority = "$applicationId.baseFileProvider"
+                    FileProvider.getUriForFile(context, authority, file)
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                    return null
+                }
+            } else {
+                Uri.fromFile(file)
+            }
+        return uri
     }
 
 }

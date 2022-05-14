@@ -136,18 +136,9 @@ public class LauncherHelper {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Uri uri = null;
+        Uri uri = ProviderUtil.INSTANCE.getUriFromFile(context, file, applicationId);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            try {
-                String authority = applicationId + ".baseFileProvider";
-                uri = FileProvider.getUriForFile(context, authority, file);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        } else {
-            uri = Uri.fromFile(file);
         }
         intent.setDataAndType(uri, "application/vnd.android.package-archive");
         return intent;

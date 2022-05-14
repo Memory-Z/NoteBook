@@ -4,18 +4,12 @@ import androidx.annotation.NonNull;
 
 import com.inz.z.note_book.base.NoteInfoStatus;
 import com.inz.z.note_book.base.NoteStatus;
-import com.inz.z.note_book.database.NoteFileContentDao;
-import com.inz.z.note_book.database.NoteInfoDao;
 
-import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.ToMany;
 
 import java.util.Date;
-import java.util.List;
-import com.inz.z.note_book.database.DaoSession;
 
 /**
  * 笔记信息
@@ -55,19 +49,6 @@ public class NoteInfo {
      */
     @NoteInfoStatus
     private int status = 0;
-
-    @ToMany(referencedJoinProperty = "noteId")
-    private List<NoteFileContent> noteFileContentList;
-    /**
-     * Used to resolve relations
-     */
-    @Generated(hash = 2040040024)
-    private transient DaoSession daoSession;
-    /**
-     * Used for active entity operations.
-     */
-    @Generated(hash = 845113378)
-    private transient NoteInfoDao myDao;
 
     @Generated(hash = 675196626)
     public NoteInfo(String noteInfoId, String noteTitle, String noteContent,
@@ -136,72 +117,6 @@ public class NoteInfo {
         this.status = status;
     }
 
-    /**
-     * To-many relationship, resolved on first access (and after reset).
-     * Changes to to-many relations are not persisted, make changes to the target entity.
-     */
-    @Generated(hash = 1421855499)
-    public List<NoteFileContent> getNoteFileContentList() {
-        if (noteFileContentList == null) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            NoteFileContentDao targetDao = daoSession.getNoteFileContentDao();
-            List<NoteFileContent> noteFileContentListNew = targetDao
-                    ._queryNoteInfo_NoteFileContentList(noteInfoId);
-            synchronized (this) {
-                if (noteFileContentList == null) {
-                    noteFileContentList = noteFileContentListNew;
-                }
-            }
-        }
-        return noteFileContentList;
-    }
-
-    /**
-     * Resets a to-many relationship, making the next get call to query for a fresh result.
-     */
-    @Generated(hash = 909027651)
-    public synchronized void resetNoteFileContentList() {
-        noteFileContentList = null;
-    }
-
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
-     * Entity must attached to an entity context.
-     */
-    @Generated(hash = 128553479)
-    public void delete() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }
-        myDao.delete(this);
-    }
-
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
-     * Entity must attached to an entity context.
-     */
-    @Generated(hash = 1942392019)
-    public void refresh() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }
-        myDao.refresh(this);
-    }
-
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
-     * Entity must attached to an entity context.
-     */
-    @Generated(hash = 713229351)
-    public void update() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }
-        myDao.update(this);
-    }
 
     @NonNull
     @Override
@@ -213,16 +128,6 @@ public class NoteInfo {
                 ", createDate=" + createDate +
                 ", updateDate=" + updateDate +
                 ", status=" + status +
-                ", noteFileContentList=" + noteFileContentList +
-                ", daoSession=" + daoSession +
-                ", myDao=" + myDao +
                 '}';
-    }
-
-    /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 889194310)
-    public void __setDaoSession(DaoSession daoSession) {
-        this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getNoteInfoDao() : null;
     }
 }

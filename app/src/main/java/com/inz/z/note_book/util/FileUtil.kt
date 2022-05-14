@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
+import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.FileUtils
 import com.inz.z.note_book.base.PickImageActivityResultContracts
 import java.io.File
@@ -128,6 +129,28 @@ object FileUtil : FileUtils() {
             PickImageActivityResultContracts(),
             callback
         )
+    }
+
+    /**
+     * 获取笔记文件地址。
+     * @param mContext 上下文
+     */
+    fun getNoteFilePath(mContext: Context): String {
+        val filePath =
+            getCacheFilePath(mContext) + File.separatorChar + Constants.Base.BASE_NOTE_FILE_PATH
+        val file = File(filePath)
+        if (!file.exists()) {
+            file.mkdirs()
+        }
+        return filePath
+    }
+
+    /**
+     * 文件名生成
+     */
+    fun createFileNameWithDate(prefix: String, suffix: String): String {
+        val dateFormat = BaseTools.getDateFormat("yyyyMMddHHmmssSSS", Locale.getDefault())
+        return prefix + "_" + dateFormat.format(BaseTools.getLocalDate()) + suffix
     }
 
 }

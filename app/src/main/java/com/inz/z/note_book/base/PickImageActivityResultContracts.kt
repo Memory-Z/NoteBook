@@ -18,10 +18,9 @@ import java.util.*
 class PickImageActivityResultContracts : ActivityResultContract<String, Uri?>() {
     override fun createIntent(context: Context, input: String?): Intent {
         return Intent(Intent.ACTION_PICK)
-            .setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            .setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
             .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             .putExtra(Intent.EXTRA_MIME_TYPES, input)
-            .setType("image/*")
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?): Uri? {

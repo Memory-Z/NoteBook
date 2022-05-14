@@ -9,25 +9,37 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.WorkerThread
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.KeyBoardUtils
 import com.inz.z.base.util.L
+import com.inz.z.base.util.ProviderUtil
 import com.inz.z.note_book.R
 import com.inz.z.note_book.base.NoteStatus
 import com.inz.z.note_book.base.PickImageActivityResultContracts
+import com.inz.z.note_book.common.HorSpanItemDecoration
+import com.inz.z.note_book.database.bean.FileInfo
+import com.inz.z.note_book.database.bean.NoteFileContent
 import com.inz.z.note_book.database.bean.NoteInfo
+import com.inz.z.note_book.database.controller.FileInfoController
+import com.inz.z.note_book.database.controller.NoteFileController
 import com.inz.z.note_book.database.controller.NoteInfoController
 import com.inz.z.note_book.databinding.NoteInfoAddLayoutBinding
 import com.inz.z.note_book.util.ClickUtil
+import com.inz.z.note_book.util.FileUtil
 import com.inz.z.note_book.view.BaseNoteActivity
+import com.inz.z.note_book.view.activity.adapter.NewNoteInfoImageRvAdapter
 import com.inz.z.note_book.view.dialog.BaseDialogFragment
 import com.inz.z.note_book.view.dialog.ChooseImageDialog
 import com.inz.z.note_book.view.widget.ScheduleLayout
 import java.io.File
 import java.lang.ref.WeakReference
 import java.util.*
+import java.util.concurrent.Future
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicReference
 
 /**
  * 新笔记
@@ -57,6 +69,11 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
     private var noteInfo: NoteInfo? = null
 
     /**
+     * 笔记-文件 信息
+     */
+    private var noteFileContentList: MutableList<NoteFileContent>? = null
+
+    /**
      * 已保存笔记内容
      */
     private var oldNoteContent = ""
@@ -65,9 +82,21 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
      * 检测笔记线程
      */
     private var checkNoteRunnable: Runnable? = null
-    private var checkNoteFeature: ScheduledFuture<*>? = null
+    private var checkNoteFuture: ScheduledFuture<*>? = null
+    private var addImageFuture: Future<*>? = null
+    private var findNoteFileFuture: Future<*>? = null
+
+    /**
+     * 拍照图片链接
+     */
+    private val takePictureUri: AtomicReference<Uri> = AtomicReference()
+
 
     private var binding: NoteInfoAddLayoutBinding? = null
+
+
+    private var newNoteInfoImageRvAdapter: NewNoteInfoImageRvAdapter? = null
+    private var newNoteInfoImageLayoutManager: LinearLayoutManager? = null
 
     /**
      * 获取 选择 图片启动 器
@@ -107,15 +136,32 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
 //        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
 
         noteInfoScheduleLayout = findViewById(R.id.note_info_add_content_schedule_layout)
+
+        newNoteInfoImageLayoutManager = LinearLayoutManager(mContext)
+            .apply {
+                this.orientation = LinearLayoutManager.HORIZONTAL
+                this.offsetChildrenHorizontal(resources.getDimensionPixelOffset(R.dimen.margin_layout))
+            }
+        newNoteInfoImageRvAdapter = NewNoteInfoImageRvAdapter(mContext)
+            .apply {
+                listener = NewNoteInfoImageRvAdapterListenerImpl()
+            }
+
         binding?.let {
             setSupportActionBar(it.noteInfoAddTopToolbar)
             it.noteInfoAddContentBrl.setOnClickListener(this)
             it.noteIabImageLl.setOnClickListener(this)
+            it.noteInfoAddContentImageRv.let { rv ->
+                rv.layoutManager = newNoteInfoImageLayoutManager
+                rv.adapter = newNoteInfoImageRvAdapter
+                rv.addItemDecoration(HorSpanItemDecoration(mContext))
+            }
         }
 
         // 注册启动器
         registerLauncher()
     }
+
 
     /**
      * 注册启动器
@@ -123,13 +169,23 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
     private fun registerLauncher() {
         // 注册 请求 图片 启动器
         getImageLauncher = registerForActivityResult(PickImageActivityResultContracts()) { result ->
-            L.i(TAG, "onActivityResult: uri - $result")
-            // TODO: 2022/5/3 处理选中文件
+            L.i(TAG, "registerLauncher: onActivityResult: uri - $result")
+            addImageFuture = result?.let {
+                getWorkThread("_pick_image")?.submit(SaveNoteFileRunnable(it))
+            }
         }
 
         // 注册 拍照 启动器
         takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) {
-
+            val uri = takePictureUri.get()
+            L.i(
+                TAG,
+                "registerLauncher: onActivityResult: is TakePicture success? $it >>> uri: $uri"
+            )
+            if (it && uri != null) {
+                addImageFuture = getWorkThread("_take_picture")?.submit(SaveNoteFileRunnable(uri))
+                takePictureUri.set(null)
+            }
         }
     }
 
@@ -158,12 +214,18 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
                     BaseTools.getBaseDateFormat().format(updateDate)
                 oldNoteContent = noteContent
             }
+
+            // 查询 笔记文件信息
+            findNoteFileFuture =
+                getWorkThread("_find_note_file")?.submit(FindNoteFileContentRunnable(noteInfoId))
         }
+
+        L.i(TAG, "initData: noteFileContentList = [$noteFileContentList]")
         if (checkNoteRunnable == null) {
             checkNoteRunnable = CheckNoteInfoRunnable(noteInfoId)
         }
         // 每 5 S 检测一次
-        checkNoteFeature = getScheduleThread(TAG + "_initData")
+        checkNoteFuture = getScheduleThread(TAG + "_initData")
             ?.scheduleAtFixedRate(checkNoteRunnable, 5, 5, TimeUnit.SECONDS)
     }
 
@@ -247,9 +309,15 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
     override fun onDestroyTask() {
         super.onDestroyTask()
         L.i(TAG, "onDestroyTask: =================>>>> ")
-        checkNoteFeature?.cancel(true)
-        checkNoteFeature = null
+        checkNoteFuture?.cancel(true)
+        checkNoteFuture = null
         checkNoteRunnable = null
+        removeNoteFileFuture?.cancel(true)
+        removeNoteFileFuture = null
+        addImageFuture?.cancel(true)
+        addImageFuture = null
+        findNoteFileFuture?.cancel(true)
+        findNoteFileFuture = null
         unregisterLauncher()
         binding = null
     }
@@ -263,7 +331,7 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
             when (v?.id) {
                 bindingTemp.noteInfoAddContentBrl.id -> {
                     // 笔记内容点击
-                    bindingTemp.noteInfoAddContentCenterLl.let {
+                    bindingTemp.noteInfoAddContentCenterRl.let {
                         val count = it.childCount
                         val lastView = it.getChildAt(count - 1)
                         lastView.performClick()
@@ -279,6 +347,27 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
             }
         }
 
+    }
+
+    /**
+     * 查询 笔记 文件 信息 线程
+     */
+    private inner class FindNoteFileContentRunnable(val noteInfoId: String) : Runnable {
+
+        override fun run() {
+            val noteFileList = NoteFileController.findNoteFileContentByNoteId(noteInfoId)
+            L.i(TAG, "FindNoteFileContentRunnable: run: noteFileList = $noteFileList")
+            noteFileContentList = noteFileList
+            val fileInfoList = mutableListOf<FileInfo>()
+            noteFileList.forEach {
+                fileInfoList.add(it.fileInfo)
+            }
+            if (fileInfoList.isNotEmpty()) {
+                getUiThread("_load_note_file")?.execute {
+                    newNoteInfoImageRvAdapter?.refreshData(fileInfoList)
+                }
+            }
+        }
     }
 
     /**
@@ -301,6 +390,7 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
      * 保存笔录信息
      */
     private fun saveNoteInfo() {
+        // 获取笔记内容。
         val newContent = binding?.noteInfoAddContentScheduleLayout?.getContent()
         if (oldNoteContent != newContent) {
             if (noteInfo != null) {
@@ -346,8 +436,8 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
             val content = editText?.get()?.text.toString()
             // 内容是否有修改。
             val haveChange = noteInfo.noteContent != content
-            L.d(TAG, "run: haveChanged = $haveChange")
             if (changed != haveChange) {
+                L.d(TAG, "run: haveChanged: form [$changed] --> to [$haveChange]")
                 getUiThread("_check_noteInfo")?.execute {
                     val title = noteInfo.noteTitle
                     val t = if (haveChange) "${title}*" else title
@@ -432,22 +522,154 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
         override fun takePicture() {
             L.i(TAG, "takePicture: ")
             // TODO: 2022/5/3 根据当前时间创建 相册 URI ;
-//            takePictureLauncher?.launch("")
+            if (mContext == null) {
+                L.e(TAG, "takePicture: mContent is null ")
+                return
+            }
+            val fileParentPath = FileUtil.getNoteFilePath(mContext)
+            val fileName = FileUtil.createFileNameWithDate("image", ".jpg")
+            val filePath = fileParentPath + File.separatorChar + fileName
+            L.i(TAG, "takePicture: ")
+            val uri = ProviderUtil.getUriFromFile(mContext, File(filePath), mContext.packageName)
+            L.i(TAG, "takePicture: filePath: $filePath  -> uri: $uri ")
+            takePictureUri.set(uri)
+            takePictureLauncher?.launch(uri)
         }
     }
-    /* ------------------------ 添加笔记土图片内容 ---------------------- */
 
-    private class TransferImageThread : Thread() {
+    /* ------------------------ 添加笔记图片内容 ---------------------- */
+
+    /**
+     * 移除笔记 文件 Future
+     */
+    private var removeNoteFileFuture: Future<*>? = null
+
+    /**
+     * 图片监听
+     */
+    private inner class NewNoteInfoImageRvAdapterListenerImpl :
+        NewNoteInfoImageRvAdapter.NewNoteInfoImageRvAdapterListener {
+        override fun clickClose(v: View?, position: Int) {
+            L.i(TAG, "clickClose: --- > remove . $position ")
+            removeNoteFileFuture = getWorkThread("_click_close")?.submit {
+                val fileInfo = newNoteInfoImageRvAdapter?.getItemByPosition(position)
+                L.i(TAG, "clickClose: fileInfo = $fileInfo ")
+                fileInfo?.let {
+                    removeNoteFileContent(it)
+                }
+                getUiThread("_click_close")?.execute {
+                    newNoteInfoImageRvAdapter?.removeItemData(position)
+                }
+            }
+        }
+    }
+
+    /**
+     * 保存笔记文件线程
+     */
+    private inner class SaveNoteFileRunnable(val uri: Uri) : Runnable {
 
         override fun run() {
-            super.run()
-            val file = File("")
+            L.i(TAG, "SaveNoteFileRunnable run: ---->>> uri - [$uri]")
+            val fileInfo = findFileInfo(uri)
+            L.i(TAG, "SaveNoteFileRunnable run: fileInfo: $fileInfo")
+            val noteFileContent = addNoteFileContent(fileInfo)
+            L.i(TAG, "SaveNoteFileRunnable run: noteFileContent: $noteFileContent")
+            noteFileContent?.let {
+                noteFileContentList?.add(it)
+            }
+            getUiThread("_save_note_file_content")?.execute {
+                L.i(TAG, "SaveNoteFileRunnable run: addItemData")
+                newNoteInfoImageRvAdapter?.addItemData(fileInfo)
+            }
         }
     }
 
-    private fun contentAddImageViewContent() {
-
+    /**
+     * 查询文件信息
+     * @param uri 文件链接
+     */
+    private fun findFileInfo(uri: Uri): FileInfo {
+        L.i(TAG, "findFileInfo: uri - [$uri]")
+        val path = ProviderUtil.queryFilePathByUri(mContext, uri)
+        L.i(TAG, "findFileInfo: uri = $uri --> path = $path")
+        var fileInfo = FileInfoController.findFileInfoByUri(uri)
+        if (fileInfo == null) {
+            val date = BaseTools.getLocalDate()
+            // 添加新文件信息
+            fileInfo = FileInfo()
+                .apply {
+                    this.filePath = path
+                    this.uri = uri.toString()
+                    path?.let {
+                        val file = File(path)
+                        if (file.exists()) {
+                            this.fileName = file.name
+                        }
+                    }
+                    this.fileType = "image/*"
+                    this.createDate = date
+                    this.updateDate = date
+                }
+            L.i(TAG, "findFileInfo: [INSERT NEW] FileInfo = $fileInfo")
+            FileInfoController.insertFileInfo(fileInfo)
+        }
+        return fileInfo
     }
 
-    /* ------------------------ 添加笔记土图片内容 ---------------------- */
+    /**
+     * 添加 笔记 文件 信息
+     * @param fileInfo 文件 信息
+     * @return noteFileContent?
+     *
+     */
+    @WorkerThread
+    private fun addNoteFileContent(fileInfo: FileInfo): NoteFileContent? {
+        if (noteInfo == null) {
+            L.i(TAG, "addNoteFileContent: note info is null. ")
+            return null
+        }
+        var noteFileContent =
+            NoteFileController.findNoteFileContentByContent(noteInfo?.noteInfoId, fileInfo.fileId)
+        // 未查询到相关 笔记 文件  信息
+        if (noteFileContent == null) {
+            val date = BaseTools.getLocalDate()
+            noteFileContent = NoteFileContent()
+                .apply {
+                    this.noteId = noteInfoId
+                    this.fileInfo = fileInfo
+                    this.fileId = fileInfo.fileId
+                    this.index =
+                        NoteFileController.findLastNoteFileContentIndexByNoteId(noteInfo!!.noteInfoId) + 1
+                    this.createDate = date
+                    this.updateDate = date
+                }
+            NoteFileController.insertNoteFileContent(noteFileContent)
+            L.i(TAG, "addNoteFileContent: [INSERT NEW] noteFileContent: $noteFileContent")
+        }
+        return noteFileContent
+    }
+
+    /**
+     * 移除笔记文件 内容
+     */
+    @WorkerThread
+    private fun removeNoteFileContent(fileInfo: FileInfo) {
+        if (noteInfo == null) {
+            L.w(TAG, "removeNoteFileContent: note info is null. ")
+            return
+        }
+        val noteFileContent =
+            NoteFileController.findNoteFileContentByContent(noteInfoId, fileInfo.fileId)
+        L.i(
+            TAG,
+            "removeNoteFileContent: noteFileContent = $noteFileContent , noteInfoId = $noteInfoId , fileId = ${fileInfo.fileId} ."
+        )
+        noteFileContent?.let {
+            NoteFileController.deleteNoteFileContent(it)
+            L.i(TAG, "removeNoteFileContent: remove note file content .")
+        }
+    }
+
+    /* ------------------------ 添加笔记图片内容 ---------------------- */
 }

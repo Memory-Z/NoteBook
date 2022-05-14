@@ -23,6 +23,11 @@ object Constants {
         private const val BASE_BACKUP_DATABASE_PATH = "backup"
 
         /**
+         * 笔记文件 地址
+         */
+        const val BASE_NOTE_FILE_PATH = "note_file"
+
+        /**
          * 获取备份地址
          */
         fun getBaseBackupPath(context: Context): String {
