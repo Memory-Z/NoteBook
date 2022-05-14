@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.util.L
 import com.inz.z.base.util.LauncherHelper
+import com.inz.z.base.util.ThreadPoolUtils
 import com.inz.z.base.view.AbsBaseFragment
 import com.inz.z.note_book.R
 import com.inz.z.note_book.base.FragmentContentTypeValue
@@ -35,6 +36,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DefaultObserver
 import io.reactivex.schedulers.Schedulers
 import java.util.*
+import java.util.concurrent.Future
+import java.util.concurrent.TimeUnit
 
 /**
  * 首页导航页
@@ -66,7 +69,7 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
     /**
      * handler
      */
-    private lateinit var mNoteNavHandler: Handler
+    private var mNoteNavHandler: Handler? = null
 
     /**
      * 显示笔记数量
@@ -84,6 +87,11 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
     private var hintNovDateLl: LinearLayout? = null
 
     val mainListener = MainListenerImpl()
+
+    /**
+     * 检测时间 Future
+     */
+    private var checkDateFuture: Future<*>? = null
 
     private var binding: NoteNavLayoutBinding? = null
     private var hintBinding: NoteNavHintLayoutBinding? = null
@@ -190,7 +198,12 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
         if (checkDataRunnable != null) {
             checkDataRunnable = null
         }
-        mNoteNavHandler.removeCallbacksAndMessages(null)
+        // +bug, 11654, 2022/5/14 , modify, memory leak.
+        checkDateFuture?.cancel(true)
+        checkDateFuture = null
+        mNoteNavHandler?.removeCallbacksAndMessages(null)
+        mNoteNavHandler = null
+        // -bug, 11654, 2022/5/14 , modify, memory leak.
         binding = null
         hintBinding = null
     }
@@ -235,7 +248,10 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
         if (checkDataRunnable == null) {
             checkDataRunnable = CheckDataRunnable()
         }
-        hintBinding?.noteNavHintDataTv?.postDelayed(checkDataRunnable, delay)
+        // +bug, 11654, 2022/5/14 , modify, memory leak.
+        checkDateFuture = ThreadPoolUtils.getScheduleThread("_check_date")
+            .schedule(checkDataRunnable, delay, TimeUnit.MILLISECONDS)
+        // -bug, 11654, 2022/5/14 , modify, memory leak.
     }
 
     /**
@@ -290,25 +306,29 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
                     minute = get(Calendar.MINUTE)
                     seconds = get(Calendar.SECOND)
                 }.time
+            val delay: Long
             when {
                 hour < 22 -> // 小于 22 点。 每两小时检测一次
-                    checkDateText(2 * 60 * 60 * 1000)
+                    delay = 2 * 60 * 60 * 1000
                 hour < 23 -> // 小于 23 点。每一小时检测一次
-                    checkDateText(60 * 60 * 1000)
+                    delay = 60 * 60 * 1000
                 minute < 50 -> // 小于 23点50 分，每 10 分检测一次
-                    checkDateText(10 * 60 * 1000)
+                    delay = 10 * 60 * 1000
                 minute < 55 -> // 小于 23 点55 分每5分执行这一次
-                    checkDateText(5 * 60 * 1000)
+                    delay = 5 * 60 * 1000
                 minute < 59 -> // 小于 23 点59 分，每 1 分钟执行一次
-                    checkDateText(60 * 1000)
+                    delay = 60 * 1000
                 seconds < 50 -> // 小于 23 点 59 分 50s 每 10s 执行一次
-                    checkDateText(10 * 1000)
+                    delay = 10 * 1000
                 else -> {
-                    setDateText(date)
+                    mNoteNavHandler?.post {
+                        setDateText(date)
+                    }
                     // 否则，每秒执行一次
-                    checkDateText(1000)
+                    delay = 1000
                 }
             }
+            checkDateText(delay)
         }
     }
 
