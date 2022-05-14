@@ -109,21 +109,10 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
     }
 
     override fun initView() {
-        hintBinding?.noteNavHintDataCenterLl?.apply {
-            this.setOnClickListener(this@NoteNavFragment)
-        }
+        hintBinding?.noteNavHintDataCenterLl?.setOnClickListener(this)
         mNoteGroupRvAdapter = NoteGroupRvAdapter(mContext)
             .apply {
-                setAdapterListener(object : NoteGroupRvAdapter.NoteGroupItemListener {
-                    override fun onItemClick(v: View, position: Int) {
-                        val noteGroup = noteGroupList?.get(position)
-                        L.i(TAG, "noteGroupRvAdapter $position is Click , noteGroup = $noteGroup")
-                        // 跳转至 Note 组界面
-                        if (noteGroup != null) {
-                            gotoGroupActivity(false, noteGroup.noteGroupId)
-                        }
-                    }
-                })
+                setAdapterListener(NoteGroupRvAdapterListenerImpl())
             }
 
         mNoteGroupLayoutManager = LinearLayoutManager(mContext)
@@ -260,6 +249,20 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
             it.noteNavHintDataTv.text = getString(R.string.base_format_day).format(date)
             it.noteNavHintWeekTv.text = getString(R.string.base_format_week).format(date)
             L.i(TAG, "setDateText: year2 = ${it.noteNavHintYearTv.text}")
+        }
+    }
+
+    /**
+     * NoteGroup RvAdapter 监听实现
+     */
+    private inner class NoteGroupRvAdapterListenerImpl : NoteGroupRvAdapter.NoteGroupItemListener {
+        override fun onItemClick(v: View?, position: Int) {
+            val noteGroup = noteGroupList?.get(position)
+            L.i(TAG, "noteGroupRvAdapter $position is Click , noteGroup = $noteGroup")
+            // 跳转至 Note 组界面
+            if (noteGroup != null) {
+                gotoGroupActivity(false, noteGroup.noteGroupId)
+            }
         }
     }
 

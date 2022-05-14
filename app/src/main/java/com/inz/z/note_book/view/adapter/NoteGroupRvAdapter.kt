@@ -3,9 +3,9 @@ package com.inz.z.note_book.view.adapter
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.inz.z.base.base.AbsBaseRvAdapter
 import com.inz.z.base.base.AbsBaseRvViewHolder
-import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.NoteGroup
 import com.inz.z.note_book.database.controller.NoteGroupWithInfoService
 import com.inz.z.note_book.databinding.ItemNoteGroupLayoutBinding
@@ -20,13 +20,10 @@ class NoteGroupRvAdapter(mContext: Context?) :
     AbsBaseRvAdapter<NoteGroup, NoteGroupRvAdapter.NoteGroupRvHolder>(mContext) {
 
     interface NoteGroupItemListener {
-        fun onItemClick(v: View, position: Int)
+        fun onItemClick(v: View?, position: Int)
     }
 
-    companion object {
-        private var noteGroupItemListener: NoteGroupItemListener? = null
-
-    }
+    private var noteGroupItemListener: NoteGroupItemListener? = null
 
     override fun onCreateVH(parent: ViewGroup, viewType: Int): NoteGroupRvHolder {
 //        val view = mLayoutInflater.inflate(R.layout.item_note_group_layout, parent, false)
@@ -43,13 +40,23 @@ class NoteGroupRvAdapter(mContext: Context?) :
 
     }
 
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        // +bug, 11654, 2022/5/14 , modify, fix memory leak.
+        this.noteGroupItemListener = null
+    }
 
-    class NoteGroupRvHolder(val mItemNoteGroupLayoutBinding: ItemNoteGroupLayoutBinding) :
-        AbsBaseRvViewHolder(mItemNoteGroupLayoutBinding.root) {
+    inner class NoteGroupRvHolder(val mItemNoteGroupLayoutBinding: ItemNoteGroupLayoutBinding) :
+        AbsBaseRvViewHolder(mItemNoteGroupLayoutBinding.root), View.OnClickListener {
 
         init {
-            itemView.setOnClickListener {
-                noteGroupItemListener?.onItemClick(it, adapterPosition)
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            val position = bindingAdapterPosition
+            if (RecyclerView.NO_POSITION != position) {
+                noteGroupItemListener?.onItemClick(v, bindingAdapterPosition)
             }
         }
     }
