@@ -139,6 +139,7 @@ class WidgetNoteInfoListRemoteViewsService : RemoteViewsService() {
 
         override fun onDestroy() {
             L.i(TAG, "onDestroy. ")
+
             this.mContext = null
         }
 

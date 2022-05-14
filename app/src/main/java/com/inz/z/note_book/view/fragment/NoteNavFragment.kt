@@ -37,7 +37,7 @@ import io.reactivex.observers.DefaultObserver
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 import java.util.concurrent.Future
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.ScheduledThreadPoolExecutor
 
 /**
  * 首页导航页
@@ -186,21 +186,25 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
         noteGroupList = NoteGroupService.findAll() as MutableList<NoteGroup>
         mNoteGroupRvAdapter?.replaceNoteGroupList(noteGroupList!!)
         // 启动时检测，确认当前时间
-        checkDateText(0)
+        checkDateText()
     }
 
     override fun onStop() {
         super.onStop()
+        val threadPool = ThreadPoolUtils.getScheduleThread("_destroy")
+        if (threadPool is ScheduledThreadPoolExecutor) {
+            threadPool.queue.remove(checkDataRunnable)
+        }
+        checkDateFuture?.cancel(true)
+        checkDateFuture = null
+        if (checkDataRunnable != null) {
+            checkDataRunnable = null
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if (checkDataRunnable != null) {
-            checkDataRunnable = null
-        }
         // +bug, 11654, 2022/5/14 , modify, memory leak.
-        checkDateFuture?.cancel(true)
-        checkDateFuture = null
         mNoteNavHandler?.removeCallbacksAndMessages(null)
         mNoteNavHandler = null
         // -bug, 11654, 2022/5/14 , modify, memory leak.
@@ -239,9 +243,15 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
     /**
      * 检测日期
      */
-    private fun checkDateText(delay: Long) {
-        L.i(TAG, "checkDateText: ---- ${delay}. ")
+    private fun checkDateText() {
+        L.i(TAG, "checkDateText: ----. ")
         if (this.isHidden || this.isRemoving || this.isDetached || !this.isVisible) {
+            val threadPool = ThreadPoolUtils.getScheduleThread("_check_date")
+            if (threadPool is ScheduledThreadPoolExecutor) {
+                threadPool.queue.remove(checkDataRunnable)
+            }
+            checkDateFuture?.cancel(true)
+            checkDateFuture = null
             checkDataRunnable = null
             return
         }
@@ -249,8 +259,7 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
             checkDataRunnable = CheckDataRunnable()
         }
         // +bug, 11654, 2022/5/14 , modify, memory leak.
-        checkDateFuture = ThreadPoolUtils.getScheduleThread("_check_date")
-            .schedule(checkDataRunnable, delay, TimeUnit.MILLISECONDS)
+        checkDateFuture = ThreadPoolUtils.getScheduleThread("_check_date").submit(checkDataRunnable)
         // -bug, 11654, 2022/5/14 , modify, memory leak.
     }
 
@@ -285,7 +294,7 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
     /**
      * 检测时间线程
      */
-    private var checkDataRunnable: Runnable? = null
+    private var checkDataRunnable: CheckDataRunnable? = null
 
 
     /**
@@ -328,7 +337,12 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
                     delay = 1000
                 }
             }
-            checkDateText(delay)
+            try {
+                Thread.sleep(delay)
+                checkDateText()
+            } catch (e: Exception) {
+
+            }
         }
     }
 

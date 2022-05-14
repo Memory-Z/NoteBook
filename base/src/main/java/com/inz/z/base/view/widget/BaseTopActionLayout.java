@@ -179,7 +179,7 @@ public class BaseTopActionLayout extends LinearLayout {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        setTopStatusHeight(statusBarHeight);
+//        setTopStatusHeight(statusBarHeight);
 
     }
 
