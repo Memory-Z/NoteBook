@@ -11,14 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:contentDescription="@string/_image"
-        android:src="@drawable/img_phone_1" />
+        android:contentDescription="@string/_image" />
 
     <ImageView
         android:id="@+id/item_nnii_close_iv"
         style="@style/Base.ImageView.Icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/image_icon_min_size"
+        android:layout_height="@dimen/image_icon_min_size"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/dp02"

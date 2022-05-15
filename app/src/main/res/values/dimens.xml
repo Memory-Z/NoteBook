@@ -86,4 +86,7 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <!-- 卡片圆角  -->
     <dimen name="card_radius">@dimen/dp04</dimen>
 
+    <dimen name="new_note_image_layout_height_expand_less">188dp</dimen>
+    <dimen name="new_note_image_layout_height_expand_more">48dp</dimen>
+
 </resources>

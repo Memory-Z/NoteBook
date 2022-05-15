@@ -73,6 +73,7 @@
         android:layout_height="match_parent"
         android:layout_above="@id/note_info_add_content_bottom_ll"
         android:layout_below="@id/note_info_add_top_ll"
+        android:background="@color/card_second_color"
         app:base_relative_layout_content_view="@id/note_info_add_content_center_rl">
 
         <RelativeLayout
@@ -114,38 +115,55 @@
                 android:id="@+id/note_info_add_content_image_rl"
                 style="@style/NoteBookAppTheme.Layout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp160"
+                android:layout_height="@dimen/new_note_image_layout_height_expand_less"
                 android:layout_alignParentBottom="true"
+                android:animateLayoutChanges="true"
                 android:orientation="horizontal"
-                android:paddingStart="@dimen/border_lr_dimen"
+                android:paddingStart="@dimen/dp0"
                 android:paddingEnd="@dimen/dp0">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/note_info_add_content_image_rv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp120"
+                <RelativeLayout
+                    android:id="@+id/note_info_add_content_image_content_rl"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp140"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true" />
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/card_main_color"
+                    android:paddingTop="@dimen/dp10"
+                    android:paddingBottom="@dimen/dp10">
 
-                <ImageView
-                    android:layout_width="@dimen/dp36"
-                    android:layout_height="0dp"
-                    android:layout_alignTop="@id/note_info_add_content_image_rv"
-                    android:layout_alignBottom="@id/note_info_add_content_image_rv"
-                    android:layout_alignParentEnd="true"
-                    android:contentDescription="@string/_cover"
-                    android:src="@drawable/bg_gradual_tran_to_white" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/note_info_add_content_image_rv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:paddingStart="@dimen/border_lr_dimen"
+                        android:paddingEnd="@dimen/dp0" />
+
+                    <ImageView
+                        android:layout_width="@dimen/dp36"
+                        android:layout_height="0dp"
+                        android:layout_alignTop="@id/note_info_add_content_image_rv"
+                        android:layout_alignBottom="@id/note_info_add_content_image_rv"
+                        android:layout_alignParentEnd="true"
+                        android:contentDescription="@string/_cover"
+                        android:src="@drawable/bg_gradual_tran_to_white" />
+                </RelativeLayout>
+
 
                 <ImageView
                     android:id="@+id/note_info_add_content_image_close_iv"
-                    android:layout_width="@dimen/image_icon_size"
-                    android:layout_height="@dimen/image_icon_size"
-                    android:layout_above="@id/note_info_add_content_image_rv"
+                    android:layout_width="@dimen/touch_target_size"
+                    android:layout_height="@dimen/touch_target_size"
+                    android:layout_above="@id/note_info_add_content_image_content_rl"
                     android:layout_alignParentEnd="true"
+                    android:background="@drawable/bg_expand_top_one"
                     android:contentDescription="@string/_close"
-                    app:tint="@color/colorPrimary"
-                    android:src="@drawable/ic_expand_more_black_24dp" />
+                    android:src="@drawable/ic_expand_more_black_24dp"
+                    app:tint="@color/colorPrimary" />
 
 
             </RelativeLayout>
@@ -162,12 +180,13 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/tool_bar_height"
         android:layout_alignParentBottom="true"
+        android:background="@color/card_main_color"
         android:orientation="vertical">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/lineColor" />
+        <!--        <View-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="1px"-->
+        <!--            android:background="@color/lineColor" />-->
 
 
         <RelativeLayout

@@ -1,5 +1,6 @@
 package com.inz.z.note_book.view.activity
 
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.KeyEvent
 import android.view.Menu
@@ -10,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.WorkerThread
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.KeyBoardUtils
@@ -151,13 +153,15 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
             setSupportActionBar(it.noteInfoAddTopToolbar)
             it.noteInfoAddContentBrl.setOnClickListener(this)
             it.noteIabImageLl.setOnClickListener(this)
+            it.noteInfoAddContentImageCloseIv.setOnClickListener(this)
             it.noteInfoAddContentImageRv.let { rv ->
                 rv.layoutManager = newNoteInfoImageLayoutManager
                 rv.adapter = newNoteInfoImageRvAdapter
                 rv.addItemDecoration(HorSpanItemDecoration(mContext))
             }
         }
-
+        // 切换显示状态
+        targetImageLayout(false, expand = true)
         // 注册启动器
         registerLauncher()
     }
@@ -341,12 +345,61 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
                     // 选择图片弹窗
                     showChooseImageDialog()
                 }
+                bindingTemp.noteInfoAddContentImageCloseIv.id -> {
+                    // 切换显示图片
+                    targetImageLayoutVisibility(true)
+                }
                 else -> {
 
                 }
             }
         }
 
+    }
+
+    /**
+     * 切换显示状态
+     * @param needChangeExpandStatus 是否需要切换显示状态, 默认不切换，仅点击时切换
+     */
+    private fun targetImageLayoutVisibility(needChangeExpandStatus: Boolean = false) {
+        // 切换显示图片
+        val haveImage = (newNoteInfoImageRvAdapter?.itemCount ?: 0) > 0
+        val currentStatus =
+            binding?.noteInfoAddContentImageContentRl?.visibility == View.VISIBLE
+        val expand = if (needChangeExpandStatus) !currentStatus else currentStatus
+        targetImageLayout(haveImage, expand)
+    }
+
+    /**
+     * 切换显示图片栏状态
+     * @param haveImage 是否有相关图片
+     * @param expand 是否展开
+     */
+    private fun targetImageLayout(haveImage: Boolean, expand: Boolean) {
+        binding?.let {
+            it.noteInfoAddContentImageRl.visibility = if (haveImage) View.VISIBLE else View.GONE
+            if (haveImage) {
+                val closeDrawable: Drawable?
+                val imageLayoutHeight: Int
+                if (expand) {
+                    it.noteInfoAddContentImageContentRl.visibility = View.VISIBLE
+                    closeDrawable =
+                        ContextCompat.getDrawable(mContext, R.drawable.ic_expand_more_black_24dp)
+                    imageLayoutHeight =
+                        resources.getDimensionPixelOffset(R.dimen.new_note_image_layout_height_expand_less)
+                } else {
+                    it.noteInfoAddContentImageContentRl.visibility = View.GONE
+                    closeDrawable =
+                        ContextCompat.getDrawable(mContext, R.drawable.ic_expand_less_black_24dp)
+                    imageLayoutHeight =
+                        resources.getDimensionPixelOffset(R.dimen.new_note_image_layout_height_expand_more)
+                }
+                it.noteInfoAddContentImageCloseIv.setImageDrawable(closeDrawable)
+                val lp = it.noteInfoAddContentImageRl.layoutParams
+                lp.height = imageLayoutHeight
+                it.noteInfoAddContentImageRl.layoutParams = lp
+            }
+        }
     }
 
     /**
@@ -365,6 +418,8 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
             if (fileInfoList.isNotEmpty()) {
                 getUiThread("_load_note_file")?.execute {
                     newNoteInfoImageRvAdapter?.refreshData(fileInfoList)
+                    // 切换图片显示状态
+                    targetImageLayoutVisibility()
                 }
             }
         }
@@ -521,7 +576,6 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
 
         override fun takePicture() {
             L.i(TAG, "takePicture: ")
-            // TODO: 2022/5/3 根据当前时间创建 相册 URI ;
             if (mContext == null) {
                 L.e(TAG, "takePicture: mContent is null ")
                 return
@@ -559,6 +613,8 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
                 }
                 getUiThread("_click_close")?.execute {
                     newNoteInfoImageRvAdapter?.removeItemData(position)
+                    // 切换显示状态
+                    targetImageLayoutVisibility()
                 }
             }
         }
@@ -581,6 +637,8 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
             getUiThread("_save_note_file_content")?.execute {
                 L.i(TAG, "SaveNoteFileRunnable run: addItemData")
                 newNoteInfoImageRvAdapter?.addItemData(fileInfo)
+                // 切换显示状态
+                targetImageLayoutVisibility()
             }
         }
     }

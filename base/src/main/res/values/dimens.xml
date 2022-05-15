@@ -84,6 +84,7 @@
     <dimen name="dp96">96dp</dimen>
     <dimen name="dp100">100dp</dimen>
     <dimen name="dp120">120dp</dimen>
+    <dimen name="dp140">140dp</dimen>
     <dimen name="dp160">160dp</dimen>
     <dimen name="dp180">180dp</dimen>
     <dimen name="dp196">196dp</dimen>
