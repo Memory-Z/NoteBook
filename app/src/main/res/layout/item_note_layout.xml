@@ -7,7 +7,7 @@
     android:layout_marginTop="@dimen/content_space_between_dimen"
     android:layout_marginEnd="@dimen/border_lr_dimen"
     android:layout_marginBottom="@dimen/content_space_between_dimen"
-    android:background="@drawable/bg_card_white"
+    android:background="@drawable/bg_card_main_color"
     android:orientation="vertical"
     android:paddingStart="@dimen/border_lr_dimen"
     android:paddingTop="@dimen/content_space_between_dimen"

@@ -8,7 +8,6 @@ import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatDialog
-import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import com.inz.z.base.util.KeyBoardUtils
 import com.inz.z.base.util.L
@@ -81,22 +80,18 @@ class AddNoteInfoDialog : AppCompatDialog, View.OnClickListener {
             it.noteInfoAddSampleTitleEt.doAfterTextChanged { editable ->
                 L.i(TAG, "initView: setOnEditorActionListener ")
                 // 根据写入文本长度判断是否可以进行提交/
-                val bgDrawableId: Int
                 val tintId: Int
                 val canClick: Boolean
-                if (editable?.toString()?.length ?: 0 > 0) {
-                    bgDrawableId = R.drawable.bg_card_main_color
-                    tintId = R.color.white
+                if ((editable?.toString()?.length ?: 0) > 0) {
+                    tintId = R.color.colorPrimary
                     canClick = true
                 } else {
-                    bgDrawableId = R.drawable.bg_card_gray
-                    tintId = R.color.base_background_color
+                    tintId = R.color.textGray
                     canClick = false
                 }
                 it.noteInfoAddSampleAddIv.let { addIv ->
                     addIv.isClickable = canClick
-                    addIv.background = ContextCompat.getDrawable(context, bgDrawableId)
-                    addIv.foregroundTintList = context.getColorStateList(tintId)
+                    addIv.backgroundTintList = context.getColorStateList(tintId)
                 }
             }
         }
