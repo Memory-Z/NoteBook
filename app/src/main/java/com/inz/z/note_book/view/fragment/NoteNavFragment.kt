@@ -46,7 +46,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor
  * @version 1.0.0
  * Create by inz in 2019/10/25 11:48.
  */
-class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
+class NoteNavFragment private constructor() : AbsBaseFragment(), View.OnClickListener {
 
     companion object {
         private const val TAG = "NoteNavFragment"
@@ -57,6 +57,12 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
         private const val SHOW_NOTE_INFO_NUMBER = 5
         private const val NOTE_NAV_GET_NOTE_GROUP = 0x0001
         private const val NOTE_NAV_GET_NOTE_INFO = 0x0002
+
+        fun getInstance(listener: NoteNavFragmentListener?): NoteNavFragment {
+            val fragment = NoteNavFragment()
+            fragment.listener = listener
+            return fragment
+        }
     }
 
     private lateinit var mNoteGroupLayoutManager: LinearLayoutManager
@@ -95,6 +101,11 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
 
     private var binding: NoteNavLayoutBinding? = null
     private var hintBinding: NoteNavHintLayoutBinding? = null
+
+    /**
+     * 监听
+     */
+    var listener: NoteNavFragmentListener? = null
 
     override fun initWindow() {
 
@@ -204,6 +215,7 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
+        listener = null
         // +bug, 11654, 2022/5/14 , modify, memory leak.
         mNoteNavHandler?.removeCallbacksAndMessages(null)
         mNoteNavHandler = null
@@ -458,7 +470,11 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
             putString("groupId", groupId)
         }
         intent.putExtras(bundle)
-        startActivity(intent)
+        if (listener != null) {
+            listener!!.gotoNoteGroup(intent)
+        } else {
+            startActivity(intent)
+        }
     }
 
 
@@ -496,6 +512,16 @@ class NoteNavFragment : AbsBaseFragment(), View.OnClickListener {
         override fun onSearchChange(search: String?) {
 
         }
+    }
+
+    /**
+     * 监听
+     */
+    interface NoteNavFragmentListener {
+        /**
+         * 跳转 至 笔记组界面
+         */
+        fun gotoNoteGroup(intent: Intent)
     }
 
 }

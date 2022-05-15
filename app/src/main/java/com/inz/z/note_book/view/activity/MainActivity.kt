@@ -195,8 +195,8 @@ class MainActivity : BaseNoteActivity() {
         val manager = supportFragmentManager
         var noteNavFragment = manager.findFragmentByTag("NoteNavFragment") as NoteNavFragment?
         if (noteNavFragment == null) {
-            noteNavFragment = NoteNavFragment()
-            mainListenerMap.put(VIEW_TYPE_MAIN, noteNavFragment.mainListener)
+            noteNavFragment = NoteNavFragment.getInstance(NoteNavFragmentListenerImpl())
+            mainListenerMap[VIEW_TYPE_MAIN] = noteNavFragment.mainListener
         }
         val fragmentTransient = manager.beginTransaction()
         if (!noteNavFragment.isAdded) {
@@ -204,6 +204,12 @@ class MainActivity : BaseNoteActivity() {
         }
         fragmentTransient.show(noteNavFragment)
         fragmentTransient.commitAllowingStateLoss()
+    }
+
+    inner class NoteNavFragmentListenerImpl : NoteNavFragment.NoteNavFragmentListener {
+        override fun gotoNoteGroup(intent: Intent) {
+            startActivity(intent)
+        }
     }
 
     /**
