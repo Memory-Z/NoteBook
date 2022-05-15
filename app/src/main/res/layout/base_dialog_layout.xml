@@ -24,7 +24,7 @@
             android:layout_marginEnd="@dimen/border_lr_dimen"
             android:contentDescription="@string/image"
             android:src="@drawable/ic_warning_black_24dp"
-            android:tint="@color/accessoryColor"
+            android:tint="@color/warn_color"
             android:visibility="gone" />
 
         <TextView
@@ -84,7 +84,7 @@
             style="@style/NoteBookAppTheme.Button.Dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/border_lr_dimen"
+            android:layout_marginEnd="@dimen/margin_text_layout"
             android:layout_weight="1"
             android:visibility="gone" />
 
@@ -101,7 +101,7 @@
             style="@style/NoteBookAppTheme.Button.Dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/border_lr_dimen"
+            android:layout_marginStart="@dimen/margin_text_layout"
             android:layout_weight="1"
             android:visibility="gone" />
 

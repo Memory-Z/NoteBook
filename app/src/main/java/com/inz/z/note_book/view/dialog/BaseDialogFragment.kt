@@ -97,6 +97,7 @@ class BaseDialogFragment private constructor() : AbsBaseDialogFragment() {
         var showIcon = false
         var drawableRes: Int? = null
         var centerView: View? = null
+        var btnFlag: IntArray = intArrayOf(0, 0, 0)
 
         /**
          * 标题
@@ -132,18 +133,21 @@ class BaseDialogFragment private constructor() : AbsBaseDialogFragment() {
         fun setLeftButton(leftBtn: String1, clickListener: View.OnClickListener?): Builder {
             this.leftBtn = leftBtn
             this.leftListener = clickListener
+            btnFlag[0] = 1
             return this@Builder
         }
 
         fun setRightButton(rightBtn: String1, clickListener: View.OnClickListener?): Builder {
             this.rightBtn = rightBtn
             this.rightListener = clickListener
+            btnFlag[2] = 1
             return this@Builder
         }
 
         fun setCenterButton(centerBtn: String1, clickListener: View.OnClickListener?): Builder {
             this.centerBtn = centerBtn
             this.centerListener = clickListener
+            btnFlag[1] = 1
             return this@Builder
         }
 
@@ -162,20 +166,60 @@ class BaseDialogFragment private constructor() : AbsBaseDialogFragment() {
         if (builder.showIcon) {
             setTitleIcon(builder.showIcon, builder.drawableRes)
         }
-        setTitle(if (builder.title.isEmpty()) getString(R.string._tips) else builder.title)
+        setTitle(builder.title.ifEmpty { getString(R.string._tips) })
         setContentMessage(builder.message)
         if (builder.centerView != null) {
             setContentView(builder.centerView!!)
         }
-        if (!builder.leftBtn.isEmpty()) {
+        val btnFlag = builder.btnFlag
+        if (btnFlag[0] == 1) {
             setLeftBtn(builder.leftBtn, builder.leftListener)
+            setLeftBtnBackground(getButtonRes(0, btnFlag))
         }
-        if (!builder.centerBtn.isEmpty()) {
+        if (btnFlag[1] == 1) {
             setCenterBtn(builder.centerBtn, builder.centerListener)
+            setCenterBtnBackground(getButtonRes(1, btnFlag))
         }
-        if (!builder.rightBtn.isEmpty()) {
+        if (btnFlag[2] == 1) {
             setRightBtn(builder.rightBtn, builder.rightListener)
+            setRightBtnBackground(getButtonRes(2, btnFlag))
         }
+
+    }
+
+    @DrawableRes
+    private fun getButtonRes(position: Int, btnFlag: IntArray): Int {
+        var leftHave = false
+        var rightHave = false
+        btnFlag.forEachIndexed { index, i ->
+            if (i == 1) {
+                if (index < position) {
+                    leftHave = true
+                } else if (index > position) {
+                    rightHave = true
+                }
+            }
+        }
+        L.i(TAG, "getButtonRes: position = $position")
+        val res: Int =
+            if (leftHave) {
+                if (rightHave) {
+                    L.i(TAG, "getButtonRes: 0")
+                    R.drawable.bg_dialog_btn_center
+                } else {
+                    L.i(TAG, "getButtonRes: 1")
+                    R.drawable.bg_dialog_btn_right
+                }
+            } else {
+                if (rightHave) {
+                    L.i(TAG, "getButtonRes: 2")
+                    R.drawable.bg_dialog_btn_left
+                } else {
+                    L.i(TAG, "getButtonRes: 3")
+                    R.drawable.bg_dialog_btn_fill
+                }
+            }
+        return res
     }
 
     /**
@@ -212,10 +256,7 @@ class BaseDialogFragment private constructor() : AbsBaseDialogFragment() {
         binding?.baseDialogTitleIconIv?.visibility = if (show) View.VISIBLE else View.GONE
         if (show && mContext != null && iconRes != null) {
             binding?.baseDialogTitleIconIv?.setImageDrawable(
-                ContextCompat.getDrawable(
-                    mContext,
-                    iconRes
-                )
+                ContextCompat.getDrawable(mContext, iconRes)
             )
         }
     }
@@ -250,6 +291,25 @@ class BaseDialogFragment private constructor() : AbsBaseDialogFragment() {
             visibility = View.VISIBLE
             text = btn
             setOnClickListener(clickListener)
+        }
+    }
+
+    private fun setLeftBtnBackground(@DrawableRes resId: Int) {
+        binding?.baseDialogLeftBtn?.apply {
+            background = ContextCompat.getDrawable(context, resId)
+            backgroundTintList = ContextCompat.getColorStateList(context, R.color.lightGray)
+        }
+    }
+
+    private fun setCenterBtnBackground(@DrawableRes resId: Int) {
+        binding?.baseDialogCenterBtn?.apply {
+            background = ContextCompat.getDrawable(context, resId)
+        }
+    }
+
+    private fun setRightBtnBackground(@DrawableRes resId: Int) {
+        binding?.baseDialogRightBtn?.apply {
+            background = ContextCompat.getDrawable(context, resId)
         }
     }
 }

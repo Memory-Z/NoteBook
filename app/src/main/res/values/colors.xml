@@ -67,4 +67,6 @@
 
     <color name="button_color_def">#FFF</color>
     <color name="button_color_press">#EFEFEF</color>
+
+    <color name="warn_color">#FFB700</color>
 </resources>
