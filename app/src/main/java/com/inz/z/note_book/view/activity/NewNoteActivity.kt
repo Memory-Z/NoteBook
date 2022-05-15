@@ -34,7 +34,6 @@ import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.activity.adapter.NewNoteInfoImageRvAdapter
 import com.inz.z.note_book.view.dialog.BaseDialogFragment
 import com.inz.z.note_book.view.dialog.ChooseImageDialog
-import com.inz.z.note_book.view.widget.ScheduleLayout
 import java.io.File
 import java.lang.ref.WeakReference
 import java.util.*
@@ -55,10 +54,10 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
         const val TAG = "NewNoteActivity"
     }
 
-    /**
-     * 修改内容框，
-     */
-    private var noteInfoScheduleLayout: ScheduleLayout? = null
+//    /**
+//     * 修改内容框，
+//     */
+//    private var noteInfoScheduleLayout: ScheduleLayout? = null
 
     /**
      * 笔记ID
@@ -137,7 +136,7 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
 //        QMUIStatusBarHelper.setStatusBarLightMode(this)
 //        window.statusBarColor = ContextCompat.getColor(mContext, R.color.card_second_color)
 
-        noteInfoScheduleLayout = findViewById(R.id.note_info_add_content_schedule_layout)
+//        noteInfoScheduleLayout = findViewById(R.id.note_info_add_content_schedule_layout)
 
         newNoteInfoImageLayoutManager = LinearLayoutManager(mContext)
             .apply {
@@ -213,7 +212,7 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
             noteInfo = NoteInfoController.findById(noteInfoId)
             noteInfo?.apply {
                 binding?.noteInfoAddTopToolbar?.title = noteTitle
-                binding?.noteInfoAddContentScheduleLayout?.setContent(noteContent)
+                binding?.noteInfoAddContentEt?.setText(noteContent)
                 binding?.noteInfoAddContentTopTimeTv?.text =
                     BaseTools.getBaseDateFormat().format(updateDate)
                 oldNoteContent = noteContent
@@ -303,7 +302,7 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
     override fun onPause() {
         super.onPause()
         // 隐藏键盘
-        noteInfoScheduleLayout?.getEditTextView()?.let {
+        binding?.noteInfoAddContentEt?.let {
             it.clearFocus()
             KeyBoardUtils.hidKeyBoard(it)
         }
@@ -429,7 +428,7 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
      * 检测是否有内容更改
      */
     private fun checkHaveChange(): Boolean {
-        val newContent = binding?.noteInfoAddContentScheduleLayout?.getContent()
+        val newContent = binding?.noteInfoAddContentEt?.text.toString()
         noteInfo?.let {
             // 判断内容是否存在修改，有修改显示提示框。
             if (newContent != it.noteContent) {
@@ -446,7 +445,7 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
      */
     private fun saveNoteInfo() {
         // 获取笔记内容。
-        val newContent = binding?.noteInfoAddContentScheduleLayout?.getContent()
+        val newContent = binding?.noteInfoAddContentEt?.text.toString()
         if (oldNoteContent != newContent) {
             if (noteInfo != null) {
                 noteInfo!!.apply {
@@ -475,9 +474,7 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
 
         init {
             binding?.let {
-                editText = WeakReference(
-                    it.noteInfoAddContentScheduleLayout.getEditTextView()
-                )
+                editText = WeakReference(it.noteInfoAddContentEt)
             }
         }
 

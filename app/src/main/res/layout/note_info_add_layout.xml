@@ -98,16 +98,25 @@
                 android:layout_height="match_parent"
                 android:layout_above="@id/note_info_add_content_image_rl"
                 android:layout_below="@id/note_info_add_content_top_time_tv"
-                android:orientation="vertical"
-                android:paddingStart="@dimen/border_lr_dimen"
-                android:paddingEnd="@dimen/border_lr_dimen">
+                android:orientation="vertical">
 
 
-                <com.inz.z.note_book.view.widget.ScheduleLayout
-                    android:id="@+id/note_info_add_content_schedule_layout"
+                <EditText
+                    android:id="@+id/note_info_add_content_et"
+                    style="@style/NoteBookAppTheme.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:have_schedule_check_box="false" />
+                    android:background="@null"
+                    android:gravity="top|start"
+                    android:hint="@string/_add_content"
+                    android:importantForAutofill="no"
+                    android:inputType="textMultiLine"
+                    android:paddingStart="@dimen/border_lr_dimen"
+                    android:paddingEnd="@dimen/border_lr_dimen"
+                    android:scrollbarStyle="outsideOverlay"
+                    android:scrollbars="vertical"
+                    android:textSize="@dimen/body_text_size"
+                    android:textStyle="normal" />
 
             </LinearLayout>
 
@@ -118,6 +127,8 @@
                 android:layout_height="@dimen/new_note_image_layout_height_expand_less"
                 android:layout_alignParentBottom="true"
                 android:animateLayoutChanges="true"
+                android:background="@color/transparent"
+                android:clickable="false"
                 android:orientation="horizontal"
                 android:paddingStart="@dimen/dp0"
                 android:paddingEnd="@dimen/dp0">
@@ -160,6 +171,7 @@
                     android:layout_height="@dimen/touch_target_size"
                     android:layout_above="@id/note_info_add_content_image_content_rl"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/margin_layout"
                     android:background="@drawable/bg_expand_top_one"
                     android:contentDescription="@string/_close"
                     android:src="@drawable/ic_expand_more_black_24dp"
