@@ -94,5 +94,8 @@ ext {
             // pinyin4j
             'pinyin4j'                  : 'com.github.open-android:pinyin4j:2.5.0',
 
+            // MPAndroidChart
+            'MPAndroidChart'                     : 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
     ]
 }
