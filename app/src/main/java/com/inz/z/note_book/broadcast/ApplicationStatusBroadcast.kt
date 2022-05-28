@@ -5,8 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.inz.z.base.util.L
+import com.inz.z.base.util.ToastUtil
 import com.inz.z.note_book.service.BackupService
 import com.inz.z.note_book.util.Constants
+import com.inz.z.note_book.util.ViewUtil
 
 /**
  *
@@ -28,7 +30,7 @@ class ApplicationStatusBroadcast : BroadcastReceiver() {
         }
         val action = intent.action
         Log.i(TAG, "onReceive: ACTION = ${action}")
-        val bundle = intent.data
+        val bundle = intent.extras
         when (action) {
             // 应用启动广播
             Constants.BaseBroadcastParams.APPLICATION_CREATE_ACTION -> {
@@ -47,6 +49,15 @@ class ApplicationStatusBroadcast : BroadcastReceiver() {
             // 备份服务销毁广播
             Constants.BaseBroadcastParams.BACKUP_SERVICE_DESTROY_ACTION -> {
                 Log.w(TAG, "onReceive: BackupService is Destroy !!! ")
+            }
+            // 创建 LovePanel 失败
+            Constants.BaseBroadcastParams.CREATE_LOVE_PANEL_FAILURE_ACTION -> {
+                L.w(TAG, "onReceive: Create LovePanel failure . ")
+                val message =
+                    bundle?.getString(Constants.BaseBroadcastParams.CREATE_LOVE_PANEL_FAILURE_MESSAGE_TAG)
+                message?.let {
+                    ToastUtil.showToast(context, it)
+                }
             }
             else -> {
 

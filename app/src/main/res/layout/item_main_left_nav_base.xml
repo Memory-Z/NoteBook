@@ -15,7 +15,7 @@
 
     <ImageView
         android:id="@+id/item_main_left_nav_base_left_iv"
-        style="@style/NoteBookAppTheme.ImageView.Icon.Min"
+        style="@style/NoteBookAppTheme.ImageView.Icon.Min.Tint"
         android:layout_width="@dimen/image_icon_min_size"
         android:layout_height="@dimen/image_icon_min_size"
         android:contentDescription="@string/image"

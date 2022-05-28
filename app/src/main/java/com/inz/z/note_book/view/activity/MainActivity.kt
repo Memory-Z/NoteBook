@@ -17,6 +17,7 @@ import com.inz.z.note_book.database.util.GreenDaoHelper
 import com.inz.z.note_book.databinding.ActivityMainBinding
 import com.inz.z.note_book.databinding.FragmentMainLeftNavLayoutBinding
 import com.inz.z.note_book.databinding.TopSearchNavLayoutBinding
+import com.inz.z.note_book.service.CreateLovePanelService
 import com.inz.z.note_book.service.FloatMessageViewService
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.activity.listener.MainActivityListener
@@ -24,7 +25,6 @@ import com.inz.z.note_book.view.dialog.BaseDialogFragment
 import com.inz.z.note_book.view.fragment.LauncherApplicationFragment
 import com.inz.z.note_book.view.fragment.LogFragment
 import com.inz.z.note_book.view.fragment.NoteNavFragment
-import com.qmuiteam.qmui.util.QMUIStatusBarHelper
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -221,9 +221,18 @@ class MainActivity : BaseNoteActivity() {
             menuInflater.inflate(R.menu.menu_main_more, morePopupMenu!!.menu)
             morePopupMenu?.setOnMenuItemClickListener {
                 when (it.itemId) {
+                    // 手动备份。
                     R.id.main_more_backup_item -> {
-                        // 手动备份。
                         GreenDaoHelper.getInstance().backupDatabase()
+                    }
+                    // 分享
+                    R.id.main_more_share_item -> {
+
+                    }
+                    // 生成 LovePanel
+                    R.id.main_more_create_love_panel_item -> {
+                        val intent = Intent(mContext, CreateLovePanelService::class.java)
+                        startService(intent)
                     }
                     else -> {
 

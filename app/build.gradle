@@ -70,6 +70,7 @@ dependencies {
     implementation libArrays['kotlin-stdlib']
     implementation libArrays['appcompat']
     implementation libArrays['core-ktx']
+    testImplementation libArrays['test-core-ktx']
     testImplementation libArrays['junit']
     androidTestImplementation libArrays['test-ext-junit']
     androidTestImplementation libArrays['test-espresso-core']

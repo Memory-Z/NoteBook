@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,7 +22,6 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -83,6 +81,33 @@ public class FileUtils {
             return Environment.getExternalStorageDirectory().getAbsolutePath();
         }
         return Environment.getExternalStorageDirectory().toString();
+    }
+
+    /**
+     * 获取 DCIM 绝对路径
+     *
+     * @return 绝对路径
+     */
+    public static String getDCIMPath() {
+        return getSDPath() + File.separatorChar + Environment.DIRECTORY_DCIM;
+    }
+
+    /**
+     * 获取 Pictures 绝对路径
+     *
+     * @return 绝对路径
+     */
+    public static String getPicturesPath() {
+        return getSDPath() + File.separatorChar + Environment.DIRECTORY_PICTURES + File.separatorChar + "Inz";
+    }
+
+    /**
+     * 获取图片相对路径
+     *
+     * @return 相对路径
+     */
+    public static String getPictureRelativePath() {
+        return Environment.DIRECTORY_PICTURES + File.separatorChar + "Inz";
     }
 
     /**

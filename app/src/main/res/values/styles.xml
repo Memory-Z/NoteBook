@@ -140,13 +140,13 @@
     </style>
 
     <style name="NoteBookAppTheme.ImageView">
-        <item name="android:tint">@color/card_inverse_color</item>
+        <!--        <item name="android:tint">@color/card_inverse_color</item>-->
         <item name="android:scaleType">centerCrop</item>
         <item name="android:contentDescription">@string/base_image</item>
     </style>
 
-    <style name="NoteBookAppTheme.ImageView.Tint">
-        <!--        <item name="android:tint">@color/card_inverse_color</item>-->
+    <style name="NoteBookAppTheme.ImageView.Tint" parent="NoteBookAppTheme.ImageView">
+        <item name="android:tint">@color/card_inverse_color</item>
     </style>
 
     <style name="NoteBookAppTheme.ImageView.Icon" parent="NoteBookAppTheme.ImageView">
@@ -159,6 +159,10 @@
         <item name="android:layout_width">@dimen/image_icon_min_size</item>
         <item name="android:layout_height">@dimen/image_icon_min_size</item>
         <item name="android:padding">@dimen/image_icon_min_padding_size</item>
+    </style>
+
+    <style name="NoteBookAppTheme.ImageView.Icon.Min.Tint" parent="NoteBookAppTheme.ImageView.Icon.Min" >
+        <item name="android:tint">@color/card_inverse_color</item>
     </style>
 
     <style name="NoteBookAppTheme.Button" parent="Widget.MaterialComponents.Button">

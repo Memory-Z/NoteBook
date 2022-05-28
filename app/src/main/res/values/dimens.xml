@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- 状态栏 -->
     <dimen name="status_bar_height">24dp</dimen>
@@ -88,5 +88,10 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
 
     <dimen name="new_note_image_layout_height_expand_less">188dp</dimen>
     <dimen name="new_note_image_layout_height_expand_more">48dp</dimen>
+
+    <dimen name="love_panel_day_width" tools:ignore="PxUsage">2480px</dimen>
+    <dimen name="love_panel_day_height" tools:ignore="PxUsage">3508px</dimen>
+
+    <dimen name="love_panel_day_text_size">48sp</dimen>
 
 </resources>

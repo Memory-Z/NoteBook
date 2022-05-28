@@ -1,14 +1,15 @@
 package com.inz.z.base.util
 
+import android.content.ContentResolver
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.util.Base64
 import com.inz.z.base.entity.Constants
 import com.inz.z.base.entity.MergeBitmapOrientation
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
+import java.io.*
 import kotlin.math.abs
 
 /**
@@ -258,5 +259,58 @@ object ImageUtils {
             matrix,
             true
         )
+    }
+
+    /**
+     * 保存Bitmap到 文件
+     * @param bitmap bitmap
+     * @param filePath 文件路径
+     * @param fileName 文件名
+     * @param quality 压缩质量，默认100
+     */
+    fun saveBitmap2File(
+        bitmap: Bitmap,
+        filePath: String,
+        fileName: String,
+        quality: Int = 100
+    ): Boolean {
+        val fileDir = File(filePath)
+        if (!fileDir.exists()) {
+            fileDir.mkdirs()
+        }
+        val file = File(fileDir, fileName)
+        val fos = FileOutputStream(file)
+        val bos = BufferedOutputStream(fos)
+        try {
+            return bitmap.compress(Bitmap.CompressFormat.JPEG, quality, bos)
+        } catch (ignore: Exception) {
+            return false
+        } finally {
+            try {
+                bos.flush()
+                bos.close()
+            } catch (ignore: Exception) {
+            }
+            try {
+                fos.flush()
+                fos.close()
+            } catch (ignore: Exception) {
+            }
+        }
+    }
+
+    /**
+     * 保存图片至Uri 中
+     * @param bitmap  Bitmap
+     * @param uri 图片链接 地址
+     * @param contentResolver 内容
+     */
+    fun saveBitmap2Uri(bitmap: Bitmap, uri: Uri, contentResolver: ContentResolver): Boolean {
+        return try {
+            val outputStream = contentResolver.openOutputStream(uri, "rw")
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        } catch (ignore: Exception) {
+            false
+        }
     }
 }

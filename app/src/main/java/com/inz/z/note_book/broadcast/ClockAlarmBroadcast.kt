@@ -6,6 +6,7 @@ import android.content.Intent
 import android.widget.Toast
 import com.inz.z.base.util.L
 import com.inz.z.base.util.LauncherHelper
+import com.inz.z.note_book.service.CreateLovePanelService
 import com.inz.z.note_book.util.Constants
 
 /**
@@ -16,9 +17,9 @@ import com.inz.z.note_book.util.Constants
  * Create by inz in 2020/01/15 15:51.
  */
 class ClockAlarmBroadcast : BroadcastReceiver() {
-    private val TAG = "AlarmBroadcast"
 
     companion object {
+        private const val TAG = "ClockAlarmBroadcast"
         private val receiveListenerList = mutableListOf<ReceiveListener>()
 
         fun addListener(listener: ReceiveListener) {
@@ -85,6 +86,13 @@ class ClockAlarmBroadcast : BroadcastReceiver() {
             Constants.AlarmAction.ALARM_BROADCAST_CLOCK_ACTION -> {
                 // 闹钟
             }
+            // 创建 LovePanel 广播
+            Constants.AlarmAction.ALARM_BROADCAST_CLOCK_CREATE_LOVE_PANEL_ACTION -> {
+                context?.let {
+                    sendStartCreateLovePanelService(it)
+                }
+            }
+
             else -> {
 
             }
@@ -99,6 +107,15 @@ class ClockAlarmBroadcast : BroadcastReceiver() {
          * 第二天
          */
         fun onDayTwo(t: String)
+    }
+
+    /**
+     * 创建 LovePanel
+     */
+    private fun sendStartCreateLovePanelService(context: Context) {
+        val service = Intent(context, CreateLovePanelService::class.java)
+        context.startService(service)
+        L.i(TAG, "sendStartCreateLovePanelService: starting ... ")
     }
 
 }

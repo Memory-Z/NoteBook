@@ -6,9 +6,6 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SET_ALARM" />
-    <uses-permission android:name="android.permission.SET_WALLPAPER" />
-    <uses-permission android:name="android.permission.SET_WALLPAPER" />
-    <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 设置 壁纸 -->
@@ -192,6 +189,15 @@
             </intent-filter>
         </activity>
 
+        <!-- 创建 爱的画板 -->
+        <activity
+            android:name=".view.activity.CreateLovePanelActivity"
+            android:configChanges="orientation|keyboardHidden|screenLayout|screenSize|navigation"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoteBookAppTheme.Transparent">
+
+        </activity>
+
         <!-- 通知服务 -->
         <service
             android:name=".service.NotificationForegroundService"
@@ -219,6 +225,12 @@
             android:name=".service.SetWallpaperService"
             android:label="@string/set_wallpaper_service" />
 
+        <!-- 创建新LovePanel  -->
+        <service
+            android:name=".service.CreateLovePanelService"
+            android:label="@string/create_love_panel"
+            android:process=":create_love_panel" />
+
         <!-- 闹钟 广播 -->
         <receiver
             android:name=".broadcast.ClockAlarmBroadcast"
@@ -231,6 +243,7 @@
                 <action android:name="${applicationId}.action.ALARM_BROADCAST_SCHEDULE_ACTION" />
                 <action android:name="${applicationId}.action.ALARM_BROADCAST_HINT_ACTION" />
                 <action android:name="${applicationId}.action.ALARM_BROADCAST_CLOCK_ACTION" />
+                <action android:name="${applicationId}.action.ALARM_BROADCAST_CLOCK_CREATE_LOVE_PANEL_ACTION" />
             </intent-filter>
         </receiver>
 
@@ -244,6 +257,12 @@
                 android:resource="@xml/file_provider" />
 
         </provider>
+
+        <!-- 调试 WorkManager -->
+        <!--        <provider-->
+        <!--            android:name="androidx.work.impl.WorkManagerInitializer"-->
+        <!--            android:authorities="${applicationId}.workmanager-init"-->
+        <!--            tools:node="remove"/>-->
 
 
         <!-- 桌面插件 -->
@@ -281,6 +300,10 @@
             <intent-filter>
                 <action android:name="${applicationId}.action.BACKUP_SERVICE_CREATE_ACTION" />
                 <action android:name="${applicationId}.action.BACKUP_SERVICE_DESTROY_ACTION" />
+            </intent-filter>
+            <!-- 创建 LovePanel 状态 -->
+            <intent-filter>
+                <action android:name="${applicationId}.action.CREATE_LOVE_PANEL_FAILURE_ACTION" />
             </intent-filter>
         </receiver>
         <!-- 桌面插件 笔记列表更新服务 -->

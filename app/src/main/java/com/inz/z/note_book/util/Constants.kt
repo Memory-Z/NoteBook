@@ -1,7 +1,6 @@
 package com.inz.z.note_book.util
 
 import android.content.Context
-import com.inz.z.base.entity.Constants
 import com.inz.z.base.util.FileUtils
 import com.inz.z.note_book.BuildConfig
 import java.io.File
@@ -107,6 +106,12 @@ object Constants {
          */
         const val ALARM_BROADCAST_CLOCK_ACTION =
             "${APPLICATION_ID}.action.ALARM_BROADCAST_CLOCK_ACTION"
+
+        /**
+         * 创建 LovePanel 时钟 广播
+         */
+        const val ALARM_BROADCAST_CLOCK_CREATE_LOVE_PANEL_ACTION =
+            "${APPLICATION_ID}.action.ALARM_BROADCAST_CLOCK_CREATE_LOVE_PANEL_ACTION"
     }
 
     /**
@@ -184,6 +189,14 @@ object Constants {
          * 未知状态
          */
         const val NOTIFICATION_UNKNOWN = "NotificationUnknown"
+
+        /**
+         * 创建 LovePanel 广播
+         */
+        const val NOTIFICATION_CREATE_LOVE_PANEL_ACTION = "NotificationCreatedLovePanelAction"
+
+        const val NOTIFICATION_TAG_TITLE = "title"
+        const val NOTIFICATION_TAG_FILE_PATH = "filePath"
     }
 
     /**
@@ -211,6 +224,14 @@ object Constants {
          */
         const val BACKUP_SERVICE_DESTROY_ACTION =
             "${APPLICATION_ID}.action.BACKUP_SERVICE_DESTROY_ACTION"
+
+        /**
+         * 生成 LovePanel 失败
+         */
+        const val CREATE_LOVE_PANEL_FAILURE_ACTION =
+            "${APPLICATION_ID}.action.CREATE_LOVE_PANEL_FAILURE_ACTION"
+
+        const val CREATE_LOVE_PANEL_FAILURE_MESSAGE_TAG = "messageTag"
     }
 
     /**

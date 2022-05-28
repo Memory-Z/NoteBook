@@ -115,6 +115,7 @@ public abstract class AbsBaseActivity extends AppCompatActivity {
      *
      * @return 默认不使用
      */
+    @Deprecated
     protected boolean useDataBinding() {
         return false;
     }

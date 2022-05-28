@@ -12,6 +12,7 @@ import android.os.Looper
 import android.os.Process
 import android.util.Log
 import android.widget.Toast
+import androidx.work.Configuration
 import com.inz.z.base.R
 import com.inz.z.base.util.CrashHandler
 import com.inz.z.base.util.L
@@ -30,7 +31,7 @@ import com.inz.z.note_book.util.SPHelper
  * @version 1.0.0
  * Create by inz in 2019/10/17 14:39.
  */
-class NoteBookApplication : Application() {
+class NoteBookApplication : Application(), Configuration.Provider {
 
     companion object {
         private const val TAG = "NoteBookApplication"
@@ -214,4 +215,13 @@ class NoteBookApplication : Application() {
     }
 
     /* ------------------- 获取进程名 -------------------- */
+
+    /**
+     * 调试WorkManager
+     */
+    override fun getWorkManagerConfiguration(): Configuration {
+        return Configuration.Builder()
+            .setMinimumLoggingLevel(Log.DEBUG)
+            .build()
+    }
 }

@@ -2,6 +2,8 @@ package com.inz.z.note_book.service
 
 import android.app.*
 import android.content.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.IBinder
 import android.widget.RemoteViews
@@ -16,6 +18,7 @@ import com.inz.z.note_book.database.controller.ScreenTimeController
 import com.inz.z.note_book.util.BaseUtil
 import com.inz.z.note_book.util.ClockAlarmManager
 import com.inz.z.note_book.util.Constants
+import com.inz.z.note_book.util.ViewUtil
 import com.inz.z.note_book.view.activity.MainActivity
 import java.util.*
 
@@ -34,11 +37,27 @@ class NotificationForegroundService : Service() {
         private const val NOTIFICATION_CHANNEL_ID = "NoteBook"
 
         private const val NOTIFICATION_TO_MAIN_REQUEST_CODE = 0x0010
+        private const val NOTIFICATION_TO_WECHAT_REQUEST_CODE = 0x0011
+
+        private const val NOTIFICATION_LOVE_PANEL_CHANNEL_ID = "LovePanel"
+        private const val NOTIFICATION_LOVE_PANEL_CHANNEL_NAME = "Love Panel"
+        private const val NOTIFICATION_LOVE_PANEL_CODE = 0x000A
 
     }
 
     private var notification: Notification? = null
     private var activityLifeBroadcast: ActivityLifeBroadcast? = null
+    private var notificationManager: NotificationManager? = null
+
+    /**
+     * 默认 通道
+     */
+    private var baseChannel: NotificationChannel? = null
+
+    /**
+     * LovePanel 通道
+     */
+    private var lovePanelChannel: NotificationChannel? = null
 
     /**
      * 时钟广播监听。
@@ -52,11 +71,13 @@ class NotificationForegroundService : Service() {
     override fun onCreate() {
         super.onCreate()
         L.i(TAG, "onCreate: --------------- ")
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
         registerActivityLifeBroadcast()
         registerNotificationBroadcast()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            initNotification()
+            initNotificationChannel()
         }
+        initForegroundNotification()
         receiveListener = ClockAlarmBroadcastReceiveListenerImpl()
         ClockAlarmBroadcast.addListener(receiveListener!!)
         bindScheduleService()
@@ -67,25 +88,45 @@ class NotificationForegroundService : Service() {
         super.onDestroy()
         L.i(TAG, "onDestroy: --------------> ")
         stopForeground(true)
-        unregisterActivityLifeBroacast()
+        unregisterActivityLifeBroadcast()
         unbindScheduleService()
         ClockAlarmBroadcast.removeListener(receiveListener)
         receiveListener = null
+        baseChannel = null
+        lovePanelChannel = null
+        notificationManager = null
     }
 
     /**
      * 初始化通知栏
      */
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun initNotification() {
-        val channel = NotificationChannel(
+    private fun initNotificationChannel() {
+        // 默认通道
+        baseChannel = NotificationChannel(
             NOTIFICATION_CHANNEL_ID,
             getString(R.string.app_name),
             NotificationManager.IMPORTANCE_LOW
         )
-        val manager: NotificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        manager.createNotificationChannel(channel)
+        baseChannel?.let {
+            notificationManager?.createNotificationChannel(it)
+        }
+
+        // 创建 LovePanel 通道
+        lovePanelChannel = NotificationChannel(
+            NOTIFICATION_LOVE_PANEL_CHANNEL_ID,
+            NOTIFICATION_LOVE_PANEL_CHANNEL_NAME,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        lovePanelChannel?.let {
+            notificationManager?.createNotificationChannel(it)
+        }
+    }
+
+    /**
+     * 初始化前台服务通知
+     */
+    private fun initForegroundNotification() {
         val time =
             BaseTools.getDateFormatTime().format(Calendar.getInstance(Locale.getDefault()).time)
         notification = NotificationCompat
@@ -108,7 +149,6 @@ class NotificationForegroundService : Service() {
      */
     private fun uploadNotification(isScreen: Boolean) {
         L.i(TAG, "uploadNotification： ")
-        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
         val notification = if (isScreen) getScreenNotification() else getBaseNotification()
         notification.flags = Notification.FLAG_FOREGROUND_SERVICE
         val intent = Intent(applicationContext, MainActivity::class.java)
@@ -121,15 +161,14 @@ class NotificationForegroundService : Service() {
             flag
         )
         notification.contentIntent = pendingIntent
-        manager?.notify(NOTIFICATION_CODE, notification)
+        notificationManager?.notify(NOTIFICATION_CODE, notification)
     }
 
     private fun hideNotification() {
         L.i(TAG, "hideNotification： ")
-        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
         val notification = getBaseNotification()
         notification.contentIntent = null
-        manager?.notify(NOTIFICATION_CODE, notification)
+        notificationManager?.notify(NOTIFICATION_CODE, notification)
     }
 
     private fun getBaseNotification(): Notification {
@@ -196,7 +235,7 @@ class NotificationForegroundService : Service() {
     /**
      * 注销广播
      */
-    private fun unregisterActivityLifeBroacast() {
+    private fun unregisterActivityLifeBroadcast() {
         activityLifeBroadcast?.apply {
             unregisterReceiver(this)
         }
@@ -212,12 +251,12 @@ class NotificationForegroundService : Service() {
             val appProcess = this.runningAppProcesses
             for (process in appProcess) {
                 if (process.processName.equals(packageName)) {
-                    if (process.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    return if (process.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
                         L.i(TAG, "checkApplicationIsVisible：this is foreground. ")
-                        return true
+                        true
                     } else {
                         L.w(TAG, "checkApplicationIsVisible: this is background. ")
-                        return false
+                        false
                     }
                 }
             }
@@ -234,7 +273,6 @@ class NotificationForegroundService : Service() {
                 L.w(TAG, "ActivityLifeBroadcast-onReceive: context or intent is null. ")
                 return
             }
-            val bundle = intent.extras
             when (intent.action) {
                 Constants.LifeAction.LIFE_CHANGE_ACTION -> {
                     // 判断进程是否显示
@@ -300,6 +338,56 @@ class NotificationForegroundService : Service() {
     }
 
     /* ------------------------- Get Notification Screen View -------------------------- */
+
+    /* ***************************** LovePanel ********************************* */
+
+    /**
+     * 更新 LovePanel 通知
+     * @param title 标题
+     * @param bitmap 图片
+     */
+    private fun updateLovePanelNotification(title: String, bitmap: Bitmap) {
+        L.d(TAG, "updateLovePanelNotification: title = $title ")
+        val remoteViews = ViewUtil.createNotificationLovePanelView(baseContext, title, bitmap)
+        val pendingIntent = getWeChatPendingIntent()
+        val notification = NotificationCompat
+            .Builder(baseContext, NOTIFICATION_LOVE_PANEL_CHANNEL_ID)
+            .setCustomContentView(remoteViews)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .setDefaults(NotificationCompat.DEFAULT_LIGHTS)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setFullScreenIntent(pendingIntent, true)
+            .setContentIntent(pendingIntent)
+            .build()
+        notification.flags = Notification.FLAG_AUTO_CANCEL
+
+        notificationManager?.notify(NOTIFICATION_LOVE_PANEL_CODE, notification)
+    }
+
+    /**
+     * 获取跳转至WeChat PendingIntent
+     */
+    private fun getWeChatPendingIntent(): PendingIntent {
+        val componentName = ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI")
+        val intent = Intent(Intent.ACTION_MAIN)
+        intent.`package` = packageName
+        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.component = componentName
+
+        val flag = BaseUtil.getPendingIntentFlag()
+        return PendingIntent.getActivity(
+            baseContext,
+            NOTIFICATION_TO_WECHAT_REQUEST_CODE,
+            intent,
+            flag
+        )
+
+    }
+
+    /* ***************************** LovePanel ********************************* */
 
     /* -------------------------------- 绑定计划Service  ---------------------------------------- */
 
@@ -392,6 +480,7 @@ class NotificationForegroundService : Service() {
                 this.addAction(Constants.NotificationServiceParams.NOTIFICATION_SCREEN_ON_ACTION)
                 this.addAction(Constants.NotificationServiceParams.NOTIFICATION_SCREEN_OFF_ACTION)
                 this.addAction(Constants.NotificationServiceParams.NOTIFICATION_UNLOCK_ACTION)
+                this.addAction(Constants.NotificationServiceParams.NOTIFICATION_CREATE_LOVE_PANEL_ACTION)
             }
         registerReceiver(broadcast, intentFilter)
     }
@@ -420,6 +509,22 @@ class NotificationForegroundService : Service() {
                     L.i(TAG, "onReceive: NOTIFICATION_UNLOCK_ACTION ")
                     uploadNotification(true)
                     // TODO: 2021/7/5 解锁， used.
+                }
+                // 创建 LovePanel 通知
+                Constants.NotificationServiceParams.NOTIFICATION_CREATE_LOVE_PANEL_ACTION -> {
+                    L.i(TAG, "onReceive: NOTIFICATION_CREATE_LOVE_PANEL_ACTION ")
+                    val bundle = intent?.extras
+                    bundle?.let {
+                        val num =
+                            it.getInt(Constants.NotificationServiceParams.NOTIFICATION_TAG_TITLE)
+                        val filePath =
+                            it.getString(Constants.NotificationServiceParams.NOTIFICATION_TAG_FILE_PATH)
+                        val bitmap = BitmapFactory.decodeFile(filePath)
+                        context?.let { c ->
+                            val title = c.getString(R.string.love_panel_title_template).format(num)
+                            updateLovePanelNotification(title, bitmap)
+                        }
+                    }
                 }
                 else -> {
                     L.i(TAG, "onReceive: OTHER.  ")

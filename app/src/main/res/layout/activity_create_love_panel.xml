@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/create_love_panel_top_ll"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/create_love_panel_toolbar"
+            style="@style/NoteBookAppTheme.TopAction"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            app:navigationIcon="@drawable/ic_chevron_left_black_24dp"
+            app:title="@string/create_love_panel" />
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/create_love_panel_content_cl"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/create_love_panel_top_ll">
+
+
+        <ImageView
+            android:id="@+id/create_love_panel_create_iv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:contentDescription="@string/create_love_panel"
+            android:scaleType="centerInside"
+            app:layout_constraintDimensionRatio="w, 3508:2480"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/create_love_panel_base_iv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:alpha=".5"
+            android:contentDescription="@string/create_love_panel"
+            android:scaleType="centerInside"
+            android:src="@drawable/love_day_1"
+            app:layout_constraintDimensionRatio="w, 3508:2480"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/create_love_panel_day_tv"
+            style="@style/NoteBookAppTheme.Text.Title"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:text="@string/_1"
+            android:textAllCaps="false"
+            android:textSize="42sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/create_love_panel_create_iv"
+            app:layout_constraintEnd_toEndOf="@id/create_love_panel_create_iv"
+            app:layout_constraintHorizontal_bias="0.607"
+            app:layout_constraintStart_toStartOf="@id/create_love_panel_create_iv"
+            app:layout_constraintTop_toTopOf="@id/create_love_panel_create_iv"
+            app:layout_constraintVertical_bias="0.515" />
+
+
+        <Button
+            android:id="@+id/create_love_panel_create_btn"
+            style="@style/NoteBookAppTheme.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/create_love_panel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/create_love_panel_create_iv" />
+
+        <Button
+            android:id="@+id/create_love_panel_load_btn"
+            style="@style/NoteBookAppTheme.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/create_love_panel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/create_love_panel_create_btn"
+            app:layout_constraintTop_toBottomOf="@id/create_love_panel_create_iv" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

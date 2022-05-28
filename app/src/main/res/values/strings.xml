@@ -159,4 +159,14 @@
 
     <string name="select_all">全选</string>
     <string name="unselect_all">取消全选</string>
+
+    <string name="create_love_panel">创建日期版</string>
+    <string name="_1">1</string>
+    <string name="love_panel_template">Love_Panel_%s.jpg</string>
+    <string name="love_panel_image">LovePanel</string>
+    <string name="love_panel_image_is_created_please_update_timely">每日图片已生成，请及时更新</string>
+    <string name="love_panel_image_is_created_no_duplicate_creation">每日图片已生成，请不要重复创建</string>
+    <string name="love_panel_image_create_failure_please_retry">每日图片生成失败，请重试</string>
+    <string name="love_panel_title_template">Day %s</string>
+    <string name="love_panel_title_error">Love Day</string>
 </resources>

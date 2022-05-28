@@ -13,4 +13,9 @@
         android:icon="@drawable/ic_baseline_backup_24"
         android:title="@string/_backup"
         app:showAsAction="never|withText" />
+    <item
+        android:id="@+id/main_more_create_love_panel_item"
+        android:contentDescription="@string/create_love_panel"
+        android:title="@string/create_love_panel"
+        app:showAsAction="never" />
 </menu>
