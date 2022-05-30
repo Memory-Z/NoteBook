@@ -36,6 +36,11 @@ class NewNoteInfoSampleActivity : BaseNoteActivity() {
 
     private var binding: NewNoteInfoSampleLayoutBinding? = null
 
+    /**
+     * 显示弹窗线程
+     */
+    private var showDialogRunnable: Runnable? = null
+
 
     override fun initWindow() {
 
@@ -107,12 +112,18 @@ class NewNoteInfoSampleActivity : BaseNoteActivity() {
                 0 -> {
                     // 普通模式
                 }
+                // 新建笔记弹窗
                 1 -> {
-                    // 新建笔记弹窗
-                    binding?.newNoteInfoSampleLayoutFl?.postDelayed({
-                        showNowAddNoteInfoDialog()
-                        binding?.newNoteInfoSampleLayoutFl?.postDelayed(checkRunnable, 100)
-                    }, 300)
+                    showDialogRunnable = object : Runnable {
+                        override fun run() {
+                            if (mContext == null) {
+                                return
+                            }
+                            showNowAddNoteInfoDialog()
+                            binding?.newNoteInfoSampleLayoutFl?.postDelayed(checkRunnable, 100)
+                        }
+                    }
+                    binding?.newNoteInfoSampleLayoutFl?.postDelayed(showDialogRunnable, 300)
                 }
                 2 -> {
                     // 改变分组弹窗
@@ -123,6 +134,13 @@ class NewNoteInfoSampleActivity : BaseNoteActivity() {
             }
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        binding?.newNoteInfoSampleLayoutFl?.removeCallbacks(showDialogRunnable)
+        hideNowAddNoteInfoDialog()
+    }
+
 
     /**
      * 是否保存了状态
@@ -142,6 +160,10 @@ class NewNoteInfoSampleActivity : BaseNoteActivity() {
     private var addNoteInfoAddDialogFragment: NoteInfoAddDialogFragment? = null
 
     private fun showNowAddNoteInfoDialog() {
+        if (mContext == null) {
+            L.w(TAG, "showNowAddNoteInfoDialog: Context is null !! ")
+            return
+        }
         val manager = supportFragmentManager
         addNoteInfoAddDialogFragment =
             manager.findFragmentByTag("NoteInfoAddDialogFragment") as NoteInfoAddDialogFragment?
@@ -172,5 +194,19 @@ class NewNoteInfoSampleActivity : BaseNoteActivity() {
         }
     }
 
+    private fun hideNowAddNoteInfoDialog() {
+        if (mContext == null) {
+            L.w(TAG, "hideNowAddNoteInfoDialog: Context is null !!! ")
+            return
+        }
+        val manager = supportFragmentManager
+        if (addNoteInfoAddDialogFragment == null) {
+            addNoteInfoAddDialogFragment =
+                manager.findFragmentByTag("NoteInfoAddDialogFragment") as NoteInfoAddDialogFragment?
+        }
+        addNoteInfoAddDialogFragment?.let {
+            manager.beginTransaction().remove(it).commitAllowingStateLoss()
+        }
+    }
 
 }

@@ -54,43 +54,47 @@ public class L {
     public static void i(String tag, String message) {
         Logger.t(tag).i(message);
         if (BuildConfig.DEBUG) {
-            Log.i(tag, message);
+            Log.i(getTag(tag), message);
         }
     }
 
     public static void w(String tag, String message) {
         Logger.t(tag).w(message);
         if (BuildConfig.DEBUG) {
-            Log.w(tag, message);
+            Log.w(getTag(tag), message);
         }
     }
 
     public static void d(String tag, String message) {
         Logger.t(tag).d(message);
         if (BuildConfig.DEBUG) {
-            Log.d(tag, message);
+            Log.d(getTag(tag), message);
         }
     }
 
     public static void wtf(String tag, String message) {
         Logger.t(tag).wtf(message);
         if (BuildConfig.DEBUG) {
-            Log.w(tag, message);
+            Log.w(getTag(tag), message);
         }
     }
 
     public static void e(String tag, String message) {
         Logger.t(tag).e(message);
         if (BuildConfig.DEBUG) {
-            Log.e(tag, message);
+            Log.e(getTag(tag), message);
         }
     }
 
     public static void e(String tag, String message, Throwable e) {
         Logger.t(tag).e(e, message);
         if (BuildConfig.DEBUG) {
-            Log.e(tag, message, e);
+            Log.e(getTag(tag), message, e);
         }
+    }
+
+    private static String getTag(String tag) {
+        return "NoteBook/" + tag;
     }
 
 }

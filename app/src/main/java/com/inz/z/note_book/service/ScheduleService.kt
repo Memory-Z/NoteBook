@@ -18,8 +18,10 @@ import com.inz.z.note_book.database.bean.TaskSchedule
 import com.inz.z.note_book.database.controller.RepeatController
 import com.inz.z.note_book.database.controller.TaskInfoController
 import com.inz.z.note_book.database.controller.TaskScheduleController
+import com.inz.z.note_book.util.BaseUtil
 import com.inz.z.note_book.util.ClockAlarmManager
 import com.inz.z.note_book.util.Constants
+import com.inz.z.note_book.util.ViewUtil
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
@@ -275,12 +277,13 @@ class ScheduleService : LifecycleService() {
                 intent.action = Constants.AlarmAction.ALARM_BROADCAST_SCHEDULE_ACTION
             }
         }
+        val flag = BaseUtil.getPendingIntentFlag()
         // TODO: 2021/10/18 code maybe have error 
         return PendingIntent.getBroadcast(
             applicationContext,
             taskInfo.taskRequestCode.toInt(),
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            flag
         )
     }
 

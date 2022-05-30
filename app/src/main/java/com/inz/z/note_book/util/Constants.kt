@@ -340,5 +340,32 @@ object Constants {
 
     }
 
+    /**
+     * 桌面小插件 参数
+     */
+    object WidgetParams {
+
+        /**
+         * noteInfo 单项点击事件 ..
+         */
+        const val WIDGET_NOTE_INFO_APP_WIDGET_ITEM_CLICK_ACTION =
+            "com.inz.z.note_book.action.NOTE_INFO_ITEM_CLICK"
+
+        /**
+         * 切换显示的笔记分组
+         */
+        const val WIDGET_NOTE_INFO_APP_WIDGET_CHANGE_NOTE_GROUP_ACTION =
+            "com.inz.z.note_book.action.NOTE_INFO_CHANGE_NOTE_GROUP"
+
+        const val WIDGET_NOTE_INFO_APP_WIDGET_NOTE_GROUP_ID =
+            "widget_note_info_click_note_group_id"
+
+        const val WIDGET_NOTE_INFO_APP_WIDGET_ITEM_CLICK_NOTE_INFO_ID =
+            "widget_note_info_click_note_info_id"
+
+        const val WIDGET_NOTE_INFO_CLICK_POSITION = "widget_note_info_click_position"
+
+    }
+
 
 }

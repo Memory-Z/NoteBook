@@ -1,5 +1,6 @@
 package com.inz.z.note_book.view.activity
 
+import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -233,6 +234,23 @@ class MainActivity : BaseNoteActivity() {
                     R.id.main_more_create_love_panel_item -> {
                         val intent = Intent(mContext, CreateLovePanelService::class.java)
                         startService(intent)
+                    }
+                    // 跳转至设置壁纸
+                    R.id.main_more_set_wallpaper_item -> {
+                        val intent = Intent()
+                        intent.action = Intent.ACTION_SET_WALLPAPER
+                        intent.data =
+                            Uri.parse("content://media/external_primary/images/media/91886")
+                        intent.addCategory(Intent.CATEGORY_DEFAULT)
+                        intent.`package` = packageName
+                        intent.flags =
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION.or(Intent.FLAG_RECEIVER_FOREGROUND)
+                        val componentName = ComponentName(
+                            "com.oplus.wallpapers",
+                            "com.oplus.wallpapers.wallpaperpreview.WallpaperPreviewActivity"
+                        )
+                        intent.component = componentName
+                        startActivity(intent)
                     }
                     else -> {
 

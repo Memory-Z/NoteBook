@@ -18,4 +18,9 @@
         android:contentDescription="@string/create_love_panel"
         android:title="@string/create_love_panel"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/main_more_set_wallpaper_item"
+        android:title="@string/set_wallpaper"
+        app:showAsAction="never" />
 </menu>

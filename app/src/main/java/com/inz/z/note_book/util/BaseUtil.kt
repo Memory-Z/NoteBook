@@ -21,5 +21,7 @@ object BaseUtil : BaseTools() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_CANCEL_CURRENT
     // -bug, 11654, 2022/5/2 , modify , update pendingIntent FLAG .
 
+    fun getMutablePendingIntentFlag(): Int =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else PendingIntent.FLAG_UPDATE_CURRENT
 
 }

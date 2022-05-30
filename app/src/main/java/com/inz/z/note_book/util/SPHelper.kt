@@ -43,15 +43,15 @@ object SPHelper {
     /**
      * 保存对应的笔记分组ID 【桌面插件】
      */
-    fun saveAppWidgetNoteGroupId(noteGroupId: String) {
-        instance?.setSharedString("appWidgetNoteGroupId", noteGroupId)
+    fun saveAppWidgetNoteGroupId(appWidgetId: Int, noteGroupId: String) {
+        instance?.setSharedString("appWidgetNoteGroupId_$appWidgetId", noteGroupId)
     }
 
     /**
      * 获取笔记分组对应的ID 【桌面插件】
      */
-    fun getAppWidgetNoteGroupId(): String {
-        return instance?.getSharedString("appWidgetNoteGroupId") ?: ""
+    fun getAppWidgetNoteGroupId(appWidgetId: Int): String {
+        return instance?.getSharedString("appWidgetNoteGroupId_$appWidgetId") ?: ""
     }
 
 }

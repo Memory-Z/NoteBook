@@ -87,4 +87,14 @@ object ViewUtil {
         remoteView.setTextViewText(R.id.notification_create_love_panel_title_tv, title)
         return remoteView
     }
+
+    /**
+     * 获取加载 RemoteViews
+     */
+    fun createLoadingRemoteView(context: Context): RemoteViews {
+        return RemoteViews(context.packageName, R.layout.item_load_more)
+            .also {
+                it.setTextViewText(R.id.item_load_more_hint_tv, context.getString(R.string.loading))
+            }
+    }
 }
