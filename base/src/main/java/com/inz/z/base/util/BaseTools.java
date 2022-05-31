@@ -1,11 +1,10 @@
 package com.inz.z.base.util;
 
 import android.content.Context;
-
-import androidx.annotation.StringRes;
-
 import android.view.Gravity;
 import android.widget.Toast;
+
+import androidx.annotation.StringRes;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -178,6 +177,30 @@ public class BaseTools {
         }
 
         return str;
+    }
+
+    /**
+     * 获取 日期 间 时间差
+     *
+     * @param newCalendar 新日期
+     * @param oldCalendar 旧日期
+     * @return 相差时间
+     */
+    public static int getDiffDay(Calendar newCalendar, Calendar oldCalendar) {
+        newCalendar.set(Calendar.MINUTE, 0);
+        newCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        newCalendar.set(Calendar.SECOND, 0);
+        newCalendar.set(Calendar.MILLISECOND, 0);
+
+        oldCalendar.set(Calendar.MINUTE, 0);
+        oldCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        oldCalendar.set(Calendar.SECOND, 0);
+        oldCalendar.set(Calendar.MILLISECOND, 0);
+
+        long newTime = newCalendar.getTimeInMillis();
+        long oldTime = oldCalendar.getTimeInMillis();
+        long diffDay = (newTime - oldTime) / (24 * 60 * 60 * 1000);
+        return (int) diffDay;
     }
 
     /**

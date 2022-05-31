@@ -46,7 +46,8 @@ class CreateLovePanelService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val currentDate = Calendar.getInstance(Locale.getDefault())
-        val num = currentDate.get(Calendar.DATE) - baseDate.get(Calendar.DATE)
+        //val num = currentDate.get(Calendar.MILLISECOND) - baseDate.get(Calendar.DATE)
+        val num: Int = BaseTools.getDiffDay(currentDate, baseDate)
         L.i(TAG, "onStartCommand: date num = $num --- ${baseDate.get(Calendar.DATE)}")
 
         if (textPaint == null) {

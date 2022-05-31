@@ -5,6 +5,7 @@ import android.os.Build
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.inz.z.base.util.L
@@ -161,7 +162,7 @@ class SplashActivity : AbsBaseActivity() {
                 .addTag("LOVE_PANEL_WORKER")
                 .build()
         WorkManager.getInstance(applicationContext)
-            .enqueue(requestWork)
+            .enqueueUniqueWork("CREATE_LOVE_PANEL", ExistingWorkPolicy.REPLACE, requestWork)
         L.i(TAG, "initCreateLovePanelWork: create LovePanel work Finish !")
     }
 }

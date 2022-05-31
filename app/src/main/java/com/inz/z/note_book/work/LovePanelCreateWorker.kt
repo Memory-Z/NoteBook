@@ -2,10 +2,7 @@ package com.inz.z.note_book.work
 
 import android.content.Context
 import android.content.Intent
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.Worker
-import androidx.work.WorkerParameters
+import androidx.work.*
 import com.inz.z.base.util.L
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.view.activity.SplashActivity
@@ -55,7 +52,7 @@ class LovePanelCreateWorker(val context: Context, workerParams: WorkerParameters
                 .addTag("LOVE_PANEL_WORKER")
                 .build()
         WorkManager.getInstance(applicationContext)
-            .enqueue(requestWork)
+            .enqueueUniqueWork("CREATE_LOVE_PANEL", ExistingWorkPolicy.REPLACE, requestWork)
 
         return Result.success()
     }
