@@ -7,7 +7,6 @@ import android.content.Intent
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.view.app_widget.NoteInfoAppWidget
-import com.inz.z.note_book.view.app_widget.bean.WidgetNoteInfo
 
 /**
  * 小部件广播工具

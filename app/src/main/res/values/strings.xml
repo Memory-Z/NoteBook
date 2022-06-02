@@ -169,4 +169,6 @@
     <string name="love_panel_image_create_failure_please_retry">每日图片生成失败，请重试</string>
     <string name="love_panel_title_template">Day %s</string>
     <string name="love_panel_title_error">Love Day</string>
+
+    <string name="choose_note_group">选择笔记目录</string>
 </resources>

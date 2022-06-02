@@ -198,6 +198,9 @@
 
         </activity>
 
+        <!-- 选择 微件  笔记分组 -->
+        <activity android:name=".view.activity.ChooseAppWidgetNoteGroupActivity" />
+
         <!-- 通知服务 -->
         <service
             android:name=".service.NotificationForegroundService"

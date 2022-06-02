@@ -97,7 +97,7 @@ object NoteController {
                 }
             })
         }
-        return emptyList()
+        return listOf()
     }
 
 

@@ -24,7 +24,6 @@ class NoteInfoAppWidgetService : Service() {
 
     private var noteGroupId = ""
 
-    private var noteInfoAppWidgetServiceHandler = Handler(NoteInoObserverHandlerCallback())
 
     override fun onBind(intent: Intent?): IBinder? {
         return null

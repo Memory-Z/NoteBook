@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 选择笔记分组 -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/choose_note_group_top_ll"
+        style="@style/NoteBookAppTheme.TopAction"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/choose_note_group_top_toolbar"
+            style="@style/NoteBookAppTheme.TopAction"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            app:menu="@menu/menu_finish"
+            app:navigationIcon="@drawable/ic_chevron_left_black_24dp"
+            app:popupTheme="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu"
+            app:title="@string/choose_note_group" />
+
+    </LinearLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/choose_note_group_content_srl"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/choose_note_group_top_ll">
+
+        <RelativeLayout
+            android:id="@+id/choose_note_group_content_ll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/choose_note_group_content_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+
+            <com.inz.z.base.view.widget.BaseNoDataView
+                android:id="@+id/choose_note_group_content_no_data_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:base_no_data_image_src="@drawable/ic_no_content"
+                app:base_no_data_title="@string/_no_content" />
+
+        </RelativeLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

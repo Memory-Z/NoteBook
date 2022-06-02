@@ -139,6 +139,19 @@ public abstract class AbsBaseRvAdapter<T, VH extends RecyclerView.ViewHolder> ex
     }
 
     /**
+     * 更新数据项
+     *
+     * @param item     数据项
+     * @param position 位置
+     */
+    public void updateItemByPosition(@NonNull T item, int position) {
+        if (isUsablePosition(position)) {
+            this.list.set(position, item);
+            notifyItemChanged(position);
+        }
+    }
+
+    /**
      * 创建 ViewHolder
      *
      * @param parent   父布局

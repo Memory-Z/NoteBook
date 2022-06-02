@@ -11,12 +11,13 @@ import android.widget.RemoteViews
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.NoteGroup
+import com.inz.z.note_book.database.controller.NoteController
 import com.inz.z.note_book.database.controller.NoteGroupService
 import com.inz.z.note_book.util.BaseUtil
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.util.SPHelper
+import com.inz.z.note_book.view.activity.ChooseAppWidgetNoteGroupActivity
 import com.inz.z.note_book.view.activity.NewNoteInfoSampleActivity
-import com.inz.z.note_book.view.app_widget.bean.WidgetNoteInfo.NOTE_INFO_APP_WIDGET_CHANGE_NOTE_GROUP_ACTION
 import com.inz.z.note_book.view.app_widget.service.WidgetNoteInfoListRemoteViewsService
 
 
@@ -88,11 +89,33 @@ class NoteInfoAppWidget : AppWidgetProvider() {
                         )
                     }
                 }
-                NOTE_INFO_APP_WIDGET_CHANGE_NOTE_GROUP_ACTION -> {
-                    L.i(TAG, " change note group is click !! ")
-                    val manager = AppWidgetManager.getInstance(context)
-                    val views = RemoteViews(context?.packageName, R.layout.note_info_app_widget)
-                    manager.updateAppWidget(saveAppWidgetIds, views)
+                // 切换 分组
+                Constants.WidgetParams.WIDGET_NOTE_INFO_APP_WIDGET_CHANGE_NOTE_GROUP_ACTION -> {
+                    L.i(TAG, "onReceive: change note group ")
+                    // 获取微件 ID
+                    val appWidgetId = it.getIntExtra(
+                        AppWidgetManager.EXTRA_APPWIDGET_ID,
+                        AppWidgetManager.INVALID_APPWIDGET_ID
+                    )
+                    val bundle = it.extras
+                    bundle?.let { bu ->
+                        val currentGroupId =
+                            bu.getString(Constants.NoteBookParams.NOTE_GROUP_ID_TAG, "")
+                        L.d(TAG, "onReceive: -currentGroupId = $currentGroupId")
+                        if (!currentGroupId.isNullOrEmpty()) {
+                            // 保存数据
+                            SPHelper.saveAppWidgetNoteGroupId(appWidgetId, currentGroupId)
+                            // 更新界面
+                            context?.let { co ->
+                                val appWidgetManager =
+                                    co.getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager?
+                                appWidgetManager?.let { manager ->
+                                    updateAppWidget(co, manager, appWidgetId)
+                                }
+                            }
+                        }
+                    }
+
                 }
                 else -> {
                     L.i(TAG, " other .do ")
@@ -110,11 +133,9 @@ class NoteInfoAppWidget : AppWidgetProvider() {
         var noteGroupId = SPHelper.getAppWidgetNoteGroupId(appWidgetId)
         if (noteGroupId.isEmpty()) {
             noteGroupId = NoteGroupService.getNearUpdateNoteGroup()?.noteGroupId ?: ""
-        }
-        L.i(TAG, "getNoteGroupId: ---->>>> noteGroupId = $noteGroupId ")
-        if (noteGroupId.isNotEmpty()) {
             SPHelper.saveAppWidgetNoteGroupId(appWidgetId, noteGroupId)
         }
+        L.i(TAG, "getNoteGroupId: ---->>>> noteGroupId = $noteGroupId ")
         return noteGroupId
     }
 
@@ -131,6 +152,13 @@ class NoteInfoAppWidget : AppWidgetProvider() {
     }
 
     /**
+     * 检测是否存在数据
+     */
+    private fun checkNoteGroupHaveNote(groupId: String): Boolean {
+        return NoteController.findAllNoteInfoByGroupId(groupId).isNotEmpty()
+    }
+
+    /**
      * 更新 AppWidget 内容
      */
     private fun updateAppWidget(
@@ -143,10 +171,12 @@ class NoteInfoAppWidget : AppWidgetProvider() {
         val noteGroupId = getNoteGroupId(appWidgetId)
         // 笔记组
         val noteGroup = getNoteGroup(noteGroupId)
+        // 是否存在内容
+        val haveNote = checkNoteGroupHaveNote(noteGroupId)
 
         L.d(TAG, "updateAppWidget: noteGroupId = $noteGroupId , noteGroup = $noteGroup  ")
         val views: RemoteViews
-        if (noteGroup == null) {
+        if (noteGroup == null || !haveNote) {
             views = RemoteViews(context.packageName, R.layout.note_info_app_widget_empty)
         } else {
             views = RemoteViews(context.packageName, R.layout.note_info_app_widget)
@@ -159,25 +189,28 @@ class NoteInfoAppWidget : AppWidgetProvider() {
             noteGroup?.groupName ?: context.getString(R.string._nothing)
         )
 
-        // 切换分组
-        val changeGroupIntent = Intent(context, NewNoteInfoSampleActivity::class.java)
+        // 选择笔记分组
+        val changeGroupIntent = Intent(context, ChooseAppWidgetNoteGroupActivity::class.java)
             .apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    .or(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 val bundle = Bundle()
-                bundle.putInt("launchType", 2)
+                    .apply {
+                        L.d(TAG, "updateAppWidget: ----->>> noteGroupId = $noteGroupId ")
+                        putString(Constants.NoteBookParams.NOTE_GROUP_ID_TAG, noteGroupId)
+                        putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                    }
                 putExtras(bundle)
             }
         // +bug, 11654, 2022/4/25 , modify, PendingIntent flag Type with S+.
-        val flag = BaseUtil.getPendingIntentFlag()
-        val changePendingIntent = PendingIntent.getActivity(
+        val flag = BaseUtil.getMutablePendingIntentFlag()
+        val changeGroupPendingIntent = PendingIntent.getActivity(
             context,
             9,
             changeGroupIntent,
             flag
         )
         // -bug, 11654, 2022/4/25 , modify, PendingIntent flag Type with S+.
-        views.setOnClickPendingIntent(R.id.app_widget_top_title_tv, changePendingIntent)
+        views.setOnClickPendingIntent(R.id.app_widget_top_title_tv, changeGroupPendingIntent)
 
         // 添加笔记
         val addNoteIntent = Intent(context, NewNoteInfoSampleActivity::class.java)

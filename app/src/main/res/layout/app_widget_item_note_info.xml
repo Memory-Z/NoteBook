@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 微件 笔记 信息 Item  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/app_widget_item_note_content_ll"
+    style="@style/NoteBookAppTheme.Layout"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/touch_target_height"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/app_widget_item_note_title_tv"
+        style="@style/NoteBookAppTheme.Text"
+        android:layout_width="match_parent"
+        android:textSize="@dimen/text_min_body_size"
+        android:layout_height="wrap_content"
+        android:lines="1" />
+</LinearLayout>

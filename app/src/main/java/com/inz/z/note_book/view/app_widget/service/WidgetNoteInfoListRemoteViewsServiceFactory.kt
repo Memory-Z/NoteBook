@@ -4,10 +4,8 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
-import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.NoteInfo
@@ -31,7 +29,7 @@ class WidgetNoteInfoListRemoteViewsServiceFactory(
         private const val TAG = "WidgetNoteInfoRemoteFactory"
     }
 
-    private var noteInfoList: MutableList<NoteInfo> = mutableListOf()
+    private var noteInfoList: MutableList<NoteInfo>? = mutableListOf()
     private var noteGroupId = ""
 
     override fun onCreate() {
@@ -48,7 +46,7 @@ class WidgetNoteInfoListRemoteViewsServiceFactory(
 
     override fun getItemId(position: Int): Long {
         L.i(TAG, "getItemId: $position")
-        return noteInfoList[position].hashCode().toLong()
+        return noteInfoList?.get(position).hashCode().toLong()
     }
 
     override fun onDataSetChanged() {
@@ -62,16 +60,11 @@ class WidgetNoteInfoListRemoteViewsServiceFactory(
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-        val noteInfo = noteInfoList[position]
+        val noteInfo = noteInfoList?.get(position)
         L.i(TAG, "getViewAt: >>>>>>>>>>>>  $position ---- $noteInfo")
-        val remoteViews =
-            RemoteViews(mContext.packageName, R.layout.widget_item_note_sample_layout)
+        val remoteViews = RemoteViews(mContext.packageName, R.layout.app_widget_item_note_info)
 
-        val updateDateStr = BaseTools.getBaseDateFormat().format(noteInfo.updateDate)
-
-        remoteViews.setTextViewText(R.id.item_note_sample_title_tv, noteInfo.noteTitle)
-        remoteViews.setTextViewText(R.id.item_note_sample_update_date_tv, updateDateStr)
-        remoteViews.setViewVisibility(R.id.item_note_sample_update_date_tv, View.GONE)
+        remoteViews.setTextViewText(R.id.app_widget_item_note_title_tv, noteInfo?.noteTitle)
 
         //设置 Intent
         val clickIntent = Intent()
@@ -81,7 +74,7 @@ class WidgetNoteInfoListRemoteViewsServiceFactory(
                         it.putInt(Constants.WidgetParams.WIDGET_NOTE_INFO_CLICK_POSITION, position)
                         it.putString(
                             Constants.WidgetParams.WIDGET_NOTE_INFO_APP_WIDGET_ITEM_CLICK_NOTE_INFO_ID,
-                            noteInfo.noteInfoId
+                            noteInfo?.noteInfoId
                         )
                         it.putString(
                             Constants.WidgetParams.WIDGET_NOTE_INFO_APP_WIDGET_NOTE_GROUP_ID,
@@ -90,15 +83,14 @@ class WidgetNoteInfoListRemoteViewsServiceFactory(
                     }
                 putExtras(bundle)
             }
-
-        remoteViews.setOnClickFillInIntent(R.id.item_note_sample_ll, clickIntent)
+        remoteViews.setOnClickFillInIntent(R.id.app_widget_item_note_content_ll, clickIntent)
 
         return remoteViews
     }
 
     override fun getCount(): Int {
-        L.i(TAG, "getCount . ${noteInfoList.size} ")
-        return noteInfoList.size
+        L.i(TAG, "getCount . ${noteInfoList?.size} ")
+        return noteInfoList?.size ?: 0
     }
 
     override fun getViewTypeCount(): Int {
@@ -119,10 +111,13 @@ class WidgetNoteInfoListRemoteViewsServiceFactory(
             L.w(TAG, "updateNoteInfoData: noteGroupId is null . ---> $this")
             return
         }
-        noteInfoList =
-            NoteController.findAllNoteInfoByGroupId(noteGroupId) as MutableList<NoteInfo>
-        L.d(TAG, "updateNoteInfoData: --->> List[Size] = ${noteInfoList.size} ")
-        AppWidgetManager.getInstance(mContext)
-            .notifyAppWidgetViewDataChanged(appWidgetId, R.id.item_note_sample_ll)
+        val list =
+            NoteController.findAllNoteInfoByGroupId(noteGroupId)
+        if (list.isNotEmpty()) {
+            noteInfoList = list as MutableList<NoteInfo>
+            L.d(TAG, "updateNoteInfoData: --->> List[Size] = ${noteInfoList?.size} ")
+            AppWidgetManager.getInstance(mContext)
+                .notifyAppWidgetViewDataChanged(appWidgetId, R.id.item_note_sample_ll)
+        }
     }
 }
