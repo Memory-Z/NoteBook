@@ -2,10 +2,9 @@
 
 <!-- 桌面空数据 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@color/textInverseColor30"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/textInverseColor30">
 
     <include
         android:id="@+id/app_widget_empty_top_rl"
@@ -16,7 +15,8 @@
         android:layout_height="match_parent"
         android:layout_below="@id/app_widget_empty_top_rl"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/touch_target_height">
 
         <TextView
             android:layout_width="wrap_content"

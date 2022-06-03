@@ -56,26 +56,34 @@ class ChooseNoteGroupAdapter(mContext: Context?) :
 
         init {
             binding.itemChooseTextCheckBox.setOnClickListener(this)
+            binding.itemChooseContentLl.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {
             val position = bindingAdapterPosition
             if (RecyclerView.NO_POSITION != bindingAdapterPosition) {
-                val clickItem = getItemByPosition(position)
-                if (clickItem != null) {
-                    // 更新 旧选中数据
-                    getItemByPosition(currentCheckPosition)
-                        ?.also {
-                            it.checked = false
-                        }
-                        ?.let {
-                            updateItemByPosition(it, currentCheckPosition)
-                        }
-                    // 更新新数据
-                    clickItem.checked = true
-                    currentCheckPosition = position
-                    updateItemByPosition(clickItem, position)
+                when (v?.id) {
+                    binding.itemChooseContentLl.id -> {
+                        binding.itemChooseTextCheckBox.performClick()
+                    }
+                    binding.itemChooseTextCheckBox.id -> {
+                        val clickItem = getItemByPosition(position)
+                        if (clickItem != null) {
+                            // 更新 旧选中数据
+                            getItemByPosition(currentCheckPosition)
+                                ?.also {
+                                    it.checked = false
+                                }
+                                ?.let {
+                                    updateItemByPosition(it, currentCheckPosition)
+                                }
+                            // 更新新数据
+                            clickItem.checked = true
+                            currentCheckPosition = position
+                            updateItemByPosition(clickItem, position)
 
+                        }
+                    }
                 }
             }
         }
