@@ -7,12 +7,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.inz.z.base.util.BaseTools
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.controller.NoteGroupService
 import com.inz.z.note_book.databinding.ActivityChooseNoteGroupBinding
-import com.inz.z.note_book.util.BaseUtil
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.activity.adapter.ChooseNoteGroupAdapter
@@ -77,8 +75,6 @@ class ChooseAppWidgetNoteGroupActivity : BaseNoteActivity() {
                 AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID
             )
-
-            L.d(TAG, "initData: noteGroupId = $noteGroupId , appWidgetId = $appWidgetId")
         }
 
         loadNoteGroupRunnable = LoadNoteGroupRunnable(noteGroupId)
@@ -107,6 +103,11 @@ class ChooseAppWidgetNoteGroupActivity : BaseNoteActivity() {
                 }
                 sendUpdateWidgetBroadcast(noteGroupId)
                 binding?.root?.postDelayed({
+                    val intent = Intent()
+                        .apply {
+                            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                        }
+                    setResult(RESULT_OK, intent)
                     finish()
                 }, 1000L)
             }
@@ -115,12 +116,12 @@ class ChooseAppWidgetNoteGroupActivity : BaseNoteActivity() {
     }
 
     override fun onDestroyTask() {
-        super.onDestroyTask()
+        intent.putExtras(Bundle.EMPTY)
         binding = null
         val removed = getWorkThread("_on_destroy_task")?.remove(loadNoteGroupRunnable)
         L.d(TAG, "onDestroyTask: remove load runnable = $removed")
         loadNoteGroupRunnable = null
-
+        super.onDestroyTask()
     }
 
 

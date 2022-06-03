@@ -106,7 +106,7 @@ class NoteInfoAppWidget : AppWidgetProvider() {
                             // 保存数据
                             SPHelper.saveAppWidgetNoteGroupId(appWidgetId, currentGroupId)
                             // 更新界面
-                            context?.let { co ->
+                            context?.applicationContext?.let { co ->
                                 val appWidgetManager =
                                     co.getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager?
                                 appWidgetManager?.let { manager ->
@@ -190,24 +190,24 @@ class NoteInfoAppWidget : AppWidgetProvider() {
         )
 
         // 选择笔记分组
+        val changeGroupBundle = Bundle()
+            .apply {
+                L.d(TAG, "updateAppWidget: ----->>> noteGroupId = $noteGroupId ")
+                putString(Constants.NoteBookParams.NOTE_GROUP_ID_TAG, noteGroupId)
+                putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            }
         val changeGroupIntent = Intent(context, ChooseAppWidgetNoteGroupActivity::class.java)
             .apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                val bundle = Bundle()
-                    .apply {
-                        L.d(TAG, "updateAppWidget: ----->>> noteGroupId = $noteGroupId ")
-                        putString(Constants.NoteBookParams.NOTE_GROUP_ID_TAG, noteGroupId)
-                        putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                    }
-                putExtras(bundle)
+                    .or(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                putExtras(changeGroupBundle)
             }
         // +bug, 11654, 2022/4/25 , modify, PendingIntent flag Type with S+.
-        val flag = BaseUtil.getMutablePendingIntentFlag()
         val changeGroupPendingIntent = PendingIntent.getActivity(
             context,
-            9,
+            0,
             changeGroupIntent,
-            flag
+            BaseUtil.getPendingIntentFlag()
         )
         // -bug, 11654, 2022/4/25 , modify, PendingIntent flag Type with S+.
         views.setOnClickPendingIntent(R.id.app_widget_top_title_tv, changeGroupPendingIntent)
@@ -223,7 +223,12 @@ class NoteInfoAppWidget : AppWidgetProvider() {
                 putExtras(bundle)
             }
         val addNotePendingIntent =
-            PendingIntent.getActivity(context, 8, addNoteIntent, flag)
+            PendingIntent.getActivity(
+                context,
+                8,
+                addNoteIntent,
+                BaseUtil.getPendingIntentFlag()
+            )
         views.setOnClickPendingIntent(R.id.app_widget_top_add_iv, addNotePendingIntent)
 
 

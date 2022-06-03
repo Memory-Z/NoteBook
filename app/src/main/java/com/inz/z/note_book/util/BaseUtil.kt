@@ -18,10 +18,14 @@ object BaseUtil : BaseTools() {
      * 获取 PendingIntent FLAG
      */
     fun getPendingIntentFlag(): Int =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE else PendingIntent.FLAG_CANCEL_CURRENT
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_IMMUTABLE.or(
+            PendingIntent.FLAG_UPDATE_CURRENT
+        ) else PendingIntent.FLAG_UPDATE_CURRENT
     // -bug, 11654, 2022/5/2 , modify , update pendingIntent FLAG .
 
     fun getMutablePendingIntentFlag(): Int =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else PendingIntent.FLAG_UPDATE_CURRENT
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE.or(
+            PendingIntent.FLAG_CANCEL_CURRENT
+        ) else PendingIntent.FLAG_CANCEL_CURRENT
 
 }
