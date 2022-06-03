@@ -1,5 +1,6 @@
 package com.inz.z.note_book.view.activity
 
+import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -14,6 +15,7 @@ import com.inz.z.base.util.L
 import com.inz.z.base.util.ToastUtil
 import com.inz.z.base.view.widget.BaseNoDataView
 import com.inz.z.note_book.R
+import com.inz.z.note_book.base.NoteInfoViewLaunchType
 import com.inz.z.note_book.base.NoteStatus
 import com.inz.z.note_book.database.bean.NoteGroup
 import com.inz.z.note_book.database.bean.NoteInfo
@@ -21,6 +23,7 @@ import com.inz.z.note_book.database.controller.NoteController
 import com.inz.z.note_book.database.controller.NoteGroupService
 import com.inz.z.note_book.databinding.ActivityGroupLayoutBinding
 import com.inz.z.note_book.util.ClickUtil
+import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.adapter.NoteInfoRecyclerAdapter
 import com.inz.z.note_book.view.dialog.AddNoteInfoDialog
@@ -41,7 +44,6 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
 
     private var binding: ActivityGroupLayoutBinding? = null
 
-    //    private var noteInfoAddBinding: NoteInfoAddSampleLayoutBinding? = null
     private var mNoteInfoRecyclerAdapter: NoteInfoRecyclerAdapter? = null
 
     /**
@@ -69,12 +71,16 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
     override fun initWindow() {
     }
 
-    override fun setNavigationBar() {
+    override fun getLayoutId(): Int = R.layout.activity_group_layout
 
-    }
+    override fun useViewBinding(): Boolean = true
 
-    override fun getLayoutId(): Int {
-        return R.layout.activity_group_layout
+    override fun setViewBinding() {
+        super.setViewBinding()
+        binding = ActivityGroupLayoutBinding.inflate(layoutInflater)
+            .apply {
+                setContentView(this.root)
+            }
     }
 
     override fun initView() {
@@ -134,20 +140,8 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
         }
         // 设置标题
         binding?.groupTopToolbar?.title = groupName
-
     }
 
-    override fun useDataBinding(): Boolean {
-        return true
-    }
-
-    override fun setDataBindingView() {
-        super.setDataBindingView()
-        binding = ActivityGroupLayoutBinding.inflate(layoutInflater)
-            .apply {
-                setContentView(this.root)
-            }
-    }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -170,13 +164,23 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
             // 加载数据
             loadNoteInfoWithDatabase()
         }
+
+
+        // 判断当前启动类型是否 为 创建新笔记信息
+        val launchType = getNoteInfoLunchType()
+        L.d(TAG, "onResume: ---LaunchType = $launchType ")
+        // 如果为 创建 新信息，弹出窗口进行提示，
+        if (launchType == Constants.NoteBookParams.NOTE_INFO_LAUNCH_TYPE_CREATE) {
+            // 显示 新笔记 信息弹窗
+            targetFabView(false)
+        }
     }
 
     override fun onPause() {
         super.onPause()
         // 如果显示 添加框，则隐藏
         if (getAddNoteInfoIsShow()) {
-            targetFabView(false)
+            targetFabView(true)
         }
     }
 
@@ -214,6 +218,19 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    /**
+     * 获取启动类型
+     */
+    @NoteInfoViewLaunchType
+    private fun getNoteInfoLunchType(): Int {
+        return intent.extras
+            ?.getInt(
+                Constants.NoteBookParams.NOTE_INFO_LAUNCH_TYPE_TAG,
+                Constants.NoteBookParams.NOTE_INFP_LAUNCH_TYPE_NORMAL
+            )
+            ?: Constants.NoteBookParams.NOTE_INFP_LAUNCH_TYPE_NORMAL
     }
 
     /**
@@ -479,7 +496,50 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
                 // 加载笔记信息
                 loadNoteInfoWithDatabase()
             }
+
+            // 判断 当前是否为AppWidget 新建
+            val launchType = getNoteInfoLunchType()
+            // 如果为新建状态，重置启动类型，发送更新广播
+            if (Constants.NoteBookParams.NOTE_INFO_LAUNCH_TYPE_CREATE == launchType) {
+                // 重置启动状态
+                val bundle = intent.extras
+                bundle?.let {
+                    it.putInt(
+                        Constants.NoteBookParams.NOTE_INFO_LAUNCH_TYPE_TAG,
+                        Constants.NoteBookParams.NOTE_INFP_LAUNCH_TYPE_NORMAL
+                    )
+                    intent.putExtras(it)
+                }
+                sendBroadcast2UpdateAppwidget()
+            }
         }
+
+    }
+
+    /**
+     * 发送 更新笔记信息 广播
+     */
+    private fun sendBroadcast2UpdateAppwidget() {
+        val appWidgetId = intent.getIntExtra(
+            AppWidgetManager.EXTRA_APPWIDGET_ID,
+            AppWidgetManager.INVALID_APPWIDGET_ID
+        )
+        L.d(
+            TAG,
+            "sendBroadcast2UpdateAppwidget: appWidgetId = $appWidgetId , noteGroupId = $currentGroupId"
+        )
+        val broadcast = Intent()
+            .apply {
+                action = Constants.WidgetParams.WIDGET_NOTE_INFO_APP_WIDGET_UPDATE_NOTE_INFO_ACTION
+                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                val bundle = Bundle()
+                    .apply {
+                        putString(Constants.NoteBookParams.NOTE_GROUP_ID_TAG, currentGroupId)
+                    }
+                putExtras(bundle)
+                `package` = mContext.packageName
+            }
+        sendBroadcast(broadcast)
 
     }
 

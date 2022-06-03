@@ -61,7 +61,6 @@ class WidgetNoteInfoListRemoteViewsServiceFactory(
 
     override fun getViewAt(position: Int): RemoteViews {
         val noteInfo = noteInfoList?.get(position)
-        L.i(TAG, "getViewAt: >>>>>>>>>>>>  $position ---- $noteInfo")
         val remoteViews = RemoteViews(mContext.packageName, R.layout.app_widget_item_note_info)
 
         remoteViews.setTextViewText(R.id.app_widget_item_note_title_tv, noteInfo?.noteTitle)

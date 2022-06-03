@@ -17,7 +17,7 @@ import com.inz.z.note_book.util.BaseUtil
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.util.SPHelper
 import com.inz.z.note_book.view.activity.ChooseAppWidgetNoteGroupActivity
-import com.inz.z.note_book.view.activity.NewNoteInfoSampleActivity
+import com.inz.z.note_book.view.activity.NoteGroupActivity
 import com.inz.z.note_book.view.app_widget.service.WidgetNoteInfoListRemoteViewsService
 
 
@@ -117,6 +117,24 @@ class NoteInfoAppWidget : AppWidgetProvider() {
                     }
 
                 }
+                // 更新 分组内容
+                Constants.WidgetParams.WIDGET_NOTE_INFO_APP_WIDGET_UPDATE_NOTE_INFO_ACTION -> {
+                    L.d(TAG, "onReceive: update widget note info . ")
+                    val appWidgetId = it.getIntExtra(
+                        AppWidgetManager.EXTRA_APPWIDGET_ID,
+                        AppWidgetManager.INVALID_APPWIDGET_ID
+                    )
+                    it.extras?.let { bu ->
+                        val noteGroupId =
+                            bu.getString(Constants.NoteBookParams.NOTE_GROUP_ID_TAG, "")
+                        if (noteGroupId.isNullOrEmpty()) return
+                        context?.let { co ->
+                            val appWidgetManager = AppWidgetManager.getInstance(co)
+                            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.app_widget_content_lv)
+//                            updateAppWidget(co, appWidgetManager, appWidgetId)
+                        }
+                    }
+                }
                 else -> {
                     L.i(TAG, " other .do ")
                 }
@@ -213,14 +231,20 @@ class NoteInfoAppWidget : AppWidgetProvider() {
         views.setOnClickPendingIntent(R.id.app_widget_top_title_tv, changeGroupPendingIntent)
 
         // 添加笔记
-        val addNoteIntent = Intent(context, NewNoteInfoSampleActivity::class.java)
+        val addNoteIntent = Intent(context, NoteGroupActivity::class.java)
             .apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     .or(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 val bundle = Bundle()
-                bundle.putInt("launchType", 1)
-                bundle.putString("groupId", noteGroupId)
+                    .apply {
+                        putInt(
+                            Constants.NoteBookParams.NOTE_INFO_LAUNCH_TYPE_TAG,
+                            Constants.NoteBookParams.NOTE_INFO_LAUNCH_TYPE_CREATE
+                        )
+                        putString(Constants.NoteBookParams.NOTE_GROUP_ID_TAG, noteGroupId)
+                    }
                 putExtras(bundle)
+                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             }
         val addNotePendingIntent =
             PendingIntent.getActivity(

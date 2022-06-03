@@ -104,16 +104,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateVisible" />
 
-
-        <!-- 透明层 -->
-        <activity
-            android:name=".view.activity.NewNoteInfoSampleActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout"
-            android:launchMode="singleTask"
-            android:screenOrientation="fullSensor"
-            android:taskAffinity="com.inz.z.note_book.sample_activity"
-            android:windowSoftInputMode="adjustResize" />
-
         <!-- 任务计划列表 -->
         <activity
             android:name=".view.activity.ScheduleActivity"
@@ -282,6 +272,8 @@
                 <action android:name="${applicationId}.action.NOTE_INFO_ITEM_CLICK" />
                 <!-- 切换选中的组 -->
                 <action android:name="${applicationId}.action.NOTE_INFO_CHANGE_NOTE_GROUP" />
+                <!-- 更新笔记分组内容  -->
+                <action android:name="${applicationId}.action.NOTE_INFO_UPDATE_NOTE_INFO" />
             </intent-filter>
 
             <meta-data

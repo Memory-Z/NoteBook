@@ -134,6 +134,14 @@ object Constants {
          * 笔记 ID
          */
         const val NOTE_ID_TAG = "noteId"
+
+        /**
+         * 笔记信息界面启动界面
+         */
+        const val NOTE_INFO_LAUNCH_TYPE_TAG = "launchType"
+        const val NOTE_INFP_LAUNCH_TYPE_NORMAL = 0
+        const val NOTE_INFO_LAUNCH_TYPE_OPEN = 0x0001
+        const val NOTE_INFO_LAUNCH_TYPE_CREATE = 0x0002
     }
 
     /**
@@ -349,13 +357,19 @@ object Constants {
          * noteInfo 单项点击事件 ..
          */
         const val WIDGET_NOTE_INFO_APP_WIDGET_ITEM_CLICK_ACTION =
-            "com.inz.z.note_book.action.NOTE_INFO_ITEM_CLICK"
+            "${APPLICATION_ID}.action.NOTE_INFO_ITEM_CLICK"
 
         /**
          * 切换显示的笔记分组
          */
         const val WIDGET_NOTE_INFO_APP_WIDGET_CHANGE_NOTE_GROUP_ACTION =
-            "com.inz.z.note_book.action.NOTE_INFO_CHANGE_NOTE_GROUP"
+            "${APPLICATION_ID}.action.NOTE_INFO_CHANGE_NOTE_GROUP"
+
+        /**
+         * 更新 笔记信息
+         */
+        const val WIDGET_NOTE_INFO_APP_WIDGET_UPDATE_NOTE_INFO_ACTION =
+            "${APPLICATION_ID}.action.NOTE_INFO_UPDATE_NOTE_INFO"
 
         const val WIDGET_NOTE_INFO_APP_WIDGET_NOTE_GROUP_ID =
             "widget_note_info_click_note_group_id"

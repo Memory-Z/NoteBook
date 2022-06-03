@@ -6,6 +6,7 @@ import androidx.annotation.IntDef
 import androidx.annotation.NonNull
 import androidx.annotation.StringDef
 import com.inz.z.note_book.R
+import com.inz.z.note_book.util.Constants
 
 /**
  *
@@ -89,6 +90,24 @@ object NoteStatus {
     AnnotationTarget.VALUE_PARAMETER
 )
 annotation class NoteInfoStatus
+
+/**
+ * 笔记信息界面启动类型
+ */
+@IntDef(
+    Constants.NoteBookParams.NOTE_INFP_LAUNCH_TYPE_NORMAL,
+    Constants.NoteBookParams.NOTE_INFO_LAUNCH_TYPE_CREATE,
+    Constants.NoteBookParams.NOTE_INFO_LAUNCH_TYPE_OPEN
+)
+@Target(
+    AnnotationTarget.FIELD,
+    AnnotationTarget.PROPERTY,
+    AnnotationTarget.TYPE_PARAMETER,
+    AnnotationTarget.FIELD,
+    AnnotationTarget.VALUE_PARAMETER,
+    AnnotationTarget.FUNCTION
+)
+annotation class NoteInfoViewLaunchType()
 
 /**
  * 任务 值
