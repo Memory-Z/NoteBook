@@ -22,7 +22,7 @@ import com.inz.z.note_book.util.ViewUtil
  */
 class WidgetNoteInfoListRemoteViewsServiceFactory(
     val mContext: Context,
-    val appWidgetId: Int?,
+    private val appWidgetId: Int?,
 ) : RemoteViewsService.RemoteViewsFactory {
 
     companion object {
@@ -33,10 +33,7 @@ class WidgetNoteInfoListRemoteViewsServiceFactory(
     private var noteGroupId = ""
 
     override fun onCreate() {
-        appWidgetId?.let {
-            noteGroupId = SPHelper.getAppWidgetNoteGroupId(it)
-        }
-        L.i(TAG, "onCreate. appWidgetId = $appWidgetId ,  noteGroupId = $noteGroupId --< ")
+        L.i(TAG, "onCreate. appWidgetId = $appWidgetId ")
     }
 
     override fun getLoadingView(): RemoteViews {
@@ -61,6 +58,7 @@ class WidgetNoteInfoListRemoteViewsServiceFactory(
 
     override fun getViewAt(position: Int): RemoteViews {
         val noteInfo = noteInfoList?.get(position)
+        L.d(TAG, "getViewAt: position - $position = ${noteInfo?.noteInfoId}")
         val remoteViews = RemoteViews(mContext.packageName, R.layout.app_widget_item_note_info)
 
         remoteViews.setTextViewText(R.id.app_widget_item_note_title_tv, noteInfo?.noteTitle)
@@ -71,14 +69,8 @@ class WidgetNoteInfoListRemoteViewsServiceFactory(
                 val bundle = Bundle()
                     .also {
                         it.putInt(Constants.WidgetParams.WIDGET_NOTE_INFO_CLICK_POSITION, position)
-                        it.putString(
-                            Constants.WidgetParams.WIDGET_NOTE_INFO_APP_WIDGET_ITEM_CLICK_NOTE_INFO_ID,
-                            noteInfo?.noteInfoId
-                        )
-                        it.putString(
-                            Constants.WidgetParams.WIDGET_NOTE_INFO_APP_WIDGET_NOTE_GROUP_ID,
-                            noteGroupId
-                        )
+                        it.putString(Constants.NoteBookParams.NOTE_ID_TAG, noteInfo?.noteInfoId)
+                        it.putString(Constants.NoteBookParams.NOTE_GROUP_ID_TAG, noteGroupId)
                     }
                 putExtras(bundle)
             }
@@ -105,6 +97,8 @@ class WidgetNoteInfoListRemoteViewsServiceFactory(
      * 更新
      */
     private fun updateNoteInfoData() {
+        noteGroupId =
+            SPHelper.getAppWidgetNoteGroupId(appWidgetId ?: AppWidgetManager.INVALID_APPWIDGET_ID)
         L.i(TAG, "updateNoteInfoData: noteGroupId = $noteGroupId")
         if (appWidgetId == null || noteGroupId.isEmpty()) {
             L.w(TAG, "updateNoteInfoData: noteGroupId is null . ---> $this")

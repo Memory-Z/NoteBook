@@ -29,6 +29,7 @@ import com.inz.z.note_book.database.controller.NoteFileController
 import com.inz.z.note_book.database.controller.NoteInfoController
 import com.inz.z.note_book.databinding.NoteInfoAddLayoutBinding
 import com.inz.z.note_book.util.ClickUtil
+import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.util.FileUtil
 import com.inz.z.note_book.view.BaseNoteActivity
 import com.inz.z.note_book.view.activity.adapter.NewNoteInfoImageRvAdapter
@@ -204,10 +205,11 @@ class NewNoteActivity : BaseNoteActivity(), View.OnClickListener {
 
 
     override fun initData() {
-        val bundle = intent.extras
-        if (bundle != null) {
-            noteInfoId = bundle.getString("noteInfoId", "")
+        intent.extras?.let {
+            L.d(TAG, "initData: bundle = $it --- $intent")
+            noteInfoId = it.getString(Constants.NoteBookParams.NOTE_ID_TAG, "")
         }
+        L.d(TAG, "initData: noteInfoId = $noteInfoId ")
         if (noteInfoId.isNotEmpty()) {
             noteInfo = NoteInfoController.findById(noteInfoId)
             noteInfo?.apply {

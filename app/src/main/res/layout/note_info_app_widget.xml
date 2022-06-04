@@ -8,15 +8,38 @@
         android:id="@+id/app_widget_top_rl"
         layout="@layout/note_info_app_widget_top_nav" />
 
-    <ListView
-        android:id="@+id/app_widget_content_lv"
+    <RelativeLayout
+        android:id="@+id/app_widget_note_info_content_rl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/app_widget_top_rl"
-        android:divider="@color/line_color"
-        android:dividerHeight="1px"
-        android:paddingStart="@dimen/layout_padding"
-        android:paddingEnd="@dimen/layout_padding"
-        android:scrollbarStyle="outsideOverlay" />
+        android:layout_below="@id/app_widget_top_rl">
+
+        <ListView
+            android:id="@+id/app_widget_note_info_content_lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/line_color"
+            android:dividerHeight="1px"
+            android:paddingStart="@dimen/layout_padding"
+            android:paddingEnd="@dimen/layout_padding"
+            android:scrollbarStyle="outsideOverlay" />
+
+        <LinearLayout
+            android:id="@+id/app_widget_note_info_empty_ll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/touch_target_height">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/_no_content" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
 
 </RelativeLayout>

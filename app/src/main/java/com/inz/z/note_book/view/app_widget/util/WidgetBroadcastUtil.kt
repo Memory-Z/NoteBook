@@ -27,7 +27,7 @@ object WidgetBroadcastUtil {
             val manager = AppWidgetManager.getInstance(context)
             val componentName = ComponentName(context, NoteInfoAppWidget::class.java)
             val appIds = manager.getAppWidgetIds(componentName)
-            manager.notifyAppWidgetViewDataChanged(appIds, R.id.app_widget_content_lv)
+            manager.notifyAppWidgetViewDataChanged(appIds, R.id.app_widget_note_info_content_rl)
         }
     }
 

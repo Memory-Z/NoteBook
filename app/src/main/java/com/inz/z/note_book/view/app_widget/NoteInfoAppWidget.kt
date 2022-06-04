@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.RemoteViews
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
@@ -17,6 +18,7 @@ import com.inz.z.note_book.util.BaseUtil
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.util.SPHelper
 import com.inz.z.note_book.view.activity.ChooseAppWidgetNoteGroupActivity
+import com.inz.z.note_book.view.activity.NewNoteActivity
 import com.inz.z.note_book.view.activity.NoteGroupActivity
 import com.inz.z.note_book.view.app_widget.service.WidgetNoteInfoListRemoteViewsService
 
@@ -73,15 +75,10 @@ class NoteInfoAppWidget : AppWidgetProvider() {
                     bundle?.let { bu ->
                         // 获取 笔记 ID
                         val noteInfoId =
-                            bu.getString(
-                                Constants.WidgetParams.WIDGET_NOTE_INFO_APP_WIDGET_ITEM_CLICK_NOTE_INFO_ID,
-                                ""
-                            )
+                            bu.getString(Constants.NoteBookParams.NOTE_ID_TAG, "")
                         // 获取 笔记 组ID
-                        val noteGroupId = bu.getString(
-                            Constants.WidgetParams.WIDGET_NOTE_INFO_APP_WIDGET_NOTE_GROUP_ID,
-                            ""
-                        )
+                        val noteGroupId =
+                            bu.getString(Constants.NoteBookParams.NOTE_GROUP_ID_TAG, "")
 
                         L.i(
                             TAG,
@@ -106,12 +103,13 @@ class NoteInfoAppWidget : AppWidgetProvider() {
                             // 保存数据
                             SPHelper.saveAppWidgetNoteGroupId(appWidgetId, currentGroupId)
                             // 更新界面
-                            context?.applicationContext?.let { co ->
-                                val appWidgetManager =
-                                    co.getSystemService(Context.APPWIDGET_SERVICE) as AppWidgetManager?
-                                appWidgetManager?.let { manager ->
-                                    updateAppWidget(co, manager, appWidgetId)
-                                }
+                            context?.let { co ->
+                                val appWidgetManager = AppWidgetManager.getInstance(co)
+                                updateAppWidget(co, appWidgetManager, appWidgetId)
+                                appWidgetManager.notifyAppWidgetViewDataChanged(
+                                    appWidgetId,
+                                    R.id.app_widget_note_info_content_lv
+                                )
                             }
                         }
                     }
@@ -130,7 +128,10 @@ class NoteInfoAppWidget : AppWidgetProvider() {
                         if (noteGroupId.isNullOrEmpty()) return
                         context?.let { co ->
                             val appWidgetManager = AppWidgetManager.getInstance(co)
-                            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.app_widget_content_lv)
+                            appWidgetManager.notifyAppWidgetViewDataChanged(
+                                appWidgetId,
+                                R.id.app_widget_note_info_content_lv
+                            )
 //                            updateAppWidget(co, appWidgetManager, appWidgetId)
                         }
                     }
@@ -192,14 +193,15 @@ class NoteInfoAppWidget : AppWidgetProvider() {
         // 是否存在内容
         val haveNote = checkNoteGroupHaveNote(noteGroupId)
 
-        L.d(TAG, "updateAppWidget: noteGroupId = $noteGroupId , noteGroup = $noteGroup  ")
-        val views: RemoteViews
-        if (noteGroup == null || !haveNote) {
-            views = RemoteViews(context.packageName, R.layout.note_info_app_widget_empty)
-        } else {
-            views = RemoteViews(context.packageName, R.layout.note_info_app_widget)
-
+        L.d(TAG, "updateAppWidget: noteGroupId = $noteGroupId  ")
+        val views = RemoteViews(context.packageName, R.layout.note_info_app_widget)
+        if (haveNote) {
             setListViewAdapter(context, appWidgetId, views)
+            views.setViewVisibility(R.id.app_widget_note_info_empty_ll, View.GONE)
+            views.setViewVisibility(R.id.app_widget_note_info_content_lv, View.VISIBLE)
+        } else {
+            views.setViewVisibility(R.id.app_widget_note_info_empty_ll, View.VISIBLE)
+            views.setViewVisibility(R.id.app_widget_note_info_content_lv, View.GONE)
         }
 
         views.setTextViewText(
@@ -269,15 +271,16 @@ class NoteInfoAppWidget : AppWidgetProvider() {
             .apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             }
-        views.setRemoteAdapter(R.id.app_widget_content_lv, noteIntentService)
+        views.setRemoteAdapter(R.id.app_widget_note_info_content_lv, noteIntentService)
 
         // 设置  list view 中 点击事件
         // 设置 intent 模板
         // <GridView/ListView/StackView> 存在很多子元素，不能通过 setOnClickPendingIntent 设置点击事件
         // 1. 通过 setPendingIntentTemplate 设置 Intent 模板
         // 2. 在 RemoteViewsFactory 的 getViewAt 中，通过 setOnClickFillInIntent 设置 item 点击事件
-        val listIntent = Intent(context, NoteInfoAppWidget::class.java)
+        val listIntent = Intent(context, NewNoteActivity::class.java)
             .apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK.or(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 action = Constants.WidgetParams.WIDGET_NOTE_INFO_APP_WIDGET_ITEM_CLICK_ACTION
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                 // 接受 fillIntent 返回值
@@ -285,8 +288,8 @@ class NoteInfoAppWidget : AppWidgetProvider() {
             }
         val flag = BaseUtil.getMutablePendingIntentFlag()
         val pendingIntent =
-            PendingIntent.getBroadcast(context, 7, listIntent, flag)
-        views.setPendingIntentTemplate(R.id.app_widget_content_lv, pendingIntent)
+            PendingIntent.getActivity(context, 0, listIntent, flag)
+        views.setPendingIntentTemplate(R.id.app_widget_note_info_content_lv, pendingIntent)
     }
 
 }

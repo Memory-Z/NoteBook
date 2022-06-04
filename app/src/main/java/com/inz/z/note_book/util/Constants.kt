@@ -133,7 +133,7 @@ object Constants {
         /**
          * 笔记 ID
          */
-        const val NOTE_ID_TAG = "noteId"
+        const val NOTE_ID_TAG = "noteInfoId"
 
         /**
          * 笔记信息界面启动界面

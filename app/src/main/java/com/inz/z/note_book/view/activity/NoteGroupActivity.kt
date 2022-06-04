@@ -93,7 +93,7 @@ class NoteGroupActivity : BaseNoteActivity(), View.OnClickListener {
                     val noteInfo = noteInfoList?.get(position)
                     val intent = Intent(mContext, NewNoteActivity::class.java)
                     val bundle = Bundle()
-                    bundle.putString("noteInfoId", noteInfo?.noteInfoId ?: "")
+                    bundle.putString(Constants.NoteBookParams.NOTE_ID_TAG, noteInfo?.noteInfoId ?: "")
                     intent.putExtras(bundle)
                     startActivity(intent)
                 }
