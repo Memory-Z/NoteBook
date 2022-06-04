@@ -13,9 +13,13 @@ import android.os.Process
 import android.util.Log
 import android.widget.Toast
 import androidx.work.Configuration
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.inz.z.base.R
 import com.inz.z.base.util.CrashHandler
 import com.inz.z.base.util.L
+import com.inz.z.base.util.ThreadPoolUtils.getScheduleThread
 import com.inz.z.note_book.base.ActivityLifeCallbackImpl
 import com.inz.z.note_book.base.TaskValue
 import com.inz.z.note_book.broadcast.ScreenBroadcast
@@ -23,6 +27,9 @@ import com.inz.z.note_book.database.bean.UserInfo
 import com.inz.z.note_book.database.util.GreenDaoHelper
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.util.SPHelper
+import com.inz.z.note_book.view.activity.SplashActivity
+import com.inz.z.note_book.work.LovePanelCreateWorker
+import java.util.concurrent.TimeUnit
 
 /**
  * 笔记Application .
@@ -94,6 +101,11 @@ class NoteBookApplication : Application(), Configuration.Provider {
         initService()
         // 初始化广播
         initBroadcast()
+
+        // 初始化 Create LovePanel
+        getScheduleThread("_init_data").submit {
+            initCreateLovePanelWork()
+        }
     }
 
     /**
@@ -135,6 +147,21 @@ class NoteBookApplication : Application(), Configuration.Provider {
                 this.addAction(Intent.ACTION_USER_PRESENT)
             }
         registerReceiver(screenBroadcast, intentFilter)
+    }
+
+    /**
+     * 初始化 创建 LovePanel 工作
+     */
+    private fun initCreateLovePanelWork() {
+        L.i(SplashActivity.TAG, "initCreateLovePanelWork: create LovePanel work Start ... ")
+        val requestWork =
+            OneTimeWorkRequestBuilder<LovePanelCreateWorker>()
+                .setInitialDelay(6000, TimeUnit.MILLISECONDS)
+                .addTag("LOVE_PANEL_WORKER")
+                .build()
+        WorkManager.getInstance(applicationContext)
+            .enqueueUniqueWork("CREATE_LOVE_PANEL", ExistingWorkPolicy.REPLACE, requestWork)
+        L.i(SplashActivity.TAG, "initCreateLovePanelWork: create LovePanel work Finish !")
     }
 
     /**

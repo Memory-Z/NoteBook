@@ -70,6 +70,11 @@ class CreateLovePanelService : Service() {
             }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        isFirstCreateImage = true
+    }
+
     private fun createLovePanelImage(num: Int, textPaint: Paint) {
         L.i(TAG, "createLovePanelImage: create love panel image ")
         val fileName = baseContext.resources.getString(R.string.love_panel_template).format(num)

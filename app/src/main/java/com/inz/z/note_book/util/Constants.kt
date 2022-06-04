@@ -39,6 +39,12 @@ object Constants {
             }
             return file.absolutePath
         }
+
+
+        /**
+         * 创建 LovePanel work
+         */
+        const val CREATE_LOVE_PANEL_WORK_NAME = "create_love_panel_work"
     }
 
     /**

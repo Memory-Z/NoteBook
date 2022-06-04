@@ -5,17 +5,12 @@ import android.os.Build
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.inz.z.base.util.L
 import com.inz.z.base.view.AbsBaseActivity
 import com.inz.z.note_book.BuildConfig
 import com.inz.z.note_book.R
 import com.inz.z.note_book.databinding.SplashLayoutBinding
 import com.inz.z.note_book.service.NotificationForegroundService
-import com.inz.z.note_book.work.LovePanelCreateWorker
-import java.util.concurrent.TimeUnit
 
 /**
  *
@@ -79,9 +74,6 @@ class SplashActivity : AbsBaseActivity() {
             startForegroundService(service)
         } else {
             startService(service)
-        }
-        getScheduleThread("_init_data")?.execute {
-            initCreateLovePanelWork()
         }
     }
 
@@ -151,18 +143,5 @@ class SplashActivity : AbsBaseActivity() {
     }
 
 
-    /**
-     * 初始化 创建 LovePanel 工作
-     */
-    private fun initCreateLovePanelWork() {
-        L.i(TAG, "initCreateLovePanelWork: create LovePanel work Start ... ")
-        val requestWork =
-            OneTimeWorkRequestBuilder<LovePanelCreateWorker>()
-                .setInitialDelay(3000, TimeUnit.MILLISECONDS)
-                .addTag("LOVE_PANEL_WORKER")
-                .build()
-        WorkManager.getInstance(applicationContext)
-            .enqueueUniqueWork("CREATE_LOVE_PANEL", ExistingWorkPolicy.REPLACE, requestWork)
-        L.i(TAG, "initCreateLovePanelWork: create LovePanel work Finish !")
-    }
+
 }
