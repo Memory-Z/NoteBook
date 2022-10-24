@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 设置 壁纸 -->
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".NoteBookApplication"
@@ -102,7 +103,8 @@
             android:name=".view.activity.NewNoteActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateVisible" />
+            android:windowSoftInputMode="adjustResize|stateVisible"
+            tools:ignore="LockedOrientationActivity" />
 
         <!-- 任务计划列表 -->
         <activity
@@ -128,14 +130,16 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/NoteBookAppTheme.Transparent"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="LockedOrientationActivity" />
 
         <!-- 记录列表 -->
         <activity
             android:name=".view.activity.RecordActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:theme="@style/NoteBookAppTheme.Transparent" />
+            android:theme="@style/NoteBookAppTheme.Transparent"
+            tools:ignore="LockedOrientationActivity" />
 
         <!-- 新动态界面 -->
         <activity
@@ -143,7 +147,8 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/NoteBookAppTheme.Transparent"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            tools:ignore="LockedOrientationActivity" />
 
         <!-- 系统文件界面  -->
         <activity
@@ -151,21 +156,24 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/NoteBookAppTheme.Transparent"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            tools:ignore="LockedOrientationActivity" />
 
         <!-- 添加内容 界面  -->
         <activity
             android:name=".view.activity.AddContentActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@style/NoteBookAppTheme.Transparent" />
+            android:theme="@style/NoteBookAppTheme.Transparent"
+            tools:ignore="LockedOrientationActivity" />
 
         <!-- 纪念日 界面 -->
         <activity
             android:name=".view.activity.MarkDayActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@style/NoteBookAppTheme.Transparent" />
+            android:theme="@style/NoteBookAppTheme.Transparent"
+            tools:ignore="LockedOrientationActivity" />
 
 
         <!-- 设置壁纸界面  -->
@@ -184,7 +192,8 @@
             android:name=".view.activity.CreateLovePanelActivity"
             android:configChanges="orientation|keyboardHidden|screenLayout|screenSize|navigation"
             android:screenOrientation="portrait"
-            android:theme="@style/NoteBookAppTheme.Transparent">
+            android:theme="@style/NoteBookAppTheme.Transparent"
+            tools:ignore="LockedOrientationActivity">
 
         </activity>
 

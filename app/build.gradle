@@ -25,6 +25,9 @@ android {
         consumerProguardFiles 'consumer-rules.pro'
     }
 
+
+//    flavorDimensions "versionCode"
+
 //    dataBinding {
 //        enabled = true
 //    }
@@ -43,6 +46,8 @@ android {
         }
         debug {
             buildConfigField "String", "UPDATE_VERSION_URL", UPDATE_VERSION_URL
+
+            applicationIdSuffix ".debug"
         }
     }
 
@@ -60,6 +65,10 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    productFlavors {
+
     }
 
 }
