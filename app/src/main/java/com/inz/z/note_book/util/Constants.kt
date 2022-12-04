@@ -316,6 +316,12 @@ object Constants {
          */
         const val FRAGMENT_TAG_PREFIX = "FragmentTag_"
 
+        /**
+         * 每日 事件弹窗
+         */
+        const val EVENT_DAY_DIALOG_TAG = "${FRAGMENT_TAG_PREFIX}EVENT_DAY_DIALOG_TAG"
+        const val EVENT_DAY_CALENDAR_TAG = "EventDayCalendarTag"
+
     }
 
     /**

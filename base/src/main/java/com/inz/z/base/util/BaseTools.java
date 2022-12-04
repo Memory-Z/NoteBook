@@ -112,6 +112,22 @@ public class BaseTools {
     }
 
     /**
+     * 获取 0时 Calendar
+     *
+     * @param date 传入日期
+     * @return Calendar.
+     */
+    public static Calendar getDateZeroCalendar(Date date) {
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar;
+    }
+
+    /**
      * 获取当前时间字符串
      *
      * @return 时间串  yyyy-MM-dd HH:mm:ss

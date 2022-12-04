@@ -85,6 +85,8 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="item_schedule_state_width">@dimen/dp08</dimen>
     <!-- 卡片圆角  -->
     <dimen name="card_radius">@dimen/dp04</dimen>
+    <!-- 底部弹窗顶部 圆角 -->
+    <dimen name="dialog_bottom_top_corners_radius">@dimen/dp16</dimen>
 
     <dimen name="new_note_image_layout_height_expand_less">188dp</dimen>
     <dimen name="new_note_image_layout_height_expand_more">48dp</dimen>

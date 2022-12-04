@@ -42,7 +42,7 @@
 
         <include
             android:id="@+id/note_main_left_inc"
-            layout="@layout/fragment_main_left_nav_layout" />
+            layout="@layout/main_left_nav_fragment_layout" />
     </com.inz.z.base.view.widget.BaseRelativeLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

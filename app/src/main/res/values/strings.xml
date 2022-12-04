@@ -170,5 +170,13 @@
     <string name="love_panel_title_template">Day %s</string>
     <string name="love_panel_title_error">Love Day</string>
 
+    <string name="_balance">余额</string>
+
     <string name="choose_note_group">选择笔记目录</string>
+
+    <string name="day_event_calendar">事件日历</string>
+    <string name="day_event_select_day_format">MM月dd日 %s</string>
+    <string name="day_event_happen_day">event happen day.</string>
+    <string name="day_event_loop_icon">event loop icon.</string>
+    <string name="day_event_schedule">event schedule.</string>
 </resources>

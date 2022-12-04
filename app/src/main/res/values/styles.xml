@@ -5,6 +5,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorSecondary">@color/white</item>
+        <!-- colorOnSecondary 控制 FAB 图标颜色 -->
+        <item name="colorOnSecondary">@color/white</item>
     </style>
 
     <style name="NoteBookAppTheme.Transparent" parent="NoteBookAppTheme">
@@ -118,6 +121,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="NoteBookAppTheme.Text.Title.DayEvent">
+        <item name="android:layout_marginStart">@dimen/margin_text_layout</item>
+        <item name="android:layout_marginEnd">@dimen/margin_text_layout</item>
+    </style>
+
     <style name="NoteBookAppTheme.Text.Second" parent="NoteBookAppTheme.Text">
         <item name="android:textColor">@color/textColor70</item>
         <item name="android:textSize">@dimen/text_content_size</item>
@@ -128,9 +136,15 @@
         <item name="android:textSize">@dimen/text_hint_size</item>
     </style>
 
+    <style name="NoteBookAppTheme.Text.Button">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
     <style name="NoteBookAppTheme.EditText" parent="Widget.AppCompat.EditText">
         <item name="android:textSize">@dimen/text_content_size</item>
         <item name="android:textColor">@color/textColor</item>
+        <item name="android:minHeight">@dimen/touch_target_height</item>
         <item name="android:gravity">center_vertical</item>
     </style>
 
@@ -161,7 +175,7 @@
         <item name="android:padding">@dimen/image_icon_min_padding_size</item>
     </style>
 
-    <style name="NoteBookAppTheme.ImageView.Icon.Min.Tint" parent="NoteBookAppTheme.ImageView.Icon.Min" >
+    <style name="NoteBookAppTheme.ImageView.Icon.Min.Tint" parent="NoteBookAppTheme.ImageView.Icon.Min">
         <item name="android:tint">@color/card_inverse_color</item>
     </style>
 
@@ -221,4 +235,20 @@
         <item name="android:checked">false</item>
     </style>
 
+    <style name="NoteBookAppTheme.RecyclerView" />
+
+    <style name="NoteBookAppTheme.RecyclerView.DayEvent">
+        <item name="android:paddingStart">@dimen/layout_padding</item>
+        <item name="android:paddingEnd">@dimen/layout_padding</item>
+    </style>
+
+    <style name="NoteBookAppTheme.FloatingActionButton">
+        <item name="android:layout_width">@dimen/tool_bar_height</item>
+        <item name="android:layout_height">@dimen/tool_bar_height</item>
+        <item name="android:layout_marginEnd">@dimen/margin_layout</item>
+        <item name="android:layout_marginBottom">@dimen/margin_layout</item>
+        <item name="android:tint">@color/textInverseColor</item>
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="fabSize">normal</item>
+    </style>
 </resources>

@@ -16,7 +16,7 @@ import com.inz.z.base.util.L
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.util.GreenDaoHelper
 import com.inz.z.note_book.databinding.ActivityMainBinding
-import com.inz.z.note_book.databinding.FragmentMainLeftNavLayoutBinding
+import com.inz.z.note_book.databinding.MainLeftNavFragmentLayoutBinding
 import com.inz.z.note_book.databinding.TopSearchNavLayoutBinding
 import com.inz.z.note_book.service.CreateLovePanelService
 import com.inz.z.note_book.service.FloatMessageViewService
@@ -45,7 +45,7 @@ class MainActivity : BaseNoteActivity() {
     private var morePopupMenu: PopupMenu? = null
 
     private var mainBinding: ActivityMainBinding? = null
-    private var leftBinding: FragmentMainLeftNavLayoutBinding? = null
+    private var leftBinding: MainLeftNavFragmentLayoutBinding? = null
     private var topBinding: TopSearchNavLayoutBinding? = null
 
     /**
