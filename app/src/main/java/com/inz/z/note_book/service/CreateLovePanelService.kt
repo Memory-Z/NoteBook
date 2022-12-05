@@ -10,6 +10,9 @@ import android.os.IBinder
 import android.provider.MediaStore
 import com.inz.z.base.util.*
 import com.inz.z.note_book.R
+import com.inz.z.note_book.service.create_image.CreateDayImageListener
+import com.inz.z.note_book.service.create_image.CreateDayImageRunnable
+import com.inz.z.note_book.service.create_image.CreateImageRunnable
 import com.inz.z.note_book.util.Constants
 import java.io.File
 import java.util.*
@@ -27,8 +30,6 @@ class CreateLovePanelService : Service() {
         private const val TAG = "CreateLovePanelService"
     }
 
-    private var textPaint: Paint? = null
-    private var textTypeface: Typeface? = null
     private val baseDate: Calendar = Calendar.getInstance(Locale.getDefault())
         .apply { set(2022, 4, 24) }
 
@@ -50,24 +51,17 @@ class CreateLovePanelService : Service() {
         val num: Int = BaseTools.getDiffDay(currentDate, baseDate)
         L.i(TAG, "onStartCommand: date num = $num --- ${baseDate.get(Calendar.DATE)}")
 
-        if (textPaint == null) {
-            initData()
-        }
-        createLovePanelImage(num, textPaint!!)
+        // Love Panel
+        // createLovePanelImage(num)
+        // ------------------------
+        // 2022/12/5
+        // Day Panel
+        createDayImage(num)
         return super.onStartCommand(intent, flags, startId)
     }
 
     private fun initData() {
-        textTypeface = Typeface.createFromAsset(assets, "fonts/RobotoSlab-Regular.ttf")
-        textPaint = Paint()
-            .apply {
-                this.typeface = textTypeface
-                this.color = Color.BLACK
-                this.textSize = 600F
-                this.textAlign = Paint.Align.LEFT
-                this.style = Paint.Style.FILL
-                this.isAntiAlias = true
-            }
+
     }
 
     override fun onDestroy() {
@@ -75,7 +69,7 @@ class CreateLovePanelService : Service() {
         isFirstCreateImage = true
     }
 
-    private fun createLovePanelImage(num: Int, textPaint: Paint) {
+    private fun createLovePanelImage(num: Int) {
         L.i(TAG, "createLovePanelImage: create love panel image ")
         val fileName = baseContext.resources.getString(R.string.love_panel_template).format(num)
         // 检测文件是否存在
@@ -90,147 +84,147 @@ class CreateLovePanelService : Service() {
         }
         val baseBitmap = BitmapFactory.decodeResource(resources, R.drawable.love_day_0)
 
-        ThreadPoolUtils.getScheduleThread("_create_love_panel")
-            .execute(CreateImageRunnable(baseBitmap, num, textPaint))
+        ThreadPoolUtils.getScheduleThread("_create_love_panel").execute(
+            CreateImageRunnable(this, baseBitmap, num,
+                object : CreateDayImageListener {
+                    override fun onSavedBitmap(bitmap: Bitmap) {
+                        saveBitmap(bitmap, num, fileName)
+                    }
+                }
+            )
+        )
+    }
 
+    private fun createDayImage(num: Int) {
+        L.i(TAG, "createDayImage: create day image. ")
+        val fileName = baseContext.resources.getString(R.string.day_panel_temp).format(num)
+        // 检测文件是否存在
+        val fileExists = checkFileExists(fileName)
+        L.i(TAG, "saveBitmap: fileName = $fileName , exists = $fileExists")
+        if (fileExists) {
+            L.w(TAG, "createLovePanelImage: file is Exists !!! ")
+            val message =
+                baseContext.getString(R.string.love_panel_image_is_created_no_duplicate_creation)
+            sendCreateLovePanelFailuresBroadcast(message)
+            return
+        }
+        val dayBitmap = BitmapFactory.decodeResource(resources, R.drawable.img_day_unsplash)
+        ThreadPoolUtils.getScheduleThread("_create_day_panel").execute(
+            CreateDayImageRunnable(this, dayBitmap, num,
+                object : CreateDayImageListener {
+                    override fun onSavedBitmap(bitmap: Bitmap) {
+                        saveBitmap(bitmap, num, fileName)
+                    }
+                }
+            )
+        )
+    }
+
+
+    private fun saveBitmap(bitmap: Bitmap, num: Int, fileName: String) {
+        // 检测文件是否存在
+        val fileExists = checkFileExists(fileName)
+        L.i(TAG, "saveBitmap: fileName = $fileName , exists = $fileExists")
+        if (fileExists) {
+            bitmap.recycle()
+            L.w(TAG, "saveBitmap: this file is exists !! ")
+            return
+        }
+        val contentValues = createPictureContentValues(fileName)
+        val uri = contentResolver.insert(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            contentValues
+        )
+        L.i(TAG, "saveBitmap: uri = $uri ")
+        uri?.let {
+            val isSaved = ImageUtils.saveBitmap2Uri(bitmap, it, contentResolver)
+            if (isSaved) {
+                // 更新 媒体库
+                contentValues.clear()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    contentValues.putNull(MediaStore.Images.ImageColumns.DATE_EXPIRES)
+                    contentValues.put(MediaStore.Images.ImageColumns.IS_PENDING, 0)
+                }
+                contentResolver.update(it, contentValues, null, null)
+
+                // 生成小图
+                val minFilePath = createMinImage(bitmap, fileName)
+                // 发送创建完成广播
+                sendCreatedLovePanelBroadcast(num, minFilePath)
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    contentResolver.delete(it, null)
+                }
+                val message =
+                    baseContext.getString(R.string.love_panel_image_create_failure_please_retry)
+                sendCreateLovePanelFailuresBroadcast(message)
+            }
+            L.i(TAG, "saveBitmap: isSaved =  $isSaved ")
+        }
+        bitmap.recycle()
+    }
+
+    /**
+     * 创建图片信息
+     */
+    private fun createPictureContentValues(fileName: String): ContentValues {
+        val date = BaseTools.getLocalDate()
+        val contentValues = ContentValues()
+        // 相对路径
+        val path = FileUtils.getPictureRelativePath()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            contentValues.put(MediaStore.Images.ImageColumns.RELATIVE_PATH, path)
+        } else {
+            @Suppress("DEPRECATION")
+            contentValues.put(MediaStore.Images.ImageColumns.DATA, path)
+        }
+        // 文件名
+        contentValues.put(MediaStore.Images.ImageColumns.DISPLAY_NAME, fileName)
+        contentValues.put(MediaStore.Images.ImageColumns.TITLE, fileName)
+        // 文件类型
+        contentValues.put(MediaStore.Images.ImageColumns.MIME_TYPE, "image/jpeg")
+        // 设置时间
+        contentValues.put(MediaStore.Images.ImageColumns.DATE_ADDED, date.time / 1000L)
+        contentValues.put(MediaStore.Images.ImageColumns.DATE_MODIFIED, date.time / 1000L)
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            contentValues.put(MediaStore.Images.ImageColumns.IS_PENDING, 1)
+        }
+        return contentValues
     }
 
 
     /**
-     * 创建 图片 线程
+     * 生成小图
+     * @param bitmap 需要生成的原图
+     * @param fileName 文件名
+     *
      */
-    private inner class CreateImageRunnable(
-        val bitmap: Bitmap,
-        val num: Int,
-        val textPaint: Paint
-    ) : Runnable {
-        override fun run() {
-            L.i(TAG, "run: Start createImage Runnable ")
-            createCanvas()
+    private fun createMinImage(bitmap: Bitmap, fileName: String): String {
+        val tempFilePath = FileUtils.getCacheImagePath(baseContext)
+        L.i(TAG, "createMinImage: filePath = $tempFilePath , fileName = $fileName")
+
+        val filePath = tempFilePath + File.separatorChar + fileName
+        val file = File(filePath)
+        if (file.exists()) {
+            file.delete()
         }
 
+        val scaleWidth = 150f / bitmap.width
+        val scaleHeight = 150f / bitmap.height
+        val scale = min(scaleWidth, scaleHeight)
+        val matrix = Matrix()
+        matrix.postScale(scale, scale)
 
-        /**
-         * 创建画布
-         */
-        private fun createCanvas() {
-
-            val newBitmap =
-                Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
-            L.i(TAG, "createCanvas: w = ${bitmap.width}  , h = ${bitmap.height} ")
-            val canvas = Canvas(newBitmap)
-            canvas.drawBitmap(bitmap, 0F, 0F, null)
-            canvas.drawText(num.toString(), 2870F, 3744F, textPaint)
-
-            saveBitmap(newBitmap)
-        }
-
-        private fun saveBitmap(bitmap: Bitmap) {
-            val fileName = baseContext.resources.getString(R.string.love_panel_template).format(num)
-            // 检测文件是否存在
-            val fileExists = checkFileExists(fileName)
-            L.i(TAG, "saveBitmap: fileName = $fileName , exists = $fileExists")
-            if (fileExists) {
-                bitmap.recycle()
-                L.w(TAG, "saveBitmap: this file is exists !! ")
-                return
-            }
-            val contentValues = createPictureContentValues(fileName)
-            val uri = contentResolver.insert(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                contentValues
-            )
-            L.i(TAG, "saveBitmap: uri = $uri ")
-            uri?.let {
-                val isSaved = ImageUtils.saveBitmap2Uri(bitmap, it, contentResolver)
-                if (isSaved) {
-                    // 更新 媒体库
-                    contentValues.clear()
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        contentValues.putNull(MediaStore.Images.ImageColumns.DATE_EXPIRES)
-                        contentValues.put(MediaStore.Images.ImageColumns.IS_PENDING, 0)
-                    }
-                    contentResolver.update(it, contentValues, null, null)
-
-                    // 生成小图
-                    val minFilePath = createMinImage(bitmap, fileName)
-                    // 发送创建完成广播
-                    sendCreatedLovePanelBroadcast(num, minFilePath)
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        contentResolver.delete(it, null)
-                    }
-                    val message =
-                        baseContext.getString(R.string.love_panel_image_create_failure_please_retry)
-                    sendCreateLovePanelFailuresBroadcast(message)
-                }
-                L.i(TAG, "saveBitmap: isSaved =  $isSaved ")
-            }
-            bitmap.recycle()
-        }
-
-        /**
-         * 创建图片信息
-         */
-        private fun createPictureContentValues(fileName: String): ContentValues {
-            val date = BaseTools.getLocalDate()
-            val contentValues = ContentValues()
-            // 相对路径
-            val path = FileUtils.getPictureRelativePath()
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                contentValues.put(MediaStore.Images.ImageColumns.RELATIVE_PATH, path)
-            } else {
-                @Suppress("DEPRECATION")
-                contentValues.put(MediaStore.Images.ImageColumns.DATA, path)
-            }
-            // 文件名
-            contentValues.put(MediaStore.Images.ImageColumns.DISPLAY_NAME, fileName)
-            contentValues.put(MediaStore.Images.ImageColumns.TITLE, fileName)
-            // 文件类型
-            contentValues.put(MediaStore.Images.ImageColumns.MIME_TYPE, "image/jpeg")
-            // 设置时间
-            contentValues.put(MediaStore.Images.ImageColumns.DATE_ADDED, date.time / 1000L)
-            contentValues.put(MediaStore.Images.ImageColumns.DATE_MODIFIED, date.time / 1000L)
-
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                contentValues.put(MediaStore.Images.ImageColumns.IS_PENDING, 1)
-            }
-            return contentValues
-        }
-
-
-        /**
-         * 生成小图
-         * @param bitmap 需要生成的原图
-         * @param fileName 文件名
-         *
-         */
-        private fun createMinImage(bitmap: Bitmap, fileName: String): String {
-            val tempFilePath = FileUtils.getCacheImagePath(baseContext)
-            L.i(TAG, "createMinImage: filePath = $tempFilePath , fileName = $fileName")
-
-            val filePath = tempFilePath + File.separatorChar + fileName
-            val file = File(filePath)
-            if (file.exists()) {
-                file.delete()
-            }
-
-            val scaleWidth = 150f / bitmap.width
-            val scaleHeight = 150f / bitmap.height
-            val scale = min(scaleWidth, scaleHeight)
-            val matrix = Matrix()
-            matrix.postScale(scale, scale)
-
-            val newBitmap =
-                Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, false)
-            val isSaved = ImageUtils.saveBitmap2File(newBitmap, tempFilePath, fileName)
-            newBitmap.recycle()
-            L.i(TAG, "createMinImage: save min image is success ? $isSaved ")
-            return filePath
-        }
-
+        val newBitmap =
+            Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, false)
+        val isSaved = ImageUtils.saveBitmap2File(newBitmap, tempFilePath, fileName)
+        newBitmap.recycle()
+        L.i(TAG, "createMinImage: save min image is success ? $isSaved ")
+        return filePath
     }
+
 
     /**
      * 检测 文件是否存在

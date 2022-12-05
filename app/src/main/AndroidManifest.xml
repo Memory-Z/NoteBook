@@ -258,8 +258,7 @@
         <!-- 创建新LovePanel  -->
         <service
             android:name=".service.CreateLovePanelService"
-            android:label="@string/create_love_panel"
-            android:process=":create_love_panel" />
+            android:label="@string/create_love_panel" />
 
         <!-- 闹钟 广播 -->
         <receiver

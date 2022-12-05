@@ -179,4 +179,8 @@
     <string name="day_event_happen_day">event happen day.</string>
     <string name="day_event_loop_icon">event loop icon.</string>
     <string name="day_event_schedule">event schedule.</string>
+    <string name="day_panel_temp">Day_Panel_%s.jpg</string>
+    <string name="good_morning">早\n安。</string>
+    <string name="lyric_ban_xin_shang_dong_feng">别借我一身孤勇\n我宁愿半梦半醒\n别赠我随意享用\n世间的疼痛\n别让我傍观看清\n你只是浮光掠影\n别送我盛筵美景\n皆是迷离惝恍大梦\n\n—————尚东峰《半醒》</string>
+    <string name="lyric_shi_zi">我去过很多个地方\n那些故事很快就遗忘\n我不想看见谁悲伤\n就只是一个人游荡\n\n——三旬老汉《世子》</string>
 </resources>
