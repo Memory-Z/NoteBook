@@ -2,9 +2,11 @@ package com.inz.z.note_book.service.create_image
 
 import android.content.Context
 import android.graphics.*
+import android.text.TextUtils
 import com.haibin.calendarview.LunarCalendar
 import com.inz.z.base.util.L
 import com.inz.z.note_book.R
+import com.inz.z.note_book.util.BaseUtil
 import java.lang.ref.SoftReference
 import java.text.SimpleDateFormat
 import java.util.*
@@ -21,9 +23,17 @@ import kotlin.math.max
 class CreateDayImageRunnable(
     context: Context,
     val bitmap: Bitmap,
-    val num: Int,
+    private val num: Int,
+    private val qrCodeStr: String,
     val listener: CreateDayImageListener
 ) : Runnable {
+
+    constructor(
+        context: Context,
+        bitmap: Bitmap,
+        num: Int,
+        listener: CreateDayImageListener
+    ) : this(context, bitmap, num, "", listener)
 
     companion object {
         private const val TAG = "CreateDayImageRunnable"
@@ -38,6 +48,7 @@ class CreateDayImageRunnable(
         private const val DAY_Y = 1360F
         private const val QRCODE_SIZE = 300
     }
+
 
     private val contextSoftReadable: SoftReference<Context>
     private val calendar: Calendar
@@ -119,7 +130,7 @@ class CreateDayImageRunnable(
         drawBelowDateText(canvas, context.getString(R.string.lyric_shi_zi))
 
         // 绘制二维码
-        val qrBitmap = getQrCodeBitmap("")
+        val qrBitmap = getQrCodeBitmap(qrCodeStr)
         val marginImage = QRCODE_SIZE / 4F
         val qrX = RIGHT_IMAGE_X + rightImageBitmap.width - marginImage - QRCODE_SIZE
         val qrY = RIGHT_IMAGE_Y + rightImageBitmap.height - marginImage - QRCODE_SIZE
@@ -336,10 +347,15 @@ class CreateDayImageRunnable(
      * 获取二维码
      */
     private fun getQrCodeBitmap(qrCodeStr: String): Bitmap {
-
         val qrBitmap = Bitmap.createBitmap(QRCODE_SIZE, QRCODE_SIZE, Bitmap.Config.ARGB_8888)
         val qrCanvas = Canvas(qrBitmap)
-        qrCanvas.drawColor(Color.BLACK)
+        qrCanvas.drawColor(Color.WHITE)
+        if (!TextUtils.isEmpty(qrCodeStr)) {
+            val bitmap = BaseUtil.createQrCode(qrCodeStr, QRCODE_SIZE)
+            qrCanvas.drawBitmap(bitmap, 0f, 0f, null)
+        } else {
+            qrCanvas.drawColor(Color.BLACK)
+        }
         return qrBitmap
     }
 

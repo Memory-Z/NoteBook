@@ -228,6 +228,15 @@
             android:theme="@style/NoteBookAppTheme.Transparent"
             tools:ignore="LockedOrientationActivity" />
 
+        <!-- 创建 - 日图 -->
+        <activity
+            android:name=".view.activity.CreateDayImageActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|screenLayout|navigation"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoteBookAppTheme.Transparent"
+            tools:ignore="LockedOrientationActivity" />
+
         <!-- 通知服务 -->
         <service
             android:name=".service.NotificationForegroundService"

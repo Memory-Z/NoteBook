@@ -26,8 +26,7 @@ import com.inz.z.note_book.broadcast.ScreenBroadcast
 import com.inz.z.note_book.database.bean.UserInfo
 import com.inz.z.note_book.database.util.GreenDaoHelper
 import com.inz.z.note_book.util.Constants
-import com.inz.z.note_book.util.SPHelper
-import com.inz.z.note_book.view.activity.SplashActivity
+import com.inz.z.note_book.util.NoteSPHelper
 import com.inz.z.note_book.work.LovePanelCreateWorker
 import java.util.concurrent.TimeUnit
 
@@ -68,10 +67,10 @@ class NoteBookApplication : Application(), Configuration.Provider {
         // 初始化数据库
         GreenDaoHelper.getInstance().initGreenDaoHelper(applicationContext)
         // 初始化 SharePreferences
-        SPHelper.init(applicationContext)
-        SPHelper.instance?.saveUpdateVersionUrl(BuildConfig.UPDATE_VERSION_URL)
-        SPHelper.instance?.saveCurrentVersionCode(BuildConfig.VERSION_CODE)
-        SPHelper.instance?.saveLaterUpdateVersion(false)
+        NoteSPHelper.init(applicationContext)
+        NoteSPHelper.instance?.saveUpdateVersionUrl(BuildConfig.UPDATE_VERSION_URL)
+        NoteSPHelper.instance?.saveCurrentVersionCode(BuildConfig.VERSION_CODE)
+        NoteSPHelper.instance?.saveLaterUpdateVersion(false)
 
         // 初始化 数据
         TaskValue.initScheduleTypeValue(this)
@@ -186,7 +185,7 @@ class NoteBookApplication : Application(), Configuration.Provider {
      */
     private inner class CrashHandlerListenerImpl : CrashHandler.CrashHandlerListener {
         override fun setHaveCrash() {
-            SPHelper.instance?.setCrashState(true)
+            NoteSPHelper.instance?.setCrashState(true)
         }
 
         override fun uploadLogToServer(filePath: String?, content: String?) {

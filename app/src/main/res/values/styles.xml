@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="NoteBookAppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="NoteBookAppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -179,12 +179,18 @@
         <item name="android:tint">@color/card_inverse_color</item>
     </style>
 
-    <style name="NoteBookAppTheme.Button" parent="Widget.MaterialComponents.Button">
-        <item name="android:background">@drawable/bg_button_white</item>
+    <style name="NoteBookAppTheme.Button" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/bg_button_base</item>
         <item name="android:textSize">@dimen/text_content_size</item>
         <item name="android:text">@string/_button</item>
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/textInverseColor70</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/textInverseColor</item>
+    </style>
+
+    <style name="NoteBookAppTheme.Button.White">
+        <item name="android:background">@drawable/bg_button_line</item>
+        <item name="android:textColor">@color/textColor</item>
     </style>
 
     <style name="NoteBookAppTheme.Button.Dialog" parent="NoteBookAppTheme.Button">
@@ -196,7 +202,7 @@
     </style>
 
     <style name="NoteBookAppTheme.ImageButton">
-        <item name="android:background">@drawable/bg_button_white</item>
+        <item name="android:background">@drawable/bg_button_base</item>
         <item name="android:tint">@color/card_inverse_color</item>
         <item name="android:scaleType">centerCrop</item>
         <item name="android:contentDescription">@string/base_image</item>

@@ -16,7 +16,7 @@ import com.inz.z.note_book.database.controller.NoteController
 import com.inz.z.note_book.database.controller.NoteGroupService
 import com.inz.z.note_book.util.BaseUtil
 import com.inz.z.note_book.util.Constants
-import com.inz.z.note_book.util.SPHelper
+import com.inz.z.note_book.util.NoteSPHelper
 import com.inz.z.note_book.view.activity.ChooseAppWidgetNoteGroupActivity
 import com.inz.z.note_book.view.activity.NewNoteActivity
 import com.inz.z.note_book.view.activity.NoteGroupActivity
@@ -101,7 +101,7 @@ class NoteInfoAppWidget : AppWidgetProvider() {
                         L.d(TAG, "onReceive: -currentGroupId = $currentGroupId")
                         if (!currentGroupId.isNullOrEmpty()) {
                             // 保存数据
-                            SPHelper.saveAppWidgetNoteGroupId(appWidgetId, currentGroupId)
+                            NoteSPHelper.saveAppWidgetNoteGroupId(appWidgetId, currentGroupId)
                             // 更新界面
                             context?.let { co ->
                                 val appWidgetManager = AppWidgetManager.getInstance(co)
@@ -149,10 +149,10 @@ class NoteInfoAppWidget : AppWidgetProvider() {
      * @param appWidgetId WidgetId
      */
     private fun getNoteGroupId(appWidgetId: Int): String {
-        var noteGroupId = SPHelper.getAppWidgetNoteGroupId(appWidgetId)
+        var noteGroupId = NoteSPHelper.getAppWidgetNoteGroupId(appWidgetId)
         if (noteGroupId.isEmpty()) {
             noteGroupId = NoteGroupService.getNearUpdateNoteGroup()?.noteGroupId ?: ""
-            SPHelper.saveAppWidgetNoteGroupId(appWidgetId, noteGroupId)
+            NoteSPHelper.saveAppWidgetNoteGroupId(appWidgetId, noteGroupId)
         }
         L.i(TAG, "getNoteGroupId: ---->>>> noteGroupId = $noteGroupId ")
         return noteGroupId

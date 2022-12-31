@@ -188,6 +188,20 @@
                 android:layout_height="@dimen/list_item_normal_height"
                 app:icon="@drawable/ic_baseline_wallpaper_24"
                 app:title="@string/system_wallpaper" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginStart="@dimen/border_lr_dimen"
+                android:backgroundTint="@color/lineColor" />
+
+            <!-- 设置壁纸 -->
+            <com.inz.z.note_book.view.widget.layout.MainLeftNavItemLayout
+                android:id="@+id/mln_set_day_image"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/list_item_normal_height"
+                app:icon="@drawable/ic_baseline_wallpaper_24"
+                app:title="@string/create_love_panel" />
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

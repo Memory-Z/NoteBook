@@ -8,12 +8,14 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.MediaStore
+import android.text.TextUtils
 import com.inz.z.base.util.*
 import com.inz.z.note_book.R
 import com.inz.z.note_book.service.create_image.CreateDayImageListener
 import com.inz.z.note_book.service.create_image.CreateDayImageRunnable
 import com.inz.z.note_book.service.create_image.CreateImageRunnable
 import com.inz.z.note_book.util.Constants
+import com.inz.z.note_book.util.NoteSPHelper
 import java.io.File
 import java.util.*
 import kotlin.math.min
@@ -108,9 +110,21 @@ class CreateLovePanelService : Service() {
             sendCreateLovePanelFailuresBroadcast(message)
             return
         }
-        val dayBitmap = BitmapFactory.decodeResource(resources, R.drawable.img_day_unsplash)
+
+        val qrContent = NoteSPHelper.getCreateDayQRContent()
+
+        val dayBitmap: Bitmap
+        // 获取设置图片
+        val settingImagePath = NoteSPHelper.getCreateDayImagePath()
+        L.d(TAG, "createDayImage: --Setting image path: $settingImagePath. ")
+        if (!TextUtils.isEmpty(settingImagePath)) {
+            dayBitmap = BitmapFactory.decodeFile(settingImagePath)
+        } else {
+            dayBitmap = BitmapFactory.decodeResource(resources, R.drawable.img_day_unsplash)
+        }
+
         ThreadPoolUtils.getScheduleThread("_create_day_panel").execute(
-            CreateDayImageRunnable(this, dayBitmap, num,
+            CreateDayImageRunnable(this, dayBitmap, num, qrContent,
                 object : CreateDayImageListener {
                     override fun onSavedBitmap(bitmap: Bitmap) {
                         saveBitmap(bitmap, num, fileName)

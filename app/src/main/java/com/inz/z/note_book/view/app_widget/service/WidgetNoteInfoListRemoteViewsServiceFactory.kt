@@ -11,7 +11,7 @@ import com.inz.z.note_book.R
 import com.inz.z.note_book.database.bean.NoteInfo
 import com.inz.z.note_book.database.controller.NoteController
 import com.inz.z.note_book.util.Constants
-import com.inz.z.note_book.util.SPHelper
+import com.inz.z.note_book.util.NoteSPHelper
 import com.inz.z.note_book.util.ViewUtil
 
 /**
@@ -98,7 +98,7 @@ class WidgetNoteInfoListRemoteViewsServiceFactory(
      */
     private fun updateNoteInfoData() {
         noteGroupId =
-            SPHelper.getAppWidgetNoteGroupId(appWidgetId ?: AppWidgetManager.INVALID_APPWIDGET_ID)
+            NoteSPHelper.getAppWidgetNoteGroupId(appWidgetId ?: AppWidgetManager.INVALID_APPWIDGET_ID)
         L.i(TAG, "updateNoteInfoData: noteGroupId = $noteGroupId")
         if (appWidgetId == null || noteGroupId.isEmpty()) {
             L.w(TAG, "updateNoteInfoData: noteGroupId is null . ---> $this")

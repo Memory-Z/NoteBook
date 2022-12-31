@@ -43,11 +43,14 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "UPDATE_VERSION_URL", UPDATE_VERSION_URL
+            resValue "string", "APP_NAME", "@string/app_name"
         }
         debug {
             buildConfigField "String", "UPDATE_VERSION_URL", UPDATE_VERSION_URL
 
             applicationIdSuffix ".debug"
+            versionNameSuffix ".debug"
+            resValue "string", "APP_NAME", "@string/app_name_debug"
         }
     }
 
@@ -159,5 +162,10 @@ dependencies {
     // https://mvnrepository.com/artifact/net.sourceforge.jexcelapi/jxl
     implementation libArrays['jxl']
     implementation libArrays['kotlin-reflect']
+
+    /**
+     * Zxing
+     */
+    implementation libArrays['ZXing']
 
 }

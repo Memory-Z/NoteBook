@@ -96,7 +96,9 @@ ext {
             'pinyin4j'                  : 'com.github.open-android:pinyin4j:2.5.0',
 
             // MPAndroidChart
-            'MPAndroidChart'                     : 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+            'MPAndroidChart'                     : 'com.github.PhilJay:MPAndroidChart:v3.1.0',
+
+            'ZXing'                     : 'com.google.zxing:core:3.3.0'
 
     ]
 }

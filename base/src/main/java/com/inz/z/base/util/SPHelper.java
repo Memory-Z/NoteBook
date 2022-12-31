@@ -117,10 +117,10 @@ public class SPHelper {
      * 获取 String 类型数据
      *
      * @param key 键
-     * @return 返回的值，默认 null
+     * @return 返回的值，默认 ""
      */
     public String getSharedString(String key) {
-        return sharedPreferences.getString(key, null);
+        return sharedPreferences.getString(key, "");
     }
 
     /**

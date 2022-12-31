@@ -9,8 +9,11 @@ import com.inz.z.base.util.SPHelper
  * @version 1.0.0
  * Create by inz in 2019/11/08 15:03.
  */
-object SPHelper {
+object NoteSPHelper {
     var instance: SPHelper? = null
+
+    private const val CREATE_DAY_IMAGE_PATH_TAG: String = "createDayImagePath"
+    private const val CREATE_DAY_QR_CONTENT_TAG: String = "createDayQrContent"
 
     /**
      * 初始化
@@ -52,6 +55,22 @@ object SPHelper {
      */
     fun getAppWidgetNoteGroupId(appWidgetId: Int): String {
         return instance?.getSharedString("appWidgetNoteGroupId_$appWidgetId") ?: ""
+    }
+
+    fun saveCreateDayImagePath(imagePath: String) {
+        instance?.setSharedString(CREATE_DAY_IMAGE_PATH_TAG, imagePath)
+    }
+
+    fun getCreateDayImagePath(): String {
+        return instance?.getSharedString(CREATE_DAY_IMAGE_PATH_TAG) ?: ""
+    }
+
+    fun saveCreateDayQRContent(qrContent: String) {
+        instance?.setSharedString(CREATE_DAY_QR_CONTENT_TAG, qrContent)
+    }
+
+    fun getCreateDayQRContent(): String {
+        return instance?.getSharedString(CREATE_DAY_QR_CONTENT_TAG) ?: ""
     }
 
 }

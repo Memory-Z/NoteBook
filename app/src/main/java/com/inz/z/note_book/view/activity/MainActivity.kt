@@ -181,6 +181,7 @@ class MainActivity : BaseNoteActivity() {
             it.mln5Bnl.setOnClickListener(leftMenuViewClickListener)
             it.mln6Bnl.setOnClickListener(leftMenuViewClickListener)
             it.mlnSetWallpaperMlnil.setOnClickListener(leftMenuViewClickListener)
+            it.mlnSetDayImage.setOnClickListener(leftMenuViewClickListener)
         }
     }
 
@@ -372,6 +373,10 @@ class MainActivity : BaseNoteActivity() {
                 // 设置 系统壁纸
                 R.id.mln_set_wallpaper_mlnil -> {
                     startActivity(Intent(mContext, SetWallpaperActivity::class.java))
+                }
+                // 设置 每日图片
+                R.id.mln_set_day_image -> {
+                    startActivity(Intent(mContext, CreateDayImageActivity::class.java))
                 }
                 else -> {
                     L.w(TAG, "LeftMenuViewClickListenerImpl: onClick -> not find click view. ")

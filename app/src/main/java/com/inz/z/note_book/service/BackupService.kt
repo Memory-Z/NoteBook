@@ -6,9 +6,7 @@ import android.os.IBinder
 import com.inz.z.base.util.ThreadPoolUtils
 import com.inz.z.note_book.database.util.GreenDaoHelper
 import com.inz.z.note_book.util.Constants
-import com.inz.z.note_book.util.SPHelper
 import java.util.concurrent.ScheduledExecutorService
-import java.util.concurrent.ScheduledThreadPoolExecutor
 
 /**
  * 备份服务。
