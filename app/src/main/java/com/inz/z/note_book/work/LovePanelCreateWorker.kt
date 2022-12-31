@@ -45,7 +45,7 @@ class LovePanelCreateWorker(val context: Context, workerParams: WorkerParameters
         }
         val currentTime = System.currentTimeMillis()
         val difTime = calendar.timeInMillis - currentTime
-        L.i(SplashActivity.TAG, "doWork: del time = $difTime ")
+        L.i(TAG, "doWork: del time = $difTime ")
         val requestWork =
             OneTimeWorkRequestBuilder<LovePanelCreateWorker>()
                 .setInitialDelay(difTime, TimeUnit.MILLISECONDS)

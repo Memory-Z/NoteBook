@@ -153,7 +153,7 @@ class NoteBookApplication : Application(), Configuration.Provider {
      * 初始化 创建 LovePanel 工作
      */
     private fun initCreateLovePanelWork() {
-        L.i(SplashActivity.TAG, "initCreateLovePanelWork: create LovePanel work Start ... ")
+        L.i(TAG, "initCreateLovePanelWork: create LovePanel work Start ... ")
         val requestWork =
             OneTimeWorkRequestBuilder<LovePanelCreateWorker>()
                 .setInitialDelay(6000, TimeUnit.MILLISECONDS)
@@ -161,7 +161,7 @@ class NoteBookApplication : Application(), Configuration.Provider {
                 .build()
         WorkManager.getInstance(applicationContext)
             .enqueueUniqueWork("CREATE_LOVE_PANEL", ExistingWorkPolicy.REPLACE, requestWork)
-        L.i(SplashActivity.TAG, "initCreateLovePanelWork: create LovePanel work Finish !")
+        L.i(TAG, "initCreateLovePanelWork: create LovePanel work Finish !")
     }
 
     /**
