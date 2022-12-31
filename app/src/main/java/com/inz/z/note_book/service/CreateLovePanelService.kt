@@ -16,6 +16,7 @@ import com.inz.z.note_book.service.create_image.CreateDayImageRunnable
 import com.inz.z.note_book.service.create_image.CreateImageRunnable
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.util.NoteSPHelper
+import com.inz.z.note_book.util.PermissionUtil
 import java.io.File
 import java.util.*
 import kotlin.math.min
@@ -117,7 +118,7 @@ class CreateLovePanelService : Service() {
         // 获取设置图片
         val settingImagePath = NoteSPHelper.getCreateDayImagePath()
         L.d(TAG, "createDayImage: --Setting image path: $settingImagePath. ")
-        if (!TextUtils.isEmpty(settingImagePath)) {
+        if (!TextUtils.isEmpty(settingImagePath) && PermissionUtil.checkReadStoragePermission(baseContext)) {
             dayBitmap = BitmapFactory.decodeFile(settingImagePath)
         } else {
             dayBitmap = BitmapFactory.decodeResource(resources, R.drawable.img_day_unsplash)
