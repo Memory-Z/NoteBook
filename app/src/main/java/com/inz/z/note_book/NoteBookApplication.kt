@@ -25,6 +25,7 @@ import com.inz.z.note_book.base.TaskValue
 import com.inz.z.note_book.broadcast.ScreenBroadcast
 import com.inz.z.note_book.database.bean.UserInfo
 import com.inz.z.note_book.database.util.GreenDaoHelper
+import com.inz.z.note_book.service.NotificationForegroundService
 import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.util.NoteSPHelper
 import com.inz.z.note_book.work.LovePanelCreateWorker
@@ -128,6 +129,16 @@ class NoteBookApplication : Application(), Configuration.Provider {
             },
             500
         )
+
+        Looper.getMainLooper().queue.addIdleHandler {
+            val service = Intent(mContext, NotificationForegroundService::class.java)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(service)
+            } else {
+                startService(service)
+            }
+            return@addIdleHandler false
+        }
 
     }
 

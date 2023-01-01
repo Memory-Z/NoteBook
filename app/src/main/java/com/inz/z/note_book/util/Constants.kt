@@ -1,6 +1,7 @@
 package com.inz.z.note_book.util
 
 import android.content.Context
+import androidx.annotation.IntDef
 import com.inz.z.base.util.FileUtils
 import com.inz.z.note_book.BuildConfig
 import java.io.File
@@ -45,7 +46,38 @@ object Constants {
          * 创建 LovePanel work
          */
         const val CREATE_LOVE_PANEL_WORK_NAME = "create_love_panel_work"
+
+
+        const val MAIN_MENU_TYPE_HOME = 0x0010
+        const val MAIN_MENU_TYPE_SCHEDULE = 0x0011
+        const val MAIN_MENU_TYPE_APPLICATION = 0x0012
+        const val MAIN_MENU_TYPE_RECORD = 0x0013
+        const val MAIN_MENU_TYPE_MESSAGE = 0x0014
+        const val MAIN_MENU_TYPE_LOG = 0x0015
+        const val MAIN_MENU_TYPE_SYS_FILE = 0x0016
+        const val MAIN_MENU_TYPE_SYS_WALLPAPER = 0x0017
+        const val MAIN_MENU_TYPE_CREATE_DAY_IMAGE = 0x0018
     }
+
+    /**
+     * Main Left Menu Type.
+     */
+    @IntDef(
+        Base.MAIN_MENU_TYPE_HOME,
+        Base.MAIN_MENU_TYPE_SCHEDULE,
+        Base.MAIN_MENU_TYPE_APPLICATION,
+        Base.MAIN_MENU_TYPE_RECORD,
+        Base.MAIN_MENU_TYPE_MESSAGE,
+        Base.MAIN_MENU_TYPE_LOG,
+        Base.MAIN_MENU_TYPE_SYS_FILE,
+        Base.MAIN_MENU_TYPE_SYS_WALLPAPER,
+        Base.MAIN_MENU_TYPE_CREATE_DAY_IMAGE
+    )
+    @Target(
+        AnnotationTarget.PROPERTY, AnnotationTarget.FIELD, AnnotationTarget.FUNCTION
+    )
+    @Retention(AnnotationRetention.SOURCE)
+    annotation class MainMenuType
 
     /**
      * 时钟开始提醒

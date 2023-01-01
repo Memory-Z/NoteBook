@@ -69,12 +69,6 @@ class SplashActivity : AbsBaseActivity() {
 
     override fun initData() {
         setRightTopTimer()
-        val service = Intent(mContext, NotificationForegroundService::class.java)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(service)
-        } else {
-            startService(service)
-        }
     }
 
     override fun onResume() {

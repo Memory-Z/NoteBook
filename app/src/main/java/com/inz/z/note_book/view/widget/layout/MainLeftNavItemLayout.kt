@@ -3,14 +3,16 @@ package com.inz.z.note_book.view.widget.layout
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.TintTypedArray
-import androidx.core.widget.ImageViewCompat
+import androidx.core.content.ContextCompat
 import com.inz.z.base.view.widget.BaseNavLayout
 import com.inz.z.note_book.R
 
@@ -56,18 +58,17 @@ class MainLeftNavItemLayout : LinearLayout {
      */
     private var lastShowViewOrder = 2
 
-    constructor(context: Context?) : super(context) {
-        this.mContext = context
-        initView()
-    }
+    constructor(context: Context?) : this(context, null)
 
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context,
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
         attrs,
-        defStyleAttr) {
+        defStyleAttr
+    ) {
         this.mContext = context
-        initViewStyle(attrs)
         initView()
+        initViewStyle(attrs)
     }
 
     /**
@@ -75,13 +76,22 @@ class MainLeftNavItemLayout : LinearLayout {
      */
     @SuppressLint("RestrictedApi")
     private fun initViewStyle(attrs: AttributeSet?) {
-        val array = TintTypedArray.obtainStyledAttributes(mContext,
+        val array = TintTypedArray.obtainStyledAttributes(
+            mContext,
             attrs,
             R.styleable.MainLeftNavItemLayout,
             0,
-            0)
-        leftIconDrawable = array.getDrawable(R.styleable.MainLeftNavItemLayout_icon)
-        titleStr = array.getString(R.styleable.MainLeftNavItemLayout_title)
+            0
+        )
+        val drawable = array.getDrawable(R.styleable.MainLeftNavItemLayout_icon)
+        drawable?.let {
+            setIconDrawable(it)
+        }
+
+        val titleStr = array.getString(R.styleable.MainLeftNavItemLayout_title)
+        if (!TextUtils.isEmpty(titleStr)) {
+            setTitle(titleStr)
+        }
         rightLayoutId = array.getResourceId(R.styleable.MainLeftNavItemLayout_right_layout_id, -1)
         array.recycle()
     }
@@ -103,8 +113,6 @@ class MainLeftNavItemLayout : LinearLayout {
 
             }
         }
-        leftIconIv?.setImageDrawable(leftIconDrawable)
-        contentTv?.text = titleStr
     }
 
     override fun onFinishInflate() {
@@ -138,5 +146,38 @@ class MainLeftNavItemLayout : LinearLayout {
         if (count > 1) {
             this.removeViews(1, count - 1)
         }
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // OPEN
+    ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Set Title.
+     */
+    fun setTitle(title: String?) {
+        this.titleStr = title ?: ""
+        contentTv?.text = title
+    }
+
+    /**
+     * Set Icon Drawable Icon.
+     */
+    fun setIconDrawableRes(@DrawableRes resId: Int) {
+        mContext?.let {
+            val drawable = ContextCompat.getDrawable(it, resId)
+            drawable?.apply {
+                setIconDrawable(this)
+            }
+        }
+    }
+
+    /**
+     * Set Icon Drawable.
+     */
+    fun setIconDrawable(drawable: Drawable) {
+        this.leftIconDrawable = drawable
+        this.leftIconIv?.setImageDrawable(drawable)
     }
 }

@@ -64,6 +64,11 @@ class NotificationForegroundService : Service() {
      */
     private var receiveListener: ClockAlarmBroadcastReceiveListenerImpl? = null
 
+    /**
+     * 通知广播
+     */
+    private var notificationBroadcast: NotificationBroadcast? = null
+
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
@@ -89,6 +94,7 @@ class NotificationForegroundService : Service() {
         L.i(TAG, "onDestroy: --------------> ")
         stopForeground(true)
         unregisterActivityLifeBroadcast()
+        unregisterNotificationBroadcast()
         unbindScheduleService()
         ClockAlarmBroadcast.removeListener(receiveListener)
         receiveListener = null
@@ -474,7 +480,9 @@ class NotificationForegroundService : Service() {
      */
     private fun registerNotificationBroadcast() {
         L.i(TAG, "registerNotificationBroadcast: ")
-        val broadcast = NotificationBroadcast()
+        if (notificationBroadcast == null) {
+            notificationBroadcast = NotificationBroadcast()
+        }
         val intentFilter = IntentFilter()
             .apply {
                 this.addAction(Constants.NotificationServiceParams.NOTIFICATION_SCREEN_ON_ACTION)
@@ -482,7 +490,17 @@ class NotificationForegroundService : Service() {
                 this.addAction(Constants.NotificationServiceParams.NOTIFICATION_UNLOCK_ACTION)
                 this.addAction(Constants.NotificationServiceParams.NOTIFICATION_CREATE_LOVE_PANEL_ACTION)
             }
-        registerReceiver(broadcast, intentFilter)
+        registerReceiver(notificationBroadcast, intentFilter)
+    }
+
+    /**
+     * 注销通知服务广播
+     */
+    private fun unregisterNotificationBroadcast() {
+        if (notificationBroadcast != null) {
+            unregisterReceiver(notificationBroadcast)
+            notificationBroadcast = null
+        }
     }
 
     /**

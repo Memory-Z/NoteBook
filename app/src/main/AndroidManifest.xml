@@ -11,7 +11,7 @@
     <!-- 设置 壁纸 -->
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <application
         android:name=".NoteBookApplication"
         android:allowBackup="false"
@@ -288,6 +288,7 @@
         <!-- 屏幕广播 -->
         <receiver
             android:name=".broadcast.ScreenBroadcast"
+            android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />

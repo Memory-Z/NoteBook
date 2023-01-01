@@ -12,7 +12,9 @@ import androidx.annotation.NonNull
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.inz.z.base.util.L
+import com.inz.z.base.util.ThreadPoolUtils
 import com.inz.z.note_book.R
 import com.inz.z.note_book.database.util.GreenDaoHelper
 import com.inz.z.note_book.databinding.ActivityMainBinding
@@ -20,7 +22,10 @@ import com.inz.z.note_book.databinding.MainLeftNavFragmentLayoutBinding
 import com.inz.z.note_book.databinding.TopSearchNavLayoutBinding
 import com.inz.z.note_book.service.CreateLovePanelService
 import com.inz.z.note_book.service.FloatMessageViewService
+import com.inz.z.note_book.util.Constants
 import com.inz.z.note_book.view.BaseNoteActivity
+import com.inz.z.note_book.view.activity.adapter.MainMenuRvAdapter
+import com.inz.z.note_book.view.activity.bean.MainMenuData
 import com.inz.z.note_book.view.activity.listener.MainActivityListener
 import com.inz.z.note_book.view.dialog.BaseDialogFragment
 import com.inz.z.note_book.view.fragment.LauncherApplicationFragment
@@ -94,6 +99,8 @@ class MainActivity : BaseNoteActivity() {
             }
     }
 
+    private var mainMenuRvAdapter: MainMenuRvAdapter? = null
+
     override fun initView() {
         L.i(TAG, "initView: ")
         drawerLayout = mainBinding?.mainNoteDrawerLayout
@@ -142,6 +149,7 @@ class MainActivity : BaseNoteActivity() {
         mainBinding = null
         leftBinding = null
         topBinding = null
+        mainMenuRvAdapter = null
     }
 
     override fun needCheckVersion(): Boolean {
@@ -167,21 +175,78 @@ class MainActivity : BaseNoteActivity() {
      * 初始化左侧导航视图
      */
     private fun initLeftNavView() {
-        leftMenuViewClickListener = LeftMenuViewClickListenerImpl()
+
+        mainMenuRvAdapter = MainMenuRvAdapter(mContext)
+            .apply {
+                this.listener = MainMenuRvAdapterListenerImpl()
+            }
+
         leftBinding?.let {
+
+            it.rvMainLeftNavFmMenuContent.apply {
+                this.adapter = mainMenuRvAdapter
+                this.layoutManager = LinearLayoutManager(mContext)
+            }
+
             it.mainLeftNavBottomSettingLl.setOnClickListener {
                 val intent = Intent(mContext, SettingActivity::class.java)
                 startActivity(intent)
             }
-            it.mln0Bnl.setOnClickListener(leftMenuViewClickListener)
-            it.mln1Bnl.setOnClickListener(leftMenuViewClickListener)
-            it.mln2Bnl.setOnClickListener(leftMenuViewClickListener)
-            it.mln3Bnl.setOnClickListener(leftMenuViewClickListener)
-            it.mln4Bnl.setOnClickListener(leftMenuViewClickListener)
-            it.mln5Bnl.setOnClickListener(leftMenuViewClickListener)
-            it.mln6Bnl.setOnClickListener(leftMenuViewClickListener)
-            it.mlnSetWallpaperMlnil.setOnClickListener(leftMenuViewClickListener)
-            it.mlnSetDayImage.setOnClickListener(leftMenuViewClickListener)
+
+            // 获取 菜单，
+            ThreadPoolUtils.getWorkThread("${TAG}_load_main_menu")
+                .execute {
+                    val menuList = MainMenuData.getMainMenuData(mContext)
+                    ThreadPoolUtils.getUiThread("${TAG}_load_main_menu_data")
+                        .execute {
+                            mainMenuRvAdapter?.refreshData(menuList)
+                        }
+                }
+        }
+    }
+
+    inner class MainMenuRvAdapterListenerImpl : MainMenuRvAdapter.MainMenuRvAdapterListener {
+        override fun onItemClick(v: View?, position: Int) {
+            mainMenuRvAdapter?.let {
+                val item = it.getItemByPosition(position)
+                item?.let { mainMenuInfo ->
+                    drawerLayout?.closeDrawer(GravityCompat.START)
+
+                    when (mainMenuInfo.menuType) {
+                        Constants.Base.MAIN_MENU_TYPE_HOME -> {
+                            targetMainFragment(VIEW_TYPE_MAIN)
+                        }
+                        Constants.Base.MAIN_MENU_TYPE_SCHEDULE -> {
+                            val intent = Intent(mContext, ScheduleActivity::class.java)
+                            val bundle = Bundle()
+                            intent.putExtras(bundle)
+                            startActivity(intent)
+                        }
+                        Constants.Base.MAIN_MENU_TYPE_APPLICATION -> {
+                            targetMainFragment(VIEW_TYPE_APPLICATION)
+                        }
+                        Constants.Base.MAIN_MENU_TYPE_RECORD -> {
+                            startActivity(Intent(mContext, RecordActivity::class.java))
+                        }
+                        Constants.Base.MAIN_MENU_TYPE_MESSAGE -> {
+                            startActivity(Intent(mContext, NewDynamicActivity::class.java))
+                        }
+                        Constants.Base.MAIN_MENU_TYPE_LOG -> {
+                            targetMainFragment(VIEW_TYPE_LOG)
+                        }
+                        Constants.Base.MAIN_MENU_TYPE_SYS_FILE -> {
+                            startActivity(Intent(mContext, SystemFileActivity::class.java))
+                        }
+                        Constants.Base.MAIN_MENU_TYPE_SYS_WALLPAPER -> {
+                            startActivity(Intent(mContext, SetWallpaperActivity::class.java))
+                        }
+                        Constants.Base.MAIN_MENU_TYPE_CREATE_DAY_IMAGE -> {
+                            startActivity(Intent(mContext, CreateDayImageActivity::class.java))
+                        }
+                        else -> {}
+                    }
+                }
+            }
         }
     }
 
@@ -331,60 +396,6 @@ class MainActivity : BaseNoteActivity() {
         transaction.show(logFragment)
         transaction.commitAllowingStateLoss()
     }
-
-    private var leftMenuViewClickListener: LeftMenuViewClickListenerImpl? = null
-
-    /**
-     * 左侧 菜单栏 点击 监听实现
-     */
-    private inner class LeftMenuViewClickListenerImpl : View.OnClickListener {
-        override fun onClick(v: View?) {
-            if (mContext == null) {
-                L.w(TAG, "LeftMenuViewClickListenerImpl: onClick -> mContext is null .  ")
-                return
-            }
-            val id = v?.id
-            drawerLayout?.closeDrawer(GravityCompat.START)
-            when (id) {
-                R.id.mln_0_bnl -> {
-                    targetMainFragment(VIEW_TYPE_MAIN)
-                }
-                R.id.mln_1_bnl -> {
-                    val intent = Intent(mContext, ScheduleActivity::class.java)
-                    val bundle = Bundle()
-                    intent.putExtras(bundle)
-                    startActivity(intent)
-                }
-                R.id.mln_2_bnl -> {
-                    targetMainFragment(VIEW_TYPE_APPLICATION)
-                }
-                R.id.mln_3_bnl -> {
-                    startActivity(Intent(mContext, RecordActivity::class.java))
-                }
-                R.id.mln_4_bnl -> {
-                    startActivity(Intent(mContext, NewDynamicActivity::class.java))
-                }
-                R.id.mln_5_bnl -> {
-                    targetMainFragment(VIEW_TYPE_LOG)
-                }
-                R.id.mln_6_bnl -> {
-                    startActivity(Intent(mContext, SystemFileActivity::class.java))
-                }
-                // 设置 系统壁纸
-                R.id.mln_set_wallpaper_mlnil -> {
-                    startActivity(Intent(mContext, SetWallpaperActivity::class.java))
-                }
-                // 设置 每日图片
-                R.id.mln_set_day_image -> {
-                    startActivity(Intent(mContext, CreateDayImageActivity::class.java))
-                }
-                else -> {
-                    L.w(TAG, "LeftMenuViewClickListenerImpl: onClick -> not find click view. ")
-                }
-            }
-        }
-    }
-
 
     /**
      * 是否显示消息浮窗
