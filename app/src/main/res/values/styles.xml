@@ -148,6 +148,11 @@
         <item name="android:gravity">center_vertical</item>
     </style>
 
+    <style name="NoteBookAppTheme.EditText.Border">
+        <item name="android:background">@drawable/bg_content_edit_base_border</item>
+        <item name="android:gravity">top|start</item>
+    </style>
+
     <style name="NoteBookAppTheme.EditText.Second" parent="NoteBookAppTheme.EditText">
         <item name="android:textColor">@color/textColor70</item>
         <item name="android:textSize">@dimen/text_hint_size</item>

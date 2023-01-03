@@ -1,77 +1,369 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/iv_create_day_image_viewer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_layout"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/image"
-            android:scaleType="centerInside"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_min="500dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".8" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-
-        <LinearLayout
-            android:id="@+id/ll_create_day_image_bottom_content"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_layout"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_create_day_image_viewer"
-            app:layout_constraintWidth_percent=".8">
-
-            <Button
-                android:id="@+id/btn_create_day_image_choose_image"
-                style="@style/NoteBookAppTheme.Button"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/iv_create_day_image_viewer"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_text_layout"
-                android:text="@string/choose_image" />
+                android:layout_marginTop="@dimen/margin_layout"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/image"
+                android:scaleType="centerInside"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_min="500dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent=".8" />
 
-            <Button
-                android:id="@+id/btn_create_day_image_setting"
-                style="@style/NoteBookAppTheme.Button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_text_layout"
-                android:text="@string/setting" />
 
-            <Button
-                android:id="@+id/btn_create_day_image_preview"
-                style="@style/NoteBookAppTheme.Button.White"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/ll_create_day_image_bottom_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_text_layout"
-                android:text="@string/_preview" />
-        </LinearLayout>
+                android:layout_marginTop="@dimen/margin_layout"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_create_day_image_viewer"
+                app:layout_constraintWidth_percent=".85">
+
+                <Button
+                    android:id="@+id/btn_create_day_image_choose_image"
+                    style="@style/NoteBookAppTheme.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_text_layout"
+                    android:text="@string/choose_image" />
+
+                <!-- Image Detail -->
+                <LinearLayout
+                    android:id="@+id/ll_create_day_image_over_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_text_layout"
+                    android:background="@drawable/bg_content_label_radius_base"
+                    android:orientation="vertical">
+
+                    <com.inz.z.base.view.widget.BaseNavLayout
+                        android:id="@+id/bnl_create_day_image_over_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/list_item_normal_height"
+                        android:background="@drawable/bg_content_label_radius_base_top_label_less"
+                        app:base_center_layout="@id/ll_create_day_image_over_label_center_content"
+                        app:base_right_layout="@id/ll_create_day_image_over_label_right_content">
+
+
+                        <LinearLayout
+                            android:id="@+id/ll_create_day_image_over_label_center_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="@dimen/margin_layout"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/margin_text_layout"
+                            android:paddingEnd="0dp">
+
+                            <TextView
+                                android:id="@+id/tv_create_day_image_over_label_title"
+                                style="@style/NoteBookAppTheme.Text"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="@string/day_panel_image_over_content"
+                                android:textColor="@color/textInverseColor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_create_day_image_over_label_right_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/margin_text_layout"
+                            android:paddingEnd="@dimen/margin_text_layout">
+
+                            <ImageView
+                                android:id="@+id/iv_create_day_image_over_content_edit"
+                                style="@style/NoteBookAppTheme.ImageView.Icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@string/base_image_holder"
+                                android:src="@drawable/ic_baseline_edit_24"
+                                app:tint="@color/white" />
+
+                            <ImageView
+                                android:id="@+id/iv_create_day_image_over_content_show_more"
+                                style="@style/NoteBookAppTheme.ImageView.Icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/margin_layout"
+                                android:contentDescription="@string/base_image_holder"
+                                android:src="@drawable/ic_expand_more_black_24dp"
+                                app:tint="@color/white" />
+
+                        </LinearLayout>
+
+                    </com.inz.z.base.view.widget.BaseNavLayout>
+
+
+                    <EditText
+                        android:id="@+id/et_create_day_image_over_content"
+                        style="@style/NoteBookAppTheme.EditText.Border"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_text_layout"
+                        android:gravity="top|start"
+                        android:hint="@string/day_panel_image_over_content"
+                        android:imeOptions="actionDone"
+                        android:importantForAutofill="no"
+                        android:inputType="textMultiLine"
+                        android:labelFor="@id/bnl_create_day_image_over_label"
+                        android:minHeight="@dimen/edit_multi_content_min_height"
+                        tools:ignore="LabelFor" />
+                </LinearLayout>
+
+                <!-- Left Content -->
+                <LinearLayout
+                    android:id="@+id/ll_create_day_image_left_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_text_layout"
+                    android:background="@drawable/bg_content_label_radius_base"
+                    android:orientation="vertical">
+
+                    <com.inz.z.base.view.widget.BaseNavLayout
+                        android:id="@+id/bnl_create_day_image_left_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/list_item_normal_height"
+                        android:background="@drawable/bg_content_label_radius_base_top_label_less"
+                        app:base_center_layout="@id/ll_create_day_image_left_label_center_content"
+                        app:base_right_layout="@id/ll_create_day_image_left_label_right_content">
+
+
+                        <LinearLayout
+                            android:id="@+id/ll_create_day_image_left_label_center_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="@dimen/margin_layout"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/margin_text_layout"
+                            android:paddingEnd="0dp">
+
+                            <TextView
+                                android:id="@+id/tv_create_day_image_left_label_title"
+                                style="@style/NoteBookAppTheme.Text"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="@string/day_panel_image_left_content"
+                                android:textColor="@color/textInverseColor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_create_day_image_left_label_right_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/margin_text_layout"
+                            android:paddingEnd="@dimen/margin_text_layout">
+
+                            <ImageView
+                                android:id="@+id/iv_create_day_image_left_content_edit"
+                                style="@style/NoteBookAppTheme.ImageView.Icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@string/base_image_holder"
+                                android:src="@drawable/ic_baseline_edit_24"
+                                app:tint="@color/white" />
+
+                            <ImageView
+                                android:id="@+id/iv_create_day_image_left_content_show_more"
+                                style="@style/NoteBookAppTheme.ImageView.Icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/margin_layout"
+                                android:contentDescription="@string/base_image_holder"
+                                android:src="@drawable/ic_expand_more_black_24dp"
+                                app:tint="@color/white" />
+
+                        </LinearLayout>
+
+                    </com.inz.z.base.view.widget.BaseNavLayout>
+
+
+                    <EditText
+                        android:id="@+id/et_create_day_image_left_content"
+                        style="@style/NoteBookAppTheme.EditText.Border"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_text_layout"
+                        android:gravity="top|start"
+                        android:hint="@string/day_panel_image_left_content"
+                        android:imeOptions="actionDone"
+                        android:importantForAutofill="no"
+                        android:inputType="textMultiLine"
+                        android:labelFor="@id/bnl_create_day_image_left_label"
+                        android:minHeight="@dimen/edit_multi_content_min_height"
+                        tools:ignore="LabelFor" />
+                </LinearLayout>
+
+                <!-- QR -->
+                <LinearLayout
+                    android:id="@+id/ll_create_day_image_qr_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_text_layout"
+                    android:background="@drawable/bg_content_label_radius_base"
+                    android:orientation="vertical">
+
+                    <com.inz.z.base.view.widget.BaseNavLayout
+                        android:id="@+id/bnl_create_day_image_qr_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/list_item_normal_height"
+                        android:background="@drawable/bg_content_label_radius_base_top_label_less"
+                        app:base_center_layout="@id/ll_create_day_image_qr_label_center_content"
+                        app:base_right_layout="@id/ll_create_day_image_qr_label_right_content">
+
+
+                        <LinearLayout
+                            android:id="@+id/ll_create_day_image_qr_label_center_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="@dimen/margin_layout"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/margin_text_layout"
+                            android:paddingEnd="0dp">
+
+                            <TextView
+                                android:id="@+id/tv_create_day_image_qr_label_title"
+                                style="@style/NoteBookAppTheme.Text"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="@string/qrcode_content"
+                                android:textColor="@color/textInverseColor" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_create_day_image_qr_label_right_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/margin_text_layout"
+                            android:paddingEnd="@dimen/margin_text_layout">
+
+                            <ImageView
+                                android:id="@+id/iv_create_day_image_qr_content_edit"
+                                style="@style/NoteBookAppTheme.ImageView.Icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@string/base_image_holder"
+                                android:src="@drawable/ic_baseline_edit_24"
+                                app:tint="@color/white" />
+
+                            <ImageView
+                                android:id="@+id/iv_create_day_image_qr_content_show_more"
+                                style="@style/NoteBookAppTheme.ImageView.Icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/margin_layout"
+                                android:contentDescription="@string/base_image_holder"
+                                android:src="@drawable/ic_expand_more_black_24dp"
+                                app:tint="@color/white" />
+
+                        </LinearLayout>
+
+                    </com.inz.z.base.view.widget.BaseNavLayout>
+
+
+                    <EditText
+                        android:id="@+id/et_create_day_image_qr_content"
+                        style="@style/NoteBookAppTheme.EditText.Border"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_text_layout"
+                        android:gravity="top|start"
+                        android:hint="@string/qrcode_content"
+                        android:imeOptions="actionDone"
+                        android:importantForAutofill="no"
+                        android:inputType="textMultiLine"
+                        android:labelFor="@id/bnl_create_day_image_qr_label"
+                        android:minHeight="@dimen/edit_multi_content_min_height"
+                        tools:ignore="LabelFor" />
+                </LinearLayout>
+
+
+                <Button
+                    android:id="@+id/btn_create_day_image_preview"
+                    style="@style/NoteBookAppTheme.Button.White"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_text_layout"
+                    android:text="@string/_preview" />
+
+                <Button
+                    android:id="@+id/btn_create_day_image_setting"
+                    style="@style/NoteBookAppTheme.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_text_layout"
+                    android:text="@string/setting" />
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <RelativeLayout
+        android:id="@+id/rl_create_day_image_preview_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_card_white"
+        android:clickable="true"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/iv_create_day_image_preview"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
-            android:contentDescription="@string/_preview"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/ll_create_day_image_bottom_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:contentDescription="@string/_preview" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/iv_create_day_image_preview_close"
+            style="@style/Base.ImageView.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_create_day_image_preview"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_layout"
+            android:layout_marginBottom="@dimen/margin_layout"
+            android:contentDescription="@string/_close"
+            android:src="@drawable/ic_close_black_24dp" />
 
-</androidx.core.widget.NestedScrollView>
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

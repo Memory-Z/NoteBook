@@ -65,6 +65,7 @@
     <dimen name="dynamic_item_height">@dimen/dp96</dimen>
     <dimen name="image_base_size_width">@dimen/dp240</dimen>
     <dimen name="image_base_size_height">@dimen/dp360</dimen>
+    <dimen name="edit_multi_content_min_height">@dimen/dp240</dimen>
 
     <!--
 Refer to App Widget Documentation for margin information
@@ -84,7 +85,9 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <!-- 计划列表 左侧 宽度  -->
     <dimen name="item_schedule_state_width">@dimen/dp08</dimen>
     <!-- 卡片圆角  -->
-    <dimen name="card_radius">@dimen/dp04</dimen>
+    <dimen name="card_radius">@dimen/dp08</dimen>
+    <dimen name="content_radius">@dimen/dp04</dimen>
+
     <!-- 底部弹窗顶部 圆角 -->
     <dimen name="dialog_bottom_top_corners_radius">@dimen/dp16</dimen>
 

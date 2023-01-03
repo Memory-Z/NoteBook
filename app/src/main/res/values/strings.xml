@@ -184,4 +184,8 @@
     <string name="good_morning">早\n安。</string>
     <string name="lyric_ban_xin_shang_dong_feng">别借我一身孤勇\n我宁愿半梦半醒\n别赠我随意享用\n世间的疼痛\n别让我傍观看清\n你只是浮光掠影\n别送我盛筵美景\n皆是迷离惝恍大梦\n\n—————尚东峰《半醒》</string>
     <string name="lyric_shi_zi">我去过很多个地方\n那些故事很快就遗忘\n我不想看见谁悲伤\n就只是一个人游荡\n\n——三旬老汉《世子》</string>
+    <string name="qrcode_content">QRCode 内容</string>
+    <string name="day_panel_setting_save_success">Day Panel 保存成功。</string>
+    <string name="day_panel_image_over_content">覆盖图片上内容</string>
+    <string name="day_panel_image_left_content">左侧内容</string>
 </resources>
