@@ -14,6 +14,8 @@ object NoteSPHelper {
 
     private const val CREATE_DAY_IMAGE_PATH_TAG: String = "createDayImagePath"
     private const val CREATE_DAY_QR_CONTENT_TAG: String = "createDayQrContent"
+    private const val CREATE_DAY_OVER_CONTENT_TAG: String = "createDayOverContent"
+    private const val CREATE_DAY_LEFT_CONTENT_TAG: String = "createDayLeftContent"
 
     /**
      * 初始化
@@ -71,6 +73,22 @@ object NoteSPHelper {
 
     fun getCreateDayQRContent(): String {
         return instance?.getSharedString(CREATE_DAY_QR_CONTENT_TAG) ?: ""
+    }
+
+    fun saveCreateDayOverContent(overContent: String) {
+        instance?.setSharedString(CREATE_DAY_OVER_CONTENT_TAG, overContent)
+    }
+
+    fun getCreateDayOverContent(): String {
+        return instance?.getSharedString(CREATE_DAY_OVER_CONTENT_TAG) ?: ""
+    }
+
+    fun saveCreateDayLeftContent(leftContent: String) {
+        instance?.setSharedString(CREATE_DAY_LEFT_CONTENT_TAG, leftContent)
+    }
+
+    fun getCreateDayLeftContent(): String {
+        return instance?.getSharedString(CREATE_DAY_LEFT_CONTENT_TAG) ?: ""
     }
 
 }

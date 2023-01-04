@@ -129,9 +129,21 @@ class CreateDayImageActivity : BaseNoteActivity(), View.OnClickListener {
         // 设置Qr 内容
         val oldQrContent = NoteSPHelper.getCreateDayQRContent()
         binding?.etCreateDayImageQrContent?.setText(oldQrContent)
+        // Over Content
+        val oldOverContent = NoteSPHelper.getCreateDayOverContent()
+        binding?.etCreateDayImageOverContent?.setText(oldOverContent)
+        // Left Content
+        val oldLeftContent = NoteSPHelper.getCreateDayLeftContent()
+        binding?.etCreateDayImageLeftContent?.setText(oldLeftContent)
+
         targetQrContentView(qrContentExpand?.get() ?: true)
         targetQrContentEditStatus(qrContentEdit?.get() ?: false)
 
+        targetOverContentView(qrContentExpand?.get() ?: true)
+        targetOverContentEditStatus(qrContentEdit?.get() ?: false)
+
+        targetLeftContentView(qrContentExpand?.get() ?: true)
+        targetLeftContentEditStatus(qrContentEdit?.get() ?: false)
 
     }
 
@@ -155,6 +167,11 @@ class CreateDayImageActivity : BaseNoteActivity(), View.OnClickListener {
                     val qrContent = it.etCreateDayImageQrContent.text.toString()
 //                    NoteSPHelper.saveCreateDayQRContent("只要你愿意，当你失落失意的时候，最需要一个肩膀的时候，告诉我，我会立即出现。")
                     NoteSPHelper.saveCreateDayQRContent(qrContent)
+
+                    val overContent = it.etCreateDayImageOverContent.text.toString()
+                    NoteSPHelper.saveCreateDayOverContent(overContent)
+                    val leftContent = it.etCreateDayImageLeftContent.text.toString()
+                    NoteSPHelper.saveCreateDayLeftContent(leftContent)
 
                     ToastUtil.showToast(
                         mContext,
@@ -180,6 +197,10 @@ class CreateDayImageActivity : BaseNoteActivity(), View.OnClickListener {
                 // 切换 Qr 显示 ， 展开/收起
                 it.bnlCreateDayImageQrLabel.id,
                 it.ivCreateDayImageQrContentShowMore.id -> {
+                    // 设置不可编辑
+                    qrContentEdit?.set(false)
+                    targetQrContentEditStatus(false)
+
                     val expand = qrContentExpand?.get() ?: true
                     qrContentExpand?.set(!expand)
                     targetQrContentView(!expand)
@@ -194,6 +215,11 @@ class CreateDayImageActivity : BaseNoteActivity(), View.OnClickListener {
                 // 切换 Over 显示 ， 展开/收起
                 it.bnlCreateDayImageOverLabel.id,
                 it.ivCreateDayImageOverContentShowMore.id -> {
+                    // 设置不可编辑
+                    overContentEdit?.set(false)
+                    targetOverContentEditStatus(false)
+
+
                     val expand = overContentExpand?.get() ?: true
                     overContentExpand?.set(!expand)
                     targetOverContentView(!expand)
@@ -208,6 +234,11 @@ class CreateDayImageActivity : BaseNoteActivity(), View.OnClickListener {
                 // 切换 Left 显示 ， 展开/收起
                 it.bnlCreateDayImageLeftLabel.id,
                 it.ivCreateDayImageLeftContentShowMore.id -> {
+                    // 设置不可编辑
+                    leftContentEdit?.set(false)
+                    targetLeftContentEditStatus(false)
+
+
                     val expand = leftContentExpand?.get() ?: true
                     leftContentExpand?.set(!expand)
                     targetLeftContentView(!expand)
@@ -239,10 +270,17 @@ class CreateDayImageActivity : BaseNoteActivity(), View.OnClickListener {
      */
     private fun previewCreateDayImage(imagePath: String) {
         val bitmap = BitmapFactory.decodeFile(imagePath)
+        val overContent = binding?.etCreateDayImageOverContent?.text.toString()
+        val leftContent = binding?.etCreateDayImageLeftContent?.text.toString()
         ThreadPoolUtils.getWorkThread("${TAG}_preview_create_day_image")
             .execute(
                 CreateDayImageRunnable(
-                    mContext.applicationContext, bitmap, 1, "张雪，我喜欢你。",
+                    mContext.applicationContext,
+                    bitmap,
+                    1,
+                    "张雪，我喜欢你。",
+                    overContent,
+                    leftContent,
                     object : CreateDayImageListener {
                         override fun onSavedBitmap(bitmap: Bitmap) {
                             val nBitmap = Bitmap.createBitmap(bitmap)
@@ -304,6 +342,12 @@ class CreateDayImageActivity : BaseNoteActivity(), View.OnClickListener {
                     this.requestFocus()
                 }
             }
+            it.ivCreateDayImageQrContentEdit.setImageDrawable(
+                ContextCompat.getDrawable(
+                    mContext,
+                    if (edit) R.drawable.ic_baseline_done_24 else R.drawable.ic_baseline_edit_24
+                )
+            )
         }
     }
 
@@ -349,6 +393,12 @@ class CreateDayImageActivity : BaseNoteActivity(), View.OnClickListener {
                 if (edit) {
                     this.requestFocus()
                 }
+                it.ivCreateDayImageOverContentEdit.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        mContext,
+                        if (edit) R.drawable.ic_baseline_done_24 else R.drawable.ic_baseline_edit_24
+                    )
+                )
             }
         }
     }
@@ -368,7 +418,7 @@ class CreateDayImageActivity : BaseNoteActivity(), View.OnClickListener {
                         R.drawable.ic_expand_more_black_24dp
                 )
             )
-            it.etCreateDayImageLeftContent.visibility =
+            it.llCreateDayImageLeftContentMore.visibility =
                 if (expand) View.VISIBLE else View.GONE
             it.ivCreateDayImageLeftContentEdit.visibility =
                 if (expand) View.VISIBLE else View.GONE
@@ -395,6 +445,12 @@ class CreateDayImageActivity : BaseNoteActivity(), View.OnClickListener {
                 if (edit) {
                     this.requestFocus()
                 }
+                it.ivCreateDayImageLeftContentEdit.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        mContext,
+                        if (edit) R.drawable.ic_baseline_done_24 else R.drawable.ic_baseline_edit_24
+                    )
+                )
             }
         }
     }

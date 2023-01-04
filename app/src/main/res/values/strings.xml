@@ -188,4 +188,5 @@
     <string name="day_panel_setting_save_success">Day Panel 保存成功。</string>
     <string name="day_panel_image_over_content">覆盖图片上内容</string>
     <string name="day_panel_image_left_content">左侧内容</string>
+    <string name="day_panel_image_left_content_hint">仅显示前 6 行内容！！！</string>
 </resources>

@@ -206,21 +206,34 @@
 
                     </com.inz.z.base.view.widget.BaseNavLayout>
 
-
-                    <EditText
-                        android:id="@+id/et_create_day_image_left_content"
-                        style="@style/NoteBookAppTheme.EditText.Border"
+                    <LinearLayout
+                        android:id="@+id/ll_create_day_image_left_content_more"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_text_layout"
-                        android:gravity="top|start"
-                        android:hint="@string/day_panel_image_left_content"
-                        android:imeOptions="actionDone"
-                        android:importantForAutofill="no"
-                        android:inputType="textMultiLine"
-                        android:labelFor="@id/bnl_create_day_image_left_label"
-                        android:minHeight="@dimen/edit_multi_content_min_height"
-                        tools:ignore="LabelFor" />
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/NoteBookAppTheme.Text.Hint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/margin_text_layout"
+                            android:text="@string/day_panel_image_left_content_hint" />
+
+                        <EditText
+                            android:id="@+id/et_create_day_image_left_content"
+                            style="@style/NoteBookAppTheme.EditText.Border"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/margin_text_layout"
+                            android:gravity="top|start"
+                            android:hint="@string/day_panel_image_left_content"
+                            android:imeOptions="actionDone"
+                            android:importantForAutofill="no"
+                            android:inputType="textMultiLine"
+                            android:minHeight="@dimen/edit_multi_content_min_height"
+                            tools:ignore="LabelFor" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <!-- QR -->

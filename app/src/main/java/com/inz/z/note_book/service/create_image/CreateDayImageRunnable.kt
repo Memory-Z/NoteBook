@@ -25,6 +25,8 @@ class CreateDayImageRunnable(
     val bitmap: Bitmap,
     private val num: Int,
     private val qrCodeStr: String,
+    private val overContent: String,
+    private val leftContent: String,
     val listener: CreateDayImageListener
 ) : Runnable {
 
@@ -34,6 +36,14 @@ class CreateDayImageRunnable(
         num: Int,
         listener: CreateDayImageListener
     ) : this(context, bitmap, num, "", listener)
+
+    constructor(
+        context: Context,
+        bitmap: Bitmap,
+        num: Int,
+        qrCodeStr: String,
+        listener: CreateDayImageListener
+    ) : this(context, bitmap, num, qrCodeStr, "", "", listener)
 
     companion object {
         private const val TAG = "CreateDayImageRunnable"
@@ -47,6 +57,8 @@ class CreateDayImageRunnable(
         private const val DAY_X = 100F
         private const val DAY_Y = 1360F
         private const val QRCODE_SIZE = 300
+
+        private const val LEFT_CONTENT_MAX_LINES = 6
     }
 
 
@@ -125,9 +137,7 @@ class CreateDayImageRunnable(
         canvas.drawBitmap(dateBitmap, DATE_X, DATE_Y, null)
 
         // 绘制图片上文字
-        drawOverImageText(canvas, context.getString(R.string.lyric_ban_xin_shang_dong_feng))
-
-        drawBelowDateText(canvas, context.getString(R.string.lyric_shi_zi))
+        drawOverImageText(canvas, overContent)
 
         // 绘制二维码
         val qrBitmap = getQrCodeBitmap(qrCodeStr)
@@ -138,6 +148,8 @@ class CreateDayImageRunnable(
 
         // 绘制装饰
         drawDecorate(canvas)
+
+        drawBelowDateText(canvas, leftContent)
 
         listener.onSavedBitmap(newBitmap)
 
@@ -324,6 +336,9 @@ class CreateDayImageRunnable(
         }
     }
 
+    /**
+     * 绘制 左侧文字内容，限制绘制 5 行。
+     */
     private fun drawBelowDateText(canvas: Canvas, content: String) {
         textPaint.textSize = 50F
         textPaint.typeface = null
@@ -335,9 +350,11 @@ class CreateDayImageRunnable(
         val textHeight = metricsInt.bottom - metricsInt.top
         var top = canvas.width - 120F
         val left = 1240F
-        content.split("\n").forEach {
-            canvas.drawText(it, left, top, textPaint)
-            top += textHeight + 10F
+        content.split("\n").forEachIndexed { index, s ->
+            if (index < LEFT_CONTENT_MAX_LINES) {
+                canvas.drawText(s, left, top, textPaint)
+                top += textHeight + 10F
+            }
         }
 
         canvas.restore()

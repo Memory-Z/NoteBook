@@ -113,6 +113,8 @@ class CreateLovePanelService : Service() {
         }
 
         val qrContent = NoteSPHelper.getCreateDayQRContent()
+        val overContent = NoteSPHelper.getCreateDayOverContent()
+        val leftContent = NoteSPHelper.getCreateDayLeftContent()
 
         val dayBitmap: Bitmap
         // 获取设置图片
@@ -125,7 +127,8 @@ class CreateLovePanelService : Service() {
         }
 
         ThreadPoolUtils.getScheduleThread("_create_day_panel").execute(
-            CreateDayImageRunnable(this, dayBitmap, num, qrContent,
+            CreateDayImageRunnable(
+                this, dayBitmap, num, qrContent, overContent, leftContent,
                 object : CreateDayImageListener {
                     override fun onSavedBitmap(bitmap: Bitmap) {
                         saveBitmap(bitmap, num, fileName)
